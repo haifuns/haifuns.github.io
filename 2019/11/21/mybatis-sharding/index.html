@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://haif-cloud.oss-cn-beijing.aliyuncs.com/img/weixing.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"haif.fun","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Mybatis插件（plugins）Mybatis允许在已映射的语句执行过程中某一点进行拦截。Mybatis允许使用插件来拦截的方法调用包括：  Executor (update, query, flushStatements, commit, rollback, getTransaction, close, isClosed) ParameterHandler (getParameterObje">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mybatis拦截器实现水平分表">
+<meta property="og:url" content="https://haif.fun/2019/11/21/mybatis-sharding/index.html">
+<meta property="og:site_name" content="With Silence.">
+<meta property="og:description" content="Mybatis插件（plugins）Mybatis允许在已映射的语句执行过程中某一点进行拦截。Mybatis允许使用插件来拦截的方法调用包括：  Executor (update, query, flushStatements, commit, rollback, getTransaction, close, isClosed) ParameterHandler (getParameterObje">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-11-21T12:50:00.000Z">
+<meta property="article:modified_time" content="2020-12-26T08:54:52.604Z">
+<meta property="article:author" content="HAIF.">
+<meta property="article:tag" content="ORM">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://haif.fun/2019/11/21/mybatis-sharding/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Mybatis拦截器实现水平分表 | With Silence.</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">With Silence.</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-info-circle fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-reading">
+
+    <a href="/reading/" rel="section"><i class="fa fa-book fa-fw"></i>读书</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://haif.fun/2019/11/21/mybatis-sharding/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.jpg">
+      <meta itemprop="name" content="HAIF.">
+      <meta itemprop="description" content="山行野宿， 孤身万里。<br/>">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="With Silence.">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Mybatis拦截器实现水平分表
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-11-21 20:50:00" itemprop="dateCreated datePublished" datetime="2019-11-21T20:50:00+08:00">2019-11-21</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-12-26 16:54:52" itemprop="dateModified" datetime="2020-12-26T16:54:52+08:00">2020-12-26</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" itemprop="url" rel="index"><span itemprop="name">数据库</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2019/11/21/mybatis-sharding/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2019/11/21/mybatis-sharding/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h3 id="Mybatis插件（plugins）"><a href="#Mybatis插件（plugins）" class="headerlink" title="Mybatis插件（plugins）"></a>Mybatis插件（plugins）</h3><p>Mybatis允许在已映射的语句执行过程中某一点进行拦截。Mybatis允许使用插件来拦截的方法调用包括：</p>
+<ul>
+<li>Executor (update, query, flushStatements, commit, rollback, getTransaction, close, isClosed)</li>
+<li>ParameterHandler (getParameterObject, setParameters)</li>
+<li>ResultSetHandler (handleResultSets, handleOutputParameters)</li>
+<li>StatementHandler (prepare, parameterize, batch, update, query)</li>
+</ul>
+<p>分别拦截以下方法调用：</p>
+<ul>
+<li>拦截执行器的方法</li>
+<li>拦截参数的处理</li>
+<li>拦截结果集的处理</li>
+<li>拦截Sql语法构建的处理</li>
+</ul>
+<a id="more"></a>
+
+<p>通过 MyBatis 提供的强大机制，使用插件是非常简单的，只需实现 Interceptor 接口：</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.apache.ibatis.plugin.Interceptor;</span><br><span class="line"><span class="keyword">import</span> org.apache.ibatis.plugin.Invocation;</span><br><span class="line"><span class="keyword">import</span> java.util.Properties;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Intercepts({@Signature(</span></span><br><span class="line"><span class="meta">  type= Executor.class,method = "update",args = {MappedStatement.class,Object.class})</span></span><br><span class="line"><span class="meta"> })</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ExamplePlugin</span> <span class="keyword">implements</span> <span class="title">Interceptor</span> </span>{</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">intercept</span><span class="params">(Invocation invocation)</span> <span class="keyword">throws</span> Throwable </span>{</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">plugin</span><span class="params">(Object o)</span> </span>{</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setProperties</span><span class="params">(Properties properties)</span> </span>{</span><br><span class="line"></span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>上面的插件将会拦截在 Executor 实例中所有的 “update” 方法调用， 这里的 Executor 是负责执行低层映射语句的内部对象。</p>
+<h3 id="水平分表实现"><a href="#水平分表实现" class="headerlink" title="水平分表实现"></a>水平分表实现</h3><h4 id="自定义插件"><a href="#自定义插件" class="headerlink" title="自定义插件"></a>自定义插件</h4><figure class="highlight"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- mybatis-config.xml --&gt;</span><br><span class="line">&lt;plugins&gt;</span><br><span class="line">  &lt;plugin interceptor=<span class="string">"org.mybatis.example.ExamplePlugin"</span>&gt;</span><br><span class="line">    &lt;property name=<span class="string">"someProperty"</span> value=<span class="string">"100"</span>/&gt;</span><br><span class="line">  &lt;/plugin&gt;</span><br><span class="line">&lt;/plugins&gt;</span><br></pre></td></tr></tbody></table></figure>
+<p>SpringBoot中只需要使用@Component注解注册为bean即可</p>
+<h4 id="选择拦截方法"><a href="#选择拦截方法" class="headerlink" title="选择拦截方法"></a>选择拦截方法</h4><p>实现分表主要是通过在sql构建时，对表名进行替换，所以选择拦截StatementHandler<br>注解为：</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Intercepts({</span></span><br><span class="line"><span class="meta">   @Signature(type = StatementHandler.class, method = "prepare", args = { Connection.class, Integer.class })</span></span><br><span class="line"><span class="meta">})</span></span><br></pre></td></tr></tbody></table></figure>
+<h4 id="定义分区表、分表字段"><a href="#定义分区表、分表字段" class="headerlink" title="定义分区表、分表字段"></a>定义分区表、分表字段</h4><p>使用Mybatis实现分表我们期望分表灵活，即可以选择要分区的表，分区表分表字段，甚至指定哪些方法需要分表</p>
+<p>自定义注解：</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="meta">@Target({ ElementType.TYPE, ElementType.METHOD })</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> TablesPartition {</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 是否分表</span></span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">split</span><span class="params">()</span> <span class="keyword">default</span> <span class="keyword">true</span></span>;</span><br><span class="line"></span><br><span class="line">    TablePartition[] value();</span><br><span class="line"></span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="meta">@Documented</span></span><br><span class="line"><span class="meta">@Retention(RetentionPolicy.RUNTIME)</span></span><br><span class="line"><span class="meta">@Target({})</span></span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> TablePartition {</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 表名</span></span><br><span class="line">    <span class="function">String <span class="title">value</span><span class="params">()</span> <span class="keyword">default</span> ""</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 字段</span></span><br><span class="line">    <span class="function">String <span class="title">field</span><span class="params">()</span> <span class="keyword">default</span> ""</span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>在Mapper接口/方法上定义注解</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@TablesPartition({</span></span><br><span class="line"><span class="meta">        @TablePartition(value = "table_0", field = "field_0"),</span></span><br><span class="line"><span class="meta">        @TablePartition(value = "table_1", field = "field_0")   </span></span><br><span class="line"><span class="meta">})</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">NormalMapper</span> </span>{</span><br><span class="line"></span><br><span class="line">    <span class="meta">@TablesPartition({</span></span><br><span class="line"><span class="meta">            @TablePartition(value = "table_0", field = "field_0")</span></span><br><span class="line"><span class="meta">    })</span></span><br><span class="line">    <span class="function">List&lt;NormalEntity&gt; <span class="title">selectAll</span><span class="params">()</span></span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<h4 id="分表核心源码实现"><a href="#分表核心源码实现" class="headerlink" title="分表核心源码实现"></a>分表核心源码实现</h4><p>源码实现：</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Slf4j</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="meta">@Intercepts({</span></span><br><span class="line"><span class="meta">   @Signature(type = StatementHandler.class, method = "prepare", args = { Connection.class, Integer.class })</span></span><br><span class="line"><span class="meta">})</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">PartitionInterceptor</span> <span class="keyword">implements</span> <span class="title">Interceptor</span> </span>{</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> ObjectFactory DEFAULT_OBJECT_FACTORY = <span class="keyword">new</span> DefaultObjectFactory();</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> ObjectWrapperFactory DEFAULT_OBJECT_WRAPPER_FACTORY = <span class="keyword">new</span> DefaultObjectWrapperFactory();</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> ReflectorFactory REFLECTOR_FACTORY = <span class="keyword">new</span> DefaultReflectorFactory();</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">intercept</span><span class="params">(Invocation invocation)</span> <span class="keyword">throws</span> Throwable </span>{</span><br><span class="line"></span><br><span class="line">        StatementHandler statementHandler = (StatementHandler) invocation.getTarget();</span><br><span class="line">        MetaObject metaStatementHandler = MetaObject.forObject(statementHandler, DEFAULT_OBJECT_FACTORY, DEFAULT_OBJECT_WRAPPER_FACTORY,REFLECTOR_FACTORY);</span><br><span class="line"></span><br><span class="line">        Object parameterObject = metaStatementHandler.getValue(<span class="string">"delegate.boundSql.parameterObject"</span>);</span><br><span class="line">        partitionTable(metaStatementHandler,parameterObject);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> invocation.proceed();</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">plugin</span><span class="params">(Object target)</span> </span>{</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 目标类是StatementHandler类型时，才包装目标类，否者直接返回目标本身,减少目标被代理的次数</span></span><br><span class="line">        <span class="keyword">if</span> (target <span class="keyword">instanceof</span> StatementHandler) {</span><br><span class="line">            <span class="keyword">return</span> Plugin.wrap(target, <span class="keyword">this</span>);</span><br><span class="line">        } <span class="keyword">else</span> {</span><br><span class="line">            <span class="keyword">return</span> target;</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setProperties</span><span class="params">(Properties properties)</span> </span>{</span><br><span class="line"></span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">partitionTable</span><span class="params">(MetaObject metaStatementHandler, Object param )</span> <span class="keyword">throws</span> Exception </span>{</span><br><span class="line"></span><br><span class="line">        String originalSql = (String) metaStatementHandler.getValue(<span class="string">"delegate.boundSql.sql"</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (StringUtils.isNotBlank(originalSql)) {</span><br><span class="line"></span><br><span class="line">            MappedStatement mappedStatement = (MappedStatement) metaStatementHandler.getValue(<span class="string">"delegate.mappedStatement"</span>);</span><br><span class="line">            String id = mappedStatement.getId();</span><br><span class="line">            String className = id.substring(<span class="number">0</span>, id.lastIndexOf(<span class="string">"."</span>));</span><br><span class="line">            String methodName = id.substring(id.lastIndexOf(<span class="string">"."</span>) + <span class="number">1</span>);</span><br><span class="line">            Class&lt;?&gt; clazz = Class.forName(className);</span><br><span class="line">            Method method = findMethod(clazz.getDeclaredMethods(), methodName);</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 根据配置自动生成分表SQL,不配置查主表</span></span><br><span class="line">            TablesPartition tablesPartition = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (method != <span class="keyword">null</span>) {</span><br><span class="line">                tablesPartition = method.getAnnotation(TablesPartition.class);</span><br><span class="line">            }</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (tablesPartition  == <span class="keyword">null</span>) {</span><br><span class="line">                tablesPartition = clazz.getAnnotation(TablesPartition.class);</span><br><span class="line">            }</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> (tablesPartition != <span class="keyword">null</span> &amp;&amp; tablesPartition.split()) {</span><br><span class="line"></span><br><span class="line">                TablePartition[] tablePartitionList = tablesPartition.value();</span><br><span class="line">                String convertedSql = originalSql;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">for</span> (TablePartition tablePartition:tablePartitionList) {</span><br><span class="line"></span><br><span class="line">                    StringBuilder stringBuilder = <span class="keyword">new</span> StringBuilder(tablePartition.value());</span><br><span class="line"></span><br><span class="line">                    String resort = <span class="string">""</span>;</span><br><span class="line">                    <span class="keyword">if</span> (param <span class="keyword">instanceof</span> Map) {</span><br><span class="line">                        resort = (String)((Map) param).get(tablePartition.field());</span><br><span class="line">                    } <span class="keyword">else</span> <span class="keyword">if</span> (param <span class="keyword">instanceof</span> String) {</span><br><span class="line">                        resort = (String)param;</span><br><span class="line">                    }</span><br><span class="line"></span><br><span class="line">                    <span class="keyword">if</span> (!StringUtils.isEmpty(resort)) {</span><br><span class="line">                        stringBuilder.append(<span class="string">"_"</span>);</span><br><span class="line">                        stringBuilder.append(resort);</span><br><span class="line">                    }</span><br><span class="line"></span><br><span class="line">                    <span class="comment">// 替换表名前先把包含表名的字段名*_替换为"thisIsSpecialColumn"</span></span><br><span class="line">                    convertedSql = convertedSql.replaceAll(<span class="string">"(?i)"</span> + tablePartition.value()+<span class="string">"_"</span>, <span class="string">"thisIsSpecialColumn"</span>);</span><br><span class="line"></span><br><span class="line">                    <span class="comment">// 替换表名,不区分大小写</span></span><br><span class="line">                    convertedSql = convertedSql.replaceAll(<span class="string">"(?i)"</span> + tablePartition.value(), stringBuilder.toString());</span><br><span class="line"></span><br><span class="line">                    <span class="comment">// 替换表名完成把"thisIsSpecialColumn"替换回字段名*_</span></span><br><span class="line">                    convertedSql = convertedSql.replaceAll(<span class="string">"thisIsSpecialColumn"</span>, tablePartition.value()+<span class="string">"_"</span>);</span><br><span class="line"></span><br><span class="line">                }</span><br><span class="line"></span><br><span class="line">                log.debug(<span class="string">"分表后的SQL:\n"</span> + convertedSql);</span><br><span class="line"></span><br><span class="line">                metaStatementHandler.setValue(<span class="string">"delegate.boundSql.sql"</span>, convertedSql);</span><br><span class="line"></span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> Method <span class="title">findMethod</span><span class="params">(Method[] methods, String methodName)</span> </span>{</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (Method method : methods) {</span><br><span class="line">            <span class="keyword">if</span> (method.getName().equals(methodName)) {</span><br><span class="line">                <span class="keyword">return</span> method;</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Haif.
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://haif.fun/2019/11/21/mybatis-sharding/" title="Mybatis拦截器实现水平分表">https://haif.fun/2019/11/21/mybatis-sharding/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/ORM/" rel="tag"><i class="fa fa-tag"></i> ORM</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2019/11/02/svn/" rel="prev" title="SVN报错Previous operation has not finished; run 'cleanup' if it was interrupted解决">
+      <i class="fa fa-chevron-left"></i> SVN报错Previous operation has not finished; run 'cleanup' if it was interrupted解决
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/11/21/flow/" rel="next" title="Java必备流程图">
+      Java必备流程图 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Mybatis%E6%8F%92%E4%BB%B6%EF%BC%88plugins%EF%BC%89"><span class="nav-number">1.</span> <span class="nav-text">Mybatis插件（plugins）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B0%B4%E5%B9%B3%E5%88%86%E8%A1%A8%E5%AE%9E%E7%8E%B0"><span class="nav-number">2.</span> <span class="nav-text">水平分表实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E6%8F%92%E4%BB%B6"><span class="nav-number">2.1.</span> <span class="nav-text">自定义插件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%80%89%E6%8B%A9%E6%8B%A6%E6%88%AA%E6%96%B9%E6%B3%95"><span class="nav-number">2.2.</span> <span class="nav-text">选择拦截方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89%E5%88%86%E5%8C%BA%E8%A1%A8%E3%80%81%E5%88%86%E8%A1%A8%E5%AD%97%E6%AE%B5"><span class="nav-number">2.3.</span> <span class="nav-text">定义分区表、分表字段</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%86%E8%A1%A8%E6%A0%B8%E5%BF%83%E6%BA%90%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="nav-number">2.4.</span> <span class="nav-text">分表核心源码实现</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="HAIF."
+      src="/uploads/avatar.jpg">
+  <p class="site-author-name" itemprop="name">HAIF.</p>
+  <div class="site-description" itemprop="description">山行野宿， 孤身万里。<br/></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">38</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2019 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">HAIF.</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : true,
+      notify     : false,
+      appId      : 'masttnqEt9G69mj43i9oaA1C-gzGzoHsz',
+      appKey     : 'hgIx9VKn0GLDhRcLxQuNMl0E',
+      placeholder: ":)",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>

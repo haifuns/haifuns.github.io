@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://haif-cloud.oss-cn-beijing.aliyuncs.com/img/weixing.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"haif.fun","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="概述JUC 包提供了Atomiclnteger 、AtomicLong 和AtomicBoolean等原子性操作类，这些类都是使用非阻塞算法CAS 实现的，相比使用锁实现原子性操作这在性能上有很大提高。原子性操作类的原理大致相同，本文只对AtomicLong 类的实现原理以及JDK 8 中新增的LongAdder 和 LongAccumulator 类的原理讲解。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Java 并发编程系列】【J.U.C】：Atomic">
+<meta property="og:url" content="https://haif.fun/2020/12/26/java-concurrent-7/index.html">
+<meta property="og:site_name" content="With Silence.">
+<meta property="og:description" content="概述JUC 包提供了Atomiclnteger 、AtomicLong 和AtomicBoolean等原子性操作类，这些类都是使用非阻塞算法CAS 实现的，相比使用锁实现原子性操作这在性能上有很大提高。原子性操作类的原理大致相同，本文只对AtomicLong 类的实现原理以及JDK 8 中新增的LongAdder 和 LongAccumulator 类的原理讲解。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/LongAddr.png">
+<meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/LongAddr-uml.png">
+<meta property="article:published_time" content="2020-12-26T09:47:00.000Z">
+<meta property="article:modified_time" content="2020-12-26T09:47:16.674Z">
+<meta property="article:author" content="HAIF.">
+<meta property="article:tag" content="并发">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/LongAddr.png">
+
+<link rel="canonical" href="https://haif.fun/2020/12/26/java-concurrent-7/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>【Java 并发编程系列】【J.U.C】：Atomic | With Silence.</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">With Silence.</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-info-circle fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-reading">
+
+    <a href="/reading/" rel="section"><i class="fa fa-book fa-fw"></i>读书</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://haif.fun/2020/12/26/java-concurrent-7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.jpg">
+      <meta itemprop="name" content="HAIF.">
+      <meta itemprop="description" content="山行野宿， 孤身万里。<br/>">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="With Silence.">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          【Java 并发编程系列】【J.U.C】：Atomic
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-12-26 17:47:00 / 修改时间：17:47:16" itemprop="dateCreated datePublished" datetime="2020-12-26T17:47:00+08:00">2020-12-26</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%B9%B6%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">并发</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/12/26/java-concurrent-7/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/12/26/java-concurrent-7/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>JUC 包提供了Atomiclnteger 、AtomicLong 和AtomicBoolean等原子性操作类，这些类都是使用非阻塞算法CAS 实现的，相比使用锁实现原子性操作这在性能上有很大提高。原子性操作类的原理大致相同，本文只对AtomicLong 类的实现原理以及JDK 8 中新增的LongAdder 和 LongAccumulator 类的原理讲解。</p>
+<a id="more"></a>
+
+<h2 id="AtomicLong"><a href="#AtomicLong" class="headerlink" title="AtomicLong"></a>AtomicLong</h2><h3 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h3><p>AtomicLong 是原子性递增或者递减类，其内部使用Unsafe 来实现，相关源码如下：</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AtomicLong</span> <span class="keyword">extends</span> <span class="title">Number</span> <span class="keyword">implements</span> <span class="title">java</span>.<span class="title">io</span>.<span class="title">Serializable</span> </span>{</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = <span class="number">1927816293512124184L</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 获取Unsafe实例</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Unsafe unsafe = Unsafe.getUnsafe();</span><br><span class="line">    <span class="comment">// 存放变量value的偏移量</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> valueOffset;</span><br><span class="line">    <span class="comment">// 判断JVM是否支持Long类型无锁CAS</span></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">boolean</span> VM_SUPPORTS_LONG_CAS = VMSupportsCS8();</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">static</span> {</span><br><span class="line">        <span class="keyword">try</span> {</span><br><span class="line">            <span class="comment">// 获取value在AtomicLong中的偏移量</span></span><br><span class="line">            valueOffset = unsafe.objectFieldOffset</span><br><span class="line">                (AtomicLong.class.getDeclaredField(<span class="string">"value"</span>));</span><br><span class="line">        } <span class="keyword">catch</span> (Exception ex) { <span class="keyword">throw</span> <span class="keyword">new</span> Error(ex); }</span><br><span class="line">    }</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 实际变量值</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">long</span> value;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">AtomicLong</span><span class="params">(<span class="keyword">long</span> initialValue)</span> </span>{</span><br><span class="line">        value = initialValue;</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<h4 id="递增和递减操作"><a href="#递增和递减操作" class="headerlink" title="递增和递减操作"></a>递增和递减操作</h4><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 调用unsafe方法，原子性设置value值为原始值 + 1， 返回值为原始值</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">long</span> <span class="title">getAndIncrement</span><span class="params">()</span> </span>{</span><br><span class="line">    <span class="keyword">return</span> unsafe.getAndAddLong(<span class="keyword">this</span>, valueOffset, <span class="number">1L</span>);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// 调用unsafe方法，原子性设置value值为原始值 - 1，返回值为原始值</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">long</span> <span class="title">getAndDecrement</span><span class="params">()</span> </span>{</span><br><span class="line">    <span class="keyword">return</span> unsafe.getAndAddLong(<span class="keyword">this</span>, valueOffset, -<span class="number">1L</span>);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// 调用unsafe 方法， 原子性设置value值为原始值 + l，返回值为递增后的值</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">long</span> <span class="title">incrementAndGet</span><span class="params">()</span> </span>{</span><br><span class="line">    <span class="keyword">return</span> unsafe.getAndAddLong(<span class="keyword">this</span>, valueOffset, <span class="number">1L</span>) + <span class="number">1L</span>;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// 调用unsafe方法，原子性设置value值为原始值 - 1，返回值为递减之后的值</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">long</span> <span class="title">decrementAndGet</span><span class="params">()</span> </span>{</span><br><span class="line">    <span class="keyword">return</span> unsafe.getAndAddLong(<span class="keyword">this</span>, valueOffset, -<span class="number">1L</span>) - <span class="number">1L</span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>在如上代码内部都是通过调用Unsafe 的getAndAddLong 方法来实现操作，这个函数是个原子性操作，这里第一个参数是AtomicLong 实例的引用， 第二个参数是value 变量在AtomicLong 中的偏移值，第三个参数是要设置的第二个变量的值。</p>
+<p>其中，getAndIncrement 方法在JDK 7 中的实现逻辑为:</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">long</span> <span class="title">getAndIncrement</span><span class="params">()</span> </span>{</span><br><span class="line">    <span class="keyword">while</span> (<span class="keyword">true</span>) {</span><br><span class="line">        <span class="keyword">long</span> current= get();</span><br><span class="line">        <span class="keyword">long</span> next = current + l ;</span><br><span class="line">        <span class="keyword">if</span> (compareAndSet(current, next))</span><br><span class="line">            <span class="keyword">return</span> current ;</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>上述代码中，每个线程先拿到变量的当前值（由于value 是volatile 变量，所以这里拿到的是最新的值），然后在工作内存中对其进行增1 操作，而后使用CAS修改变量的值。如果设置失败，则循环继续尝试，直到设置成功。</p>
+<p>而在JDK 8中的实现逻辑为：</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">long</span> <span class="title">getAndIncrement</span><span class="params">()</span> </span>{</span><br><span class="line">    <span class="keyword">return</span> unsafe.getAndAddLong(<span class="keyword">this</span>, valueOffset, <span class="number">1L</span>);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>其中JDK 8 中unsafe.getAndAddLong 的代码为：</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">long</span> <span class="title">getAndAddLong</span><span class="params">(Object var1, <span class="keyword">long</span> var2, <span class="keyword">long</span> var4)</span> </span>{</span><br><span class="line">    <span class="keyword">long</span> var6;</span><br><span class="line">    <span class="keyword">do</span> {</span><br><span class="line">        var6 = <span class="keyword">this</span>.getLongVolatile(var1, var2);</span><br><span class="line">    } <span class="keyword">while</span>(!<span class="keyword">this</span>.compareAndSwapLong(var1, var2, var6, var6 + var4));</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> var6;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>JDK 7 AtomicLong 中的循环逻辑已经被JDK 8 中的原子操作类UNsafe 内置了，之所以内置应该是考虑到这个函数在其他地方也会用到，而内置可以提高复用性。</p>
+<h4 id="boolean-compareAndSet-long-expect-long-update"><a href="#boolean-compareAndSet-long-expect-long-update" class="headerlink" title="boolean compareAndSet(long expect, long update)"></a>boolean compareAndSet(long expect, long update)</h4><p>如果原子变量中的value 值等于expect，则使用update 值更新该值并返回true，否则返回false。</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">boolean</span> <span class="title">compareAndSet</span><span class="params">(<span class="keyword">long</span> expect, <span class="keyword">long</span> update)</span> </span>{</span><br><span class="line">    <span class="keyword">return</span> unsafe.compareAndSwapLong(<span class="keyword">this</span>, valueOffset, expect, update);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<h2 id="LongAdder"><a href="#LongAdder" class="headerlink" title="LongAdder"></a>LongAdder</h2><p>使用AtomicLong 时，在高并发下大量线程会同时去竞争更新同一个原子变量，但是由于同时只有一个线程的CAS 操作会成功，这就造成了大量线程竞争失败后，会通过无限循环不断进行自旋尝试CAS 的操作， 而这会白白浪费CPU 资源。为此JDK 8 新增了一个原子性递增或者递减类LongAdder 用来克服在高并发下使用AtomicLong 的缺点。</p>
+<p>如下图所示，LongAdder 在内部维护多个Cell 变量，每个Cell 里面有一个初始值为0 的long 型变量，在同等并发量的情况下，争夺单个变量更新操作的线程量会减少，减少了争夺共享资源的并发量。另外，多个线程在争夺同一个Cell 原子变量时如果失败了， 它并不是在当前Cell 变量上一直自旋CAS 重试，而是尝试在其他Cell 的变量上进行CAS 尝试，这个改变增加了当前线程重试CAS 成功的可能性。在获取LongAdder 当前值时， 是把所有Cell 变量的value 值累加后再加上base 返回的。</p>
+<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/LongAddr.png" alt="image"></p>
+<p>LongAdder 维护了一个延迟初始化的原子性更新数组（默认情况下Cell 数组是null）和一个基值变量base。由于Cells 占用的内存是相对比较大的，所以一开始并不创建它，而是在需要时创建，也就是惰性加载。</p>
+<p>当一开始判断Cell 数组是null 并且并发线程较少时，所有的累加操作都是对base 变量进行的。保持Cell 数组的大小为2 的N 次方，在初始化时Cell 数组中的Cell 元素个数为2 ，数组里面的变量实体是Cell 类型。Cell 类型是AtomicLong 的一个改进，用来减少缓存的争用，也就是解决伪共享问题（@sun.misc.Contended）。</p>
+<h3 id="实现原理-1"><a href="#实现原理-1" class="headerlink" title="实现原理"></a>实现原理</h3><p>下面围绕以下话题从源码角度来分析LongAdder 的实现： </p>
+<ol>
+<li>LongAdder 的结构是怎样的？</li>
+<li>当前线程应该访问Cell 数组里面的哪一个Cell 元素？</li>
+<li>如何初始化Cell 数组？</li>
+<li>Cell 数组如何扩容？</li>
+<li>线程访问分配的Cell 元素有冲突后如何处理？</li>
+<li>如何保证线程操作被分配的Cell 元素的原子性？</li>
+</ol>
+<p>LongAdder 类图结构如下：</p>
+<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/LongAddr-uml.png" alt="image"></p>
+<p>LongAdder 类继承自Striped64 类，在Striped64 内部维护着三个变量。LongAdder 的真实值其实是base 的值与Cell 数组里面所有Cell 元素中的value 值的累加，base 是个基础值，默认为0 。cellsBusy 用来实现自旋锁，状态值只有0 和l ，当创建Cell 元素，扩容Cell 数组或者初始化Cell 数组时，使用CAS 操作该变量来保证同时只有一个线程可以进行其中之一的操作。</p>
+<p>Cell 的构造如下：</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 避免伪共享</span></span><br><span class="line"><span class="meta">@sun</span>.misc.Contended <span class="keyword">static</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">Cell</span> </span>{</span><br><span class="line">    <span class="comment">// 保证内存可见</span></span><br><span class="line">    <span class="keyword">volatile</span> <span class="keyword">long</span> value;</span><br><span class="line">    Cell(<span class="keyword">long</span> x) { value = x; }</span><br><span class="line">    <span class="function"><span class="keyword">final</span> <span class="keyword">boolean</span> <span class="title">cas</span><span class="params">(<span class="keyword">long</span> cmp, <span class="keyword">long</span> val)</span> </span>{</span><br><span class="line">        <span class="keyword">return</span> UNSAFE.compareAndSwapLong(<span class="keyword">this</span>, valueOffset, cmp, val);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Unsafe mechanics</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> sun.misc.Unsafe UNSAFE;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> valueOffset;</span><br><span class="line">    <span class="keyword">static</span> {</span><br><span class="line">        <span class="keyword">try</span> {</span><br><span class="line">            UNSAFE = sun.misc.Unsafe.getUnsafe();</span><br><span class="line">            Class&lt;?&gt; ak = Cell.class;</span><br><span class="line">            valueOffset = UNSAFE.objectFieldOffset</span><br><span class="line">                (ak.getDeclaredField(<span class="string">"value"</span>));</span><br><span class="line">        } <span class="keyword">catch</span> (Exception e) {</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> Error(e);</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<h4 id="long-sum"><a href="#long-sum" class="headerlink" title="long sum()"></a>long sum()</h4><p>内部操作是累加所有Cell 内部的value 值后累加base。但是由于计算总和没有对Cell 数组进行加锁，在累加过程中可能有其他线程对Cell 中的值进行了修改，也有可能对数组进行了扩容，所以sum 返回的值并不是非常精确的，其返回值并不是一个调用sum 方法时的原子快照值。</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">long</span> <span class="title">sum</span><span class="params">()</span> </span>{</span><br><span class="line">    Cell[] as = cells; Cell a;</span><br><span class="line">    <span class="keyword">long</span> sum = base;</span><br><span class="line">    <span class="keyword">if</span> (as != <span class="keyword">null</span>) {</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; as.length; ++i) {</span><br><span class="line">            <span class="keyword">if</span> ((a = as[i]) != <span class="keyword">null</span>)</span><br><span class="line">                sum += a.value;</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> sum;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<h4 id="void-reset"><a href="#void-reset" class="headerlink" title="void reset()"></a>void reset()</h4><p>重置操作，把base 置为0，如果Cell 数组中有元素，则元素值重置为0</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">reset</span><span class="params">()</span> </span>{</span><br><span class="line">    Cell[] as = cells; Cell a;</span><br><span class="line">    base = <span class="number">0L</span>;</span><br><span class="line">    <span class="keyword">if</span> (as != <span class="keyword">null</span>) {</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; as.length; ++i) {</span><br><span class="line">            <span class="keyword">if</span> ((a = as[i]) != <span class="keyword">null</span>)</span><br><span class="line">                a.value = <span class="number">0L</span>;</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<h4 id="long-sumThenReset"><a href="#long-sumThenReset" class="headerlink" title="long sumThenReset()"></a>long sumThenReset()</h4><p>sum 累加Cell 值后，把前一个Cell 值重置为0，base 重置为0，多线程存在问题。</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">long</span> <span class="title">sumThenReset</span><span class="params">()</span> </span>{</span><br><span class="line">    Cell[] as = cells; Cell a;</span><br><span class="line">    <span class="keyword">long</span> sum = base;</span><br><span class="line">    base = <span class="number">0L</span>;</span><br><span class="line">    <span class="keyword">if</span> (as != <span class="keyword">null</span>) {</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; as.length; ++i) {</span><br><span class="line">            <span class="keyword">if</span> ((a = as[i]) != <span class="keyword">null</span>) {</span><br><span class="line">                sum += a.value;</span><br><span class="line">                a.value = <span class="number">0L</span>;</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> sum;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<h4 id="void-add-long-x"><a href="#void-add-long-x" class="headerlink" title="void add(long x)"></a>void add(long x)</h4><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(<span class="keyword">long</span> x)</span> </span>{</span><br><span class="line">    Cell[] as; <span class="keyword">long</span> b, v; <span class="keyword">int</span> m; Cell a;</span><br><span class="line">    <span class="comment">// 如果cells不为null继续执行，如果cells为空，则在base上累加，类似AtomicLong </span></span><br><span class="line">    <span class="keyword">if</span> ((as = cells) != <span class="keyword">null</span> || !casBase(b = base, b + x)) { </span><br><span class="line">        <span class="keyword">boolean</span> uncontended = <span class="keyword">true</span>;</span><br><span class="line">        <span class="keyword">if</span> (as == <span class="keyword">null</span> || (m = as.length - <span class="number">1</span>) &lt; <span class="number">0</span> ||</span><br><span class="line">            (a = as[getProbe() &amp; m]) == <span class="keyword">null</span> || <span class="comment">// 前面的条件决定当前线程应该访问cells数组中的哪一个元素（m是当前cells数组元素个数-1，getProbe()用于获取当前线程变量threadlocalRandomProbe）</span></span><br><span class="line">            !(uncontended = a.cas(v = a.value, v + x))) <span class="comment">// 如果当前线程映射的元素存在， 使用CAS更新Cell元素值</span></span><br><span class="line">            longAccumulate(x, <span class="keyword">null</span>, uncontended); </span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line">    </span><br><span class="line"><span class="function"><span class="keyword">final</span> <span class="keyword">boolean</span> <span class="title">casBase</span><span class="params">(<span class="keyword">long</span> cmp, <span class="keyword">long</span> val)</span> </span>{</span><br><span class="line">    <span class="keyword">return</span> UNSAFE.compareAndSwapLong(<span class="keyword">this</span>, BASE, cmp, val);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<h4 id="cells-数组初始化和扩容"><a href="#cells-数组初始化和扩容" class="headerlink" title="cells 数组初始化和扩容"></a>cells 数组初始化和扩容</h4><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">final</span> <span class="keyword">void</span> <span class="title">longAccumulate</span><span class="params">(<span class="keyword">long</span> x, LongBinaryOperator fn,</span></span></span><br><span class="line"><span class="function"><span class="params">                          <span class="keyword">boolean</span> wasUncontended)</span> </span>{</span><br><span class="line">    <span class="comment">// 初始化当前线程变量threadLocalRandomProbe的值（计算当前线程应分配到cells哪一个Cell元素用到）</span></span><br><span class="line">    <span class="keyword">int</span> h;</span><br><span class="line">    <span class="keyword">if</span> ((h = getProbe()) == <span class="number">0</span>) {</span><br><span class="line">        ThreadLocalRandom.current(); <span class="comment">// force initialization</span></span><br><span class="line">        h = getProbe();</span><br><span class="line">        wasUncontended = <span class="keyword">true</span>;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">boolean</span> collide = <span class="keyword">false</span>;                <span class="comment">// True if last slot nonempty</span></span><br><span class="line">    <span class="keyword">for</span> (;;) {</span><br><span class="line">        Cell[] as; Cell a; <span class="keyword">int</span> n; <span class="keyword">long</span> v;</span><br><span class="line">        <span class="keyword">if</span> ((as = cells) != <span class="keyword">null</span> &amp;&amp; (n = as.length) &gt; <span class="number">0</span>) { <span class="comment">// cells中有元素</span></span><br><span class="line">            <span class="keyword">if</span> ((a = as[(n - <span class="number">1</span>) &amp; h]) == <span class="keyword">null</span>) { <span class="comment">// 当前线程应该访问cells数组的位置是空</span></span><br><span class="line">                <span class="keyword">if</span> (cellsBusy == <span class="number">0</span>) {       <span class="comment">// Try to attach new Cell</span></span><br><span class="line">                    Cell r = <span class="keyword">new</span> Cell(x);   <span class="comment">// Optimistically create</span></span><br><span class="line">                    <span class="keyword">if</span> (cellsBusy == <span class="number">0</span> &amp;&amp; casCellsBusy()) {</span><br><span class="line">                        <span class="keyword">boolean</span> created = <span class="keyword">false</span>;</span><br><span class="line">                        <span class="keyword">try</span> {               <span class="comment">// Recheck under lock</span></span><br><span class="line">                            Cell[] rs; <span class="keyword">int</span> m, j;</span><br><span class="line">                            <span class="keyword">if</span> ((rs = cells) != <span class="keyword">null</span> &amp;&amp;</span><br><span class="line">                                (m = rs.length) &gt; <span class="number">0</span> &amp;&amp;</span><br><span class="line">                                rs[j = (m - <span class="number">1</span>) &amp; h] == <span class="keyword">null</span>) {</span><br><span class="line">                                rs[j] = r;</span><br><span class="line">                                created = <span class="keyword">true</span>;</span><br><span class="line">                            }</span><br><span class="line">                        } <span class="keyword">finally</span> {</span><br><span class="line">                            cellsBusy = <span class="number">0</span>;</span><br><span class="line">                        }</span><br><span class="line">                        <span class="keyword">if</span> (created)</span><br><span class="line">                            <span class="keyword">break</span>;</span><br><span class="line">                        <span class="keyword">continue</span>;           <span class="comment">// Slot is now non-empty</span></span><br><span class="line">                    }</span><br><span class="line">                }</span><br><span class="line">                collide = <span class="keyword">false</span>;</span><br><span class="line">            }</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (!wasUncontended)       <span class="comment">// CAS already known to fail</span></span><br><span class="line">                wasUncontended = <span class="keyword">true</span>;      <span class="comment">// Continue after rehash</span></span><br><span class="line">            <span class="comment">// 当前Cell存在则执行CAS设置</span></span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (a.cas(v = a.value, ((fn == <span class="keyword">null</span>) ? v + x :</span><br><span class="line">                                         fn.applyAsLong(v, x))))</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="comment">// 当前Cell数组元素个数大于CPU个数</span></span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (n &gt;= NCPU || cells != as)</span><br><span class="line">                collide = <span class="keyword">false</span>;            <span class="comment">// At max size or stale</span></span><br><span class="line">            <span class="comment">// 是否有冲突</span></span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (!collide)</span><br><span class="line">                collide = <span class="keyword">true</span>;</span><br><span class="line">            <span class="comment">// 如果当前元素个数没有达到CPU个数并且有冲突则扩容</span></span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (cellsBusy == <span class="number">0</span> &amp;&amp; casCellsBusy()) {</span><br><span class="line">                <span class="keyword">try</span> {</span><br><span class="line">                    <span class="keyword">if</span> (cells == as) {      <span class="comment">// Expand table unless stale</span></span><br><span class="line">                        <span class="comment">// 扩容为之前的2倍</span></span><br><span class="line">                        Cell[] rs = <span class="keyword">new</span> Cell[n &lt;&lt; <span class="number">1</span>];</span><br><span class="line">                        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; ++i)</span><br><span class="line">                            rs[i] = as[i];</span><br><span class="line">                        cells = rs;</span><br><span class="line">                    }</span><br><span class="line">                } <span class="keyword">finally</span> {</span><br><span class="line">                    <span class="comment">// 重置cellsBusy标识</span></span><br><span class="line">                    cellsBusy = <span class="number">0</span>;</span><br><span class="line">                }</span><br><span class="line"></span><br><span class="line">                collide = <span class="keyword">false</span>;</span><br><span class="line">                <span class="keyword">continue</span>;                   <span class="comment">// Retry with expanded table</span></span><br><span class="line">            }</span><br><span class="line">            <span class="comment">// 为了能找到一个空闲的Cell,重新计算hash值，xorshift算法生成随机数（问题5，对CAS失败的线程重新计算threadLocalRandomProbe以减少冲突）</span></span><br><span class="line">            h = advanceProbe(h);</span><br><span class="line">        }</span><br><span class="line">        <span class="comment">// 初始化Cell数组</span></span><br><span class="line">        <span class="comment">// cellsBusy标识，为0表示当前cells没有被初始化或扩容也没有在新建Cell元素；为1表示cells数组在被初始化或扩容或当前在创建新的Cell元素</span></span><br><span class="line">        <span class="comment">// casCellsBusy()通过CAS设置cellsBusy为1</span></span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (cellsBusy == <span class="number">0</span> &amp;&amp; cells == as &amp;&amp; casCellsBusy()) {</span><br><span class="line">            <span class="keyword">boolean</span> init = <span class="keyword">false</span>;</span><br><span class="line">            <span class="keyword">try</span> {                           <span class="comment">// Initialize table</span></span><br><span class="line">                <span class="keyword">if</span> (cells == as) {</span><br><span class="line">                    <span class="comment">// 初始化cells元素个数为2</span></span><br><span class="line">                    Cell[] rs = <span class="keyword">new</span> Cell[<span class="number">2</span>];</span><br><span class="line">                    <span class="comment">// threadLocalRandomProbe &amp; (数组元素个数-1) 计算当前线程应该访问cells数组的位置</span></span><br><span class="line">                    rs[h &amp; <span class="number">1</span>] = <span class="keyword">new</span> Cell(x);</span><br><span class="line">                    cells = rs;</span><br><span class="line">                    init = <span class="keyword">true</span>;</span><br><span class="line">                }</span><br><span class="line">            } <span class="keyword">finally</span> {</span><br><span class="line">                <span class="comment">// 重置cellsBusy标识</span></span><br><span class="line">                cellsBusy = <span class="number">0</span>;</span><br><span class="line">            }</span><br><span class="line">            <span class="keyword">if</span> (init)</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (casBase(v = base, ((fn == <span class="keyword">null</span>) ? v + x :</span><br><span class="line">                                    fn.applyAsLong(v, x))))</span><br><span class="line">            <span class="keyword">break</span>;                          <span class="comment">// Fall back on using base</span></span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<h2 id="LongAccumulator"><a href="#LongAccumulator" class="headerlink" title="LongAccumulator"></a>LongAccumulator</h2><p>LongAdder 类是LongAccumulator 的一个特例， LongAccumulator 比LongAdder 的功能更强大，可以为累加器提供非0 的初始值，还可以指定累加规则，比如不进行累加而进行相乘。</p>
+<p>LongAccumulator构造函数如下：</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">LongAccumulator</span><span class="params">(LongBinaryOperator accumulatorFunction,</span></span></span><br><span class="line"><span class="function"><span class="params">                           <span class="keyword">long</span> identity)</span> </span>{</span><br><span class="line">    <span class="keyword">this</span>.function = accumulatorFunction;</span><br><span class="line">    base = <span class="keyword">this</span>.identity = identity;</span><br><span class="line">}</span><br><span class="line">    </span><br><span class="line"><span class="meta">@FunctionalInterface</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">LongBinaryOperator</span> </span>{</span><br><span class="line">    <span class="function"><span class="keyword">long</span> <span class="title">applyAsLong</span><span class="params">(<span class="keyword">long</span> left, <span class="keyword">long</span> right)</span></span>;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>其中accumulatorFunction 是一个双目运算器接口，根据输入的两个参数返回一个计算值，identity 为LongAccumulator 累加器的初始值。</p>
+<p>调用LongAdder 就相当于使用下面的方式调用LongAccumulator:</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">LongAdder adder = <span class="keyword">new</span> LongAdder();</span><br><span class="line"></span><br><span class="line">LongAccumulator accumulator = <span class="keyword">new</span> LongAccumulator(<span class="keyword">new</span> LongBinaryOperator() {</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">long</span> <span class="title">applyAsLong</span><span class="params">(<span class="keyword">long</span> left, <span class="keyword">long</span> right)</span> </span>{</span><br><span class="line">		<span class="keyword">return</span> left + right;</span><br><span class="line">	}</span><br><span class="line">}, <span class="number">0</span>);</span><br></pre></td></tr></tbody></table></figure>
+<p>通过对比LongAccumulator 与LongAdder 累加操作，不同之处在于在调用casBase时，后者传递的时b+x，前者使用 function.applyAsLong(b = base, x)来计算。</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// LongAccumulator</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">accumulate</span><span class="params">(<span class="keyword">long</span> x)</span> </span>{</span><br><span class="line">    Cell[] as; <span class="keyword">long</span> b, v, r; <span class="keyword">int</span> m; Cell a;</span><br><span class="line">    <span class="keyword">if</span> ((as = cells) != <span class="keyword">null</span> ||</span><br><span class="line">        (r = function.applyAsLong(b = base, x)) != b &amp;&amp; !casBase(b, r)) {</span><br><span class="line">        <span class="keyword">boolean</span> uncontended = <span class="keyword">true</span>;</span><br><span class="line">        <span class="keyword">if</span> (as == <span class="keyword">null</span> || (m = as.length - <span class="number">1</span>) &lt; <span class="number">0</span> ||</span><br><span class="line">            (a = as[getProbe() &amp; m]) == <span class="keyword">null</span> ||</span><br><span class="line">            !(uncontended =</span><br><span class="line">                (r = function.applyAsLong(v = a.value, x)) == v ||</span><br><span class="line">                a.cas(v, r)))</span><br><span class="line">            longAccumulate(x, function, uncontended);</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">final</span> <span class="keyword">void</span> <span class="title">longAccumulate</span><span class="params">(<span class="keyword">long</span> x, LongBinaryOperator fn,</span></span></span><br><span class="line"><span class="function"><span class="params">                              <span class="keyword">boolean</span> wasUncontended)</span> </span>{</span><br><span class="line">    <span class="keyword">int</span> h;</span><br><span class="line">    <span class="keyword">if</span> ((h = getProbe()) == <span class="number">0</span>) {</span><br><span class="line">        ThreadLocalRandom.current(); <span class="comment">// force initialization</span></span><br><span class="line">        h = getProbe();</span><br><span class="line">        wasUncontended = <span class="keyword">true</span>;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">boolean</span> collide = <span class="keyword">false</span>;                <span class="comment">// True if last slot nonempty</span></span><br><span class="line">    <span class="keyword">for</span> (;;) {</span><br><span class="line">        Cell[] as; Cell a; <span class="keyword">int</span> n; <span class="keyword">long</span> v;</span><br><span class="line">        <span class="keyword">if</span> ((as = cells) != <span class="keyword">null</span> &amp;&amp; (n = as.length) &gt; <span class="number">0</span>) {</span><br><span class="line">            <span class="comment">// ···</span></span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (cellsBusy == <span class="number">0</span> &amp;&amp; cells == as &amp;&amp; casCellsBusy()) {</span><br><span class="line">            <span class="comment">// ···</span></span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (casBase(v = base, ((fn == <span class="keyword">null</span>) ? v + x : <span class="comment">// function为空默认使用v+x，等价于LongAdder，不为空使用自定义逻辑</span></span><br><span class="line">                                        fn.applyAsLong(v, x)))) </span><br><span class="line">            <span class="keyword">break</span>;                          <span class="comment">// Fall back on using base</span></span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// LongAdder</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">(<span class="keyword">long</span> x)</span> </span>{</span><br><span class="line">    Cell[] as; <span class="keyword">long</span> b, v; <span class="keyword">int</span> m; Cell a;</span><br><span class="line">    <span class="keyword">if</span> ((as = cells) != <span class="keyword">null</span> || !casBase(b = base, b + x)) {</span><br><span class="line">        <span class="keyword">boolean</span> uncontended = <span class="keyword">true</span>;</span><br><span class="line">        <span class="keyword">if</span> (as == <span class="keyword">null</span> || (m = as.length - <span class="number">1</span>) &lt; <span class="number">0</span> ||</span><br><span class="line">            (a = as[getProbe() &amp; m]) == <span class="keyword">null</span> ||</span><br><span class="line">            !(uncontended = a.cas(v = a.value, v + x)))</span><br><span class="line">            longAccumulate(x, <span class="keyword">null</span>, uncontended);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Haif.
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://haif.fun/2020/12/26/java-concurrent-7/" title="【Java 并发编程系列】【J.U.C】：Atomic">https://haif.fun/2020/12/26/java-concurrent-7/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/%E5%B9%B6%E5%8F%91/" rel="tag"><i class="fa fa-tag"></i> 并发</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/26/java-concurrent-6/" rel="prev" title="【Java 并发编程系列】：ThreadLocal">
+      <i class="fa fa-chevron-left"></i> 【Java 并发编程系列】：ThreadLocal
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/12/26/java-concurrent-4/" rel="next" title="【Java 并发编程系列】【J.U.C】：ThreadLocalRandom">
+      【Java 并发编程系列】【J.U.C】：ThreadLocalRandom <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A6%82%E8%BF%B0"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AtomicLong"><span class="nav-number">2.</span> <span class="nav-text">AtomicLong</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86"><span class="nav-number">2.1.</span> <span class="nav-text">实现原理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%80%92%E5%A2%9E%E5%92%8C%E9%80%92%E5%87%8F%E6%93%8D%E4%BD%9C"><span class="nav-number">2.1.1.</span> <span class="nav-text">递增和递减操作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#boolean-compareAndSet-long-expect-long-update"><span class="nav-number">2.1.2.</span> <span class="nav-text">boolean compareAndSet(long expect, long update)</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LongAdder"><span class="nav-number">3.</span> <span class="nav-text">LongAdder</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86-1"><span class="nav-number">3.1.</span> <span class="nav-text">实现原理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#long-sum"><span class="nav-number">3.1.1.</span> <span class="nav-text">long sum()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#void-reset"><span class="nav-number">3.1.2.</span> <span class="nav-text">void reset()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#long-sumThenReset"><span class="nav-number">3.1.3.</span> <span class="nav-text">long sumThenReset()</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#void-add-long-x"><span class="nav-number">3.1.4.</span> <span class="nav-text">void add(long x)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#cells-%E6%95%B0%E7%BB%84%E5%88%9D%E5%A7%8B%E5%8C%96%E5%92%8C%E6%89%A9%E5%AE%B9"><span class="nav-number">3.1.5.</span> <span class="nav-text">cells 数组初始化和扩容</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#LongAccumulator"><span class="nav-number">4.</span> <span class="nav-text">LongAccumulator</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="HAIF."
+      src="/uploads/avatar.jpg">
+  <p class="site-author-name" itemprop="name">HAIF.</p>
+  <div class="site-description" itemprop="description">山行野宿， 孤身万里。<br/></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">38</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2019 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">HAIF.</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : true,
+      notify     : false,
+      appId      : 'masttnqEt9G69mj43i9oaA1C-gzGzoHsz',
+      appKey     : 'hgIx9VKn0GLDhRcLxQuNMl0E',
+      placeholder: ":)",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>
