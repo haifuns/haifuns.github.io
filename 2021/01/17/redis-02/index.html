@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://haif-cloud.oss-cn-beijing.aliyuncs.com/img/weixing.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"haif.fun","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Redis除了提供5种基本数据结构外，还提供了一些附加功能：  慢查询分析 Redis Shell Pipeline 事务与Lua Bitmaps HyperLogLog 发布订阅 GEO">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Redis】附加功能">
+<meta property="og:url" content="https://haif.fun/2021/01/17/redis-02/index.html">
+<meta property="og:site_name" content="With Silence.">
+<meta property="og:description" content="Redis除了提供5种基本数据结构外，还提供了一些附加功能：  慢查询分析 Redis Shell Pipeline 事务与Lua Bitmaps HyperLogLog 发布订阅 GEO">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-01-17T15:00:00.000Z">
+<meta property="article:modified_time" content="2021-01-17T15:01:11.970Z">
+<meta property="article:author" content="HAIF.">
+<meta property="article:tag" content="Redis">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://haif.fun/2021/01/17/redis-02/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>【Redis】附加功能 | With Silence.</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">With Silence.</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-info-circle fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-reading">
+
+    <a href="/reading/" rel="section"><i class="fa fa-book fa-fw"></i>读书</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://haif.fun/2021/01/17/redis-02/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.jpg">
+      <meta itemprop="name" content="HAIF.">
+      <meta itemprop="description" content="山行野宿， 孤身万里。<br/>">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="With Silence.">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          【Redis】附加功能
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-01-17 23:00:00 / 修改时间：23:01:11" itemprop="dateCreated datePublished" datetime="2021-01-17T23:00:00+08:00">2021-01-17</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/NoSQL/" itemprop="url" rel="index"><span itemprop="name">NoSQL</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2021/01/17/redis-02/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/01/17/redis-02/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>Redis除了提供5种基本数据结构外，还提供了一些附加功能：</p>
+<ul>
+<li>慢查询分析</li>
+<li>Redis Shell</li>
+<li>Pipeline</li>
+<li>事务与Lua</li>
+<li>Bitmaps</li>
+<li>HyperLogLog</li>
+<li>发布订阅</li>
+<li>GEO</li>
+</ul>
+<a id="more"></a>
+
+<h1 id="慢查询分析"><a href="#慢查询分析" class="headerlink" title="慢查询分析"></a>慢查询分析</h1><p>Redis客户端执行一条命令分为4个部分：</p>
+<ol>
+<li>发送命令</li>
+<li>命令排队</li>
+<li>命令执行</li>
+<li>返回结果</li>
+</ol>
+<p>慢查询只统计步骤3的时间，没有慢查询并不代表没有超时问题。</p>
+<h2 id="配置参数"><a href="#配置参数" class="headerlink" title="配置参数"></a>配置参数</h2><p>Redis提供<code>slowlog-log-slower-than</code>和<code>slowlog-max-len</code>两个配置。其中<code>slowlog-log-slower-than</code>用来设置阈值，单位时间是微秒，默认值是10000，执行时间超过10000微秒的命令会被记录在慢查询日志中。</p>
+<p>Redis使用了一个列表来存储慢查询日志，<code>slowlog-max-len</code>是列表的最大长度。</p>
+<p>Redis中有两种方法修改配置：</p>
+<ul>
+<li>修改配置文件</li>
+<li>使用<code>config set</code>命令动态修改</li>
+</ul>
+<p>例如：</p>
+<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">config set slowlog-log-slower-than 20000 # 将阈值设置为20000微妙</span><br><span class="line">config set slowlog-max-len 1000 # 将列表长度设置为1000</span><br><span class="line">config rewrite # 将配置文件持久化到本地配置文件</span><br></pre></td></tr></tbody></table></figure>
+<h2 id="查看慢查询"><a href="#查看慢查询" class="headerlink" title="查看慢查询"></a>查看慢查询</h2><ul>
+<li>获取慢查询日志</li>
+</ul>
+<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">slowlog get [n] # 可选参数n可以指定条数</span><br></pre></td></tr></tbody></table></figure>
+<p>慢查询日志由四个属性组成：</p>
+<ol>
+<li>慢查询标识id</li>
+<li>发生时间戳</li>
+<li>命令耗时</li>
+<li>执行命令和参数</li>
+</ol>
+<ul>
+<li>获取慢查询日志列表当前长度</li>
+</ul>
+<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">slowlog len</span><br></pre></td></tr></tbody></table></figure>
+<ul>
+<li>慢查询日志重置</li>
+</ul>
+<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">slowlog reset</span><br></pre></td></tr></tbody></table></figure>
+<h2 id="最佳实践"><a href="#最佳实践" class="headerlink" title="最佳实践"></a>最佳实践</h2><ul>
+<li>slowlog-max-len配置建议：线上设置1000以上。记录慢查询时Redis会对长命令做截断处理，不会占用大量内存。</li>
+<li>slowlog-log-slower-than配置建议：默认超过10ms判定为慢查询，需要根据Redis并发量调整该值。对于高流量的场景，如果命令执行时间在1ms以上，那么Redis最多可支撑OPS不到1000。对于高OPS场景Redis建议设置为1ms。</li>
+</ul>
+<p>由于慢查询日志是一个先进先出的队列，在慢查询较多时会丢失部分日志，所以可以定时执行<code>slow get</code>命令将慢查询日志持久化到其他存储中（MySQL等）。</p>
+<h1 id="Redis-Shell"><a href="#Redis-Shell" class="headerlink" title="Redis Shell"></a>Redis Shell</h1><p>Redis提供了redis-cli、redis-server、redis-benchmarl等shell工具。</p>
+<h2 id="redis-cli"><a href="#redis-cli" class="headerlink" title="redis-cli"></a>redis-cli</h2><p>redis-cli可选参数如下：</p>
+<ul>
+<li>-h：host，主机地址</li>
+<li>-p：port，端口</li>
+<li>-r：repeat，将命令执行多次</li>
+<li>-i：interbval，每隔几秒执行一次命令，与-r配合使用</li>
+<li>-x：从标准输入（stdin）读取数据作为最后一个参数，例如：<code>echo "world" | redis-cli -x set hello</code></li>
+<li>-c：cluster，连接Redis Cluster节点，防止moved和ask异常</li>
+<li>-a：auth，指定密码</li>
+<li>–scan和–pattern：用于扫描指定模式的键</li>
+<li>–slave：把客户端模拟成当前Redis节点的从节点，可以用来获取当前Redis节点的更新操作</li>
+<li>–rdb，请求Redis实例生成并发送RDB持久化文件，保存在本地</li>
+<li>–pipe，将命令封装成Redis通信协议定义的数据格式，批量发送给Redis执行</li>
+<li>–bigkeys，使用scan命令对Redis的键进行采样，从中找到内存占用比较大的键值</li>
+<li>–eval，执行指定Lua脚本</li>
+<li>–latency<ul>
+<li>–latency：测试客户端到目标Redis的网络延迟</li>
+<li>–latency-history：分时段输出网络延迟</li>
+<li>–latency-dist：使用统计图表输出网络延迟统计信息</li>
+</ul>
+</li>
+<li>–stat：实时获取Redis的重要统计信息</li>
+<li>–raw和–no-raw：–no-raw要求返回结果必须是原始格式，–raw返回格式化后的结果</li>
+</ul>
+<h2 id="redis-server"><a href="#redis-server" class="headerlink" title="redis-server"></a>redis-server</h2><p>redis-sever除了用来启动Redis外，还有一个<code>--test-memory</code>选项可以用来检测当前操作系统能否稳定分配指定容量的内存给Redis，通过检测可以有效避免因为内存问题造成Redis崩溃。</p>
+<p>例如，检测当前操作系统是否能提供1G内存给Redis：</p>
+<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">redis-server --test-memery 1024</span><br></pre></td></tr></tbody></table></figure>
+<h2 id="redis-benchmark"><a href="#redis-benchmark" class="headerlink" title="redis-benchmark"></a>redis-benchmark</h2><p>redis-benchmark可以为Redis做基准性能测试，可选参数如下：</p>
+<ul>
+<li>-c：client，客户端的并发数量，默认50</li>
+<li>-n：num，客户端请求总数量，默认100000</li>
+<li>-q：输出requests per second信息</li>
+<li>-r：random，随机插入键</li>
+<li>-P：每个请求的pipeline的数据量，默认1</li>
+<li>-k：keepalive，1使用，0不使用，默认1</li>
+<li>-t：对指定命令进行基准测试</li>
+<li>–csv：结果按照csv格式输出</li>
+</ul>
+<h1 id="Pipline"><a href="#Pipline" class="headerlink" title="Pipline"></a>Pipline</h1><p>Redis客户端执行一次命令需要经过发送、排队、执行、返回四个过程，其中发送和返回过程称为Round Trip Time（RTT，往返时间）。</p>
+<p>Redis中大部分命令不支持批量操作，那么每个命令都要消耗一次RTT。Pipeline（流水线）机制可以改善这类问题，它可以将一组Redis命令进行组装，通过一次RTT传输给Redis，再将这组Redis命令的执行结果按顺序返回给客户端。使用Pipeline执行多条命令只需要一次RTT。</p>
+<p>redis-cli的–pipe选项实际上就是使用了Pipeline机制，例如，下面将set hello world和incr counter两条命令组装：</p>
+<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo -en '*3\r\n$3\r\nSET\r\n$5\r\nhello\r\n$5\r\nworld\r\n*2\r\n$4\r\nincr\r\n$7\r\ncounter\r\n' | redis-cli --pipe</span><br></pre></td></tr></tbody></table></figure>
+<h2 id="原生批量命令与Pipeline对比"><a href="#原生批量命令与Pipeline对比" class="headerlink" title="原生批量命令与Pipeline对比"></a>原生批量命令与Pipeline对比</h2><ul>
+<li>原生批量任务是原子的，Pipeline是非原子的</li>
+<li>原生批量任务是一个命令对应多个key，Pipeline支持多个命令</li>
+<li>原生批量任务是Redis服务端支持实现的，Pipeline需要服务端和客户端共同实现</li>
+</ul>
+<h1 id="事务与Lua"><a href="#事务与Lua" class="headerlink" title="事务与Lua"></a>事务与Lua</h1><p>为了保证多条命令组合的原子性，Redis提供简单的事务功能以及集成Lua脚本来解决这个问题。</p>
+<h2 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h2><p>Redis提供简单的事务功能，将需要一起执行的命令放到<code>multi</code>和<code>exec</code>两个命令之间。multi命令代表事务开始，exec命令代表事务结束，它们之间的命令是原子性执行的。</p>
+<p><code>discard</code>命令用来停止事务执行。</p>
+<p>如果事务中的命令出现错误，不同情况下Redis的处理机制也不相同：</p>
+<ul>
+<li>命令错误：语法错误会造成整个事务无法执行</li>
+<li>运行时错误：Redis并不支持回滚功能，未发生错误的命令会正常执行</li>
+</ul>
+<p>有些应用场景需要在执行事务之前，确保事务中的key没有被其他客户端修改过才执行事务，否则不执行。Redis提供了<code>watch</code>命令来解决这类问题。（在multi命令前执行watch key，在执行exec时，如果key被修改了事务不会执行，结果为nil）</p>
+<h2 id="Lua"><a href="#Lua" class="headerlink" title="Lua"></a>Lua</h2><p>Lua语言于1993年诞生，设计目标是作为嵌入式程序移植到其他应用程序。由C语言实现，作为脚本语言被应用于游戏领域、Web服务器Nginx等地方。</p>
+<p>Redis将Lua作为脚本语言，通过修改源码可实现定制命令。</p>
+<p>在Redis中使用Lua脚本功能有如下优点：</p>
+<ul>
+<li>Lua脚本在Redis中是原子执行的，执行过程中不会插入其它命令</li>
+<li>基于Lua脚本可以创造出定制命令，并且可以将这些命令常驻在内存中，实现复用</li>
+<li>Lua脚本可以将多条命令打包，有效较少网络开销</li>
+</ul>
+<h3 id="使用Lua"><a href="#使用Lua" class="headerlink" title="使用Lua"></a>使用Lua</h3><p>在Redis中执行Lua脚本有两种方法：eval和evalsha。</p>
+<ul>
+<li>eval</li>
+</ul>
+<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">eval 脚本内容 key个数 key列表 参数列表</span><br></pre></td></tr></tbody></table></figure>
+<p>如果Lua脚本比较长，可以使用redis-cli –eval直接执行文件。</p>
+<ul>
+<li>evalsha</li>
+</ul>
+<p>Redis还提供evalsha命令来执行Lua脚本。首先将Lua脚本加载到Redis服务端，得到该脚本的SHA1校验和，evalsha命令使用SHA1作为参数可以直接执行对应的Lua脚本，避免每次发送Lua脚本的开销。脚本会常驻在服务端得到复用。</p>
+<p>加载脚本：</p>
+<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">redis-cli script load "$(cat lua_get.lua)" # 将lua_get.lua加载到内存中，返回SHA1</span><br></pre></td></tr></tbody></table></figure>
+<p>执行脚本：</p>
+<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">evalsha 脚本SHA1值 key个数 key列表 参数列表</span><br></pre></td></tr></tbody></table></figure>
+<h3 id="redis-api"><a href="#redis-api" class="headerlink" title="redis api"></a>redis api</h3><p>Lua可以使用redis.call函数实现对Redis的访问，例如：</p>
+<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">redis.call("set", "hello", "world")</span><br><span class="line">redis,call("get", "hello")</span><br></pre></td></tr></tbody></table></figure>
+<p>在Redis中执行效果如下：</p>
+<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ eval 'return redis.call("get", "KEY[1]")' 1 hello</span><br><span class="line">"world"</span><br></pre></td></tr></tbody></table></figure>
+<p>除redis.call外，Lua还可以使用redis.pcall函数实现对Redis的调用。区别在于，redis.call执行失败时，脚本执行结束会直接返回错误，而redis.pcall会忽略错误继续执行脚本。</p>
+<h3 id="管理Lua脚本"><a href="#管理Lua脚本" class="headerlink" title="管理Lua脚本"></a>管理Lua脚本</h3><ul>
+<li><code>script load script</code>：加载脚本到内存中</li>
+<li><code>script exists sha1 [sha1 ...]</code>：判断sha1是否已经加载到内存</li>
+<li><code>script flush</code>：清除内存中的Lua脚本</li>
+<li><code>script kill</code>：杀掉正在执行的Lua脚本。Redis提供lua-time-limit参数，默认5s，当脚本执行时间超过lua-time-limit后，会向其它命令调用发送BASY信号并提示使用script kill或shutdown nosave命令杀到busy脚本，但是不会停止服务端或客户端脚本执行</li>
+</ul>
+<h1 id="Bitmaps"><a href="#Bitmaps" class="headerlink" title="Bitmaps"></a>Bitmaps</h1><p>合理地使用位操作能够有效地提高内存使用率和开发效率。Redis提供了Bitmaps，可以实现对位的操作。Bitmaps不是一种数据结构，其本身就是字符串，但是可以对字符串的位进行操作。</p>
+<p>Bitmaps单独提供了一套命令，可以把Bitmaps看做成以位为单位的数组，数据每个单元只能存放1和0，数组的下标为偏移量。</p>
+<h2 id="命令"><a href="#命令" class="headerlink" title="命令"></a>命令</h2><figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">setbit key offset value # 设置值</span><br><span class="line"></span><br><span class="line">gitbit key offset # 获取值</span><br><span class="line"></span><br><span class="line">bitcount [start] [end] # 获取Bitmaps指定范围值为1的个数</span><br><span class="line"></span><br><span class="line">bitop op destkey key [key ...] # 对多个Bitmaps操作，op：and(交集)、or(并集)、not(非)、xor(异或)</span><br><span class="line"></span><br><span class="line">bitpos key targetBit [start] [end] # 计算Bitmaps中第一个值为targetBit的偏移量</span><br></pre></td></tr></tbody></table></figure>
+<h1 id="HyperLogLog"><a href="#HyperLogLog" class="headerlink" title="HyperLogLog"></a>HyperLogLog</h1><p>HyperLogLog 并不是一种新的数据结构（实际类型为字符串类型），而是一种基数算法，通过HyperLogLog可以利用极小的内存空间完成独立总数的统计，数据集可以是IP、Email、ID等。</p>
+<p>HyperLogLog内存占用量非常小，但是存在错误率，在进行数据结构选型时只需要确认以下两条：</p>
+<ol>
+<li>只为了计算独立总数，不需要获取单条数据</li>
+<li>可以容忍一定误差率</li>
+</ol>
+<h2 id="命令-1"><a href="#命令-1" class="headerlink" title="命令"></a>命令</h2><figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">pfadd key element [element ...] # 添加元素</span><br><span class="line"></span><br><span class="line">pfcount key [key ...] # 计算独立用户数</span><br><span class="line"></span><br><span class="line">pfmerge destkey sourcekey [sourcekey] # 求多个HyperLogLog并集，并赋值给destkey</span><br></pre></td></tr></tbody></table></figure>
+<h1 id="发布订阅"><a href="#发布订阅" class="headerlink" title="发布订阅"></a>发布订阅</h1><p>Redis提供了基于“发布/订阅”模式的消息机制，此模式下，消息发布者与订阅者不需要直接通信，发布者客户端向指定的频道（channel）发布消息，订阅该频道的每个客户端都能收到消息。</p>
+<h2 id="命令-2"><a href="#命令-2" class="headerlink" title="命令"></a>命令</h2><figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">publish channel message # 发布消息</span><br><span class="line"></span><br><span class="line">subscribe channel [channel ...] # 订阅消息</span><br><span class="line">    # 客户端在执行订阅命令后进入订阅状态，只能接受subscribe、psubscribe、unsubscribe、punsubscribe的四个命令</span><br><span class="line">    # 新开启的订阅客户端无法收到频道之前的消息，因为Redis不会对发布的消息进行持久化</span><br><span class="line"></span><br><span class="line">unsubscribe [channel [channel ...]] # 取消订阅</span><br><span class="line"></span><br><span class="line">psubscribe pattern [pattern ...] # 按照模式订阅</span><br><span class="line">punsubscribe [pattern [pattern ...]] # 按照模式取消订阅</span><br><span class="line"></span><br><span class="line">pubsub channels [pattern] # 查看活跃的频道</span><br><span class="line">pubsub numsub [channel ...] # 查看频道订阅数</span><br><span class="line">pubsub numpat # 查看模式订阅数</span><br></pre></td></tr></tbody></table></figure>
+<h2 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h2><p>聊天室、公告牌、服务之间都可以使用发布订阅模式实现消息解耦。</p>
+<blockquote>
+<p>和很多专业的消息队列系统（例如Kafka、RocketMQ等）相比，Redis的发布订阅略显粗糙，例如无法实现消息堆积和回溯。但胜在足够简单，如果当前场景可以容忍的这些缺点，也不失为一个不错的选择。</p>
+</blockquote>
+<h1 id="GEO"><a href="#GEO" class="headerlink" title="GEO"></a>GEO</h1><p>Redis3.2版本开始提供了GEO（地理信息定位）功能，支持存储地理位置信息用来实现诸如附近位置、摇一摇这类依赖于地理位置信息的功能。</p>
+<p>GEO的数据类型为zset，Redis将所有地理位置信息的geohash存放在zset中。</p>
+<h2 id="命令-3"><a href="#命令-3" class="headerlink" title="命令"></a>命令</h2><figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">geoadd key longitube latitude member [longitude latitude member ...] # 增加地理位置信息</span><br><span class="line">            # longitube：经度</span><br><span class="line">            # latitude：维度</span><br><span class="line">            # member：成员</span><br><span class="line">            </span><br><span class="line">geopos key member [member ...] # 获取地理位置信息</span><br><span class="line"></span><br><span class="line">geodist key member1 member2 [unit] # 获取两个地理位置的距离</span><br><span class="line">            # unit：表示返回结果的单位，包含以下四种</span><br><span class="line">                # m (meters)：米</span><br><span class="line">                # km (kilometers)：公里</span><br><span class="line">                # mi (miles)：英里</span><br><span class="line">                # ft (feet)：尺</span><br><span class="line">                            </span><br><span class="line"># 获取指定位置范围内的地理信息位置集合</span><br><span class="line">georadius key longitude latitude radiusm|km|ft|mi [withcoord] [withdist] [withhash] [COUNT count] [asc|desc] [store key] [storedist key] </span><br><span class="line">georadiusbymember key member radiusm|km|ft|mi [withcoord] [withdist] [withhash] [COUNT count] [asc|desc] [store key] [storedist key]</span><br><span class="line"></span><br><span class="line">            # withcoord：返回结果中包含经纬度</span><br><span class="line">            # withdist：返回结果中包含离中心节点位置的距离</span><br><span class="line">            # withhash：返回结果中包含geohash</span><br><span class="line">            # COUNT count：指定返回结果的数量</span><br><span class="line">            # asc|desc：返回结果按照离中心节点的距离做升序或者降序</span><br><span class="line">            # store key：将返回结果的地理位置信息保存到指定键</span><br><span class="line"></span><br><span class="line">geohash key member [member ...] # 获取geohash。Redis使用geohash将二维经纬度转换为一维字符串</span><br><span class="line"></span><br><span class="line">zrem key member # 删除地理位置信息</span><br></pre></td></tr></tbody></table></figure>
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>HAIF.
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://haif.fun/2021/01/17/redis-02/" title="【Redis】附加功能">https://haif.fun/2021/01/17/redis-02/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/Redis/" rel="tag"><i class="fa fa-tag"></i> Redis</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/01/15/redis-01/" rel="prev" title="【Redis】数据结构">
+      <i class="fa fa-chevron-left"></i> 【Redis】数据结构
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%85%A2%E6%9F%A5%E8%AF%A2%E5%88%86%E6%9E%90"><span class="nav-number">1.</span> <span class="nav-text">慢查询分析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E5%8F%82%E6%95%B0"><span class="nav-number">1.1.</span> <span class="nav-text">配置参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E6%85%A2%E6%9F%A5%E8%AF%A2"><span class="nav-number">1.2.</span> <span class="nav-text">查看慢查询</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="nav-number">1.3.</span> <span class="nav-text">最佳实践</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Redis-Shell"><span class="nav-number">2.</span> <span class="nav-text">Redis Shell</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#redis-cli"><span class="nav-number">2.1.</span> <span class="nav-text">redis-cli</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#redis-server"><span class="nav-number">2.2.</span> <span class="nav-text">redis-server</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#redis-benchmark"><span class="nav-number">2.3.</span> <span class="nav-text">redis-benchmark</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Pipline"><span class="nav-number">3.</span> <span class="nav-text">Pipline</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8E%9F%E7%94%9F%E6%89%B9%E9%87%8F%E5%91%BD%E4%BB%A4%E4%B8%8EPipeline%E5%AF%B9%E6%AF%94"><span class="nav-number">3.1.</span> <span class="nav-text">原生批量命令与Pipeline对比</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%8B%E5%8A%A1%E4%B8%8ELua"><span class="nav-number">4.</span> <span class="nav-text">事务与Lua</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8B%E5%8A%A1"><span class="nav-number">4.1.</span> <span class="nav-text">事务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Lua"><span class="nav-number">4.2.</span> <span class="nav-text">Lua</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8Lua"><span class="nav-number">4.2.1.</span> <span class="nav-text">使用Lua</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#redis-api"><span class="nav-number">4.2.2.</span> <span class="nav-text">redis api</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%AE%A1%E7%90%86Lua%E8%84%9A%E6%9C%AC"><span class="nav-number">4.2.3.</span> <span class="nav-text">管理Lua脚本</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Bitmaps"><span class="nav-number">5.</span> <span class="nav-text">Bitmaps</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%91%BD%E4%BB%A4"><span class="nav-number">5.1.</span> <span class="nav-text">命令</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#HyperLogLog"><span class="nav-number">6.</span> <span class="nav-text">HyperLogLog</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%91%BD%E4%BB%A4-1"><span class="nav-number">6.1.</span> <span class="nav-text">命令</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%91%E5%B8%83%E8%AE%A2%E9%98%85"><span class="nav-number">7.</span> <span class="nav-text">发布订阅</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%91%BD%E4%BB%A4-2"><span class="nav-number">7.1.</span> <span class="nav-text">命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-number">7.2.</span> <span class="nav-text">使用场景</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#GEO"><span class="nav-number">8.</span> <span class="nav-text">GEO</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%91%BD%E4%BB%A4-3"><span class="nav-number">8.1.</span> <span class="nav-text">命令</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="HAIF."
+      src="/uploads/avatar.jpg">
+  <p class="site-author-name" itemprop="name">HAIF.</p>
+  <div class="site-description" itemprop="description">山行野宿， 孤身万里。<br/></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">40</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">16</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2019 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">HAIF.</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : true,
+      notify     : false,
+      appId      : 'masttnqEt9G69mj43i9oaA1C-gzGzoHsz',
+      appKey     : 'hgIx9VKn0GLDhRcLxQuNMl0E',
+      placeholder: ":)",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : 'https://leancloud.haif.fun'
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>
