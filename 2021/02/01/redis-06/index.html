@@ -34,7 +34,7 @@
 <meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/redis/redis-cluster-meet.png">
 <meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/redis/redis-gossip.png">
 <meta property="article:published_time" content="2021-02-01T14:50:00.000Z">
-<meta property="article:modified_time" content="2021-02-01T14:46:06.738Z">
+<meta property="article:modified_time" content="2021-02-01T14:55:17.679Z">
 <meta property="article:author" content="HAIF.">
 <meta property="article:tag" content="Redis">
 <meta name="twitter:card" content="summary">
@@ -205,7 +205,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2021-02-01 22:50:00 / 修改时间：22:46:06" itemprop="dateCreated datePublished" datetime="2021-02-01T22:50:00+08:00">2021-02-01</time>
+              <time title="创建时间：2021-02-01 22:50:00 / 修改时间：22:55:17" itemprop="dateCreated datePublished" datetime="2021-02-01T22:50:00+08:00">2021-02-01</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -254,7 +254,22 @@
 
 <h1 id="数据分布"><a href="#数据分布" class="headerlink" title="数据分布"></a>数据分布</h1><h2 id="数据分布理论"><a href="#数据分布理论" class="headerlink" title="数据分布理论"></a>数据分布理论</h2><p>分布式数据库会把整个数据集按照分区规则映射到多个节点上，即把数据集划分到多个节点上，每个节点负责整体数据的一个子集。</p>
 <p>常见的分区规则有哈希分区和顺序分区两种。区别如下表所示：</p>
-<p>分区方式 | 特点<br>—|—|—<br>哈希分区 | 离散度好；数据分布与业务无关；无法顺序访问<br>顺序分区 | 离散度易倾斜；数据分布与业务有关；可顺序访问</p>
+<table>
+<thead>
+<tr>
+<th>分区方式</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>哈希分区</td>
+<td>离散度好；数据分布与业务无关；无法顺序访问</td>
+</tr>
+<tr>
+<td>顺序分区</td>
+<td>离散度易倾斜；数据分布与业务有关；可顺序访问</td>
+</tr>
+</tbody></table>
 <p>Redis Cluster采用的是哈希分区规则，下面重点讨论哈希分区，常见的哈希分区规则有以下几种：</p>
 <ol>
 <li>节点取余分区</li>
@@ -277,7 +292,7 @@
 </ol>
 <p>虚拟槽分区巧妙地使用了哈希空间，使用分散度良好的哈希函数把所有数据映射到一个固定范围的整数集合中，整数定义为槽（slot）。这个范围一般远大于节点数，比如Redis Cluster槽范围是0 ~ 16383。槽是集群内数据管理和迁移的基本单位。采用大范围槽的主要目的是为了方便数据拆分和集群扩展。每个节点会负责一定数量的槽。</p>
 <h2 id="Redis数据分区"><a href="#Redis数据分区" class="headerlink" title="Redis数据分区"></a>Redis数据分区</h2><p>Redis Cluster采用虚拟槽分区，所有的键根据哈希函数映射到0 ~ 16383整数槽内，计算公式：</p>
-<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">slot = CRC16(key) \&amp; 16383</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">slot = CRC16(key) &amp; 16383</span><br></pre></td></tr></tbody></table></figure>
 <p>每一个节点负责维护一部分槽以及槽所映射的键值数据。</p>
 <p>Redis虚拟槽分区特点如下：</p>
 <ul>
