@@ -173,6 +173,122 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://haif.fun/2021/02/10/jvm-7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.jpg">
+      <meta itemprop="name" content="HAIF.">
+      <meta itemprop="description" content="山行野宿， 孤身万里。<br/>">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="With Silence.">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/02/10/jvm-7/" class="post-title-link" itemprop="url">【JVM】：核心参数</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-02-10 23:42:00 / 修改时间：23:41:29" itemprop="dateCreated datePublished" datetime="2021-02-10T23:42:00+08:00">2021-02-10</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/JVM/" itemprop="url" rel="index"><span itemprop="name">JVM</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2021/02/10/jvm-7/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/02/10/jvm-7/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <ul>
+<li>-Xms/-XX:InitialHeapSize ：初始堆大小，默认物理内存1/64</li>
+<li>-Xmx/-XX:MaxHeapSize ：最大堆大小，默认物理内存1/4</li>
+<li>-Xmn ：新生代大小，默认物理内存3/8</li>
+<li>-XX:PermSize/-XX:MetaspaceSize ：永久代大小</li>
+<li>-XX:MaxPermSize/-XX:MaxMetaspaceSize ：永久代最大大小</li>
+<li>-Xss ：每个线程的栈内存大小</li>
+<li>-XX:NewSize ：新生代大小</li>
+<li>-XX:MaxNewSize ：新生代最大大小</li>
+<li>-XX:NewRatio ：老年代与新生代比值</li>
+<li>-XX:SurvivorRatio ：eden区与survivor区比值，默认为8</li>
+<li>-XX:MaxTenuringThreshold ：对象晋升到老年代的GC次数阈值，默认为15</li>
+<li>-XX:PretenureSizeThreshold ：大对象直接晋升老年代的字节阈值</li>
+<li>-XX:HandlePromotionFailure ：设置空间分配担保，jdk1.6后已废弃</li>
+<li>-XX:+UseParNewGC ：使用ParNew作为新生代收集器</li>
+<li> -XX:ParallelGCThreads ：并行GC线程数，默认为CPU核心数</li>
+<li>-XX:+UseConcMarkSweepGC ：使用CMS作为老年代收集器，Serial Old将作为CMS出错后的后备收集器</li>
+<li>-XX:CMSInitiatingOccupancyFraction ：CMS收集器在老年代空间被使用多少后触发回收，jdk1.6默认92%</li>
+<li>-XX:+UseCMSCompactAtFullCollection ：在FullGC后进行Stop The World，停止工作线程进行内存碎片整理，默认开启</li>
+<li>-XX:CMSFullGCsBeforeCompaction ：在执行多少次FullGC后执行碎片整理，默认0即每次FullGC都进行内存整理</li>
+<li>-XX:+UseG1GC ：使用G1收集器，jdk1.9后默认</li>
+<li>-XX:G1HeapRegionSize ：指定Region大小，取值范围1MB ~ 32MB，应为2的N次幂</li>
+<li>-XX:G1NewSizePercent ：G1新生代初始占比，默认5%</li>
+<li>-XX:G1MaxNewSizePercent ：G1新生代最大占比，默认60%</li>
+<li>-XX:MaxGCPauseMills ：G1目标停顿时间，默认200ms</li>
+<li>-XX:InitiatingHeapOccupancyLPercent ：G1老年代占比Region多少触发混合回收，默认45%</li>
+<li>-XX:G1MixedGCCountTarget ：G1混合回收中最后一个阶段执行混合垃圾回收的目标次数，默认8次</li>
+<li>-XX:G1HeapWastePercent ：空闲Region达到堆指定占比停止混合回收，默认5%</li>
+<li>-XX:G1MixedGCLiveThresholdPercent ：存活对象占比Region低于多少可以进行回收，默认85%</li>
+<li>-XX:+HeapDumpOnOutOfMemoryError ： OOM时自动生成dump文件</li>
+<li>-XX:HeapDumpPath ：指定dump导出路径</li>
+<li>-XX:+PrintGCDetails 打印详细GC日志</li>
+<li>-XX:+PrintGCTimeStamps 打印每次GC发生的时间</li>
+<li>-Xloggc:gc.log 指定GC日志</li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://haif.fun/2021/02/01/redis-06/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1021,97 +1137,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://haif.fun/2020/12/26/java-concurrent-11/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.jpg">
-      <meta itemprop="name" content="HAIF.">
-      <meta itemprop="description" content="山行野宿， 孤身万里。<br/>">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="With Silence.">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/12/26/java-concurrent-11/" class="post-title-link" itemprop="url">【Java 并发编程系列】【J.U.C】：Lock</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-12-26 17:54:00 / 修改时间：17:53:45" itemprop="dateCreated datePublished" datetime="2020-12-26T17:54:00+08:00">2020-12-26</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%B9%B6%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">并发</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2020/12/26/java-concurrent-11/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2020/12/26/java-concurrent-11/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><h2 id="ReentrantLock"><a href="#ReentrantLock" class="headerlink" title="ReentrantLock"></a>ReentrantLock</h2><p>ReentrantLock 是可重入的独占锁，同时只能有一个线程可以获取该锁，其他获取该锁的线程会被阻塞而被放入该锁的AQS 阻塞队列里。</p>
-<h3 id="类图"><a href="#类图" class="headerlink" title="类图"></a>类图</h3><p>ReentrantLock 类图如下：</p>
-<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/ReentrantLock-uml.png" alt="image"></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/12/26/java-concurrent-11/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1183,7 +1208,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">44</span>
+          <span class="site-state-item-count">45</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
