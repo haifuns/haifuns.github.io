@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://haif-cloud.oss-cn-beijing.aliyuncs.com/img/weixing.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"haif.fun","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="网络层次划分国际标准化组织（ISO）提出的开放系统互连参考模型 (Open System Interconnect 简称OSI）将计算机网络体系结构的通信协议划分为七层，自下而上依次为：  物理层（Physics Layer） 数据链路层（Data Link Layer） 网络层（Network Layer） 传输层（Transport Layer） 会话层（Session Layer） 表示层（">
+<meta property="og:type" content="article">
+<meta property="og:title" content="网络基础">
+<meta property="og:url" content="https://haif.fun/2021/03/13/tcpip/index.html">
+<meta property="og:site_name" content="With Silence.">
+<meta property="og:description" content="网络层次划分国际标准化组织（ISO）提出的开放系统互连参考模型 (Open System Interconnect 简称OSI）将计算机网络体系结构的通信协议划分为七层，自下而上依次为：  物理层（Physics Layer） 数据链路层（Data Link Layer） 网络层（Network Layer） 传输层（Transport Layer） 会话层（Session Layer） 表示层（">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/tcpip/tcpip-model.png">
+<meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/tcpip/tcp-header.png">
+<meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/tcpip/tcp-conn.png">
+<meta property="article:published_time" content="2021-03-13T08:00:00.000Z">
+<meta property="article:modified_time" content="2021-03-13T08:03:02.732Z">
+<meta property="article:author" content="HAIF.">
+<meta property="article:tag" content="TCP&#x2F;IP">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/tcpip/tcpip-model.png">
+
+<link rel="canonical" href="https://haif.fun/2021/03/13/tcpip/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>网络基础 | With Silence.</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">With Silence.</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-info-circle fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-reading">
+
+    <a href="/reading/" rel="section"><i class="fa fa-book fa-fw"></i>读书</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://haif.fun/2021/03/13/tcpip/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.jpg">
+      <meta itemprop="name" content="HAIF.">
+      <meta itemprop="description" content="无限进步<br/>">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="With Silence.">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          网络基础
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-03-13 16:00:00 / 修改时间：16:03:02" itemprop="dateCreated datePublished" datetime="2021-03-13T16:00:00+08:00">2021-03-13</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/TCP-IP/" itemprop="url" rel="index"><span itemprop="name">TCP/IP</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2021/03/13/tcpip/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/03/13/tcpip/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="网络层次划分"><a href="#网络层次划分" class="headerlink" title="网络层次划分"></a>网络层次划分</h1><p>国际标准化组织（ISO）提出的开放系统互连参考模型 (Open System Interconnect 简称OSI）将计算机网络体系结构的通信协议划分为七层，自下而上依次为：</p>
+<ul>
+<li>物理层（Physics Layer）</li>
+<li>数据链路层（Data Link Layer）</li>
+<li>网络层（Network Layer）</li>
+<li>传输层（Transport Layer）</li>
+<li>会话层（Session Layer）</li>
+<li>表示层（Presentation Layer）</li>
+<li>应用层（Application Layer）</li>
+</ul>
+<p>其中第四层完成数据传送服务，上面三层面向用户。</p>
+<a id="more"></a>
+
+<p>除了标准的OSI七层模型以外，常见的网络层次划分还有TCP/IP四层协议以及TCP/IP五层协议，它们之间的对应关系如下图所示：</p>
+<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/tcpip/tcpip-model.png" alt="image"></p>
+<h1 id="OSI七层网络模型"><a href="#OSI七层网络模型" class="headerlink" title="OSI七层网络模型"></a>OSI七层网络模型</h1><table>
+<thead>
+<tr>
+<th>层数</th>
+<th>分层名称</th>
+<th>功能</th>
+<th>实例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>7</td>
+<td>应用层</td>
+<td>针对特定应用的协议</td>
+<td>HTTP、FTP、DNS、Telnet、SMTP、POP3</td>
+</tr>
+<tr>
+<td>6</td>
+<td>表示层</td>
+<td>设备固有数据格式和网络标准数据格式的转换</td>
+<td>ASCII、GIF、JPEG</td>
+</tr>
+<tr>
+<td>5</td>
+<td>会话层</td>
+<td>通信管理，负责建立和断开通信连接，管理传输层以下的分层</td>
+<td>RPC、SQL、NFS</td>
+</tr>
+<tr>
+<td>4</td>
+<td>传输层</td>
+<td>管理两个节点之间的数据传输，负责可靠传输</td>
+<td>TCP、UDP，设备：网关</td>
+</tr>
+<tr>
+<td>3</td>
+<td>网络层</td>
+<td>地址管理与路由选择</td>
+<td>IP、ICMP、ARP、RARP，设备：路由器</td>
+</tr>
+<tr>
+<td>2</td>
+<td>数据链路层</td>
+<td>互连设备之间传送和识别数据帧</td>
+<td>IEEE 802.3，设备：网桥、交换机</td>
+</tr>
+<tr>
+<td>1</td>
+<td>物理层</td>
+<td>以0、1代表电压高低、灯光的闪灭，界定连接器和网线的规格</td>
+<td>RS232、v.35，设备：集线器、中继器</td>
+</tr>
+</tbody></table>
+<ul>
+<li>物理层</li>
+</ul>
+<p>负责0、1比特流（0、1序列）与电压的高低、光的闪灭之间的互换。</p>
+<ul>
+<li>数据链路层</li>
+</ul>
+<p>负责物理层面上的互连的、节点之间的通信传输。例如与1个以太网相连的2个节点之间的通信。将0、1序列划分为具有意义的数据帧传送给对端（数据帧的生成与接收）。</p>
+<ul>
+<li>网络层</li>
+</ul>
+<p>将数据层传输到目标地址，目标地址可以是多个网络通过路由器连接而成的某一地址。因此这一层主要负责寻址和路由选择。</p>
+<ul>
+<li>传输层</li>
+</ul>
+<p>起着可靠传输的作用。只在通信双方节点上进行处理，而无需在路由器上处理。</p>
+<ul>
+<li>会话层</li>
+</ul>
+<p>负责建立和断开通信连接（数据流动的逻辑通路），以及数据的分割等数据传输相关的管理。</p>
+<ul>
+<li>表示层</li>
+</ul>
+<p>将应用处理的信息转换为适合网络传输的格式，或将来自下一层的数据转换为上层能够处理的格式。因此表示层主要负责数据格式的转换。</p>
+<ul>
+<li>应用层</li>
+</ul>
+<p>为应用程序提供服务并规定应用程序中通信相关的细节。包括文件传输、电子邮件、远程登录（虚拟中端）等协议。</p>
+<h1 id="IP：网际协议"><a href="#IP：网际协议" class="headerlink" title="IP：网际协议"></a>IP：网际协议</h1><p>IP协议是TCP/IP协议的核心，所有的TCP，UDP，IMCP以及IGMP数据都以IP数据报格式传输。要注意的是IP不是可靠的协议，也就是说，IP协议没有提供一种数据未传达以后的处理机制，这被认为是上层协议：TCP或UDP要做的事情。</p>
+<h2 id="IP地址"><a href="#IP地址" class="headerlink" title="IP地址"></a>IP地址</h2><p>IP地址（IPv4）由32位正整数来表示，每8位一组，分成4组，每组以“.”隔开。理论上最多可以允许2^32台机器连接到网络。</p>
+<p>IP地址由网络标识（网络地址）和主机标识（主机地址）两部分组成。网络标识在数据链路的每个段配置不同的值。网络标识必须保证相互连接的每个段的地址不重复。而相同段内相连的主机必须有相同的网络地址。IP地址的主机标识则不允许在同一个网段内出现。</p>
+<p>对于从第几位到第几位是主机标识，哪些位是主机标识，有约定俗成的两种区分类型：最初以分类进行区分；现在基本以子网掩码（网络前缀）区分。</p>
+<h2 id="IP地址分类"><a href="#IP地址分类" class="headerlink" title="IP地址分类"></a>IP地址分类</h2><p>IP地址分为四个级别，分别是A类、B类、C类、D类。根据IP地址中从第1位到第4位的比特列对其网络标识和主机标识进行区分。</p>
+<ul>
+<li>A类地址：以0开头，前8位是网络标识，地址范围是0.0.0.0 ~ 127.255.255.255；</li>
+<li>B类地址：以10开头，前16位是网络标识，地址范围是128.0.0.0 ~ 191.255.255.255；</li>
+<li>C类地址：以110开头，前24位是网络标识，地址范围是192.0.0.0 ~ 223.255.255.255；</li>
+<li>D类地址：以1110开头，前32位是网络标识，地址范围是224.0.0.0 ~ 239.255.255.255，D类地址常被用于多播；</li>
+<li>以1111开头的地址为保留地址，地址范围是240.0.0.0 ~ 255.255.255.255；</li>
+</ul>
+<blockquote>
+<p>注：只有A，B，C有网络号和主机号之分，D类地址没有划分网络号和主机号。</p>
+</blockquote>
+<h1 id="UDP：用户数据报协议"><a href="#UDP：用户数据报协议" class="headerlink" title="UDP：用户数据报协议"></a>UDP：用户数据报协议</h1><p>用户数据报协议（UDP，User Datagram Protocol）是一种面向无连接的传输层协议，提供面向事务的简单不可靠传送服务。常被用于一下场景：</p>
+<ul>
+<li>包总量较少的通信（DNS、SNMP）等；</li>
+<li>视频、音频等多媒体通信（即时通信）；</li>
+<li>限定于LAN等特定网络中的应用通信；</li>
+<li>广播通信（广播、多播）；</li>
+</ul>
+<h1 id="TCP：传输控制协议"><a href="#TCP：传输控制协议" class="headerlink" title="TCP：传输控制协议"></a>TCP：传输控制协议</h1><p>传输控制协议（TCP，Transmission Control Protocol）是一种面向连接的、可靠的、基于字节流的传输层通信协议。</p>
+<h2 id="TCP首部"><a href="#TCP首部" class="headerlink" title="TCP首部"></a>TCP首部</h2><p>TCP数据被封装在一个IP数据报中，如下图所示：</p>
+<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/tcpip/tcp-header.png" alt="image"></p>
+<p>图中同时展示了TCP首部的数据格式，如果不计任选字段，通常是20个字节。包含如下部分：</p>
+<ul>
+<li>源端和目的端的端口号：用于寻找发端和收端应用进程。这两个值加上IP首部中源端IP地址和目的端IP地址唯一确定一个TCP连接。</li>
+<li>序号：用来标识从TCP发端向TCP收端发送的数据字节流，它表示在这个报文段中的第一个数据字节。序号到达2^32-1后从0重新开始。</li>
+<li>确认序号：包含发送确认的一端所期望收到的下一个序号。只有ACK标志为1时，确认序号才有效。</li>
+<li>首部长度：首部中32bit字的数目。TCP首部最多60字节，如果没有任选字段，正常长度是20字节。</li>
+<li>标志位：<ul>
+<li>URG：紧急指针有效；</li>
+<li>ACK：确认序号有效；</li>
+<li>PSH：接收方应该尽快将这个报文段交给应用层；</li>
+<li>SYN：同步序号用来发起一个连接；</li>
+<li>FIN：发端完成发送任务；</li>
+</ul>
+</li>
+<li>窗口大小：字节数，起始于确认序号字段指明的值，这个值是接收端期望收到的字节。窗口大小最大为65535字节。TCP流量控制由连接的每一端通过声明的窗口大小来提供。</li>
+<li>检验和：覆盖TCP首部和TCP数据，由发端计算和存储、收端验证。</li>
+<li>紧急指针：正的偏移量，和序号字段中的值相加表示紧急数据最后一个字节的序号。只有URG标志设置为1时紧急指针才有效。</li>
+<li>可选字段：最常见的可选字段是最长报文大小，又称为MSS。</li>
+</ul>
+<h2 id="TCP连接"><a href="#TCP连接" class="headerlink" title="TCP连接"></a>TCP连接</h2><p>TCP连接建立与终止流程如下图所示：</p>
+<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/tcpip/tcp-conn.png" alt="image"></p>
+<h3 id="连接建立：三次握手"><a href="#连接建立：三次握手" class="headerlink" title="连接建立：三次握手"></a>连接建立：三次握手</h3><ol>
+<li>请求端发送一个SYN段指明客户打算连接的服务器端口，以及初始序号。</li>
+<li>服务端发回包含服务器的初始序号的SYN报文段作为应答，同时设置ACK标志，将确认序号设置为客户的序号加1以对客户的SYN报文段进行确认。</li>
+<li>客户必须将确认序号设置为服务器的序号加1以对服务器的SYN报文段进行确认。</li>
+</ol>
+<h3 id="连接断开：四次挥手"><a href="#连接断开：四次挥手" class="headerlink" title="连接断开：四次挥手"></a>连接断开：四次挥手</h3><ol>
+<li>请求端发送FIN报文到服务端，进入FIN-WAIT-1状态。</li>
+<li>服务端发回一个ACK报文，确认序号为收到的序号加1，然后进入CLOSE-WAIT状态。（服务端可能还有数据没有发完，客户端收到后进入FIN-WAIT-2状态继续等待服务端FIN消息）</li>
+<li>服务端处理完数据后向客户端发送FIN报文，序号，ACK标志以及确认序号，然后进入LAST-ACK状态。</li>
+<li>客户端收到FIN回复后，发送ACK报文到服务端，然后进入TIME-WAIT状态，等待2MSL后如果没有收到服务端重传请求则认为服务端已确认，进入CLOSE状态。</li>
+</ol>
+<h3 id="十万个为什么"><a href="#十万个为什么" class="headerlink" title="十万个为什么"></a>十万个为什么</h3><h4 id="为什么要三次握手？"><a href="#为什么要三次握手？" class="headerlink" title="为什么要三次握手？"></a>为什么要三次握手？</h4><p>三次握手可以有效防止已失效的连接请求报文段突然又传送到了服务端而产生错误。</p>
+<p>在两次“握手”的情形下，假设客户端在跟服务端建立连接过程中数据报丢失了（有可能数据传输过程因为网络并发量很大在某个结点被阻塞了），那么客户端会再次发起连接请求。这种情形下服务端将有可能先后收到两次请求并建立连接，然后持续等待两个客户端请求向它发送数据。此时服务端有两个响应而客户端实际上只有一次请求，因而造成资源浪费。</p>
+<h4 id="为什么要四次挥手？"><a href="#为什么要四次挥手？" class="headerlink" title="为什么要四次挥手？"></a>为什么要四次挥手？</h4><p>TCP是全双工模式，因此在四次挥手中，前两次挥手用于断开一个方向的连接，后两次挥手用于断开另一方向的连接。</p>
+<h4 id="为什么第四次挥手后要等待2MSL才关闭？"><a href="#为什么第四次挥手后要等待2MSL才关闭？" class="headerlink" title="为什么第四次挥手后要等待2MSL才关闭？"></a>为什么第四次挥手后要等待2MSL才关闭？</h4><p>MSL：报文段最大生存时间，它是任何报文段被丢弃前在网络内的最长时间。</p>
+<p>等待2MSL主要有两个原因：</p>
+<ol>
+<li>为了保证客户端发送的最后一个ACK报文段能够到达服务器。因为这个ACK有可能丢失，从而导致处在LAST-ACK状态的服务器收不到对FIN-ACK的确认报文。服务器会超时重传这个FIN-ACK，接着客户端再重传一次确认，重新启动时间等待计时器。最后客户端和服务器都能正常的关闭。假设客户端不等待2MSL，而是在发送完ACK之后直接释放关闭，一但这个ACK丢失的话，服务器就无法正常的进入关闭连接状态。</li>
+<li>可以防止已失效的报文段。客户端在发送最后一个ACK之后，再经过经过2MSL，就可以使本连接持续时间内所产生的所有报文段都从网络中消失。从保证在关闭连接后不会有还在网络中滞留的报文段去骚扰服务器。</li>
+</ol>
+<blockquote>
+<p>服务器在发送FIN-ACK后，会立即启动超时重传计时器。客户端在发送最后一个ACK之后会立即启动时间等待计时器。</p>
+</blockquote>
+<p>参考文章：</p>
+<ul>
+<li>《TCP/IP详解 卷一：协议》</li>
+<li>《图解TCPIP》</li>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/maybe2030/p/4781555.html">[Network] 计算机网络基础知识总结</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Haif.
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://haif.fun/2021/03/13/tcpip/" title="网络基础">https://haif.fun/2021/03/13/tcpip/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/TCP-IP/" rel="tag"><i class="fa fa-tag"></i> TCP/IP</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/02/25/devops-02/" rel="prev" title="Prometheus+Grafana监控JVM">
+      <i class="fa fa-chevron-left"></i> Prometheus+Grafana监控JVM
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E5%B1%82%E6%AC%A1%E5%88%92%E5%88%86"><span class="nav-number">1.</span> <span class="nav-text">网络层次划分</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#OSI%E4%B8%83%E5%B1%82%E7%BD%91%E7%BB%9C%E6%A8%A1%E5%9E%8B"><span class="nav-number">2.</span> <span class="nav-text">OSI七层网络模型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#IP%EF%BC%9A%E7%BD%91%E9%99%85%E5%8D%8F%E8%AE%AE"><span class="nav-number">3.</span> <span class="nav-text">IP：网际协议</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#IP%E5%9C%B0%E5%9D%80"><span class="nav-number">3.1.</span> <span class="nav-text">IP地址</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IP%E5%9C%B0%E5%9D%80%E5%88%86%E7%B1%BB"><span class="nav-number">3.2.</span> <span class="nav-text">IP地址分类</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#UDP%EF%BC%9A%E7%94%A8%E6%88%B7%E6%95%B0%E6%8D%AE%E6%8A%A5%E5%8D%8F%E8%AE%AE"><span class="nav-number">4.</span> <span class="nav-text">UDP：用户数据报协议</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#TCP%EF%BC%9A%E4%BC%A0%E8%BE%93%E6%8E%A7%E5%88%B6%E5%8D%8F%E8%AE%AE"><span class="nav-number">5.</span> <span class="nav-text">TCP：传输控制协议</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#TCP%E9%A6%96%E9%83%A8"><span class="nav-number">5.1.</span> <span class="nav-text">TCP首部</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TCP%E8%BF%9E%E6%8E%A5"><span class="nav-number">5.2.</span> <span class="nav-text">TCP连接</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9E%E6%8E%A5%E5%BB%BA%E7%AB%8B%EF%BC%9A%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B"><span class="nav-number">5.2.1.</span> <span class="nav-text">连接建立：三次握手</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9E%E6%8E%A5%E6%96%AD%E5%BC%80%EF%BC%9A%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B"><span class="nav-number">5.2.2.</span> <span class="nav-text">连接断开：四次挥手</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%81%E4%B8%87%E4%B8%AA%E4%B8%BA%E4%BB%80%E4%B9%88"><span class="nav-number">5.2.3.</span> <span class="nav-text">十万个为什么</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E4%B8%89%E6%AC%A1%E6%8F%A1%E6%89%8B%EF%BC%9F"><span class="nav-number">5.2.3.1.</span> <span class="nav-text">为什么要三次握手？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B%EF%BC%9F"><span class="nav-number">5.2.3.2.</span> <span class="nav-text">为什么要四次挥手？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E7%AC%AC%E5%9B%9B%E6%AC%A1%E6%8C%A5%E6%89%8B%E5%90%8E%E8%A6%81%E7%AD%89%E5%BE%852MSL%E6%89%8D%E5%85%B3%E9%97%AD%EF%BC%9F"><span class="nav-number">5.2.3.3.</span> <span class="nav-text">为什么第四次挥手后要等待2MSL才关闭？</span></a></li></ol></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="HAIF."
+      src="/uploads/avatar.jpg">
+  <p class="site-author-name" itemprop="name">HAIF.</p>
+  <div class="site-description" itemprop="description">无限进步<br/></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">49</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">18</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2019 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">HAIF.</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : true,
+      notify     : false,
+      appId      : 'masttnqEt9G69mj43i9oaA1C-gzGzoHsz',
+      appKey     : 'hgIx9VKn0GLDhRcLxQuNMl0E',
+      placeholder: ":)",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : 'https://leancloud.haif.fun'
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>
