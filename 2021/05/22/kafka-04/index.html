@@ -23,21 +23,20 @@
     var CONFIG = {"hostname":"haif.fun","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="本文使用开源扩展 Hibernate Types 实现操作postgresql json&#x2F;jsonb&#x2F;hstore数据类型   添加依赖123456&lt;!-- Hibernate 5.4, 5.3 and 5.2 --&gt;&lt;dependency&gt;    &lt;groupId&gt;com.vladmihalcea&lt;&#x2F;groupId&gt;    &lt;artifac">
+  <meta name="description" content="概述Kafka中多个消费者间的分区分配由消费者协调器（ConsumerCoordinator）和组协调器（GroupCoordinator）共同完成。全部消费组被分为多个子集，每个子集在服务端对应者一个GroupCoordinator进行管理，而消费者客户端中的ConsumerCoordinator组件负责与GroupCoordinator进行交互。 GroupCoordinator与Consum">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hibernate&#x2F;Jpa扩展支持Json&#x2F;Hstore">
-<meta property="og:url" content="https://haif.fun/2020/04/28/hibernatetypes-extend/index.html">
+<meta property="og:title" content="【Kafka】：再均衡原理剖析">
+<meta property="og:url" content="https://haif.fun/2021/05/22/kafka-04/index.html">
 <meta property="og:site_name" content="With Silence.">
-<meta property="og:description" content="本文使用开源扩展 Hibernate Types 实现操作postgresql json&#x2F;jsonb&#x2F;hstore数据类型   添加依赖123456&lt;!-- Hibernate 5.4, 5.3 and 5.2 --&gt;&lt;dependency&gt;    &lt;groupId&gt;com.vladmihalcea&lt;&#x2F;groupId&gt;    &lt;artifac">
+<meta property="og:description" content="概述Kafka中多个消费者间的分区分配由消费者协调器（ConsumerCoordinator）和组协调器（GroupCoordinator）共同完成。全部消费组被分为多个子集，每个子集在服务端对应者一个GroupCoordinator进行管理，而消费者客户端中的ConsumerCoordinator组件负责与GroupCoordinator进行交互。 GroupCoordinator与Consum">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2020-04-28T15:45:00.000Z">
-<meta property="article:modified_time" content="2020-12-26T09:02:39.120Z">
+<meta property="article:published_time" content="2021-05-22T12:30:00.000Z">
+<meta property="article:modified_time" content="2021-05-22T12:03:56.540Z">
 <meta property="article:author" content="HAIF.">
-<meta property="article:tag" content="Hibernate">
-<meta property="article:tag" content="PostgreSQL">
+<meta property="article:tag" content="Kafka">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://haif.fun/2020/04/28/hibernatetypes-extend/">
+<link rel="canonical" href="https://haif.fun/2021/05/22/kafka-04/">
 
 
 <script id="page-configurations">
@@ -50,7 +49,7 @@
   };
 </script>
 
-  <title>Hibernate/Jpa扩展支持Json/Hstore | With Silence.</title>
+  <title>【Kafka】：再均衡原理剖析 | With Silence.</title>
   
 
 
@@ -178,7 +177,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://haif.fun/2020/04/28/hibernatetypes-extend/">
+    <link itemprop="mainEntityOfPage" href="https://haif.fun/2021/05/22/kafka-04/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/uploads/avatar.jpg">
@@ -191,7 +190,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Hibernate/Jpa扩展支持Json/Hstore
+          【Kafka】：再均衡原理剖析
         </h1>
 
         <div class="post-meta">
@@ -200,23 +199,17 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2020-04-28 23:45:00" itemprop="dateCreated datePublished" datetime="2020-04-28T23:45:00+08:00">2020-04-28</time>
+              <time title="创建时间：2021-05-22 20:30:00 / 修改时间：20:03:56" itemprop="dateCreated datePublished" datetime="2021-05-22T20:30:00+08:00">2021-05-22</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-12-26 17:02:39" itemprop="dateModified" datetime="2020-12-26T17:02:39+08:00">2020-12-26</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" itemprop="url" rel="index"><span itemprop="name">数据库</span></a>
+                  <a href="/categories/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6/" itemprop="url" rel="index"><span itemprop="name">消息中间件</span></a>
                 </span>
             </span>
 
@@ -236,8 +229,8 @@
       </span>
       <span class="post-meta-item-text">Valine：</span>
     
-    <a title="valine" href="/2020/04/28/hibernatetypes-extend/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2020/04/28/hibernatetypes-extend/" itemprop="commentCount"></span>
+    <a title="valine" href="/2021/05/22/kafka-04/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/05/22/kafka-04/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -252,168 +245,44 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id=""><a href="#" class="headerlink" title=""></a></h2><ul>
-<li>本文使用开源扩展 <a target="_blank" rel="noopener" href="https://github.com/vladmihalcea/hibernate-types/">Hibernate Types</a> 实现操作postgresql json/jsonb/hstore数据类型 </li>
-</ul>
-<h4 id="添加依赖"><a href="#添加依赖" class="headerlink" title="添加依赖"></a>添加依赖</h4><figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- Hibernate 5.4, 5.3 and 5.2 --&gt;</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;com.vladmihalcea&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;hibernate-types-52&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;${hibernate-types.version}&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></tbody></table></figure>
+        <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>Kafka中多个消费者间的分区分配由消费者协调器（ConsumerCoordinator）和组协调器（GroupCoordinator）共同完成。全部消费组被分为多个子集，每个子集在服务端对应者一个GroupCoordinator进行管理，而消费者客户端中的ConsumerCoordinator组件负责与GroupCoordinator进行交互。</p>
+<p>GroupCoordinator与ConsumerCoordinaor之间最重要的工作就是负责执行消费者再均衡。分区分配工作也是在再均衡期间完成的。</p>
 <a id="more"></a>
-<h4 id="声明Hibernate类型"><a href="#声明Hibernate类型" class="headerlink" title="声明Hibernate类型"></a>声明Hibernate类型</h4><figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">@TypeDefs({</span><br><span class="line">		@TypeDef(name = "json", typeClass = JsonBinaryType.class),</span><br><span class="line">		@TypeDef(name = "jsonb", typeClass = JsonBinaryType.class),</span><br><span class="line">		@TypeDef(name = "hstore", typeClass = PostgreSQLHStoreType.class)</span><br><span class="line">})</span><br><span class="line">@Table(name = "STUDENT")</span><br><span class="line">public class Student implements Serializable {</span><br><span class="line"></span><br><span class="line">	···</span><br><span class="line">	</span><br><span class="line">	@Type(type = "hstore")</span><br><span class="line">	@Column(name = "BOOK", columnDefinition = "hstore")</span><br><span class="line">	private Map&lt;String,String&gt; book;</span><br><span class="line"></span><br><span class="line">	@Type(type = "json")</span><br><span class="line">	@Column(name = "INFO", columnDefinition = "json")</span><br><span class="line">	private Object info;</span><br><span class="line"></span><br><span class="line">	@Type(type = "jsonb")</span><br><span class="line">	@Column(name = "FRIEND", columnDefinition = "jsonb")</span><br><span class="line">	private Object friend;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="触发时机"><a href="#触发时机" class="headerlink" title="触发时机"></a>触发时机</h1><p>触发再均衡的场景如下：</p>
 <ul>
-<li>json/jsonb引用JsonBinaryType</li>
-<li>hstore引用PostgreSQLHStoreType<ul>
-<li>postgresql使用hstore需要安装扩展<code>CREATE EXTENSION hstore;</code></li>
+<li>新的消费者加入消费组。</li>
+<li>消费者宕机。</li>
+<li>消费者主动退出消费组。</li>
+<li>消费组对应的GroupCoordinaor节点发生变更。</li>
+<li>消费组内订阅的任一主题或主题分区数量发生变化。</li>
 </ul>
-</li>
-</ul>
-<p>完成后即可以使用这些数据类型的高级查询功能：</p>
-<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Student&gt; students = entityManager.createNativeQuery(</span><br><span class="line">    "SELECT jsonb_pretty(s.friend) " +</span><br><span class="line">    "FROM student s " +</span><br><span class="line">    "WHERE s.friend -&gt;&gt; 0 = '李四'")</span><br><span class="line">.getResultList();</span><br></pre></td></tr></tbody></table></figure>
-<h4 id="JPA简单操作"><a href="#JPA简单操作" class="headerlink" title="JPA简单操作"></a>JPA简单操作</h4><figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@Query(value = "SELECT s.* FROM student s WHERE s.friend -&gt;&gt; 0 = :name", nativeQuery = true)</span><br><span class="line">	List&lt;Student&gt; queryByFriend(@Param("name") String name);</span><br></pre></td></tr></tbody></table></figure>
+<h1 id="再均衡流程"><a href="#再均衡流程" class="headerlink" title="再均衡流程"></a>再均衡流程</h1><h2 id="第一阶段（FIND-COORDINATOR）"><a href="#第一阶段（FIND-COORDINATOR）" class="headerlink" title="第一阶段（FIND_COORDINATOR）"></a>第一阶段（FIND_COORDINATOR）</h2><p>此阶段消费者需要与所属消费组对应的GroupCoordinator所在的broker建立连接。如果消费者已经保存与消费组对应的GroupCoordinator节点的信息，并且与之建立的网络连接正常，那么就直接进入第二阶段。否则，需要向负载最小的节点（leastLoadedNode）发送FindCoordinatorRequest（coordinator_key + coordinator_type）请求来查找对应的GroupCoordinator。</p>
+<p>Kafka收到FindCoordinatorRequest消息后，会根据coordinator_key（即groupId）查找对应的GroupCoordinator节点，返回对应的node_id、ip、port信息。</p>
+<p>查找GroupCoordinator的方式为先根据groupId的hash值对__consumers_offsets的分区数取余，得到分区号，然后寻找此分区leader副本所在的broker节点，即这个groupId所对应的GroupCoordinator节点。</p>
+<p>消费者groupId最终的分区分配方案及组内消费者提交的消费位移都会提交到查到的broker节点上。</p>
+<h2 id="第二阶段（JOIN-GROUP）"><a href="#第二阶段（JOIN-GROUP）" class="headerlink" title="第二阶段（JOIN_GROUP）"></a>第二阶段（JOIN_GROUP）</h2><p>此阶段消费者会向GroupCoordinator发送JoinGroupRequest请求，请求体包含如下信息：</p>
 <ul>
-<li>json</li>
+<li>group_id：消费组id。</li>
+<li>session_timeout：对应消费者session.timeout.ms，默认10s。当GroupCoordinator超过session_timeout指定的时间没有收到心跳则认为消费者已下线。</li>
+<li>reblance_timeout：对应消费者max.poll.interval.ms，默认5min。表示消费组再平衡时GroupCoordinator等待消费者重新加入的最长时间。</li>
+<li>member_id：GroupCoordinator分配给消费者的id。消费者第一次发送JoinGroupRequest请求时此字段为null。</li>
+<li>protocol_type：消费者实现协议，此处传consumer。</li>
+<li>group_protocols：多个分区分配策略，配置多种策略时包含多个protocol_name和protocol_metadata信息。</li>
 </ul>
-<table>
-<thead>
-<tr>
-<th>操作符</th>
-<th>右操作类型</th>
-<th>返回类型</th>
-<th>描述</th>
-<th>示例</th>
-<th>示例结果</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>-&gt;</td>
-<td>int</td>
-<td>json/jsonb</td>
-<td>获取JSON数组元素（从零开始索引，从末数开始为负整数）</td>
-<td>‘[{“a”:”foo”},{“b”:”bar”},{“c”:”baz”}]’::json-&gt;2</td>
-<td>{“c”:”baz”}</td>
-</tr>
-<tr>
-<td>-&gt;</td>
-<td>text</td>
-<td>json/jsonb</td>
-<td>通过键获取JSON对象字段</td>
-<td>‘{“a”: {“b”:”foo”}}’::json-&gt;’a’</td>
-<td>{“b”:”foo”}</td>
-</tr>
-<tr>
-<td>-&gt;&gt;</td>
-<td>int</td>
-<td>text</td>
-<td>获取JSON数组元素为 <code>text</code></td>
-<td>‘[1,2,3]’::json-&gt;&gt;2</td>
-<td>3</td>
-</tr>
-<tr>
-<td>-&gt;&gt;</td>
-<td>text</td>
-<td>text</td>
-<td>获取JSON对象字段为 <code>text</code></td>
-<td>‘{“a”:1,”b”:2}’::json-&gt;&gt;’b’</td>
-<td>2</td>
-</tr>
-<tr>
-<td>#&gt;</td>
-<td>text[]</td>
-<td>json/jsonb</td>
-<td>在指定路径获取JSON对象</td>
-<td>‘{“a”: {“b”:{“c”: “foo”}}}’::json#&gt;’{a,b}’</td>
-<td>{“c”: “foo”}</td>
-</tr>
-<tr>
-<td>#&gt;&gt;</td>
-<td>text[]</td>
-<td>text</td>
-<td>在指定路径下获取JSON对象为 <code>text</code></td>
-<td>‘{“a”:[1,2,3],”b”:[4,5,6]}’::json#&gt;&gt;’{a,2}’</td>
-<td>3</td>
-</tr>
-</tbody></table>
-<ul>
-<li>store</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>操作符</th>
-<th>描述</th>
-<th>示例</th>
-<th>示例结果</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>hstore -&gt; text</td>
-<td>获取密钥值（如果不存在<code>NULL</code>）</td>
-<td>‘a=&gt;x, b=&gt;y’::hstore -&gt; ‘a’</td>
-<td>x</td>
-</tr>
-<tr>
-<td>hstore -&gt; text[]</td>
-<td>获取密钥值（如果不存在<code>NULL</code>）</td>
-<td>‘a=&gt;x, b=&gt;y, c=&gt;z’::hstore -&gt; ARRAY[‘c’,’a’]</td>
-<td>{“z”,”x”}</td>
-</tr>
-<tr>
-<td>hstore || hstore</td>
-<td>组合<code>hstore</code></td>
-<td>‘a=&gt;b, c=&gt;d’::hstore || ‘c=&gt;x, d=&gt;q’::hstore</td>
-<td>“a”=&gt;”b”, “c”=&gt;”x”, “d”=&gt;”q”</td>
-</tr>
-<tr>
-<td>hstore ? text</td>
-<td>是否包含键</td>
-<td>‘a=&gt;1’::hstore ? ‘a’</td>
-<td>t</td>
-</tr>
-<tr>
-<td>hstore ?&amp; text[]</td>
-<td>是否包含所有指定的键</td>
-<td>‘a=&gt;1,b=&gt;2’::hstore ?&amp; ARRAY[‘a’,’b’]</td>
-<td>t</td>
-</tr>
-<tr>
-<td>hstore ?| text[]</td>
-<td>是否包含任意指定的键</td>
-<td>‘a=&gt;1,b=&gt;2’::hstore ?| ARRAY[‘b’,’c’]</td>
-<td>t</td>
-</tr>
-<tr>
-<td>hstore @&gt; hstore</td>
-<td>左包含右</td>
-<td>‘a=&gt;b, b=&gt;1, c=&gt;NULL’::hstore @&gt; ‘b=&gt;1’</td>
-<td>t</td>
-</tr>
-<tr>
-<td>hstore &lt;@ hstore</td>
-<td>左包含在右边</td>
-<td>‘a=&gt;c’::hstore &lt;@ ‘a=&gt;b, b=&gt;1, c=&gt;NULL’</td>
-<td>f</td>
-</tr>
-<tr>
-<td>hstore - text</td>
-<td>删除键</td>
-<td>‘a=&gt;1, b=&gt;2, c=&gt;3’::hstore - ‘b’::text</td>
-<td>“a”=&gt;”1”, “c”=&gt;”3”</td>
-</tr>
-<tr>
-<td>hstore - text[]</td>
-<td>删除多个键</td>
-<td>‘a=&gt;1, b=&gt;2, c=&gt;3’::hstore - ARRAY[‘a’,’b’]</td>
-<td>“c”=&gt;”3”</td>
-</tr>
-<tr>
-<td>hstore - hstore</td>
-<td>删除匹配对</td>
-<td>‘a=&gt;1, b=&gt;2, c=&gt;3’::hstore - ‘a=&gt;4, b=&gt;2’::hstore</td>
-<td>“a”=&gt;”1”, “c”=&gt;”3”</td>
-</tr>
-</tbody></table>
-<h4 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h4><ul>
-<li>json/hstore更多语法移步<a target="_blank" rel="noopener" href="https://www.postgresql.org/docs/devel/functions-json.html">JSON Functions and Operators</a>/<a target="_blank" rel="noopener" href="https://www.postgresql.org/docs/devel/hstore.html">hstore</a>官方文档。中文版：<a target="_blank" rel="noopener" href="http://postgres.cn/docs/9.6/functions-json.html">JSON Functions and Operators</a>/<a target="_blank" rel="noopener" href="http://postgres.cn/docs/9.6/hstore.html">hstore</a></li>
-<li>可能会遇到的语法包含特殊字符可参考<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/50464741/how-to-escape-question-mark-character-with-spring-jparepository">How to escape question mark ? character with Spring JpaRepository</a></li>
-</ul>
+<h3 id="选举消费者组leader"><a href="#选举消费者组leader" class="headerlink" title="选举消费者组leader"></a>选举消费者组leader</h3><p>GroupCoordinator需要为消费组内的消费者选举一个消费组leader，当消费者组还没有leader时，第一个加入的消费者即为消费者组leader，如果leader退出了消费者组就随机选一个消费者作为leader。</p>
+<h3 id="选举分区分配策略"><a href="#选举分区分配策略" class="headerlink" title="选举分区分配策略"></a>选举分区分配策略</h3><p>消费组需要从各个消费者呈报的分配策略中选举出一个策略，由消费者投票选出。具体选举过程如下：</p>
+<ol>
+<li>收集各个消费者支持的所有分配策略（partition.assignment.strategy）组成候选集。</li>
+<li>每个消费者从候选集中找出第一个支持的的策略并投票。</li>
+<li>计算候选集中的策略投票数，选票最多的策略即为当前消费组的分配策略。</li>
+</ol>
+<p>分配策略选举完成后Kafka会发送给消费者JoinGroupResponse回执，回执中包含GroupCoordinator中投票选举出的分配策略信息，并且只有leader消费者的回执中包含各个消费者的订阅信息。</p>
+<h2 id="第三阶段（SYNC-GROUP）"><a href="#第三阶段（SYNC-GROUP）" class="headerlink" title="第三阶段（SYNC_GROUP）"></a>第三阶段（SYNC_GROUP）</h2><p>此阶段leader消费者会根据上一个阶段选举出来的分区分配策略进行具体的分区分配，之后通过GroupCorrdinator转发同步分配方案。</p>
+<p>所有消费者会向GroupCoordinator发送SyncGroupRequest请求，并且只有leader消费者的请求中携带分区分配方案。</p>
+<p>GroupCoordinator会将leader消费者请求中的分区分配策略连同这个消费组的元数据信息存入Kafka的__consumer_offsets主题中。最后发送分区分配方案给各个消费者。</p>
+<h2 id="第四阶段（HEARTAEAT）"><a href="#第四阶段（HEARTAEAT）" class="headerlink" title="第四阶段（HEARTAEAT）"></a>第四阶段（HEARTAEAT）</h2><p>进入此阶段后消费组中的所有消费者就会处于正常工作状态。在开始消费前，消费者需要拉取消息的起始位置，如果之前提交过消费位移则通过OffsetFetchRequest向GroupCoordinator获取上次提交的位移并从此处继续消费。</p>
+<p>消费者通过一个独立的心跳线程向GroupCoordinator发送心跳，心跳间隔由heartbeat.interval.ms指定，默认3s。如果一个消费者发生崩溃并停止消费消息，那么GroupCoordinator会等待session.timeout.ms时间确认消费者死亡后触发再均衡。</p>
 
     </div>
 
@@ -425,11 +294,11 @@
 <div>
 <ul class="post-copyright">
   <li class="post-copyright-author">
-    <strong>本文作者： </strong>haif.
+    <strong>本文作者： </strong>Haif.
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://haif.fun/2020/04/28/hibernatetypes-extend/" title="Hibernate&#x2F;Jpa扩展支持Json&#x2F;Hstore">https://haif.fun/2020/04/28/hibernatetypes-extend/</a>
+    <a href="https://haif.fun/2021/05/22/kafka-04/" title="【Kafka】：再均衡原理剖析">https://haif.fun/2021/05/22/kafka-04/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -441,8 +310,7 @@
       <footer class="post-footer">
           
           <div class="post-tags">
-              <a href="/tags/Hibernate/" rel="tag"><i class="fa fa-tag"></i> Hibernate</a>
-              <a href="/tags/PostgreSQL/" rel="tag"><i class="fa fa-tag"></i> PostgreSQL</a>
+              <a href="/tags/Kafka/" rel="tag"><i class="fa fa-tag"></i> Kafka</a>
           </div>
 
         
@@ -451,13 +319,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2019/11/21/flow/" rel="prev" title="Java必备流程图">
-      <i class="fa fa-chevron-left"></i> Java必备流程图
+    <a href="/2021/05/22/kafka-03/" rel="prev" title="【Kafka】：消费者">
+      <i class="fa fa-chevron-left"></i> 【Kafka】：消费者
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/06/14/docker/" rel="next" title="docker入门指南">
-      docker入门指南 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -517,7 +382,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-number">1.</span> <span class="nav-text"></span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B7%BB%E5%8A%A0%E4%BE%9D%E8%B5%96"><span class="nav-number">1.0.1.</span> <span class="nav-text">添加依赖</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A3%B0%E6%98%8EHibernate%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.0.2.</span> <span class="nav-text">声明Hibernate类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#JPA%E7%AE%80%E5%8D%95%E6%93%8D%E4%BD%9C"><span class="nav-number">1.0.3.</span> <span class="nav-text">JPA简单操作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%B6%E4%BB%96"><span class="nav-number">1.0.4.</span> <span class="nav-text">其他</span></a></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A6%82%E8%BF%B0"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%A7%A6%E5%8F%91%E6%97%B6%E6%9C%BA"><span class="nav-number">2.</span> <span class="nav-text">触发时机</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%86%8D%E5%9D%87%E8%A1%A1%E6%B5%81%E7%A8%8B"><span class="nav-number">3.</span> <span class="nav-text">再均衡流程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E9%98%B6%E6%AE%B5%EF%BC%88FIND-COORDINATOR%EF%BC%89"><span class="nav-number">3.1.</span> <span class="nav-text">第一阶段（FIND_COORDINATOR）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E9%98%B6%E6%AE%B5%EF%BC%88JOIN-GROUP%EF%BC%89"><span class="nav-number">3.2.</span> <span class="nav-text">第二阶段（JOIN_GROUP）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%89%E4%B8%BE%E6%B6%88%E8%B4%B9%E8%80%85%E7%BB%84leader"><span class="nav-number">3.2.1.</span> <span class="nav-text">选举消费者组leader</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%80%89%E4%B8%BE%E5%88%86%E5%8C%BA%E5%88%86%E9%85%8D%E7%AD%96%E7%95%A5"><span class="nav-number">3.2.2.</span> <span class="nav-text">选举分区分配策略</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%B8%89%E9%98%B6%E6%AE%B5%EF%BC%88SYNC-GROUP%EF%BC%89"><span class="nav-number">3.3.</span> <span class="nav-text">第三阶段（SYNC_GROUP）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E5%9B%9B%E9%98%B6%E6%AE%B5%EF%BC%88HEARTAEAT%EF%BC%89"><span class="nav-number">3.4.</span> <span class="nav-text">第四阶段（HEARTAEAT）</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
