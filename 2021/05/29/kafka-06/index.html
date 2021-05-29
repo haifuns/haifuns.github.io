@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://haif-cloud.oss-cn-beijing.aliyuncs.com/img/weixing.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"haif.fun","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="概述Kafka中的消息以主题为基本单位进行归类，每个主题可以分为一个或多个分区，不考虑多副本的情况下，一个分区对应一个日志（Log）。 为了防止Log过大、便于消息维护和管理，Kafka引入了日志分段（LogSegment）的概念，将Log切分为多个LogSegment。Log和LogSegment都不是纯粹物理意义上的概念，实际上，Log在物理层面是以文件夹形式存储，而每个LogSegment对">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Kafka】：日志存储">
+<meta property="og:url" content="https://haif.fun/2021/05/29/kafka-06/index.html">
+<meta property="og:site_name" content="With Silence.">
+<meta property="og:description" content="概述Kafka中的消息以主题为基本单位进行归类，每个主题可以分为一个或多个分区，不考虑多副本的情况下，一个分区对应一个日志（Log）。 为了防止Log过大、便于消息维护和管理，Kafka引入了日志分段（LogSegment）的概念，将Log切分为多个LogSegment。Log和LogSegment都不是纯粹物理意义上的概念，实际上，Log在物理层面是以文件夹形式存储，而每个LogSegment对">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/kafka/kafka05.png">
+<meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/kafka/kafka06.png">
+<meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/kafka/kafka07.png">
+<meta property="article:published_time" content="2021-05-29T15:10:00.000Z">
+<meta property="article:modified_time" content="2021-05-29T15:08:09.061Z">
+<meta property="article:author" content="HAIF.">
+<meta property="article:tag" content="Kafka">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/kafka/kafka05.png">
+
+<link rel="canonical" href="https://haif.fun/2021/05/29/kafka-06/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>【Kafka】：日志存储 | With Silence.</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">With Silence.</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-info-circle fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-roaming">
+
+    <a href="/roaming/" rel="section"><i class="fa fa-book fa-fw"></i>漫游</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://haif.fun/2021/05/29/kafka-06/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.jpg">
+      <meta itemprop="name" content="HAIF.">
+      <meta itemprop="description" content="无限进步<br/>">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="With Silence.">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          【Kafka】：日志存储
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-05-29 23:10:00 / 修改时间：23:08:09" itemprop="dateCreated datePublished" datetime="2021-05-29T23:10:00+08:00">2021-05-29</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6/" itemprop="url" rel="index"><span itemprop="name">消息中间件</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2021/05/29/kafka-06/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/05/29/kafka-06/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>Kafka中的消息以主题为基本单位进行归类，每个主题可以分为一个或多个分区，不考虑多副本的情况下，一个分区对应一个日志（Log）。</p>
+<p>为了防止Log过大、便于消息维护和管理，Kafka引入了日志分段（LogSegment）的概念，将Log切分为多个LogSegment。Log和LogSegment都不是纯粹物理意义上的概念，实际上，Log在物理层面是以文件夹形式存储，而每个LogSegment对应磁盘上的一个日志文件和两个索引文件，以及可能的其他文件。</p>
+<h1 id="文件目录"><a href="#文件目录" class="headerlink" title="文件目录"></a>文件目录</h1><p>Log对应一个命名形式为<code>&lt;topic&gt;-&lt;partiton&gt;</code>的文件夹，向Log中追加消息时是顺序写入的，只有最后一个LogSegment才能执行写入操作（称为activeSegment，即当前活跃数据），此前的LogSegment都不能写入数据。随着消息的不断写入，当activeSegment满足一定条件时，就会创建新的activeSegment，之后追加消息到新的activeSegment。</p>
+<p>每个LogSegment中的日志文件都对应两个索引文件：</p>
+<ul>
+<li>偏移量索引文件（.index文件后缀）</li>
+<li>时间戳索引文件（.timeindex文件后缀）</li>
+</ul>
+<p>每个LogSegment都有一个基准偏移量baseOffset，用来表示当前LogSegment中的第一条消息的offset。偏移量是一个64位的长整数，日志文件和两个索引文件都是根据baseOffset命名的，名称固定为20位数字，比如第一个LogSegment的baseOffset为0，对应的日志文件为<code>00000000000000000000.log</code>。</p>
+<a id="more"></a>
+
+<h1 id="日志格式"><a href="#日志格式" class="headerlink" title="日志格式"></a>日志格式</h1><h2 id="V1版本"><a href="#V1版本" class="headerlink" title="V1版本"></a>V1版本</h2><p>Kafka消息格式（V1版本，未压缩）如下图所示，图中RECORD为消息体，offset和message size为日志头部（LOG_OVERHEAD）。与消息对应的还有消息集的概念，消息集中包含一条或者多条消息，消息集不仅是存储于磁盘及在网络上传输（Produce &amp; Fetch）的基本形式，而且是Kafka中压缩的基本单元，结构如图中右边部分。</p>
+<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/kafka/kafka05.png" alt="image"></p>
+<p>消息格式中的各个字段如下：</p>
+<ul>
+<li>crc32（4B）：crc32校验值，校验范围为magic到value之间。</li>
+<li>magic（1B）：消息格式版本号。</li>
+<li>timestamp（8B）：消息时间戳。（broker端可配置，默认使用生产者创建消息时的时间）</li>
+<li>attributes（1B）：消息属性。低3位表示压缩类型，0-NONE，1-GZIP，2-SNAPPY，3-LZ4。第4位表示timestamp类型，0-CreateTime，1-LogAppendTime。其余位保留。</li>
+<li>key length（4B）：消息key的长度。-1表示key为null。</li>
+<li>key：消息键。</li>
+<li>value length（4B）：实际消息体的长度。-1表示消息为null。</li>
+<li>value：消息体。</li>
+</ul>
+<h2 id="消息压缩"><a href="#消息压缩" class="headerlink" title="消息压缩"></a>消息压缩</h2><p>为了得到更好的压缩效果，Kafka实现的压缩方案是将多条消息一起压缩。一般情况下，生产者发送的压缩消息在broker中也是保持压缩状态进行存储的，消费者从broker拉取到的也是压缩消息，在处理消息前才会进行解压。</p>
+<p>Kafka日志压缩方式通过参数<code>compression.type</code>配置，默认值为producer，即保留生产者使用的压缩方式。压缩方式还可以配置为gzip/snappy/lz4三种压缩算法，以及可以配置不压缩（uncompressed）。</p>
+<p>消息压缩时，将整个消息集作为内层消息，内层消息整体作为外层的value。压缩后的消息key为null，value是多条压缩消息。当生产者创建压缩消息时，对内部压缩消息设置的offset从0开始，offset由broker进行转换，保存内层最后一条的绝对位移在外层offset。如下图所示：</p>
+<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/kafka/kafka06.png" alt="image"></p>
+<h2 id="V2版本"><a href="#V2版本" class="headerlink" title="V2版本"></a>V2版本</h2><p>V2版本中的消息集称为Record Batch，而不是Messgage Set，其内部也包含一条或者多条消息，如下图中部和右边。在消息压缩时，Record Batch Header部分（图左，first offset到records count字段）是不被压缩的，被压缩的是records字段中的所有内容。</p>
+<p>生产者客户端中的ProducerBatch对应RecordBatch，而ProducerRecord对应Record。</p>
+<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/kafka/kafka07.png" alt="image"></p>
+<p>消息格式中Record部分字段为varints变长字段，Kafka会根据具体值确定需要几个字节保存。部分字段解释如下：</p>
+<ul>
+<li>length：消息总长度。</li>
+<li>attributes：已弃用。</li>
+<li>timestamp delta：时间戳增量，保存与RecordBatch的起始时间戳差值。</li>
+<li>offset delta：时间戳增量，保存与RecordBatch起始位移的差值。</li>
+</ul>
+<p>RecordBatch字段解释如下：</p>
+<ul>
+<li>first offset：当前RecordBatch的起始偏移。</li>
+<li>length：从partition leader epoch字段开始到末尾的长度。</li>
+<li>partition leader epoch：分区leader纪元，可以看作分区leader的版本号或更新次数。</li>
+<li>magic：消息格式版本号，V2版本此字段为2。</li>
+<li>attributes：消息属性，低3位表示压缩格式，第4位表示时间戳类型，第5位表示此RecordBatch是否处于事务中，第6位表示是否是控制消息（ControlBatch），控制消息用来支持事务功能。</li>
+<li>last offset delta：RecordBatch中最后一个Record的offset与first offset的差值。</li>
+<li>first timestamp：RecordBatch中第一条Record的时间戳。</li>
+<li>max timestamp：RecordBatch中最大的时间戳。</li>
+<li>producer id：PID，用来支持幂等和事务。</li>
+<li>producer epoch：同producer id，用来支持幂等和事务。</li>
+<li>producer sequence：同producer id、producer epoch，用来支持幂等和事务。</li>
+<li>records count：RecordBatch中的Record的个数。</li>
+</ul>
+<h1 id="日志索引"><a href="#日志索引" class="headerlink" title="日志索引"></a>日志索引</h1><p>每个日志分段文件都对应两个索引文件，用来提高查找消息的效率。偏移量索引文件用来建立消息偏移量到物理地址之间的映射关系，方便快速定位到消息所在的物理文件位置。时间戳索引文件用来根据指定时间戳来查找对应的偏移量信息。</p>
+<p>Kafka中的索引文件以稀疏索引的方式构造，其不保证每条消息在索引文件中都有对应的索引项，每当写入一定量的消息时（broker端参数log.index.interval.bytes控制，默认4KB），偏移量索引文件和时间戳索引文件分别增加一个偏移量索引和时间戳索引项。</p>
+<p>稀疏索引通过MapppedByteBuffer将索引文件映射到内存中以加快索引查询速度。偏移量索引文件中的偏移量是单调递增的，查询指定偏移量时，使用二分查找快速定位偏移量位置，如果指定偏移量不在索引文件中，则会返回小于指定偏移量的最大偏移量。时间戳索引查找方式同理，至于找到对应的物理文件位置时需要再根据偏移量索引再次定位。</p>
+<p>对于日志分段文件，其切分条件如下，满足其一即可：</p>
+<ol>
+<li>当前日志分段文件的大小超过了broker端参数log.segment.bytes配置的值。默认值为1GB。</li>
+<li>当前日志分段中消息的最大时间戳与当前系统的时间戳差值大于log.roll.ms或log.roll.hours参数配置的值。默认情况下只配置log.roll.hours参数，为7天。</li>
+<li>偏移量索引或时间戳索引文件大小达到broker端参数log.index.size.max.bytes配置的值，默认10MB。</li>
+<li>追加的消息的偏移量与当前日志分段的偏移量之间的差值大于Integer.MAX_VALUE，即要追加的消息偏移量不能转变为相对偏移量（offset - baseOffset &gt; Integer.MAX_VALUE）。</li>
+</ol>
+<h2 id="偏移量索引"><a href="#偏移量索引" class="headerlink" title="偏移量索引"></a>偏移量索引</h2><p>每个偏移量索引项占8个字节，分为两个部分：</p>
+<ol>
+<li>relativeOffset：相对偏移量，表示消息相对于baseOffset的偏移量，占用4个字节，当前索引文件文件名即为baseOffset。</li>
+<li>position：物理地址，也就是消息在日志分段文件中的对应物理位置，占用4个字节。</li>
+</ol>
+<h2 id="时间戳索引"><a href="#时间戳索引" class="headerlink" title="时间戳索引"></a>时间戳索引</h2><p>每个时间戳索引项占12个字节，也分为两个部分：</p>
+<ol>
+<li>timestamp：当前日志分段的最大时间戳，占用8个字节。</li>
+<li>relativeOffset：时间戳对应的消息相对偏移量，占用4个字节。</li>
+</ol>
+<h1 id="日志清理"><a href="#日志清理" class="headerlink" title="日志清理"></a>日志清理</h1><p>为了控制消息存储占用的磁盘空间，Kafka提供了两种日志清理策略：</p>
+<ol>
+<li>日志删除（Log Retention）：按照一定策略直接删除不符合条件的日志分段。</li>
+<li>日志压缩（Log Compaction）：针对每个消息的key进行整合，对于相同的key的不同value值，只保留最后一个版本。</li>
+</ol>
+<p>通过broker端参数log.cleanup.policy参数设置日志清理策略，默认为delete即采用日志清理策略，可配置为compact即日志压缩策略，还可以配置为delete,compact即同时支持两种策略。日志清理的粒度可以控制到主题级别，对应主题级别参数cleanup.policy。</p>
+<p>对于日志删除，Kafka的日志管理器中有一个专门的日志删除任务来周期性检测和删除不符合保留条件的日志分段文件，默认频率5分钟。当前日志分段的保留策略有三种：</p>
+<ul>
+<li>基于时间的保留策略</li>
+<li>基于日志大小的保留策略</li>
+<li>基于日志起始偏移量的保留策略</li>
+</ul>
+<h1 id="磁盘存储"><a href="#磁盘存储" class="headerlink" title="磁盘存储"></a>磁盘存储</h1><h2 id="磁盘顺序写"><a href="#磁盘顺序写" class="headerlink" title="磁盘顺序写"></a>磁盘顺序写</h2><p>Kafka采用文件追加的方式写入消息，即只能在日志文件的尾部追加新的消息，并且不允许修改已写入的消息。这种顺序写盘的操作使得Kafka即使使用磁盘作为存储介质，其所能承载的吞吐量也不容小觑。</p>
+<h2 id="页缓存"><a href="#页缓存" class="headerlink" title="页缓存"></a>页缓存</h2><p>Kafka中大量使用了页缓存，消息先被写入页缓存，然后由操作系统负责具体的刷盘任务，同时Kafka提供同步刷盘及强制性刷盘（fsync）功能，通过log.flushl.interval.messages、log.flush.interval.ms等参数控制。</p>
+<h2 id="零拷贝"><a href="#零拷贝" class="headerlink" title="零拷贝"></a>零拷贝</h2><p>Kafka还使用了零拷贝（Zero-Copy，将数据直接从磁盘文件复制到网卡设备中，而不需要经由应用程序）技术来进一步提升性能。</p>
+
+    </div>
+
+    
+    
+    
+        
+
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Haif.
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://haif.fun/2021/05/29/kafka-06/" title="【Kafka】：日志存储">https://haif.fun/2021/05/29/kafka-06/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/Kafka/" rel="tag"><i class="fa fa-tag"></i> Kafka</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/05/29/kafka-05/" rel="prev" title="【Kafka】：主题与分区">
+      <i class="fa fa-chevron-left"></i> 【Kafka】：主题与分区
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A6%82%E8%BF%B0"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E7%9B%AE%E5%BD%95"><span class="nav-number">2.</span> <span class="nav-text">文件目录</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%97%A5%E5%BF%97%E6%A0%BC%E5%BC%8F"><span class="nav-number">3.</span> <span class="nav-text">日志格式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#V1%E7%89%88%E6%9C%AC"><span class="nav-number">3.1.</span> <span class="nav-text">V1版本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B6%88%E6%81%AF%E5%8E%8B%E7%BC%A9"><span class="nav-number">3.2.</span> <span class="nav-text">消息压缩</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#V2%E7%89%88%E6%9C%AC"><span class="nav-number">3.3.</span> <span class="nav-text">V2版本</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%97%A5%E5%BF%97%E7%B4%A2%E5%BC%95"><span class="nav-number">4.</span> <span class="nav-text">日志索引</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%81%8F%E7%A7%BB%E9%87%8F%E7%B4%A2%E5%BC%95"><span class="nav-number">4.1.</span> <span class="nav-text">偏移量索引</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%97%B6%E9%97%B4%E6%88%B3%E7%B4%A2%E5%BC%95"><span class="nav-number">4.2.</span> <span class="nav-text">时间戳索引</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%97%A5%E5%BF%97%E6%B8%85%E7%90%86"><span class="nav-number">5.</span> <span class="nav-text">日志清理</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%A3%81%E7%9B%98%E5%AD%98%E5%82%A8"><span class="nav-number">6.</span> <span class="nav-text">磁盘存储</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A3%81%E7%9B%98%E9%A1%BA%E5%BA%8F%E5%86%99"><span class="nav-number">6.1.</span> <span class="nav-text">磁盘顺序写</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A1%B5%E7%BC%93%E5%AD%98"><span class="nav-number">6.2.</span> <span class="nav-text">页缓存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%9B%B6%E6%8B%B7%E8%B4%9D"><span class="nav-number">6.3.</span> <span class="nav-text">零拷贝</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="HAIF."
+      src="/uploads/avatar.jpg">
+  <p class="site-author-name" itemprop="name">HAIF.</p>
+  <div class="site-description" itemprop="description">无限进步<br/></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">57</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2019 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">HAIF.</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : true,
+      notify     : false,
+      appId      : 'masttnqEt9G69mj43i9oaA1C-gzGzoHsz',
+      appKey     : 'hgIx9VKn0GLDhRcLxQuNMl0E',
+      placeholder: ":)",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : 'https://leancloud.haif.fun'
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>
