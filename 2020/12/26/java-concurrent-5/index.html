@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 5.3.0">
+<meta name="generator" content="Hexo 5.4.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="https://haif-cloud.oss-cn-beijing.aliyuncs.com/img/weixing.png">
@@ -21,7 +21,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"haif.fun","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"haif.fun","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
   <meta name="description" content="什么是线程线程是进程中的一个实体，线程本身是不会独立存在。进程是代码在数据集合上的一次运行活动， 是系统进行资源分配和调度的基本单位，线程则是进程的一个执行路径， 一个进程中至少有一个线程，进程中的多个线程共享进程的资源。 操作系统在分配资源时是把资源分配给进程的， 但是CPU 资源比较特殊， 它是被分配到线程的， 因为真正要占用CPU 运行的是线程，所以也说线程是CPU 分配的基本单位。 线程创">
@@ -32,8 +32,8 @@
 <meta property="og:description" content="什么是线程线程是进程中的一个实体，线程本身是不会独立存在。进程是代码在数据集合上的一次运行活动， 是系统进行资源分配和调度的基本单位，线程则是进程的一个执行路径， 一个进程中至少有一个线程，进程中的多个线程共享进程的资源。 操作系统在分配资源时是把资源分配给进程的， 但是CPU 资源比较特殊， 它是被分配到线程的， 因为真正要占用CPU 运行的是线程，所以也说线程是CPU 分配的基本单位。 线程创">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/threadstatus.png">
-<meta property="article:published_time" content="2020-12-26T09:44:00.000Z">
-<meta property="article:modified_time" content="2020-12-26T09:45:04.805Z">
+<meta property="article:published_time" content="2020-12-26T17:44:00.000Z">
+<meta property="article:modified_time" content="2021-08-08T08:09:27.160Z">
 <meta property="article:author" content="HAIF.">
 <meta property="article:tag" content="并发">
 <meta name="twitter:card" content="summary">
@@ -202,10 +202,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2020-12-26 17:44:00 / 修改时间：17:45:04" itemprop="dateCreated datePublished" datetime="2020-12-26T17:44:00+08:00">2020-12-26</time>
+              <time title="创建时间：2020-12-26 17:44:00" itemprop="dateCreated datePublished" datetime="2020-12-26T17:44:00+00:00">2020-12-26</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-08-08 08:09:27" itemprop="dateModified" datetime="2021-08-08T08:09:27+00:00">2021-08-08</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -256,7 +262,7 @@
 <li>通过实现Runnable接口的run 方法</li>
 <li>通过使用FutureTask 方式, 实现Callable接口的call 方法</li>
 </ol>
-<a id="more"></a>
+<span id="more"></span>
 
 <ul>
 <li>继承Thread类，重写run方法<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ThreadTest</span> </span>{</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 继承Thread类并重写run方法</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">MyThread</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>{</span><br><span class="line">		<span class="meta">@Override</span></span><br><span class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>{</span><br><span class="line">			System.out.println(<span class="string">"I am a child thread"</span>);</span><br><span class="line">		}</span><br><span class="line">	}</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>{</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 创建线程</span></span><br><span class="line">		Singleton.ThreadTest.MyThread thread = <span class="keyword">new</span> Singleton.ThreadTest.MyThread();</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 启动线程</span></span><br><span class="line">		thread.start();</span><br><span class="line">	}</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
@@ -284,13 +290,16 @@
 <ol>
 <li>执行synchronized 同步代码块时， 使用该共享变量作为参数。<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">synchronized</span>(共享变量) {</span><br><span class="line">    <span class="comment">// do something</span></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure></li>
 <li>调用该共享变量的方法，并且该方法使用了synchronized 修饰。<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">method</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span> </span>{</span><br><span class="line">    <span class="comment">// do something</span></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-另外需要注意的是，一个线程可以从挂起状态变为可以运行状态（也就是被唤醒），即使该线程没有被其他线程调用notify()、notifyAll() 方法进行通知，或者被中断，或者等待超时，这就是所谓的虚假唤醒。</li>
+
+</li>
 </ol>
+<p>另外需要注意的是，一个线程可以从挂起状态变为可以运行状态（也就是被唤醒），即使该线程没有被其他线程调用notify()、notifyAll() 方法进行通知，或者被中断，或者等待超时，这就是所谓的虚假唤醒。</p>
 <p>（虚假唤醒在应用实践中很少发生），防患做法是不停地去测试该线程被唤醒的条件是否满足，不满足则继续等待，也就是说在一个循环中调用wait() 方法进行防范。退出循环的条件是满足了唤醒该线程的条件。</p>
 <figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">synchronized</span>(obj) {</span><br><span class="line">    <span class="keyword">while</span>(条件不满足) {</span><br><span class="line">        obj.wait();</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
 <h3 id="wait-long-timeout-函数"><a href="#wait-long-timeout-函数" class="headerlink" title="wait(long timeout) 函数"></a>wait(long timeout) 函数</h3><p>如果一个线程调用共享对象的该方法挂起后，没有在指定的timeout ms时间内被其他线程调用该共享变量的 notify() 或者notifyAll() 方法唤醒，那么该函数会因为超时而返回。</p>
 <h3 id="wait-long-timeout-int-nanos-函数"><a href="#wait-long-timeout-int-nanos-函数" class="headerlink" title="wait(long timeout, int nanos) 函数"></a>wait(long timeout, int nanos) 函数</h3><p>nanos 纳秒，在nanos &gt; 0 时使参数timeout 递增1。</p>
 <figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">wait</span><span class="params">(<span class="keyword">long</span> timeout, <span class="keyword">int</span> nanos)</span> <span class="keyword">throws</span> InterruptedException </span>{</span><br><span class="line">    <span class="keyword">if</span> (timeout &lt; <span class="number">0</span>) {</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"timeout value is negative"</span>);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (nanos &lt; <span class="number">0</span> || nanos &gt; <span class="number">999999</span>) {</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(</span><br><span class="line">              <span class="string">"nanosecond timeout value out of range"</span>);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (nanos &gt; <span class="number">0</span>) {</span><br><span class="line">        timeout++;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    wait(timeout);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
 <h3 id="notify-函数"><a href="#notify-函数" class="headerlink" title="notify() 函数"></a>notify() 函数</h3><p>一个线程调用共享对象的notify() 方法后，会随机唤醒一个在该共享变量上调用wait 系列方法后被挂起的线程。被唤醒的变量只有在获取到共享变量监视器锁后才能继续执行。</p>
 <p>类似wait 系列方法，只有当前线程获取到了共享变量的监视器锁后，才可以调用共享变量的notify() 方法，否则会抛出IllegalMonitorStateException 异常。</p>
 <h3 id="notifyAll-函数"><a href="#notifyAll-函数" class="headerlink" title="notifyAll() 函数"></a>notifyAll() 函数</h3><p>notifyAll() 方法会唤醒所有在该共享变量上由于调用wait 系列方法而被挂起的线程。</p>
@@ -524,7 +533,7 @@
   </span>
   <span class="author" itemprop="copyrightHolder">HAIF.</span>
 </div>
-  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
   </div>
 
         

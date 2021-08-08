@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 5.3.0">
+<meta name="generator" content="Hexo 5.4.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="https://haif-cloud.oss-cn-beijing.aliyuncs.com/img/weixing.png">
@@ -21,7 +21,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"haif.fun","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"haif.fun","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
   <meta name="description" content="网络层次划分国际标准化组织（ISO）提出的开放系统互连参考模型 (Open System Interconnect 简称OSI）将计算机网络体系结构的通信协议划分为七层，自下而上依次为：  物理层（Physics Layer） 数据链路层（Data Link Layer） 网络层（Network Layer） 传输层（Transport Layer） 会话层（Session Layer） 表示层（">
@@ -34,8 +34,8 @@
 <meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/tcpip/tcpip-model.png">
 <meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/tcpip/tcp-header.png">
 <meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/tcpip/tcp-conn.png">
-<meta property="article:published_time" content="2021-03-13T08:00:00.000Z">
-<meta property="article:modified_time" content="2021-03-13T08:03:02.732Z">
+<meta property="article:published_time" content="2021-03-13T16:00:00.000Z">
+<meta property="article:modified_time" content="2021-08-08T08:09:27.164Z">
 <meta property="article:author" content="HAIF.">
 <meta property="article:tag" content="TCP&#x2F;IP">
 <meta name="twitter:card" content="summary">
@@ -204,10 +204,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2021-03-13 16:00:00 / 修改时间：16:03:02" itemprop="dateCreated datePublished" datetime="2021-03-13T16:00:00+08:00">2021-03-13</time>
+              <time title="创建时间：2021-03-13 16:00:00" itemprop="dateCreated datePublished" datetime="2021-03-13T16:00:00+00:00">2021-03-13</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-08-08 08:09:27" itemprop="dateModified" datetime="2021-08-08T08:09:27+00:00">2021-08-08</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -261,7 +267,7 @@
 <li>应用层（Application Layer）</li>
 </ul>
 <p>其中第四层完成数据传送服务，上面三层面向用户。</p>
-<a id="more"></a>
+<span id="more"></span>
 
 <p>除了标准的OSI七层模型以外，常见的网络层次划分还有TCP/IP四层协议以及TCP/IP五层协议，它们之间的对应关系如下图所示：</p>
 <p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/tcpip/tcpip-model.png" alt="image"></p>
@@ -587,7 +593,7 @@
   </span>
   <span class="author" itemprop="copyrightHolder">HAIF.</span>
 </div>
-  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
   </div>
 
         

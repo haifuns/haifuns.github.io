@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 5.3.0">
+<meta name="generator" content="Hexo 5.4.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="https://haif-cloud.oss-cn-beijing.aliyuncs.com/img/weixing.png">
@@ -21,7 +21,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"haif.fun","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"haif.fun","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
   <meta name="description" content="I&#x2F;O 模型BIOBIO 就是传统的java.io包，同步并阻塞，基于流模型实现，在读入输入流或者输出流时，在读写动作完成之前，线程会一直阻塞。  优点是代码比较简单、直观 缺点是效率和扩展性很低，容易成为应用性能瓶颈  NIONIO 是Java 1.4引入的java.nio包，同步非阻塞，提供了 Channel、Selector、Buffer 等新的抽象，可以构建多路复用的、同步非阻塞 IO 程">
@@ -32,8 +32,8 @@
 <meta property="og:description" content="I&#x2F;O 模型BIOBIO 就是传统的java.io包，同步并阻塞，基于流模型实现，在读入输入流或者输出流时，在读写动作完成之前，线程会一直阻塞。  优点是代码比较简单、直观 缺点是效率和扩展性很低，容易成为应用性能瓶颈  NIONIO 是Java 1.4引入的java.nio包，同步非阻塞，提供了 Channel、Selector、Buffer 等新的抽象，可以构建多路复用的、同步非阻塞 IO 程">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/io/bio.png">
-<meta property="article:published_time" content="2020-12-26T09:26:00.000Z">
-<meta property="article:modified_time" content="2020-12-26T09:26:56.157Z">
+<meta property="article:published_time" content="2020-12-26T17:26:00.000Z">
+<meta property="article:modified_time" content="2021-08-08T08:09:27.160Z">
 <meta property="article:author" content="HAIF.">
 <meta property="article:tag" content="Java IO">
 <meta name="twitter:card" content="summary">
@@ -202,10 +202,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2020-12-26 17:26:00 / 修改时间：17:26:56" itemprop="dateCreated datePublished" datetime="2020-12-26T17:26:00+08:00">2020-12-26</time>
+              <time title="创建时间：2020-12-26 17:26:00" itemprop="dateCreated datePublished" datetime="2020-12-26T17:26:00+00:00">2020-12-26</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-08-08 08:09:27" itemprop="dateModified" datetime="2021-08-08T08:09:27+00:00">2021-08-08</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -255,7 +261,7 @@
 </ul>
 <h3 id="NIO"><a href="#NIO" class="headerlink" title="NIO"></a>NIO</h3><p>NIO 是<em>Java 1.4</em>引入的<code>java.nio</code>包，<strong>同步非阻塞</strong>，提供了 Channel、Selector、Buffer 等新的抽象，可以构建多路复用的、同步非阻塞 IO 程序，同时提供了更接近操作系统底层高性能的数据操作方式。</p>
 <h3 id="AIO"><a href="#AIO" class="headerlink" title="AIO"></a>AIO</h3><p>AIO 是<em>Java 1.7</em>之后引入的包，是 NIO 的升级版本，<strong>异步非阻塞</strong>，（Asynchronous IO），异步 IO 是基于事件和回调机制实现的，也就是应用操作之后会直接返回，不会堵塞在那里，当后台处理完成，操作系统会通知相应的线程进行后续的操作。</p>
-<a id="more"></a>
+<span id="more"></span>
 
 <h2 id="BIO、NIO、AIO-适用场景分析"><a href="#BIO、NIO、AIO-适用场景分析" class="headerlink" title="BIO、NIO、AIO 适用场景分析"></a>BIO、NIO、AIO 适用场景分析</h2><ul>
 <li>BIO 方式适用于连接数目比较小且固定的架构，这种方式对服务器资源要求比较高，并发局限于应用中，JDK1.4 以前的唯一选择，但程序简单易理解。</li>
@@ -312,6 +318,7 @@
 </ol>
 <p>代码如下：</p>
 <figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BioServer</span> </span>{</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException </span>{</span><br><span class="line">        <span class="comment">// 创建线程池</span></span><br><span class="line">        ExecutorService executorService = Executors.newCachedThreadPool();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 创建ServerSocket</span></span><br><span class="line">        ServerSocket serverSocket = <span class="keyword">new</span> ServerSocket(<span class="number">8080</span>);</span><br><span class="line">        System.out.println(<span class="string">"server start"</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> (<span class="keyword">true</span>) {</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 监听, 等待客户端连接</span></span><br><span class="line">            <span class="keyword">final</span> Socket socket = serverSocket.accept();;</span><br><span class="line">            System.out.println(<span class="string">"client connect, thread: "</span>+ Thread.currentThread());</span><br><span class="line"></span><br><span class="line">            executorService.execute(() -&gt; handler(socket));</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 与客户端通信</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">handler</span><span class="params">(Socket socket)</span> </span>{</span><br><span class="line">        <span class="keyword">byte</span>[] bytes = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">1024</span>];</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 通过socket获取输入流</span></span><br><span class="line">        <span class="keyword">try</span> (InputStream inputStream = socket.getInputStream()) {</span><br><span class="line">            <span class="comment">// 循环读取客户端发送的数据</span></span><br><span class="line">            <span class="keyword">while</span> (<span class="keyword">true</span>) {</span><br><span class="line">                <span class="keyword">int</span> read = inputStream.read(bytes);</span><br><span class="line">                <span class="keyword">if</span> (read != -<span class="number">1</span>) {</span><br><span class="line">                    System.out.println(<span class="string">"receive message: "</span> + <span class="keyword">new</span> String(bytes, <span class="number">0</span> , read) + <span class="string">", thread: "</span>+ Thread.currentThread());</span><br><span class="line">                } <span class="keyword">else</span> {</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                }</span><br><span class="line">            }</span><br><span class="line">        } <span class="keyword">catch</span> (IOException e) {</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        } <span class="keyword">finally</span> {</span><br><span class="line">            System.out.println(<span class="string">"client close, thread: "</span>+ Thread.currentThread());</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
 <p>cmd 窗口使用 telnet 127.0.0.1 8080 创建连接，输入ctrl+]，输入send <message> 发送消息测试</message></p>
 <h3 id="BIO-问题分析"><a href="#BIO-问题分析" class="headerlink" title="BIO 问题分析"></a>BIO 问题分析</h3><ul>
 <li>每个请求都需要创建独立的线程，与对应的客户端进行数据Read ，业务处理，数据 Write</li>
@@ -489,7 +496,7 @@
   </span>
   <span class="author" itemprop="copyrightHolder">HAIF.</span>
 </div>
-  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
   </div>
 
         

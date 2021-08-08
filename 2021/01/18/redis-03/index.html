@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 5.3.0">
+<meta name="generator" content="Hexo 5.4.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="https://haif-cloud.oss-cn-beijing.aliyuncs.com/img/weixing.png">
@@ -21,7 +21,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"haif.fun","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"haif.fun","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
   <meta name="description" content="Redis支持RDB和AOF两种持久化机制，持久化功能可以有效的避免因进程退出造成的数据丢失，当下次重启时利用之前持久化的文件即可实现数据恢复。">
@@ -35,8 +35,8 @@
 <meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/redis/redis-aof.png">
 <meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/redis/redis-aof-rewrite.png">
 <meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/redis/redis-load.png">
-<meta property="article:published_time" content="2021-01-18T14:08:00.000Z">
-<meta property="article:modified_time" content="2021-01-18T14:09:03.600Z">
+<meta property="article:published_time" content="2021-01-18T22:08:00.000Z">
+<meta property="article:modified_time" content="2021-08-08T08:09:27.164Z">
 <meta property="article:author" content="HAIF.">
 <meta property="article:tag" content="Redis">
 <meta name="twitter:card" content="summary">
@@ -205,10 +205,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2021-01-18 22:08:00 / 修改时间：22:09:03" itemprop="dateCreated datePublished" datetime="2021-01-18T22:08:00+08:00">2021-01-18</time>
+              <time title="创建时间：2021-01-18 22:08:00" itemprop="dateCreated datePublished" datetime="2021-01-18T22:08:00+00:00">2021-01-18</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-08-08 08:09:27" itemprop="dateModified" datetime="2021-08-08T08:09:27+00:00">2021-08-08</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -252,7 +258,7 @@
 
       
         <p>Redis支持RDB和AOF两种持久化机制，持久化功能可以有效的避免因进程退出造成的数据丢失，当下次重启时利用之前持久化的文件即可实现数据恢复。</p>
-<a id="more"></a>
+<span id="more"></span>
 
 <h1 id="RDB"><a href="#RDB" class="headerlink" title="RDB"></a>RDB</h1><p>RDB持久化是把当前进程数据生成快照保存到硬盘的过程，触发RDB持久化过程分为手动触发和自动触发。</p>
 <h2 id="触发机制"><a href="#触发机制" class="headerlink" title="触发机制"></a>触发机制</h2><p>手动触发分为save和bgsave两种命令：</p>
@@ -300,7 +306,8 @@
 <li>当Redis服务器重启时，加载AOF文件进行数据恢复</li>
 </ol>
 <h2 id="命令写入"><a href="#命令写入" class="headerlink" title="命令写入"></a>命令写入</h2><p>AOF命令写入的内容是文本协议格式。例如set hello world命令会在AOF缓冲区追加如下文本：</p>
-<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">*3\r\n$3\r\nset\r\n$5\r\nhello\r\n$5\r\nworld\r\n</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">*3\r\n$3\r\nset\r\n$5\r\nhello\r\n$5\r\nworld\r\n</span><br></pre></td></tr></tbody></table></figure>
+
 <p>AOF直接采用文本协议格式有如下原因：</p>
 <ul>
 <li>文本协议具有很好的兼容性</li>
@@ -351,7 +358,8 @@
 </ul>
 </li>
 </ul>
-<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">自动触发时机 = aof_current_size &gt; auto-aof-rewrite-min-size &amp;&amp; (aof_current_size - aof_base_size) / aof_base_size &gt;= auto-aof-rewrite-percentage</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">自动触发时机 = aof_current_size &gt; auto-aof-rewrite-min-size &amp;&amp; (aof_current_size - aof_base_size) / aof_base_size &gt;= auto-aof-rewrite-percentage</span><br></pre></td></tr></tbody></table></figure>
+
 <h3 id="AOF重写运作流程"><a href="#AOF重写运作流程" class="headerlink" title="AOF重写运作流程"></a>AOF重写运作流程</h3><p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/redis/redis-aof-rewrite.png" alt="AOF重写运作流程"></p>
 <p>AOF重写运作流程说明：</p>
 <ol>
@@ -380,7 +388,8 @@
 <li>加载AOF/RDB文件存在错误时，Redis启动失败</li>
 </ol>
 <h2 id="文件校验"><a href="#文件校验" class="headerlink" title="文件校验"></a>文件校验</h2><p>加载损坏的AOF文件时Redis会拒绝启动，并打印如下日志：</p>
-<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># Bad file format reading the append only file: make a backup of your AOF file, then use ./redis-check-aof --fix &lt;filename&gt;</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># Bad file format reading the append only file: make a backup of your AOF file, then use ./redis-check-aof --fix &lt;filename&gt;</span><br></pre></td></tr></tbody></table></figure>
+
 <p>对于错误格式的AOF文件，先进行备份，然后使用redis-check-aof –fix命令进行修复，修复后使用diff -u对比数据的差异，找到丢失的数据，有些可以人工修改补全。</p>
 <p>AOF文件可能存在结尾不完整的情况，比如机器突然掉电导致AOF尾部文件命令写入不全。Redis提供了aof-load-truncated配置来兼容这种情况，默认开启。</p>
 
@@ -550,7 +559,7 @@
   </span>
   <span class="author" itemprop="copyrightHolder">HAIF.</span>
 </div>
-  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
   </div>
 
         

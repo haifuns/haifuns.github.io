@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 5.3.0">
+<meta name="generator" content="Hexo 5.4.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="https://haif-cloud.oss-cn-beijing.aliyuncs.com/img/weixing.png">
@@ -21,7 +21,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"haif.fun","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"haif.fun","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
   <meta name="description" content="为了满足故障恢复和负载均衡等需求，Redis提供了复制功能，实现了相同数据的多个副本。复制功能是高可用Redis的基础，哨兵和集群也都是在复制的基础上实现高可用。">
@@ -33,8 +33,8 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/redis/redis-psync.png">
 <meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/redis/redis-psync2.png">
-<meta property="article:published_time" content="2021-01-22T16:00:05.000Z">
-<meta property="article:modified_time" content="2021-01-22T16:01:28.819Z">
+<meta property="article:published_time" content="2021-01-23T00:00:05.000Z">
+<meta property="article:modified_time" content="2021-08-08T08:09:27.164Z">
 <meta property="article:author" content="HAIF.">
 <meta property="article:tag" content="Redis">
 <meta name="twitter:card" content="summary">
@@ -203,10 +203,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2021-01-23 00:00:05 / 修改时间：00:01:28" itemprop="dateCreated datePublished" datetime="2021-01-23T00:00:05+08:00">2021-01-23</time>
+              <time title="创建时间：2021-01-23 00:00:05" itemprop="dateCreated datePublished" datetime="2021-01-23T00:00:05+00:00">2021-01-23</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-08-08 08:09:27" itemprop="dateModified" datetime="2021-08-08T08:09:27+00:00">2021-08-08</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -250,7 +256,7 @@
 
       
         <p>为了满足故障恢复和负载均衡等需求，Redis提供了复制功能，实现了相同数据的多个副本。复制功能是高可用Redis的基础，哨兵和集群也都是在复制的基础上实现高可用。</p>
-<a id="more"></a>
+<span id="more"></span>
 
 <h1 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h1><h2 id="建立复制"><a href="#建立复制" class="headerlink" title="建立复制"></a>建立复制</h2><p>参与复制的Redis实例划分为主节点（master）和从节点（slave）。默认情况下，Redis都是主节点。每个从节点只能有一个主节点，而主节点可以同时具有多个从节点。复制的数据流是单向的，只能由主节点复制到从节点。</p>
 <p>配置复制的方式有以下三种：</p>
@@ -315,7 +321,8 @@
 <h3 id="复制积压缓冲区"><a href="#复制积压缓冲区" class="headerlink" title="复制积压缓冲区"></a>复制积压缓冲区</h3><p>复制积压缓冲区是保存在主节点上的一个固定长度的队列，默认大小是1MB。当主节点有连接的从节点时被创建，这时主节点响应写命令时，不但会把命令发送给从节点，还会写到复制积压缓冲区。</p>
 <p>缓冲区本质上是先进先出的定长队列，实现保存最近已复制数据的功能，用于部分复制和复制命令丢失数据的补救。</p>
 <p>复制缓冲区相关信息保存在主节点info replication中：</p>
-<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; info replication</span><br><span class="line"># Replication</span><br><span class="line">role:master</span><br><span class="line">//...</span><br><span class="line">repl_backlog_active:1 // 开启复制缓冲区</span><br><span class="line">repl_backlog_size:1048576 // 缓冲区最大长度</span><br><span class="line">repl_backlog_first_byte_offset:7479 // 起始偏移量，计算当前缓冲区可用范围</span><br><span class="line">repl_backlog_histlen:1048576 // 已保存数据的有效长度。</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; info replication</span><br><span class="line"># Replication</span><br><span class="line">role:master</span><br><span class="line">//...</span><br><span class="line">repl_backlog_active:1 // 开启复制缓冲区</span><br><span class="line">repl_backlog_size:1048576 // 缓冲区最大长度</span><br><span class="line">repl_backlog_first_byte_offset:7479 // 起始偏移量，计算当前缓冲区可用范围</span><br><span class="line">repl_backlog_histlen:1048576 // 已保存数据的有效长度。</span><br></pre></td></tr></tbody></table></figure>
+
 <p>复制积压缓冲区内可用偏移量范围是：[repl_backlog_first_byte_offset, repl_backlog_first_byte_offset + repl_backlog_histlen]。</p>
 <h3 id="主节点运行ID"><a href="#主节点运行ID" class="headerlink" title="主节点运行ID"></a>主节点运行ID</h3><p>每个Redis节点启动后都会动态分配一个40位的十六进制字符串作为运行ID。运行ID的主要作用是唯一标识Redis节点，比如从节点保存主节点的运行ID识别正在复制的是哪个主节点。使用info server命令可查看当前节点的运行ID。</p>
 <h3 id="psync命令"><a href="#psync命令" class="headerlink" title="psync命令"></a>psync命令</h3><p>psync命令格式为<code>psync {runId} {offset}</code>，runId为主节点运行id，offset为当前从节点已复制的数据偏移量。</p>
@@ -369,7 +376,7 @@
 <li>对于修改命令异步发送给从节点，从节点在主线程中执行复制的命令</li>
 </ol>
 <p>由于主从复制过程是异步的，就会造成从节点的数据相对主节点存在延迟。具体延迟多少字节，可以在主节点执行info replication命令查看相关指标获得。例如以下信息：</p>
-<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">slave0:ip=127.0.0.1,port=6380,state=online,offset=841,lag=1</span><br><span class="line">master_repl_offset:841</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">slave0:ip=127.0.0.1,port=6380,state=online,offset=841,lag=1</span><br><span class="line">master_repl_offset:841</span><br></pre></td></tr></tbody></table></figure>
 <p>从节点slave0信息中offset表示当前从节点的复制偏移量，master_repl_offset表示当前主节点的复制偏移量，两者的差值就是当前从节点复制延迟量。</p>
 
     </div>
@@ -538,7 +545,7 @@
   </span>
   <span class="author" itemprop="copyrightHolder">HAIF.</span>
 </div>
-  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
   </div>
 
         

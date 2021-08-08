@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 5.3.0">
+<meta name="generator" content="Hexo 5.4.0">
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
   <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
   <link rel="icon" type="image/png" sizes="16x16" href="https://haif-cloud.oss-cn-beijing.aliyuncs.com/img/weixing.png">
@@ -21,7 +21,7 @@
 
 <script id="hexo-configurations">
     var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"haif.fun","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+    var CONFIG = {"hostname":"haif.fun","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
   <meta name="description" content="网络分区网络分区意义RabbitMQ 集群的网络分区的容错性并不是很高，一般都是使用 Federation 或者 Shovel 解决广域网中的使用问题。不过即使是在局域网环境下，网络分区也不可能完全避免，网络设备(比如中继设备、网卡)出现故障也会导致网络分区。当出现网络分区时，不同分区里的节点会认为不属于自身所在分区的节点都已经挂(down)了，对于队列、交换器、绑定的操作仅对当前分区有效。在 R">
@@ -33,8 +33,8 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/mq/rabbitmq-network-partition1.png">
 <meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/mq/rabbitmq-network-partition2.png">
-<meta property="article:published_time" content="2020-12-26T09:00:00.000Z">
-<meta property="article:modified_time" content="2020-12-26T09:12:22.456Z">
+<meta property="article:published_time" content="2020-12-26T17:00:00.000Z">
+<meta property="article:modified_time" content="2021-08-08T08:09:27.164Z">
 <meta property="article:author" content="HAIF.">
 <meta property="article:tag" content="RabbitMQ">
 <meta name="twitter:card" content="summary">
@@ -203,10 +203,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2020-12-26 17:00:00 / 修改时间：17:12:22" itemprop="dateCreated datePublished" datetime="2020-12-26T17:00:00+08:00">2020-12-26</time>
+              <time title="创建时间：2020-12-26 17:00:00" itemprop="dateCreated datePublished" datetime="2020-12-26T17:00:00+00:00">2020-12-26</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-08-08 08:09:27" itemprop="dateModified" datetime="2021-08-08T08:09:27+00:00">2021-08-08</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -252,7 +258,7 @@
         <h1 id="网络分区"><a href="#网络分区" class="headerlink" title="网络分区"></a>网络分区</h1><h2 id="网络分区意义"><a href="#网络分区意义" class="headerlink" title="网络分区意义"></a>网络分区意义</h2><p>RabbitMQ 集群的网络分区的容错性并不是很高，一般都是使用 Federation 或者 Shovel 解决广域网中的使用问题。不过即使是在局域网环境下，网络分区也不可能完全避免，网络设备(比如中继设备、网卡)出现故障也会导致网络分区。当出现网络分区时，不同分区里的节点会认为不属于自身所在分区的节点都已经挂(down)了，对于队列、交换器、绑定的操作仅对当前分区有效。在 RabbitMQ 的默认配置下，即使网络恢复了也不会自动处理网络分区带来的问题。RabbitMQ 3.1 版本开始会自动探测网络分区，并且提供了相应的配置来解决这个问题。</p>
 <p>当一个集群发生网络分区时，这个集群会分成两个部分或者更多，它们各自为政，互相都认为对方分区内的节点已经挂了，包括队列、交换器及绑定等元数据的创建和销毁都处于自身分区内，与其他分区无关。如果原集群中配置了镜像队列，而这个镜像队列又牵涉两个或者更多个网络分区中的节点时，每一个网络分区中都会出现一个 master 节点，对于各个网络分区，此队列都是相互独立的。当然也会有一些其他未知的、怪异的事情发生。当网络恢复时，网络分区的状态还是会保持，除非采取了一些措施去解决它。</p>
 <p>RabbitMQ 网络分区带来的影响大多是负面的，极端情况下不仅会造成数据丢失，还会影响服务的可用性。那为什么RabbitMQ 还要引入网络分区的设计理念呢？其中一个原因就与它本身的数据一致性复制原理有关，RabbitMQ 采用的镜像队列是一种环形的逻辑结构 ，如下图所示：</p>
-<a id="more"></a>
+<span id="more"></span>
 
 <p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/mq/rabbitmq-network-partition1.png" alt="image"></p>
 <p>图中为某队列配置了4 个镜像，其中A 节点作为 master 节点，其余B、C、D 节点为 slave 节点，4 个镜像节点组成一个环形结构。</p>
@@ -264,11 +270,12 @@
 <p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/mq/rabbitmq-network-partition2.png" alt="image"></p>
 <p>图中每个节点代表一次 tick 判定的时间戳，在2 个临界值 0.75  * net_ticktime 和<br>1.25 * net_ticktime 之间可以连续执行4 次的 tick 判定。默认情况下，在 45s &lt; T &lt; 75s 之间会判定出net_tick_timeout。</p>
 <p>RabbtMQ 不仅会将队列、交换器及绑定等信息存储在 Mnesia 数据库中，而且许多围绕网络分区的一些细节也都和这个 Mneia 的行为相关。如果一个节点不能在T 时间连上另一个节点，那么 Mnesia 通常认为这个节点己经挂了，就算之后两个节点又重新恢复了内部通信，但是这两个节点都会认为对方已经挂了，Mnesia 此时认定了发生网络分区的情况。这些会被记录到RabbitMQ 的服务日志之中如下：</p>
-<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Mnesia('rabbit@node1'): ** ERROR ** mnesia event got</span><br><span class="line">{inconsistent_database, running_partitioned_network, 'rabbit@node2'}</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Mnesia('rabbit@node1'): ** ERROR ** mnesia event got</span><br><span class="line">{inconsistent_database, running_partitioned_network, 'rabbit@node2'}</span><br></pre></td></tr></tbody></table></figure>
+
 <p>除了通过查看 RabbitMQ 服务日志的方式，还有以下3 种方法可以查看是否出现网络分区：</p>
 <ol>
-<li>采用 rabbitmqctl 工具来查看，即采用<code>rabbitmqctl cluster_status</code>，通过这条命令可以看到集群相关信息，未发生网络分区时的情形举例如下：<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[{nodes, [{disc, [rabbit@node1,rabbit@node2,rabbit@node3]}]},</span><br><span class="line">{running_nodes, [rabbit@node2,rabbit@node3,rabbit@node1]},</span><br><span class="line">{cluster_name, &lt;&lt;"rabbit@node1"&gt;&gt;},</span><br><span class="line">{partitio, []}]</span><br></pre></td></tr></tbody></table></figure>
-由上面的信息可知，集群中一共有3 个节点，分别为rabbit@node1、rabbit@node2、rabbit@node3。在partitions这一项中没有相关记录，则说明没有产生网络分区。如果partitions 项中有相关容，则说明产生了网络分区，例如：<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[{nodes, [{disc, [rabbit@node1,rabbit@node2,rabbit@node3]}]},</span><br><span class="line">{running_nodes, [rabbit@node3,rabbit@node1]},</span><br><span class="line">{cluster_name, &lt;&lt;"rabbit@node1"&gt;&gt;},</span><br><span class="line">{partitions, [{rabbit@node3,[rabbit@node2]},{rabbit@node1,[rabbit@node2]}]}]</span><br></pre></td></tr></tbody></table></figure>
+<li>采用 rabbitmqctl 工具来查看，即采用<code>rabbitmqctl cluster_status</code>，通过这条命令可以看到集群相关信息，未发生网络分区时的情形举例如下：<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[{nodes, [{disc, [rabbit@node1,rabbit@node2,rabbit@node3]}]},</span><br><span class="line">{running_nodes, [rabbit@node2,rabbit@node3,rabbit@node1]},</span><br><span class="line">{cluster_name, &lt;&lt;"rabbit@node1"&gt;&gt;},</span><br><span class="line">{partitio, []}]</span><br></pre></td></tr></tbody></table></figure>
+由上面的信息可知，集群中一共有3 个节点，分别为rabbit@node1、rabbit@node2、rabbit@node3。在partitions这一项中没有相关记录，则说明没有产生网络分区。如果partitions 项中有相关容，则说明产生了网络分区，例如：<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[{nodes, [{disc, [rabbit@node1,rabbit@node2,rabbit@node3]}]},</span><br><span class="line">{running_nodes, [rabbit@node3,rabbit@node1]},</span><br><span class="line">{cluster_name, &lt;&lt;"rabbit@node1"&gt;&gt;},</span><br><span class="line">{partitions, [{rabbit@node3,[rabbit@node2]},{rabbit@node1,[rabbit@node2]}]}]</span><br></pre></td></tr></tbody></table></figure>
 上面partitions 项中的内容表示：</li>
 </ol>
 <ul>
@@ -277,10 +284,11 @@
 </ul>
 <ol start="2">
 <li>通过 Web 管理界面的方式查看。如果发生了网络分区页面会出现警告。推荐采用这种方式来检测是否发生了网络分区。</li>
-<li>通过 HTTP API 的方式调取节点信息来检测是否发生网络分区，比如通过 curl 命令来调取节点信息：<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -i -u root:root123 -H "content-type:application/json" -X GET http://localhost:15672/api/nodes</span><br></pre></td></tr></tbody></table></figure>
-<h2 id="模拟网络分区"><a href="#模拟网络分区" class="headerlink" title="模拟网络分区"></a>模拟网络分区</h2></li>
+<li>通过 HTTP API 的方式调取节点信息来检测是否发生网络分区，比如通过 curl 命令来调取节点信息：<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -i -u root:root123 -H "content-type:application/json" -X GET http://localhost:15672/api/nodes</span><br></pre></td></tr></tbody></table></figure>
+
+</li>
 </ol>
-<p>正常情况下，很难观察到 RabbitMQ 网络分区的发生。为了更好地理解网络分区，需要采取某些手段将其模拟出来，以便对其进行相应的分析处理，进而在实际应用环境中遇到类似情形可以处理游刃有余。往长远方面讲，也可以采取一些要的手段去规避网络分区的发生，或者可以监控网络分区以及准备相关的处理预案。</p>
+<h2 id="模拟网络分区"><a href="#模拟网络分区" class="headerlink" title="模拟网络分区"></a>模拟网络分区</h2><p>正常情况下，很难观察到 RabbitMQ 网络分区的发生。为了更好地理解网络分区，需要采取某些手段将其模拟出来，以便对其进行相应的分析处理，进而在实际应用环境中遇到类似情形可以处理游刃有余。往长远方面讲，也可以采取一些要的手段去规避网络分区的发生，或者可以监控网络分区以及准备相关的处理预案。</p>
 <p>模拟网络分区的方式有多种，主要分为以下三大类:</p>
 <ul>
 <li>iptables 封禁/解封 IP 地址或者端口号；</li>
@@ -406,7 +414,8 @@
 <p>对于未配置镜像的集群，网络分区发生之后，队列也会伴随着宿主节点而分散在各自的分区之中。对于消息发送方而言，可以成功发送消息，但是会有路由失败的现象，要需要配合mandatory 等机制保障消息的可靠性。对于消息消费方来说，有可能会有诡异、不可预知的现象发生，比如对于已消费消息的ack 会失效。如果网络分区发生之后，客户端与某分区重新建立通信链路，其分区中如果没有相应的队列进程，则会有异常报出。如果从网络分区中恢复之后，数据不会丢失，但是客户端会重复消费。</p>
 <h3 id="已配置镜像"><a href="#已配置镜像" class="headerlink" title="已配置镜像"></a>已配置镜像</h3><p>如果集群中配置了镜像队列，那么在发生网络分区时，情形比未配置镜像队列的情况复杂得多，尤其是发生多个网络分区的时候。这里先简单地从3 个节点分裂成2 个网络分区的情形展开讨论。如前文所述，集群中有node1、node2、node3 三个节点，分别在这些节点上创建队列queue1、queue2、queue3 并配置镜像队列。采用iptables 的方式将集群模拟分裂[node1,node3] [node2] 这两个网络分区。</p>
 <p>镜像队列的相关配置可以参考如下：</p>
-<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ha-mode:exactly </span><br><span class="line">ha-param:2 </span><br><span class="line">ha-sync-mode:automatic</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ha-mode:exactly </span><br><span class="line">ha-param:2 </span><br><span class="line">ha-sync-mode:automatic</span><br></pre></td></tr></tbody></table></figure>
+
 <p>首先来分析第一种情况。如下表示，3 个队列的master 镜像和slave 镜像分别做相应分布。</p>
 <p>分区之前：</p>
 <table>
@@ -484,8 +493,17 @@
 <td>node2</td>
 <td>[]</td>
 </tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>对于[node2] 分区而言，queue2、queue3的分布比较容易理解，此分区中只有一个节点，所有slave 列为空。但是对于queue1而言，其部署还是和分区前如出一辙。不管是在网络分区前，还是在网络分区之后，再或者是又从网络分区中恢复，对于queue1而言生产和消费消息都不会受到任何的影响，就如未发生过网络分区一样。对于队列queue2、queue3 情形可以参考上面未配置镜像的相关细节，从网络分区中恢复(即恢复成之前的[node1,node2,node3] 组成的完整分区)之后可能会有数据丢失。</td>
+<td></td>
+<td></td>
+</tr>
 </tbody></table>
-<p>对于[node2] 分区而言，queue2、queue3的分布比较容易理解，此分区中只有一个节点，所有slave 列为空。但是对于queue1而言，其部署还是和分区前如出一辙。不管是在网络分区前，还是在网络分区之后，再或者是又从网络分区中恢复，对于queue1而言生产和消费消息都不会受到任何的影响，就如未发生过网络分区一样。对于队列queue2、queue3 情形可以参考上面未配置镜像的相关细节，从网络分区中恢复(即恢复成之前的[node1,node2,node3] 组成的完整分区)之后可能会有数据丢失。</p>
 <p>再考虑另一种情形，分区之前如下所示：</p>
 <p>分区之前：</p>
 <table>
@@ -595,9 +613,11 @@
 </blockquote>
 <p>如果原本配置了镜像队列，从发生网络分区到恢复的过程中队列可能会出现“漂移”的现象。可以重启之前先删除镜像队列的配置，这样能够在一定程度上阻止队列的“过分漂移”，即阻止可能所有队列都“漂移”到一个节点上的情况。</p>
 <p>删除镜像队列的配置可以采用 rabbitmqctl 工具删除：</p>
-<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rabbitmqctl clear_policy [-p vhost] {mirror_queue_name}</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rabbitmqctl clear_policy [-p vhost] {mirror_queue_name}</span><br></pre></td></tr></tbody></table></figure>
+
 <p>可以通过 Web 管理界面进行删除，也可以通过 HTTPAPI 的方式进行删除:</p>
-<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -s -u {username:password} -X DELETE http://localhost:15672/api/policies/default/{mirror_queue_name}</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -s -u {username:password} -X DELETE http://localhost:15672/api/policies/default/{mirror_queue_name}</span><br></pre></td></tr></tbody></table></figure>
+
 <h3 id="网络分区处理步骤"><a href="#网络分区处理步骤" class="headerlink" title="网络分区处理步骤"></a>网络分区处理步骤</h3><ul>
 <li>步骤 1：挂起生产者和消费者进程。这样可以减少消息不必要的丢失，如果进程数过多，情形又比较紧急，也可跳过此步骤。</li>
 <li>步骤 2：删除镜像队列的配置。</li>
@@ -610,19 +630,23 @@
 <li>步骤 9：恢复生产者和消费者的进程。</li>
 </ul>
 <h2 id="自动处理网络分区"><a href="#自动处理网络分区" class="headerlink" title="自动处理网络分区"></a>自动处理网络分区</h2><p>RabbitMQ 提供了三种方法自动地处理网络分区pause-minority 模式、pause-if-all-down 模式和autoheal 模式。默认是 ignore 模式，即不自动处理网络分区，所以在这种模式下，当网络分区的时候需要人工介入。在 rabbitmq.config 配置文件中配置<code>cluster_partition_handling</code> 参数即可实现相应的功能。默认的 ignore 模式的配置如下，注意最后有个点号：</p>
-<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line">    {</span><br><span class="line">        rabbit, [</span><br><span class="line">            {cluster_partition_handling, ignore}</span><br><span class="line">        ]</span><br><span class="line">    }</span><br><span class="line">].</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line">    {</span><br><span class="line">        rabbit, [</span><br><span class="line">            {cluster_partition_handling, ignore}</span><br><span class="line">        ]</span><br><span class="line">    }</span><br><span class="line">].</span><br></pre></td></tr></tbody></table></figure>
+
 <h3 id="pause-minority-模式"><a href="#pause-minority-模式" class="headerlink" title="pause-minority 模式"></a>pause-minority 模式</h3><p>在pause-minority 模式下，当发生网络分区时，集群中的节点在观察到某些节点”down”的时候，会自动检测其自身是否处于”少数派”(分区中的节点小于或者等于集群中一半的节点数)，RabbitMQ 会自动关闭这些节点的运作。根据 CAP 原理，这里保障了P，即分区耐受性。这样确保了在发生网络分区的情况下，大多数节点(当然这些节点得在同一个分区中)可以继续运行。”少数派”中的节点在分区开始时会关闭，当分区结束时又会启动。这里关闭是指RabbitMQ 应用的关闭，而Erlang 虚拟机并不关闭，类似于执行了 <code>rabbitmqctl stop_app</code> 命令。处于关闭的节点会每秒检测一次是否可连通到剩余集群中，如果可以则启动自身的应用。相当于执行 <code>rabbitmqctl start_app</code> 命令。</p>
 <p>pause-minority 模式相应的配置如下：</p>
-<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line">    {</span><br><span class="line">        rabbit, [</span><br><span class="line">            {cluster_partition_handling, pause-minority}</span><br><span class="line">        ]</span><br><span class="line">    }</span><br><span class="line">].</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line">    {</span><br><span class="line">        rabbit, [</span><br><span class="line">            {cluster_partition_handling, pause-minority}</span><br><span class="line">        ]</span><br><span class="line">    }</span><br><span class="line">].</span><br></pre></td></tr></tbody></table></figure>
+
 <p>需要注意的是RabbitMQ 会关闭不是严格意义上的大多数，比如在一个集群中只有两个节点的时候并不适合采用pause-minority 的模式，因为其中任何一个节点失败而发生网络分区时，两个节点都会关闭。当网络恢复时有可能两个节点会自动启动恢复网络分区，也有可能仍保持关闭状态，然而如果集群中的节点数远大于2 个时，pause-minority 模式比 ignore 模式更加可靠，特别是网络分区通常是由单节点网络故障而脱离原有分区引起的。</p>
 <p>当对等分区出现时，会关闭这些分区内的所有节点，对于前面的[node1,node2] [node3,node4] 的例子而言，这四个节点上的RabbitMQ 应用都会被关闭，只有等待网络恢复之后，才会自动启动所有的节点以求从网络分区中恢复。</p>
 <h3 id="pause-if-all-down-模式"><a href="#pause-if-all-down-模式" class="headerlink" title="pause-if-all-down 模式"></a>pause-if-all-down 模式</h3><p>在pause-if-all-down 模式下，RabbitMQ 集群中的节点在和所配置的列表中的任何节点不能交互时才会关闭 语法为 {pause_if_all_down, [nodes], ignore|autoheal}，其中[nodes]为受信节点，参考配置如下：</p>
-<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line">    {</span><br><span class="line">        rabbit, [</span><br><span class="line">            {cluster_partition_handling, {pause_if_all_down, ['rabbit@node1'], ignore}}</span><br><span class="line">        ]</span><br><span class="line">    }</span><br><span class="line">].</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line">    {</span><br><span class="line">        rabbit, [</span><br><span class="line">            {cluster_partition_handling, {pause_if_all_down, ['rabbit@node1'], ignore}}</span><br><span class="line">        ]</span><br><span class="line">    }</span><br><span class="line">].</span><br></pre></td></tr></tbody></table></figure>
+
 <p>如果一个节点与 rabbit@node1 节点无法通信时，则会关闭自身的 RabbitMQ 应用。如果是rabbit@node1 本身发生了故障造成网络不可用，而其他节点都是正常的情况下，这种规则会让所有的节点中 RabbitMQ 应用都关闭，待rabbit@node1 中的网络恢复之后，各个节点再启动自身应用以从网络分区中恢复。</p>
 <p>pause-if-all-down 模式下有ignore 和autoheal 两种不同的配置。考虑前面pause-minority 模式中提及的一种情形，node1、node2 部署在机架A 上，而node3、node4 部署在机架B，此时配置{cluster_partition_handling,{pause_if_all_down,[‘rabbit@node1’ ,‘rabbit@node3’], ignore}}，那么当机架A 和机架B 通信出现异常时，由于node1、node2 保持着通信，node3、node4 保持着通信，这4 个节点都不会自行关闭，但是会形成两个分区，所以这样不能实现自动处理的功能。所以如果将配置中的ignore 替换成autoheal 就可以处理此种情形。</p>
 <h3 id="autoheal-模式"><a href="#autoheal-模式" class="headerlink" title="autoheal 模式"></a>autoheal 模式</h3><p>在autoheal 模式下，当认为发生网络分区时，RabbitMQ 会自动决定一个获胜(winning)的分区，然后重启不在这个分区中的节点来从网络分区中恢复。一个获胜的分区是指客户端连接最多的分区，如果产生一个平局，即有两个或者多个分区的客户端连接数一样多，那么节点数最多的一个分区就是获胜分区，如果此时节点数也一样多，将以节点名称的字典序来挑选获胜分区。</p>
 <p>autoheal 模式参考配置如下：</p>
-<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line">    {</span><br><span class="line">        rabbit, [</span><br><span class="line">            {cluster_partition_handling, autoheal}</span><br><span class="line">        ]</span><br><span class="line">    }</span><br><span class="line">].</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line">    {</span><br><span class="line">        rabbit, [</span><br><span class="line">            {cluster_partition_handling, autoheal}</span><br><span class="line">        ]</span><br><span class="line">    }</span><br><span class="line">].</span><br></pre></td></tr></tbody></table></figure>
+
 <blockquote>
 <p>注意：在autoheal 模式下，如果集群中有节点处于非运行状态，那么当发生网络分区的时候，将不会有任何自动处理的动作。</p>
 </blockquote>
@@ -817,7 +841,7 @@
   </span>
   <span class="author" itemprop="copyrightHolder">HAIF.</span>
 </div>
-  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
   </div>
 
         
