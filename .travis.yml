@@ -15,4 +15,4 @@ deploy:
   keep-history: true
   on:
     branch: gh-pages
-  local-dir: public
+  local_dir: public
