@@ -118,3 +118,8 @@ leancloud_counter_security:
   app_key: hgIx9VKn0GLDhRcLxQuNMl0E
   username: hf
   password: haifhexo
+  
+sitemap:
+  path: sitemap.xml
+baidusitemap:
+  path: baidusitemap.xml
