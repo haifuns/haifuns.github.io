@@ -117,7 +117,7 @@ darkmode: true
 # External url should start with http:// or https://
 menu:
   home: / || fa fa-home
-  roaming: /roaming/ || fa fa-space-shuttle
+  roaming: /roaming/ || fa fa-rocket
   tags: /tags/ || fa fa-tags
   categories: /categories/ || fa fa-th
   archives: /archives/ || fa fa-archive
