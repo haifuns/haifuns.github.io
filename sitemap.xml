@@ -2,13 +2,6 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://haif.fun/roaming/index.html</loc>
-    
-    <lastmod>2021-08-19</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://haif.fun/2020/12/26/java-concurrent-2/</loc>
     
     <lastmod>2021-08-19</lastmod>
@@ -94,34 +87,6 @@
   
   <url>
     <loc>https://haif.fun/2020/12/26/zero-copy/</loc>
-    
-    <lastmod>2021-08-19</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://haif.fun/2020/12/26/java-concurrent-11/</loc>
-    
-    <lastmod>2021-08-19</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://haif.fun/2020/12/26/java-concurrent-12/</loc>
-    
-    <lastmod>2021-08-19</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://haif.fun/2020/12/26/java-concurrent-13/</loc>
-    
-    <lastmod>2021-08-19</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://haif.fun/2020/12/26/java-concurrent-14/</loc>
     
     <lastmod>2021-08-19</lastmod>
     
@@ -324,6 +289,13 @@
   </url>
   
   <url>
+    <loc>https://haif.fun/roaming/index.html</loc>
+    
+    <lastmod>2021-08-19</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://haif.fun/2020/12/26/java-concurrent-1/</loc>
     
     <lastmod>2021-08-19</lastmod>
@@ -332,6 +304,34 @@
   
   <url>
     <loc>https://haif.fun/2020/12/26/java-concurrent-10/</loc>
+    
+    <lastmod>2021-08-19</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://haif.fun/2020/12/26/java-concurrent-11/</loc>
+    
+    <lastmod>2021-08-19</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://haif.fun/2020/12/26/java-concurrent-12/</loc>
+    
+    <lastmod>2021-08-19</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://haif.fun/2020/12/26/java-concurrent-13/</loc>
+    
+    <lastmod>2021-08-19</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://haif.fun/2020/12/26/java-concurrent-14/</loc>
     
     <lastmod>2021-08-19</lastmod>
     
