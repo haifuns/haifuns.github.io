@@ -3,7 +3,7 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: With Silence.
+title: With Silence
 subtitle: ''
 description: 无限进步<br/>
 keywords:
@@ -106,7 +106,7 @@ deploy:
   -
     type: git
     repo: 
-      github: https://github.com/haiffun/haiffun.github.io
+      #github: https://github.com/haiffun/haifuns.github.io
       coding: https://e.coding.net/haif/blog.git
     branch: master
   #- 
