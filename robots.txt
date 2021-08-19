@@ -1,0 +1,11 @@
+User-agent: *
+Disallow: /archives
+Disallow: /css
+Disallow: /js
+Disallow: /categories
+Disallow: /roaming
+Disallow: /tags
+Disallow: /uploads
+Disallow: /about
+Sitemap: https://haif.fun/sitemap.xml
+Sitemap: https://haif.fun/baidusitemap.xml
