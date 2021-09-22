@@ -15,12 +15,13 @@ date: 2020-01-01 20:01:01
 
 ### 电影
 
-* 《[白蛇2：青蛇劫起](https://www.bilibili.com/bangumi/media/md28234796/)》
-* 《[*EVA* *新世纪福音战士新剧场版*3.33：Q](https://www.bilibili.com/bangumi/play/ss1640/?from=search&seid=13546175103643921540)》
-* 《[*EVA* *新世纪福音战士新剧场版*2.22：破](https://www.bilibili.com/bangumi/play/ss1639/?from=search&seid=13546175103643921540)》
-* 《[*EVA* *新世纪福音战士新剧场版*1.11：序](https://www.bilibili.com/bangumi/play/ss1638/?from=search&seid=13546175103643921540)》
-
-* 《福音战士新剧场版：序 ヱヴァンゲリヲン新劇場版：序‎ (2007)》
+* 《一代宗师》
+* 《鱿鱼游戏》
+* 《白蛇2：青蛇劫起》
+* 《EVA 新世纪福音战士新剧场版3.33：Q》
+* 《EVA 新世纪福音战士新剧场版2.22：破》
+* 《EVA 新世纪福音战士新剧场版1.11：序》
+* 《新·福音战士剧场版：终 シン・エヴァンゲリオン劇場版:│▌ (2021)》
 * 《花束般的恋爱》 
 * 《浪客剑心 最终章 追忆篇 るろうに剣心 最終章 The Beginning 》
 * 《头领》
