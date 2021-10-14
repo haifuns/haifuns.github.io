@@ -2,7 +2,56 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://haifuns.com/2020/12/26/jvm-1/</loc>
+    
+    <lastmod>2021-10-14</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://haifuns.com/2020/12/26/jvm-2/</loc>
+    
+    <lastmod>2021-10-14</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://haifuns.com/2020/12/26/jvm-3/</loc>
+    
+    <lastmod>2021-10-14</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://haifuns.com/2020/12/26/jvm-6/</loc>
+    
+    <lastmod>2021-10-14</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://haifuns.com/2020/12/26/zero-copy/</loc>
+    
+    <lastmod>2021-10-14</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://haifuns.com/2020/12/26/java-nio/</loc>
+    
+    <lastmod>2021-10-14</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://haifuns.com/2020/12/26/jvm-4/</loc>
+    
+    <lastmod>2021-10-14</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://haifuns.com/2020/12/26/jvm-5/</loc>
     
     <lastmod>2021-10-14</lastmod>
     
@@ -86,6 +135,13 @@
   </url>
   
   <url>
+    <loc>https://haifuns.com/2021/02/10/jvm-7/</loc>
+    
+    <lastmod>2021-10-14</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://haifuns.com/2021/02/13/redis-07/</loc>
     
     <lastmod>2021-10-14</lastmod>
@@ -101,6 +157,55 @@
   
   <url>
     <loc>https://haifuns.com/2021/03/21/zookeeper/</loc>
+    
+    <lastmod>2021-10-14</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://haifuns.com/2021/05/15/kafka-01/</loc>
+    
+    <lastmod>2021-10-14</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://haifuns.com/2021/05/22/kafka-02/</loc>
+    
+    <lastmod>2021-10-14</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://haifuns.com/2021/05/22/kafka-03/</loc>
+    
+    <lastmod>2021-10-14</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://haifuns.com/2021/05/22/kafka-04/</loc>
+    
+    <lastmod>2021-10-14</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://haifuns.com/2021/05/29/kafka-05/</loc>
+    
+    <lastmod>2021-10-14</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://haifuns.com/2021/05/29/kafka-06/</loc>
+    
+    <lastmod>2021-10-14</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://haifuns.com/2021/06/06/kafka-07/</loc>
     
     <lastmod>2021-10-14</lastmod>
     
@@ -205,34 +310,6 @@
   </url>
   
   <url>
-    <loc>https://haifuns.com/2020/12/26/jvm-1/</loc>
-    
-    <lastmod>2021-10-14</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://haifuns.com/2020/12/26/jvm-2/</loc>
-    
-    <lastmod>2021-10-14</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://haifuns.com/2020/12/26/jvm-3/</loc>
-    
-    <lastmod>2021-10-14</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://haifuns.com/2020/12/26/jvm-6/</loc>
-    
-    <lastmod>2021-10-14</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://haifuns.com/2020/12/26/java-concurrent-11/</loc>
     
     <lastmod>2021-10-14</lastmod>
@@ -268,35 +345,7 @@
   </url>
   
   <url>
-    <loc>https://haifuns.com/2020/12/26/java-nio/</loc>
-    
-    <lastmod>2021-10-14</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://haifuns.com/2020/12/26/jvm-4/</loc>
-    
-    <lastmod>2021-10-14</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://haifuns.com/2020/12/26/jvm-5/</loc>
-    
-    <lastmod>2021-10-14</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://haifuns.com/2020/06/14/docker/</loc>
-    
-    <lastmod>2021-10-14</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://haifuns.com/2021/02/10/jvm-7/</loc>
     
     <lastmod>2021-10-14</lastmod>
     
@@ -318,55 +367,6 @@
   
   <url>
     <loc>https://haifuns.com/2021/04/04/distribution-01/</loc>
-    
-    <lastmod>2021-10-14</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://haifuns.com/2021/05/15/kafka-01/</loc>
-    
-    <lastmod>2021-10-14</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://haifuns.com/2021/05/22/kafka-02/</loc>
-    
-    <lastmod>2021-10-14</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://haifuns.com/2021/05/22/kafka-03/</loc>
-    
-    <lastmod>2021-10-14</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://haifuns.com/2021/05/22/kafka-04/</loc>
-    
-    <lastmod>2021-10-14</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://haifuns.com/2021/05/29/kafka-05/</loc>
-    
-    <lastmod>2021-10-14</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://haifuns.com/2021/05/29/kafka-06/</loc>
-    
-    <lastmod>2021-10-14</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://haifuns.com/2021/06/06/kafka-07/</loc>
     
     <lastmod>2021-10-14</lastmod>
     
