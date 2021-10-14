@@ -5,10 +5,6 @@
     <lastmod>2021-10-14</lastmod>
   </url>
   <url>
-    <loc>https://haifuns.com/2020/12/26/netty/</loc>
-    <lastmod>2021-10-14</lastmod>
-  </url>
-  <url>
     <loc>https://haifuns.com/2020/06/14/rabbitmq-req/</loc>
     <lastmod>2021-10-14</lastmod>
   </url>
@@ -58,26 +54,6 @@
   </url>
   <url>
     <loc>https://haifuns.com/2021/03/21/zookeeper/</loc>
-    <lastmod>2021-10-14</lastmod>
-  </url>
-  <url>
-    <loc>https://haifuns.com/2021/05/29/kafka-05/</loc>
-    <lastmod>2021-10-14</lastmod>
-  </url>
-  <url>
-    <loc>https://haifuns.com/2021/05/29/kafka-06/</loc>
-    <lastmod>2021-10-14</lastmod>
-  </url>
-  <url>
-    <loc>https://haifuns.com/2021/06/06/kafka-07/</loc>
-    <lastmod>2021-10-14</lastmod>
-  </url>
-  <url>
-    <loc>https://haifuns.com/2021/06/06/kafka-08/</loc>
-    <lastmod>2021-10-14</lastmod>
-  </url>
-  <url>
-    <loc>https://haifuns.com/2021/06/06/kafka-09/</loc>
     <lastmod>2021-10-14</lastmod>
   </url>
   <url>
@@ -169,23 +145,15 @@
     <lastmod>2021-10-14</lastmod>
   </url>
   <url>
+    <loc>https://haifuns.com/2020/12/26/netty/</loc>
+    <lastmod>2021-10-14</lastmod>
+  </url>
+  <url>
     <loc>https://haifuns.com/2020/06/14/docker/</loc>
     <lastmod>2021-10-14</lastmod>
   </url>
   <url>
     <loc>https://haifuns.com/2021/02/10/jvm-7/</loc>
-    <lastmod>2021-10-14</lastmod>
-  </url>
-  <url>
-    <loc>https://haifuns.com/2021/02/25/devops-01/</loc>
-    <lastmod>2021-10-14</lastmod>
-  </url>
-  <url>
-    <loc>https://haifuns.com/2021/02/25/devops-02/</loc>
-    <lastmod>2021-10-14</lastmod>
-  </url>
-  <url>
-    <loc>https://haifuns.com/2021/04/04/distribution-01/</loc>
     <lastmod>2021-10-14</lastmod>
   </url>
   <url>
@@ -202,6 +170,38 @@
   </url>
   <url>
     <loc>https://haifuns.com/2021/05/22/kafka-04/</loc>
+    <lastmod>2021-10-14</lastmod>
+  </url>
+  <url>
+    <loc>https://haifuns.com/2021/05/29/kafka-05/</loc>
+    <lastmod>2021-10-14</lastmod>
+  </url>
+  <url>
+    <loc>https://haifuns.com/2021/05/29/kafka-06/</loc>
+    <lastmod>2021-10-14</lastmod>
+  </url>
+  <url>
+    <loc>https://haifuns.com/2021/06/06/kafka-07/</loc>
+    <lastmod>2021-10-14</lastmod>
+  </url>
+  <url>
+    <loc>https://haifuns.com/2021/06/06/kafka-08/</loc>
+    <lastmod>2021-10-14</lastmod>
+  </url>
+  <url>
+    <loc>https://haifuns.com/2021/06/06/kafka-09/</loc>
+    <lastmod>2021-10-14</lastmod>
+  </url>
+  <url>
+    <loc>https://haifuns.com/2021/02/25/devops-01/</loc>
+    <lastmod>2021-10-14</lastmod>
+  </url>
+  <url>
+    <loc>https://haifuns.com/2021/02/25/devops-02/</loc>
+    <lastmod>2021-10-14</lastmod>
+  </url>
+  <url>
+    <loc>https://haifuns.com/2021/04/04/distribution-01/</loc>
     <lastmod>2021-10-14</lastmod>
   </url>
   <url>
