@@ -23,13 +23,6 @@
   </url>
   
   <url>
-    <loc>https://haifuns.com/2020/12/26/rabbitmq-3/</loc>
-    
-    <lastmod>2021-10-14</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://haifuns.com/2021/01/15/redis-01/</loc>
     
     <lastmod>2021-10-14</lastmod>
@@ -276,6 +269,13 @@
   
   <url>
     <loc>https://haifuns.com/2020/12/26/rabbitmq-2/</loc>
+    
+    <lastmod>2021-10-14</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://haifuns.com/2020/12/26/rabbitmq-3/</loc>
     
     <lastmod>2021-10-14</lastmod>
     
