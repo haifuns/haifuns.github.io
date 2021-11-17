@@ -1,4 +1,4 @@
-title: 【分布式共识算法】Paxos
+title: 分布式共识算法之Paxos算法
 author: haifun
 tags:
   - 分布式
