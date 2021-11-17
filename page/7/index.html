@@ -174,6 +174,124 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://haifuns.com/2019/07/15/rabbitmq/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/logo.png">
+      <meta itemprop="name" content="HAIFUN">
+      <meta itemprop="description" content="无限进步<br/>">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="With Silence">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2019/07/15/rabbitmq/" class="post-title-link" itemprop="url">RabbitMQ 基础</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2019-07-15 12:30:00" itemprop="dateCreated datePublished" datetime="2019-07-15T12:30:00+00:00">2019-07-15</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-02-25 12:28:01" itemprop="dateModified" datetime="2021-02-25T12:28:01+00:00">2021-02-25</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6/" itemprop="url" rel="index"><span itemprop="name">消息中间件</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2019/07/15/rabbitmq/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2019/07/15/rabbitmq/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="消息中间件"><a href="#消息中间件" class="headerlink" title="消息中间件"></a>消息中间件</h1><p>消息 (Message) 是指在应用间传送的数据。消息可以非常简单，比如只包含文本字符串、 JSON 等，也可以很复杂，比如内嵌对象。</p>
+<p>消息队列中间件 (Message Queue Middleware，简称为 MQ) 是指利用高效可靠的消息传递 机制进行与平台无关的数据交流，并基于数据通信来进行分布式系统的集成。通过提供消息传递和消息排队模型，它可以在分布式环境下扩展进程间的通信。</p>
+<p>消息队列中间件，也可以称为消息队列或者消息中间件。它一般有两种传递模式:点对点 (P2P, Point-to-Point) 模式和发布/订阅 (Pub/Sub) 模式。</p>
+<h2 id="中间件作用"><a href="#中间件作用" class="headerlink" title="中间件作用"></a>中间件作用</h2><ul>
+<li>解耦</li>
+<li>冗余（存储）</li>
+<li>扩展性</li>
+<li>削峰</li>
+<li>可恢复性</li>
+<li>顺序保证</li>
+<li>缓冲</li>
+<li>异步通信</li>
+</ul>
+<h1 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h1><ul>
+<li>可靠性：RabbitMQ使用机制保证可靠性，如持久化、传输确认以及发布确认等</li>
+<li>灵活的路由：通过交换器路由消息到队列</li>
+<li>扩展性：可集群</li>
+<li>高可用性： 队列可以在集群中的机器上设置镜像，使得在部分节点出现问题的情况下队列仍然可用（镜像集群：不同队列消息同步）</li>
+<li>多种协议： 除了原生支持 AMQP 协议，还支持 STOMP， MQTT 等</li>
+<li>多语言客户端：如 Java、 Python、 Ruby、 PHP、 C#、 JavaScript 等。</li>
+<li>管理界面：提供了一个易用的用户界面，使得用户可以监控和管理消息、集群中的节点等。（rabbitmq_management插件）</li>
+<li>插件机制：插件丰富可扩展</li>
+</ul>
+<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2019/07/15/rabbitmq/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://haifuns.com/2019/06/28/git/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -435,7 +553,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">62</span>
+          <span class="site-state-item-count">63</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
