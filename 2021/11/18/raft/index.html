@@ -24,26 +24,20 @@
     var CONFIG = {"hostname":"haifuns.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="概述限流在日常生活中很常见，比如在节假日期间去一个旅游景点，为了防止人流量过大，景点管理方通常会在入口处设置拦截，限制进入景点的人数，等有游客出去后才放新游客进去。对应到计算机中，比如要办活动、秒杀等，由于系统有自己的最大服务能力，即在达到某个临界点之前，系统都可以正常提供服务。为了保证系统在面临临界流量时仍然可以对外提供服务，这时就需要限流技术。 限流可以分为技术层面的限流和业务层面的限流。技术">
+  <meta name="description" content="Raft算法是一种等价派生于Multi Paxos的分布式共识算法，它源自于题为《In Search of an Understandable Consensus Algorithm》的论文，后来成为Etcd、LogCabin、Consul等重要分布式系统的理论基础。 如何达到分布式共识Raft算法论文论证了当以下三个问题同时被解决时，即等价于达成共识：  如何选主（Leader Election">
 <meta property="og:type" content="article">
-<meta property="og:title" content="常见限流方案设计">
-<meta property="og:url" content="https://haifuns.com/2021/04/04/distribution-01/index.html">
+<meta property="og:title" content="分布式共识算法之Raft算法">
+<meta property="og:url" content="https://haifuns.com/2021/11/18/raft/index.html">
 <meta property="og:site_name" content="With Silence">
-<meta property="og:description" content="概述限流在日常生活中很常见，比如在节假日期间去一个旅游景点，为了防止人流量过大，景点管理方通常会在入口处设置拦截，限制进入景点的人数，等有游客出去后才放新游客进去。对应到计算机中，比如要办活动、秒杀等，由于系统有自己的最大服务能力，即在达到某个临界点之前，系统都可以正常提供服务。为了保证系统在面临临界流量时仍然可以对外提供服务，这时就需要限流技术。 限流可以分为技术层面的限流和业务层面的限流。技术">
+<meta property="og:description" content="Raft算法是一种等价派生于Multi Paxos的分布式共识算法，它源自于题为《In Search of an Understandable Consensus Algorithm》的论文，后来成为Etcd、LogCabin、Consul等重要分布式系统的理论基础。 如何达到分布式共识Raft算法论文论证了当以下三个问题同时被解决时，即等价于达成共识：  如何选主（Leader Election">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/distribution/%E6%BC%8F%E6%A1%B6%E7%AE%97%E6%B3%95.png">
-<meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/distribution/%E4%BB%A4%E7%89%8C%E6%A1%B6%E7%AE%97%E6%B3%95.png">
-<meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/distribution/%E6%97%B6%E9%97%B4%E7%AA%97%E5%8F%A3%E7%AE%97%E6%B3%95.png">
-<meta property="article:published_time" content="2021-04-04T20:46:00.000Z">
-<meta property="article:modified_time" content="2021-11-18T12:41:11.897Z">
+<meta property="article:published_time" content="2021-11-18T20:40:00.000Z">
+<meta property="article:modified_time" content="2021-11-18T12:41:11.901Z">
 <meta property="article:author" content="HAIFUN">
-<meta property="article:tag" content="高可用">
 <meta property="article:tag" content="分布式">
-<meta property="article:tag" content="限流">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/distribution/%E6%BC%8F%E6%A1%B6%E7%AE%97%E6%B3%95.png">
 
-<link rel="canonical" href="https://haifuns.com/2021/04/04/distribution-01/">
+<link rel="canonical" href="https://haifuns.com/2021/11/18/raft/">
 
 
 <script id="page-configurations">
@@ -56,7 +50,7 @@
   };
 </script>
 
-  <title>常见限流方案设计 | With Silence</title>
+  <title>分布式共识算法之Raft算法 | With Silence</title>
   
 
 
@@ -184,7 +178,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://haifuns.com/2021/04/04/distribution-01/">
+    <link itemprop="mainEntityOfPage" href="https://haifuns.com/2021/11/18/raft/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/uploads/logo.png">
@@ -197,7 +191,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          常见限流方案设计
+          分布式共识算法之Raft算法
         </h1>
 
         <div class="post-meta">
@@ -206,16 +200,10 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2021-04-04 20:46:00" itemprop="dateCreated datePublished" datetime="2021-04-04T20:46:00+00:00">2021-04-04</time>
+              <time title="创建时间：2021-11-18 20:40:00 / 修改时间：12:41:11" itemprop="dateCreated datePublished" datetime="2021-11-18T20:40:00+00:00">2021-11-18</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-11-18 12:41:11" itemprop="dateModified" datetime="2021-11-18T12:41:11+00:00">2021-11-18</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -242,8 +230,8 @@
       </span>
       <span class="post-meta-item-text">Valine：</span>
     
-    <a title="valine" href="/2021/04/04/distribution-01/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2021/04/04/distribution-01/" itemprop="commentCount"></span>
+    <a title="valine" href="/2021/11/18/raft/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/11/18/raft/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -258,40 +246,37 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>限流在日常生活中很常见，比如在节假日期间去一个旅游景点，为了防止人流量过大，景点管理方通常会在入口处设置拦截，限制进入景点的人数，等有游客出去后才放新游客进去。对应到计算机中，比如要办活动、秒杀等，由于系统有自己的最大服务能力，即在达到某个临界点之前，系统都可以正常提供服务。为了保证系统在面临临界流量时仍然可以对外提供服务，这时就需要限流技术。</p>
-<p>限流可以分为技术层面的限流和业务层面的限流。技术层面的限流比较通用，各个业务场景都可以用到。业务层面的限流则需要根据具体的业务场景做开发。</p>
-<span id="more"></span>
-
-<h1 id="技术层面的限流"><a href="#技术层面的限流" class="headerlink" title="技术层面的限流"></a>技术层面的限流</h1><p>技术层面的限流有两种方案：</p>
+        <p>Raft算法是一种等价派生于Multi Paxos的分布式共识算法，它源自于题为《In Search of an Understandable Consensus Algorithm》的论文，后来成为Etcd、LogCabin、Consul等重要分布式系统的理论基础。</p>
+<h1 id="如何达到分布式共识"><a href="#如何达到分布式共识" class="headerlink" title="如何达到分布式共识"></a>如何达到分布式共识</h1><p>Raft算法论文论证了当以下三个问题同时被解决时，即等价于达成共识：</p>
 <ul>
-<li>限制并发数，也就是根据系统的最大资源量进行限制，比如数据库连接池、线程池、Nginx的limit_conn模块。</li>
-<li>限制速率（QPS），比如Guava的RateLimiter、Nginx的limit_req模块。</li>
+<li>如何选主（Leader Election）</li>
+<li>如何把数据复制到各个节点（Entity Replication）</li>
+<li>如何保证过程是安全的（Safety）</li>
 </ul>
-<p>限制速率这种方式对于服务的接口调用非常有用。比如通过压力测试知道服务的QPS是2000，那么就可以限流2000QPS。当调用方的并发量超过了这个数字会直接拒绝提供服务，虽然部分请求被拒绝了，但是保证了其他请求可以正常处理。</p>
-<h1 id="业务层面的限流"><a href="#业务层面的限流" class="headerlink" title="业务层面的限流"></a>业务层面的限流</h1><p>比如在秒杀系统中，一个商品的库存只有100件，有2万人抢购，没有必要放2万个人进来，可以只放前500个，后面的人直接返回已售完即可。</p>
-<p>针对这种业务场景，可以做一个限流系统（或者叫票据系统），票据系统中存放着500张票据，每进来一个人领一张票据，领到票据的人再进入后面的业务系统进行抢购。对于领不到票据的人，则返回已售完。</p>
-<p>具体实现上，可以使用Redis或Nginx+Lua脚本实现。</p>
-<h1 id="限流算法"><a href="#限流算法" class="headerlink" title="限流算法"></a>限流算法</h1><p>常用的限流算法有计数器算法、漏桶算法、令牌桶算法和滑动时间窗口算法。</p>
-<h2 id="计数器算法"><a href="#计数器算法" class="headerlink" title="计数器算法"></a>计数器算法</h2><p>计数器算法“简单粗暴”，该算法会维护一个counter，规定在单位时间内counter的大小不能超过最大值，每隔固定时间将counter值归零。如果counter值大于设定的阈值，那么系统就开始拒绝请求以保护系统的负载。</p>
-<h2 id="漏桶算法"><a href="#漏桶算法" class="headerlink" title="漏桶算法"></a>漏桶算法</h2><p>如下图所示，在漏桶算法中会维护一个固定容量的桶，这个桶按照指定速率漏水。如果桶空了就停止漏水。</p>
-<p>请求到达系统就类似于水加到桶中，这个速度可以是匀速的也可以瞬间的，如果桶满了就忽略后面来的请求，直到桶可以存放多余的水。</p>
-<p>漏桶算法的好处是可以将系统的处理能力维持在一个比较平稳的水平，缺点是在瞬间流量过来时会拒绝后续的请求流量。</p>
-<p>一般来说，代码实现时会使用一个队列实现“漏桶”效果，当请求过多时，队列中的请求开始积压，当队列满了系统就开始拒绝请求。</p>
-<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/distribution/%E6%BC%8F%E6%A1%B6%E7%AE%97%E6%B3%95.png"></p>
-<h2 id="令牌桶算法"><a href="#令牌桶算法" class="headerlink" title="令牌桶算法"></a>令牌桶算法</h2><p>令牌桶与漏桶算法的效果一致，但是原理相反：如下图所示，随着时间的流逝，系统会按照指定速率往令牌桶中添加token，每来一个新请求就从桶中拿走一个token，没有token就拒绝服务。这种算法的好处是便于控制系统的处理速度，甚至可以通过统计信息实时优化令牌桶的大小。</p>
-<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/distribution/%E4%BB%A4%E7%89%8C%E6%A1%B6%E7%AE%97%E6%B3%95.png"></p>
-<p>漏桶算法和令牌桶算法一个是保持流出速率恒定，另一个是保持流入速率恒定。两者用途有一些差别，令牌桶限制的是平均流入速率而不是瞬时速率，因为可能出现一段时间没有请求进来，令牌桶中存满了令牌，然后短时间内突发流量过来，一瞬间从桶中拿令牌出来；漏桶有点类似消息队列，起到削峰的作用，平滑了突发流入速率。</p>
-<blockquote>
-<p>Guava中的concurrent包中提供了限流工具类RateLimiter，使用了令牌桶算法，它支持两种令牌获取接口：获取不到就一直阻塞；在指定时间内获取不到就阻塞，超过这个时间就返回获取失败。</p>
-</blockquote>
-<h2 id="滑动时间窗口算法"><a href="#滑动时间窗口算法" class="headerlink" title="滑动时间窗口算法"></a>滑动时间窗口算法</h2><p>滑动时间窗口算法就是根据当前时间获取对应的时间窗口，时间窗口保存有流量相关的统计值，根据该统计值判断是否触发流控。</p>
-<p>一般来说，时间窗口可以循环复用，在复用时重新初始化即可。滑动时间窗口能够支持的瞬时流量最大可为该窗口上限，而令牌桶算法能够支持的瞬时流量最大为桶大小。</p>
-<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/distribution/%E6%97%B6%E9%97%B4%E7%AA%97%E5%8F%A3%E7%AE%97%E6%B3%95.png"></p>
-<p>参考文献：</p>
+<h2 id="如何选主"><a href="#如何选主" class="headerlink" title="如何选主"></a>如何选主</h2><p>前篇Paxos算法详尽介绍了选主的原理，尽管选主问题的实际工程实践中还涉及很多细节，譬如心跳、随机超时、并行竞选等，其本质还是对分布式系统对“谁当主节点”这件事达成共识，不妨碍我们理解。</p>
+<h2 id="如何把数据复制到各个节点"><a href="#如何把数据复制到各个节点" class="headerlink" title="如何把数据复制到各个节点"></a>如何把数据复制到各个节点</h2><p>这里我们需要讨论一下数据（Paxos中的提案、Raft中的日志）在各个网络节点间的复制问题：</p>
+<h3 id="正常情况"><a href="#正常情况" class="headerlink" title="正常情况"></a>正常情况</h3><p>在正常情况下，当客户端向主节点发起一个操作请求，主节点会先写入自己的变更日志，但是不提交，接着把变更信息在下一个心跳包中广播给所有从节点，并要求从节点回复确认收到的消息，从节点收到消息后，将操作写入自己的变更日志，然后给主节点发送确认签收的消息，主节点在收到多数签收消息后，提交自己的变更、应答客户端并且给从节点广播可以提交的消息，从节点收到提交消息后提交自己的变更，此时数据在节点间的复制就完成了。</p>
+<h3 id="异常情况"><a href="#异常情况" class="headerlink" title="异常情况"></a>异常情况</h3><p>在异常情况下，网络出现分区，部分节点失联，但是只要仍能工作的节点满足过半数的要求，分布式系统就仍然可以正常工作，此时，数据复制过程如下：</p>
+<p>假设S1、S2、S3、S4、S5五个节点，S1是主节点，由于网络故障导致S1、S2和S3、S4、S5之间无法通信，形成网络分区。</p>
+<p>一段时间后，S3、S4、S5中的某一个节点（假设是S3）先达到心跳超时阈值，此时S3发起竞选主节点广播并收到S4、S5两个节点的批准响应，加上自己的一票达到了多数派的要求，竞选成功，此时系统中存在S1和S3两个主节点，由于网络分区，它们不知道对方的存在。</p>
+<p>此时如果客户端发起操作请求会有以下两种情况：</p>
 <ul>
-<li>《软件架构设计》</li>
-<li>《高可用可伸缩微服务架构》</li>
-<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/hlkawa/p/13111003.html">限流相关的算法实现</a></li>
+<li>如果客户端连接到S1、S2之一，都将由S1处理，由于操作只能获取两个节点的响应，没有达到多数派的要求，所以任何变更都无法更改。</li>
+<li>如果客户端连接到S3、S4、S5之一，都将由S3处理，此时操作可以满足多数派响应，变更可以被提交，系统可以正常提供服务。</li>
+</ul>
+<blockquote>
+<p>网络分区是由于软、硬件或网络故障构成，内部网络出现分区，但两个分区仍能分别与外部网络中的客户端正常通信的情况非常少见。所以以上两种情况很少能同时出现，更多的场景是算法能容忍网络里下线了部分节点。</p>
+</blockquote>
+<p>假设之后故障恢复，网络分区解除，五个节点恢复通信，此时S1、S3都会向所有节点发送心跳包，从各自的心跳中可以得知S3的任期编号更大，此时五个节点都会承认S3是唯一的主节点，S1、S2会回滚它们所有没有提交的变更，然后从S3的心跳包中获得失联期间所有的变更，将变更写入本地磁盘，此时分布式系统从网络分区中恢复，各个节点的状态达到最终一致。</p>
+<h2 id="如何保证过程安全"><a href="#如何保证过程安全" class="headerlink" title="如何保证过程安全"></a>如何保证过程安全</h2><p>在分布式理论中有两个描述安全性的预定义术语：</p>
+<ul>
+<li>协定性（Safety）：所有的坏事都不会发生（something “bad” will never happen）</li>
+<li>终止性（Liveness）：所有的好事都终将发生，但不知道是啥时候（something “good” will must happen, but we don’t know when）</li>
+</ul>
+<p>术语太过晦涩，以选主问题举例，Safety要保证选主的结果一定是有且只有一个主节点，不可能同时出现两个主节点。Liveness则要保证选举过程一定在某个时刻可以结束。在Liveness整个属性上选主问题存在理论上的瑕疵，即可能由于活锁问题导致无法选出主节点，在Raft论文中只对Safety做了保证，但是由于工程实现上的处理，现实中几乎不会出现终止性问题。</p>
+<h1 id="Raft算法动画演示"><a href="#Raft算法动画演示" class="headerlink" title="Raft算法动画演示"></a>Raft算法动画演示</h1><ul>
+<li>英文版：<a target="_blank" rel="noopener" href="http://thesecretlivesofdata.com/raft/">http://thesecretlivesofdata.com/raft/</a></li>
+<li>中文版：<a target="_blank" rel="noopener" href="http://www.kailing.pub/raft/index.html">http://www.kailing.pub/raft/index.html</a></li>
 </ul>
 
     </div>
@@ -304,11 +289,11 @@
 <div>
 <ul class="post-copyright">
   <li class="post-copyright-author">
-    <strong>本文作者： </strong>HAIF.
+    <strong>本文作者： </strong>haifun
   </li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="https://haifuns.com/2021/04/04/distribution-01/" title="常见限流方案设计">https://haifuns.com/2021/04/04/distribution-01/</a>
+    <a href="https://haifuns.com/2021/11/18/raft/" title="分布式共识算法之Raft算法">https://haifuns.com/2021/11/18/raft/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
@@ -320,9 +305,7 @@
       <footer class="post-footer">
           
           <div class="post-tags">
-              <a href="/tags/%E9%AB%98%E5%8F%AF%E7%94%A8/" rel="tag"><i class="fa fa-tag"></i> 高可用</a>
               <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/" rel="tag"><i class="fa fa-tag"></i> 分布式</a>
-              <a href="/tags/%E9%99%90%E6%B5%81/" rel="tag"><i class="fa fa-tag"></i> 限流</a>
           </div>
 
         
@@ -331,13 +314,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2021/03/21/zookeeper/" rel="prev" title="ZooKeeper入门">
-      <i class="fa fa-chevron-left"></i> ZooKeeper入门
+    <a href="/2021/11/17/multi-paxos/" rel="prev" title="分布式共识算法之Multi Paxos算法">
+      <i class="fa fa-chevron-left"></i> 分布式共识算法之Multi Paxos算法
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2021/05/15/kafka-01/" rel="next" title="【Kafka】：初识篇">
-      【Kafka】：初识篇 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -397,7 +377,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A6%82%E8%BF%B0"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8A%80%E6%9C%AF%E5%B1%82%E9%9D%A2%E7%9A%84%E9%99%90%E6%B5%81"><span class="nav-number">2.</span> <span class="nav-text">技术层面的限流</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%9A%E5%8A%A1%E5%B1%82%E9%9D%A2%E7%9A%84%E9%99%90%E6%B5%81"><span class="nav-number">3.</span> <span class="nav-text">业务层面的限流</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%99%90%E6%B5%81%E7%AE%97%E6%B3%95"><span class="nav-number">4.</span> <span class="nav-text">限流算法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%A1%E6%95%B0%E5%99%A8%E7%AE%97%E6%B3%95"><span class="nav-number">4.1.</span> <span class="nav-text">计数器算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%BC%8F%E6%A1%B6%E7%AE%97%E6%B3%95"><span class="nav-number">4.2.</span> <span class="nav-text">漏桶算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%A4%E7%89%8C%E6%A1%B6%E7%AE%97%E6%B3%95"><span class="nav-number">4.3.</span> <span class="nav-text">令牌桶算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%BB%91%E5%8A%A8%E6%97%B6%E9%97%B4%E7%AA%97%E5%8F%A3%E7%AE%97%E6%B3%95"><span class="nav-number">4.4.</span> <span class="nav-text">滑动时间窗口算法</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E8%BE%BE%E5%88%B0%E5%88%86%E5%B8%83%E5%BC%8F%E5%85%B1%E8%AF%86"><span class="nav-number">1.</span> <span class="nav-text">如何达到分布式共识</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E9%80%89%E4%B8%BB"><span class="nav-number">1.1.</span> <span class="nav-text">如何选主</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E6%8A%8A%E6%95%B0%E6%8D%AE%E5%A4%8D%E5%88%B6%E5%88%B0%E5%90%84%E4%B8%AA%E8%8A%82%E7%82%B9"><span class="nav-number">1.2.</span> <span class="nav-text">如何把数据复制到各个节点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%AD%A3%E5%B8%B8%E6%83%85%E5%86%B5"><span class="nav-number">1.2.1.</span> <span class="nav-text">正常情况</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%82%E5%B8%B8%E6%83%85%E5%86%B5"><span class="nav-number">1.2.2.</span> <span class="nav-text">异常情况</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A6%82%E4%BD%95%E4%BF%9D%E8%AF%81%E8%BF%87%E7%A8%8B%E5%AE%89%E5%85%A8"><span class="nav-number">1.3.</span> <span class="nav-text">如何保证过程安全</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Raft%E7%AE%97%E6%B3%95%E5%8A%A8%E7%94%BB%E6%BC%94%E7%A4%BA"><span class="nav-number">2.</span> <span class="nav-text">Raft算法动画演示</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
