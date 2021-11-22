@@ -2,6 +2,90 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://haifuns.com/2020/12/26/zero-copy/</loc>
+    
+    <lastmod>2021-11-22</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://haifuns.com/2021/02/01/redis-06/</loc>
+    
+    <lastmod>2021-11-22</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://haifuns.com/2021/02/13/redis-07/</loc>
+    
+    <lastmod>2021-11-22</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://haifuns.com/2021/03/13/tcpip/</loc>
+    
+    <lastmod>2021-11-22</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://haifuns.com/2021/03/21/zookeeper/</loc>
+    
+    <lastmod>2021-11-22</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://haifuns.com/2021/11/22/zab/</loc>
+    
+    <lastmod>2021-11-22</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://haifuns.com/about/index.html</loc>
+    
+    <lastmod>2021-11-22</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://haifuns.com/roaming/index.html</loc>
+    
+    <lastmod>2021-11-22</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://haifuns.com/2020/12/26/java-concurrent-1/</loc>
+    
+    <lastmod>2021-11-22</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://haifuns.com/2020/12/26/java-concurrent-10/</loc>
+    
+    <lastmod>2021-11-22</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://haifuns.com/2020/12/26/java-concurrent-2/</loc>
+    
+    <lastmod>2021-11-22</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://haifuns.com/2020/12/26/java-concurrent-3/</loc>
+    
+    <lastmod>2021-11-22</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://haifuns.com/2020/12/26/java-concurrent-4/</loc>
     
     <lastmod>2021-11-22</lastmod>
@@ -72,7 +156,28 @@
   </url>
   
   <url>
-    <loc>https://haifuns.com/2020/12/26/zero-copy/</loc>
+    <loc>https://haifuns.com/2020/12/26/java-concurrent-11/</loc>
+    
+    <lastmod>2021-11-22</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://haifuns.com/2020/12/26/java-concurrent-12/</loc>
+    
+    <lastmod>2021-11-22</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://haifuns.com/2020/12/26/java-concurrent-13/</loc>
+    
+    <lastmod>2021-11-22</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://haifuns.com/2020/12/26/java-concurrent-14/</loc>
     
     <lastmod>2021-11-22</lastmod>
     
@@ -177,35 +282,7 @@
   </url>
   
   <url>
-    <loc>https://haifuns.com/2021/02/01/redis-06/</loc>
-    
-    <lastmod>2021-11-22</lastmod>
-    
-  </url>
-  
-  <url>
     <loc>https://haifuns.com/2021/02/10/jvm-7/</loc>
-    
-    <lastmod>2021-11-22</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://haifuns.com/2021/02/13/redis-07/</loc>
-    
-    <lastmod>2021-11-22</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://haifuns.com/2021/03/13/tcpip/</loc>
-    
-    <lastmod>2021-11-22</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://haifuns.com/2021/03/21/zookeeper/</loc>
     
     <lastmod>2021-11-22</lastmod>
     
@@ -275,6 +352,13 @@
   </url>
   
   <url>
+    <loc>https://haifuns.com/2021/11/22/gossip/</loc>
+    
+    <lastmod>2021-11-22</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://haifuns.com/2021/11/17/multi-paxos/</loc>
     
     <lastmod>2021-11-22</lastmod>
@@ -290,83 +374,6 @@
   
   <url>
     <loc>https://haifuns.com/2021/11/18/raft/</loc>
-    
-    <lastmod>2021-11-22</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://haifuns.com/2021/11/22/zab/</loc>
-    
-    <lastmod>2021-11-22</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://haifuns.com/about/index.html</loc>
-    
-    <lastmod>2021-11-22</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://haifuns.com/roaming/index.html</loc>
-    
-    <lastmod>2021-11-22</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://haifuns.com/2020/12/26/java-concurrent-1/</loc>
-    
-    <lastmod>2021-11-22</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://haifuns.com/2020/12/26/java-concurrent-10/</loc>
-    
-    <lastmod>2021-11-22</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://haifuns.com/2020/12/26/java-concurrent-2/</loc>
-    
-    <lastmod>2021-11-22</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://haifuns.com/2020/12/26/java-concurrent-3/</loc>
-    
-    <lastmod>2021-11-22</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://haifuns.com/2020/12/26/java-concurrent-11/</loc>
-    
-    <lastmod>2021-11-22</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://haifuns.com/2020/12/26/java-concurrent-12/</loc>
-    
-    <lastmod>2021-11-22</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://haifuns.com/2020/12/26/java-concurrent-13/</loc>
-    
-    <lastmod>2021-11-22</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://haifuns.com/2020/12/26/java-concurrent-14/</loc>
     
     <lastmod>2021-11-22</lastmod>
     
