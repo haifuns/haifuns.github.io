@@ -1,4 +1,4 @@
-title: Java必备流程图
+title: Spring生命周期
 author: Haif.
 tags:
   - Spring
@@ -7,9 +7,6 @@ categories:
 date: 2019-11-21 21:43:00
 copyright: true
 ---
-### Spring生命周期
-
-<!-- more -->
 
 <img width=45% src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/img/SpringBean.png" >
 
@@ -24,4 +21,4 @@ copyright: true
 * 此时bean准备已完成，可以使用。
 * 容器关闭后，如果bean实现了DisposableBean接口，会执行destory方法。
 * 最后执行自定义的销毁前destory-method指定方法。
-* bean销毁完成。
+* bean销毁完成。https://github.com/haifuns/redisson.git
