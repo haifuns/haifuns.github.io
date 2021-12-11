@@ -174,6 +174,117 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://haifuns.com/2021/12/11/redission-01/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.jpg">
+      <meta itemprop="name" content="HAIFUN">
+      <meta itemprop="description" content="无限进步<br/>">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="With Silence">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/12/11/redission-01/" class="post-title-link" itemprop="url">【Redission源码解析】可重入锁源码实现</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-12-11 23:15:00 / 修改时间：15:19:56" itemprop="dateCreated datePublished" datetime="2021-12-11T23:15:00+00:00">2021-12-11</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/" itemprop="url" rel="index"><span itemprop="name">分布式锁</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2021/12/11/redission-01/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/12/11/redission-01/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>Redission提供的可重入锁RedissonLock实现了java.util.concurrent.locks.Lock接口，使用起来非常简单，示例如下：</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">RLock lock = redisson.getLock(<span class="string">"anyLock"</span>);</span><br><span class="line">lock.lock();</span><br></pre></td></tr></tbody></table></figure>
+
+<p>同时，还支持指定锁超时时间、指定获取锁最大等待时间以及异步获取锁的方式：</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 加锁后10秒钟自动解锁</span></span><br><span class="line"><span class="comment">// 无需调用unlock方法手动解锁</span></span><br><span class="line">lock.lock(<span class="number">10</span>, TimeUnit.SECONDS);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 尝试加锁，最多等待100秒，加锁后10秒钟自动解锁</span></span><br><span class="line"><span class="keyword">boolean</span> res = lock.tryLock(<span class="number">100</span>, <span class="number">10</span>, TimeUnit.SECONDS);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 异步加锁</span></span><br><span class="line">RLock lock = redisson.getLock(<span class="string">"anyLock"</span>);</span><br><span class="line">lock.lockAsync();</span><br><span class="line">lock.lockAsync(<span class="number">10</span>, TimeUnit.SECONDS);</span><br><span class="line">Future&lt;Boolean&gt; res = lock.tryLockAsync(<span class="number">100</span>, <span class="number">10</span>, TimeUnit.SECONDS);</span><br></pre></td></tr></tbody></table></figure>
+
+<p>接下来我们来探究一下RedissionLock可重入锁加锁原理。</p>
+<h1 id="lua脚本加锁"><a href="#lua脚本加锁" class="headerlink" title="lua脚本加锁"></a>lua脚本加锁</h1><p>在调用#lock加锁时，redission会先尝试加锁，成功直接返回，失败就订阅锁状态变更消息，循环重试。</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">lock</span><span class="params">()</span> </span>{</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    lock(-<span class="number">1</span>, <span class="keyword">null</span>, <span class="keyword">false</span>);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">lock</span><span class="params">(<span class="keyword">long</span> leaseTime, TimeUnit unit, <span class="keyword">boolean</span> interruptibly)</span> <span class="keyword">throws</span> InterruptedException </span>{</span><br><span class="line">    <span class="keyword">long</span> threadId = Thread.currentThread().getId();</span><br><span class="line">    Long ttl = tryAcquire(-<span class="number">1</span>, leaseTime, unit, threadId);</span><br><span class="line">    <span class="comment">// 获取成功</span></span><br><span class="line">    <span class="comment">// lock acquired</span></span><br><span class="line">    <span class="keyword">if</span> (ttl == <span class="keyword">null</span>) {</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 订阅解锁的消息</span></span><br><span class="line">    RFuture&lt;RedissonLockEntry&gt; future = subscribe(threadId);</span><br><span class="line">    <span class="keyword">if</span> (interruptibly) {</span><br><span class="line">        commandExecutor.syncSubscriptionInterrupted(future);</span><br><span class="line">    } <span class="keyword">else</span> {</span><br><span class="line">        commandExecutor.syncSubscription(future);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span> {</span><br><span class="line">        <span class="comment">// 获取锁失败就循环重试</span></span><br><span class="line">        <span class="keyword">while</span> (<span class="keyword">true</span>) {</span><br><span class="line">            ttl = tryAcquire(-<span class="number">1</span>, leaseTime, unit, threadId);</span><br><span class="line">            <span class="comment">// lock acquired</span></span><br><span class="line">            <span class="keyword">if</span> (ttl == <span class="keyword">null</span>) {</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            }</span><br><span class="line"></span><br><span class="line">            <span class="comment">// waiting for message</span></span><br><span class="line">            <span class="keyword">if</span> (ttl &gt;= <span class="number">0</span>) {</span><br><span class="line">                <span class="keyword">try</span> {</span><br><span class="line">                    <span class="comment">// 等待解锁继续执行，超时时间为当前锁ttl</span></span><br><span class="line">                    future.getNow().getLatch().tryAcquire(ttl, TimeUnit.MILLISECONDS);</span><br><span class="line">                } <span class="keyword">catch</span> (InterruptedException e) {</span><br><span class="line">                    <span class="keyword">if</span> (interruptibly) {</span><br><span class="line">                        <span class="keyword">throw</span> e;</span><br><span class="line">                    }</span><br><span class="line">                    future.getNow().getLatch().tryAcquire(ttl, TimeUnit.MILLISECONDS);</span><br><span class="line">                }</span><br><span class="line">            } <span class="keyword">else</span> {</span><br><span class="line">                <span class="keyword">if</span> (interruptibly) {</span><br><span class="line">                    future.getNow().getLatch().acquire();</span><br><span class="line">                } <span class="keyword">else</span> {</span><br><span class="line">                    future.getNow().getLatch().acquireUninterruptibly();</span><br><span class="line">                }</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">    } <span class="keyword">finally</span> {</span><br><span class="line">        <span class="comment">// 取消订阅锁状态消息</span></span><br><span class="line">        unsubscribe(future, threadId);</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> Long <span class="title">tryAcquire</span><span class="params">(<span class="keyword">long</span> waitTime, <span class="keyword">long</span> leaseTime, TimeUnit unit, <span class="keyword">long</span> threadId)</span> </span>{</span><br><span class="line">    <span class="keyword">return</span> get(tryAcquireAsync(waitTime, leaseTime, unit, threadId));</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>核心加锁方法如下，使用lua加锁实现原子加锁，分布式缓存中的锁为hash结构，key为lock key，field 为 ConnectionManagerId:threadId（uuid:threadId），value为锁重入次数，过期时间默认为30s。</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">&lt;T&gt; <span class="function">RFuture&lt;T&gt; <span class="title">tryLockInnerAsync</span><span class="params">(<span class="keyword">long</span> waitTime, <span class="keyword">long</span> leaseTime, TimeUnit unit, <span class="keyword">long</span> threadId, RedisStrictCommand&lt;T&gt; command)</span> </span>{</span><br><span class="line">    <span class="comment">// 使用lua脚本加锁</span></span><br><span class="line">    <span class="comment">// KEYS[1] getLock指定的key，作为redis hash key</span></span><br><span class="line">    <span class="comment">// ARGV[1] LockWatchdogTimeout，默认过期时间，30s</span></span><br><span class="line">    <span class="comment">// ARGV[2] ConnectionManagerId:threadId uuid:threadId，作为redis field key</span></span><br><span class="line">    <span class="comment">// 如果hash key不存在，新增hash {key:{uuid:threadId:1}}，过期时间默认30s，返回空</span></span><br><span class="line">    <span class="comment">// 如果hash key.uuid:threadId存在，给field uuid:threadId的值加1，更新过期时间，返回空</span></span><br><span class="line">    <span class="comment">// 如果hash key存在，并且uuid:threadId不存在，说明已经被其他线程锁定，返回key过期时间</span></span><br><span class="line">    <span class="keyword">return</span> evalWriteAsync(getRawName(), LongCodec.INSTANCE, command,</span><br><span class="line">            <span class="string">"if (redis.call('exists', KEYS[1]) == 0) then "</span> +</span><br><span class="line">                    <span class="string">"redis.call('hincrby', KEYS[1], ARGV[2], 1); "</span> +</span><br><span class="line">                    <span class="string">"redis.call('pexpire', KEYS[1], ARGV[1]); "</span> +</span><br><span class="line">                    <span class="string">"return nil; "</span> +</span><br><span class="line">                    <span class="string">"end; "</span> +</span><br><span class="line">                    <span class="string">"if (redis.call('hexists', KEYS[1], ARGV[2]) == 1) then "</span> +</span><br><span class="line">                    <span class="string">"redis.call('hincrby', KEYS[1], ARGV[2], 1); "</span> +</span><br><span class="line">                    <span class="string">"redis.call('pexpire', KEYS[1], ARGV[1]); "</span> +</span><br><span class="line">                    <span class="string">"return nil; "</span> +</span><br><span class="line">                    <span class="string">"end; "</span> +</span><br><span class="line">                    <span class="string">"return redis.call('pttl', KEYS[1]);"</span>,</span><br><span class="line">            Collections.singletonList(getRawName()), unit.toMillis(leaseTime), getLockName(threadId));</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>在内部接下来的调用中可以看到：</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> &lt;T, R&gt; <span class="function">RFuture&lt;R&gt; <span class="title">evalWriteAsync</span><span class="params">(String key, Codec codec, RedisCommand&lt;T&gt; evalCommandType, String script, List&lt;Object&gt; keys, Object... params)</span> </span>{</span><br><span class="line">    <span class="comment">// 关键代码</span></span><br><span class="line">    NodeSource source = getNodeSource(key);</span><br><span class="line">    <span class="keyword">return</span> evalAsync(source, <span class="keyword">false</span>, codec, evalCommandType, script, keys, <span class="keyword">false</span>, params);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> NodeSource <span class="title">getNodeSource</span><span class="params">(String key)</span> </span>{</span><br><span class="line">    <span class="keyword">int</span> slot = connectionManager.calcSlot(key);</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> NodeSource(slot);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// ClusterConnectionManager.class</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">calcSlot</span><span class="params">(String key)</span> </span>{</span><br><span class="line">    <span class="keyword">if</span> (key == <span class="keyword">null</span>) {</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> start = key.indexOf(<span class="string">'{'</span>);</span><br><span class="line">    <span class="keyword">if</span> (start != -<span class="number">1</span>) {</span><br><span class="line">        <span class="keyword">int</span> end = key.indexOf(<span class="string">'}'</span>);</span><br><span class="line">        <span class="keyword">if</span> (end != -<span class="number">1</span> &amp;&amp; start + <span class="number">1</span> &lt; end) {</span><br><span class="line">            key = key.substring(start + <span class="number">1</span>, end);</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> result = CRC16.crc16(key.getBytes()) % MAX_SLOT;</span><br><span class="line">    log.debug(<span class="string">"slot {} for {}"</span>, result, key);</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>从如上代码可以看到在发起请求之前Redission先基于key计算出了slot的位置（slot=CRC16(key)&amp;16383），在发起请求时，redission会从缓存中找到slot对应的redis节点直接向其发起请求，这样就可以节省一次重定向，这也是Redission作为smart client的体现。</p>
+<h1 id="watchdog维持加锁"><a href="#watchdog维持加锁" class="headerlink" title="watchdog维持加锁"></a>watchdog维持加锁</h1><p>在加锁完成后，可以看到redission添加了一个更新锁过期时间的定时任务，每10秒钟过期一次，如果锁还在就更新过期时间。</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> &lt;T&gt; <span class="function">RFuture&lt;Long&gt; <span class="title">tryAcquireAsync</span><span class="params">(<span class="keyword">long</span> waitTime, <span class="keyword">long</span> leaseTime, TimeUnit unit, <span class="keyword">long</span> threadId)</span> </span>{</span><br><span class="line">    RFuture&lt;Long&gt; ttlRemainingFuture;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    <span class="comment">// #lock加锁真实处理逻辑</span></span><br><span class="line">    ttlRemainingFuture = tryLockInnerAsync(waitTime, internalLockLeaseTime,</span><br><span class="line">            TimeUnit.MILLISECONDS, threadId, RedisCommands.EVAL_LONG);</span><br><span class="line"></span><br><span class="line">    ttlRemainingFuture.onComplete((ttlRemaining, e) -&gt; {</span><br><span class="line">        <span class="keyword">if</span> (e != <span class="keyword">null</span>) {</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 加锁成功</span></span><br><span class="line">        <span class="comment">// lock acquired</span></span><br><span class="line">        <span class="keyword">if</span> (ttlRemaining == <span class="keyword">null</span>) {</span><br><span class="line">            <span class="comment">// ...</span></span><br><span class="line">            <span class="comment">// 加锁成功后维持锁定时任务</span></span><br><span class="line">            scheduleExpirationRenewal(threadId);</span><br><span class="line">        }</span><br><span class="line">    });</span><br><span class="line">    <span class="keyword">return</span> ttlRemainingFuture;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">scheduleExpirationRenewal</span><span class="params">(<span class="keyword">long</span> threadId)</span> </span>{</span><br><span class="line">    ExpirationEntry entry = <span class="keyword">new</span> ExpirationEntry();</span><br><span class="line">    ExpirationEntry oldEntry = EXPIRATION_RENEWAL_MAP.putIfAbsent(getEntryName(), entry);</span><br><span class="line">     <span class="comment">// 如果当前锁没有续期任务就创建，如果已经存在就更新一下线程id</span></span><br><span class="line">    <span class="keyword">if</span> (oldEntry != <span class="keyword">null</span>) {</span><br><span class="line">        oldEntry.addThreadId(threadId);</span><br><span class="line">    } <span class="keyword">else</span> {</span><br><span class="line">        entry.addThreadId(threadId);</span><br><span class="line">        <span class="keyword">try</span> {</span><br><span class="line">            renewExpiration();</span><br><span class="line">        } <span class="keyword">finally</span> {</span><br><span class="line">            <span class="keyword">if</span> (Thread.currentThread().isInterrupted()) {</span><br><span class="line">                cancelExpirationRenewal(threadId);</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">renewExpiration</span><span class="params">()</span> </span>{</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    <span class="comment">// 每10秒钟执行一次</span></span><br><span class="line">    Timeout task = commandExecutor.getConnectionManager().newTimeout(<span class="keyword">new</span> TimerTask() {</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">(Timeout timeout)</span> <span class="keyword">throws</span> Exception </span>{</span><br><span class="line">            </span><br><span class="line">            <span class="comment">// ...</span></span><br><span class="line">            <span class="comment">// 维持锁过期</span></span><br><span class="line">            RFuture&lt;Boolean&gt; future = renewExpirationAsync(threadId);</span><br><span class="line">            future.onComplete((res, e) -&gt; {</span><br><span class="line">                <span class="comment">// ..</span></span><br><span class="line">                </span><br><span class="line">                <span class="keyword">if</span> (res) {</span><br><span class="line">                    <span class="comment">// // 如果锁过期时间被更新了，就重新定义一个任务</span></span><br><span class="line">                    <span class="comment">// reschedule itself</span></span><br><span class="line">                    renewExpiration();</span><br><span class="line">                } <span class="keyword">else</span> {</span><br><span class="line">                    <span class="comment">// 如果锁过期时间更新失败，说明锁已经释放了，释放任务</span></span><br><span class="line">                    cancelExpirationRenewal(<span class="keyword">null</span>);</span><br><span class="line">                }</span><br><span class="line">            });</span><br><span class="line">        }</span><br><span class="line">    }, internalLockLeaseTime / <span class="number">3</span>, TimeUnit.MILLISECONDS);</span><br><span class="line">    </span><br><span class="line">    ee.setTimeout(task);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>维持锁过期时间也是使用了lua脚本，如果锁还在就更新过期时间为30秒。</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> RFuture&lt;Boolean&gt; <span class="title">renewExpirationAsync</span><span class="params">(<span class="keyword">long</span> threadId)</span> </span>{</span><br><span class="line">    <span class="comment">// 维持锁lua</span></span><br><span class="line">    <span class="comment">// 如果lock key存在managerId:threadId这个field，就更新锁过期时间</span></span><br><span class="line">    <span class="keyword">return</span> evalWriteAsync(getRawName(), LongCodec.INSTANCE, RedisCommands.EVAL_BOOLEAN,</span><br><span class="line">            <span class="string">"if (redis.call('hexists', KEYS[1], ARGV[2]) == 1) then "</span> +</span><br><span class="line">                    <span class="string">"redis.call('pexpire', KEYS[1], ARGV[1]); "</span> +</span><br><span class="line">                    <span class="string">"return 1; "</span> +</span><br><span class="line">                    <span class="string">"end; "</span> +</span><br><span class="line">                    <span class="string">"return 0;"</span>,</span><br><span class="line">            Collections.singletonList(getRawName()),</span><br><span class="line">            internalLockLeaseTime, getLockName(threadId));</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="释放锁"><a href="#释放锁" class="headerlink" title="释放锁"></a>释放锁</h1><p>在需要释放锁时，redission会判断锁是否存在，锁重入次数是否小于等于1，满足条件就进行删除，然后向指定通道发送一条解锁消息，以通知获取锁的线程。</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">unlock</span><span class="params">()</span> </span>{</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    get(unlockAsync(Thread.currentThread().getId()));</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> RFuture&lt;Void&gt; <span class="title">unlockAsync</span><span class="params">(<span class="keyword">long</span> threadId)</span> </span>{</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    RFuture&lt;Boolean&gt; future = unlockInnerAsync(threadId);</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">protected</span> RFuture&lt;Boolean&gt; <span class="title">unlockInnerAsync</span><span class="params">(<span class="keyword">long</span> threadId)</span> </span>{</span><br><span class="line">    <span class="comment">// 如果lock key.thread不存在，直接返回空</span></span><br><span class="line">    <span class="comment">// 如果lock key.thread存在，就把value先减1</span></span><br><span class="line">    <span class="comment">//      如果值大于0，说明不可以释放，重置过期时间返回0</span></span><br><span class="line">    <span class="comment">//      否则，说明可以解锁了，删除锁，向redisson_lock__channe:{lockkey}发布一条内容为0的消息，返回1</span></span><br><span class="line">    <span class="keyword">return</span> evalWriteAsync(getRawName(), LongCodec.INSTANCE, RedisCommands.EVAL_BOOLEAN,</span><br><span class="line">            <span class="string">"if (redis.call('hexists', KEYS[1], ARGV[3]) == 0) then "</span> +</span><br><span class="line">                    <span class="string">"return nil;"</span> +</span><br><span class="line">                    <span class="string">"end; "</span> +</span><br><span class="line">                    <span class="string">"local counter = redis.call('hincrby', KEYS[1], ARGV[3], -1); "</span> +</span><br><span class="line">                    <span class="string">"if (counter &gt; 0) then "</span> +</span><br><span class="line">                    <span class="string">"redis.call('pexpire', KEYS[1], ARGV[2]); "</span> +</span><br><span class="line">                    <span class="string">"return 0; "</span> +</span><br><span class="line">                    <span class="string">"else "</span> +</span><br><span class="line">                    <span class="string">"redis.call('del', KEYS[1]); "</span> +</span><br><span class="line">                    <span class="string">"redis.call('publish', KEYS[2], ARGV[1]); "</span> +</span><br><span class="line">                    <span class="string">"return 1; "</span> +</span><br><span class="line">                    <span class="string">"end; "</span> +</span><br><span class="line">                    <span class="string">"return nil;"</span>,</span><br><span class="line">            Arrays.asList(getRawName(), getChannelName()), LockPubSub.UNLOCK_MESSAGE, internalLockLeaseTime, getLockName(threadId));</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="加锁超时与自动释放"><a href="#加锁超时与自动释放" class="headerlink" title="加锁超时与自动释放"></a>加锁超时与自动释放</h1><p>redission支持指定加锁超时时间以及锁过期时间，可以调用#tryLock(long waitTime, long leaseTime, TimeUnit unit)方法进行加锁。</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">tryLock</span><span class="params">(<span class="keyword">long</span> waitTime, <span class="keyword">long</span> leaseTime, TimeUnit unit)</span> <span class="keyword">throws</span> InterruptedException </span>{</span><br><span class="line">    <span class="keyword">long</span> time = unit.toMillis(waitTime);</span><br><span class="line">    <span class="keyword">long</span> current = System.currentTimeMillis();</span><br><span class="line">    <span class="keyword">long</span> threadId = Thread.currentThread().getId();</span><br><span class="line">    <span class="comment">// 直接加锁，没有watchdog机制</span></span><br><span class="line">    Long ttl = tryAcquire(waitTime, leaseTime, unit, threadId);</span><br><span class="line">    <span class="comment">// lock acquired</span></span><br><span class="line">    <span class="keyword">if</span> (ttl == <span class="keyword">null</span>) {</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    }</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 如果超时直接返回</span></span><br><span class="line">    time -= System.currentTimeMillis() - current;</span><br><span class="line">    <span class="keyword">if</span> (time &lt;= <span class="number">0</span>) {</span><br><span class="line">        acquireFailed(waitTime, unit, threadId);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    }</span><br><span class="line">    </span><br><span class="line">    current = System.currentTimeMillis();</span><br><span class="line">    RFuture&lt;RedissonLockEntry&gt; subscribeFuture = subscribe(threadId);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 设置最大等待时间，如果指定时间没有收到解锁状态变更直接超时返回</span></span><br><span class="line">    <span class="keyword">if</span> (!subscribeFuture.await(time, TimeUnit.MILLISECONDS)) {</span><br><span class="line">        <span class="keyword">if</span> (!subscribeFuture.cancel(<span class="keyword">false</span>)) {</span><br><span class="line">            subscribeFuture.onComplete((res, e) -&gt; {</span><br><span class="line">                <span class="keyword">if</span> (e == <span class="keyword">null</span>) {</span><br><span class="line">                    unsubscribe(subscribeFuture, threadId);</span><br><span class="line">                }</span><br><span class="line">            });</span><br><span class="line">        }</span><br><span class="line">        acquireFailed(waitTime, unit, threadId);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 如果收到解锁消息就继续重试</span></span><br><span class="line">    <span class="keyword">try</span> {</span><br><span class="line">        time -= System.currentTimeMillis() - current;</span><br><span class="line">        <span class="keyword">if</span> (time &lt;= <span class="number">0</span>) {</span><br><span class="line">            acquireFailed(waitTime, unit, threadId);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        }</span><br><span class="line">    </span><br><span class="line">        <span class="keyword">while</span> (<span class="keyword">true</span>) {</span><br><span class="line">            <span class="keyword">long</span> currentTime = System.currentTimeMillis();</span><br><span class="line">            ttl = tryAcquire(waitTime, leaseTime, unit, threadId);</span><br><span class="line">            <span class="comment">// lock acquired</span></span><br><span class="line">            <span class="keyword">if</span> (ttl == <span class="keyword">null</span>) {</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">            }</span><br><span class="line"></span><br><span class="line">            time -= System.currentTimeMillis() - currentTime;</span><br><span class="line">            <span class="keyword">if</span> (time &lt;= <span class="number">0</span>) {</span><br><span class="line">                acquireFailed(waitTime, unit, threadId);</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">            }</span><br><span class="line"></span><br><span class="line">            <span class="comment">// waiting for message</span></span><br><span class="line">            currentTime = System.currentTimeMillis();</span><br><span class="line">            <span class="keyword">if</span> (ttl &gt;= <span class="number">0</span> &amp;&amp; ttl &lt; time) {</span><br><span class="line">                subscribeFuture.getNow().getLatch().tryAcquire(ttl, TimeUnit.MILLISECONDS);</span><br><span class="line">            } <span class="keyword">else</span> {</span><br><span class="line">                subscribeFuture.getNow().getLatch().tryAcquire(time, TimeUnit.MILLISECONDS);</span><br><span class="line">            }</span><br><span class="line"></span><br><span class="line">            time -= System.currentTimeMillis() - currentTime;</span><br><span class="line">            <span class="keyword">if</span> (time &lt;= <span class="number">0</span>) {</span><br><span class="line">                acquireFailed(waitTime, unit, threadId);</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">    } <span class="keyword">finally</span> {</span><br><span class="line">        unsubscribe(subscribeFuture, threadId);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>结合不指定超时时间的加锁逻辑可以看到，在指定超时时间时redission不会设置watchdog机制进行锁续期，因为过期自动解锁时正常行为。此时解锁有锁过期自动删除和手动解锁两种情况。</p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://haifuns.com/2021/11/22/gossip/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -205,7 +316,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-12-09 02:11:00" itemprop="dateModified" datetime="2021-12-09T02:11:00+00:00">2021-12-09</time>
+                <time title="修改时间：2021-12-11 15:19:56" itemprop="dateModified" datetime="2021-12-11T15:19:56+00:00">2021-12-11</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -315,7 +426,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-12-09 02:11:00" itemprop="dateModified" datetime="2021-12-09T02:11:00+00:00">2021-12-09</time>
+                <time title="修改时间：2021-12-11 15:19:56" itemprop="dateModified" datetime="2021-12-11T15:19:56+00:00">2021-12-11</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -452,7 +563,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-12-09 02:11:00" itemprop="dateModified" datetime="2021-12-09T02:11:00+00:00">2021-12-09</time>
+                <time title="修改时间：2021-12-11 15:19:56" itemprop="dateModified" datetime="2021-12-11T15:19:56+00:00">2021-12-11</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -571,7 +682,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-12-09 02:11:00" itemprop="dateModified" datetime="2021-12-09T02:11:00+00:00">2021-12-09</time>
+                <time title="修改时间：2021-12-11 15:19:56" itemprop="dateModified" datetime="2021-12-11T15:19:56+00:00">2021-12-11</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -671,7 +782,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-12-09 02:11:00" itemprop="dateModified" datetime="2021-12-09T02:11:00+00:00">2021-12-09</time>
+                <time title="修改时间：2021-12-11 15:19:56" itemprop="dateModified" datetime="2021-12-11T15:19:56+00:00">2021-12-11</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -796,7 +907,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-12-09 02:11:00" itemprop="dateModified" datetime="2021-12-09T02:11:00+00:00">2021-12-09</time>
+                <time title="修改时间：2021-12-11 15:19:56" itemprop="dateModified" datetime="2021-12-11T15:19:56+00:00">2021-12-11</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -898,7 +1009,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-12-09 02:11:00" itemprop="dateModified" datetime="2021-12-09T02:11:00+00:00">2021-12-09</time>
+                <time title="修改时间：2021-12-11 15:19:56" itemprop="dateModified" datetime="2021-12-11T15:19:56+00:00">2021-12-11</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1000,7 +1111,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-12-09 02:11:00" itemprop="dateModified" datetime="2021-12-09T02:11:00+00:00">2021-12-09</time>
+                <time title="修改时间：2021-12-11 15:19:56" itemprop="dateModified" datetime="2021-12-11T15:19:56+00:00">2021-12-11</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1102,7 +1213,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-12-09 02:11:00" itemprop="dateModified" datetime="2021-12-09T02:11:00+00:00">2021-12-09</time>
+                <time title="修改时间：2021-12-11 15:19:56" itemprop="dateModified" datetime="2021-12-11T15:19:56+00:00">2021-12-11</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1143,109 +1254,6 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2021/06/06/kafka-07/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://haifuns.com/2021/05/29/kafka-06/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.jpg">
-      <meta itemprop="name" content="HAIFUN">
-      <meta itemprop="description" content="无限进步<br/>">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="With Silence">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/05/29/kafka-06/" class="post-title-link" itemprop="url">【Kafka】：日志存储</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-05-29 23:10:00" itemprop="dateCreated datePublished" datetime="2021-05-29T23:10:00+00:00">2021-05-29</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-12-09 02:11:00" itemprop="dateModified" datetime="2021-12-09T02:11:00+00:00">2021-12-09</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6/" itemprop="url" rel="index"><span itemprop="name">消息中间件</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2021/05/29/kafka-06/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2021/05/29/kafka-06/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>Kafka中的消息以主题为基本单位进行归类，每个主题可以分为一个或多个分区，不考虑多副本的情况下，一个分区对应一个日志（Log）。</p>
-<p>为了防止Log过大、便于消息维护和管理，Kafka引入了日志分段（LogSegment）的概念，将Log切分为多个LogSegment。Log和LogSegment都不是纯粹物理意义上的概念，实际上，Log在物理层面是以文件夹形式存储，而每个LogSegment对应磁盘上的一个日志文件和两个索引文件，以及可能的其他文件。</p>
-<h1 id="文件目录"><a href="#文件目录" class="headerlink" title="文件目录"></a>文件目录</h1><p>Log对应一个命名形式为<code>&lt;topic&gt;-&lt;partiton&gt;</code>的文件夹，向Log中追加消息时是顺序写入的，只有最后一个LogSegment才能执行写入操作（称为activeSegment，即当前活跃数据），此前的LogSegment都不能写入数据。随着消息的不断写入，当activeSegment满足一定条件时，就会创建新的activeSegment，之后追加消息到新的activeSegment。</p>
-<p>每个LogSegment中的日志文件都对应两个索引文件：</p>
-<ul>
-<li>偏移量索引文件（.index文件后缀）</li>
-<li>时间戳索引文件（.timeindex文件后缀）</li>
-</ul>
-<p>每个LogSegment都有一个基准偏移量baseOffset，用来表示当前LogSegment中的第一条消息的offset。偏移量是一个64位的长整数，日志文件和两个索引文件都是根据baseOffset命名的，名称固定为20位数字，比如第一个LogSegment的baseOffset为0，对应的日志文件为<code>00000000000000000000.log</code>。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/05/29/kafka-06/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1336,20 +1344,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">66</span>
+          <span class="site-state-item-count">67</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-count">14</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-count">25</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

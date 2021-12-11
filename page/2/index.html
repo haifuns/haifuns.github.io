@@ -174,6 +174,109 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://haifuns.com/2021/05/29/kafka-06/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.jpg">
+      <meta itemprop="name" content="HAIFUN">
+      <meta itemprop="description" content="无限进步<br/>">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="With Silence">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/05/29/kafka-06/" class="post-title-link" itemprop="url">【Kafka】：日志存储</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-05-29 23:10:00" itemprop="dateCreated datePublished" datetime="2021-05-29T23:10:00+00:00">2021-05-29</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-12-11 15:19:56" itemprop="dateModified" datetime="2021-12-11T15:19:56+00:00">2021-12-11</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6/" itemprop="url" rel="index"><span itemprop="name">消息中间件</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2021/05/29/kafka-06/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/05/29/kafka-06/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>Kafka中的消息以主题为基本单位进行归类，每个主题可以分为一个或多个分区，不考虑多副本的情况下，一个分区对应一个日志（Log）。</p>
+<p>为了防止Log过大、便于消息维护和管理，Kafka引入了日志分段（LogSegment）的概念，将Log切分为多个LogSegment。Log和LogSegment都不是纯粹物理意义上的概念，实际上，Log在物理层面是以文件夹形式存储，而每个LogSegment对应磁盘上的一个日志文件和两个索引文件，以及可能的其他文件。</p>
+<h1 id="文件目录"><a href="#文件目录" class="headerlink" title="文件目录"></a>文件目录</h1><p>Log对应一个命名形式为<code>&lt;topic&gt;-&lt;partiton&gt;</code>的文件夹，向Log中追加消息时是顺序写入的，只有最后一个LogSegment才能执行写入操作（称为activeSegment，即当前活跃数据），此前的LogSegment都不能写入数据。随着消息的不断写入，当activeSegment满足一定条件时，就会创建新的activeSegment，之后追加消息到新的activeSegment。</p>
+<p>每个LogSegment中的日志文件都对应两个索引文件：</p>
+<ul>
+<li>偏移量索引文件（.index文件后缀）</li>
+<li>时间戳索引文件（.timeindex文件后缀）</li>
+</ul>
+<p>每个LogSegment都有一个基准偏移量baseOffset，用来表示当前LogSegment中的第一条消息的offset。偏移量是一个64位的长整数，日志文件和两个索引文件都是根据baseOffset命名的，名称固定为20位数字，比如第一个LogSegment的baseOffset为0，对应的日志文件为<code>00000000000000000000.log</code>。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2021/05/29/kafka-06/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://haifuns.com/2021/05/29/kafka-05/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -205,7 +308,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-12-09 02:11:00" itemprop="dateModified" datetime="2021-12-09T02:11:00+00:00">2021-12-09</time>
+                <time title="修改时间：2021-12-11 15:19:56" itemprop="dateModified" datetime="2021-12-11T15:19:56+00:00">2021-12-11</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -305,7 +408,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-12-09 02:11:00" itemprop="dateModified" datetime="2021-12-09T02:11:00+00:00">2021-12-09</time>
+                <time title="修改时间：2021-12-11 15:19:56" itemprop="dateModified" datetime="2021-12-11T15:19:56+00:00">2021-12-11</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -401,7 +504,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-12-09 02:11:00" itemprop="dateModified" datetime="2021-12-09T02:11:00+00:00">2021-12-09</time>
+                <time title="修改时间：2021-12-11 15:19:56" itemprop="dateModified" datetime="2021-12-11T15:19:56+00:00">2021-12-11</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -501,7 +604,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-12-09 02:11:00" itemprop="dateModified" datetime="2021-12-09T02:11:00+00:00">2021-12-09</time>
+                <time title="修改时间：2021-12-11 15:19:56" itemprop="dateModified" datetime="2021-12-11T15:19:56+00:00">2021-12-11</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -597,7 +700,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-12-09 02:11:00" itemprop="dateModified" datetime="2021-12-09T02:11:00+00:00">2021-12-09</time>
+                <time title="修改时间：2021-12-11 15:19:56" itemprop="dateModified" datetime="2021-12-11T15:19:56+00:00">2021-12-11</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -692,7 +795,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-12-09 02:11:00" itemprop="dateModified" datetime="2021-12-09T02:11:00+00:00">2021-12-09</time>
+                <time title="修改时间：2021-12-11 15:19:56" itemprop="dateModified" datetime="2021-12-11T15:19:56+00:00">2021-12-11</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -788,7 +891,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-12-09 02:11:00" itemprop="dateModified" datetime="2021-12-09T02:11:00+00:00">2021-12-09</time>
+                <time title="修改时间：2021-12-11 15:19:56" itemprop="dateModified" datetime="2021-12-11T15:19:56+00:00">2021-12-11</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -890,7 +993,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-12-09 02:11:00" itemprop="dateModified" datetime="2021-12-09T02:11:00+00:00">2021-12-09</time>
+                <time title="修改时间：2021-12-11 15:19:56" itemprop="dateModified" datetime="2021-12-11T15:19:56+00:00">2021-12-11</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -995,7 +1098,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-12-09 02:11:00" itemprop="dateModified" datetime="2021-12-09T02:11:00+00:00">2021-12-09</time>
+                <time title="修改时间：2021-12-11 15:19:56" itemprop="dateModified" datetime="2021-12-11T15:19:56+00:00">2021-12-11</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1036,115 +1139,6 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2021/02/25/devops-02/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://haifuns.com/2021/02/25/devops-01/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.jpg">
-      <meta itemprop="name" content="HAIFUN">
-      <meta itemprop="description" content="无限进步<br/>">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="With Silence">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/02/25/devops-01/" class="post-title-link" itemprop="url">Docker搭建Prometheus+Grafana监控</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-02-25 20:25:00" itemprop="dateCreated datePublished" datetime="2021-02-25T20:25:00+00:00">2021-02-25</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-12-09 02:11:00" itemprop="dateModified" datetime="2021-12-09T02:11:00+00:00">2021-12-09</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/DevOps/" itemprop="url" rel="index"><span itemprop="name">DevOps</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2021/02/25/devops-01/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2021/02/25/devops-01/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="环境说明"><a href="#环境说明" class="headerlink" title="环境说明"></a>环境说明</h1><p>监控组件说明：</p>
-<ul>
-<li>Grafana：负责展示数据。</li>
-<li>Prometheus：负责收集数据。其中采用Prometheus中的Exporter：<ul>
-<li>Node Exporter：负责收集硬件和操作系统数据。</li>
-<li>Cadvisor：负责收集容器数据。</li>
-<li>Alertmanager：负责告警。</li>
-</ul>
-</li>
-</ul>
-<p>运行环境准备：</p>
-<ul>
-<li>docker</li>
-<li>docker-compose</li>
-</ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/02/25/devops-01/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1235,20 +1229,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">66</span>
+          <span class="site-state-item-count">67</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-count">14</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-count">25</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
