@@ -1,4 +1,4 @@
-title: 【Redission源码解析】公平锁源码实现
+title: 【Redission源码】公平锁源码解析
 author: haifun
 tags:
   - Redission

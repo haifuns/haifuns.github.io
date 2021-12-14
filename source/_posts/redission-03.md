@@ -1,4 +1,4 @@
-title: 【Redission源码解析】联锁&红锁源码实现
+title: 【Redission源码】联锁&红锁源码解析
 author: haifun
 tags:
   - Redission
