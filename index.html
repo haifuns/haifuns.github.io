@@ -174,6 +174,114 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://haifuns.com/2021/12/16/redission-05/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.jpg">
+      <meta itemprop="name" content="HAIFUN">
+      <meta itemprop="description" content="无限进步<br/>">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="With Silence">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/12/16/redission-05/" class="post-title-link" itemprop="url">【Redission源码】信号量&闭锁源码解析</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-12-16 00:20:00" itemprop="dateCreated datePublished" datetime="2021-12-16T00:20:00+00:00">2021-12-16</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-12-15 16:19:01" itemprop="dateModified" datetime="2021-12-15T16:19:01+00:00">2021-12-15</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/" itemprop="url" rel="index"><span itemprop="name">分布式锁</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2021/12/16/redission-05/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/12/16/redission-05/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="信号量-Semaphore"><a href="#信号量-Semaphore" class="headerlink" title="信号量 Semaphore"></a>信号量 Semaphore</h1><p>Redisson提供分布式信号量，接口和用法与juc.Semaphore相似，使用方式如下：</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">RSemaphore semaphore = redisson.getSemaphore(<span class="string">"semaphore"</span>);</span><br><span class="line">semaphore.addPermits(<span class="number">10</span>);</span><br><span class="line">semaphore.acquire();</span><br><span class="line"><span class="comment">//或</span></span><br><span class="line">semaphore.acquireAsync();</span><br><span class="line">semaphore.acquire(<span class="number">23</span>);</span><br><span class="line">semaphore.tryAcquire();</span><br><span class="line"><span class="comment">//或</span></span><br><span class="line">semaphore.tryAcquireAsync();</span><br><span class="line">semaphore.tryAcquire(<span class="number">23</span>, TimeUnit.SECONDS);</span><br><span class="line"><span class="comment">//或</span></span><br><span class="line">semaphore.tryAcquireAsync(<span class="number">23</span>, TimeUnit.SECONDS);</span><br><span class="line">semaphore.release(<span class="number">10</span>);</span><br><span class="line">semaphore.release();</span><br><span class="line"><span class="comment">//或</span></span><br><span class="line">semaphore.releaseAsync();</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="新增凭证"><a href="#新增凭证" class="headerlink" title="新增凭证"></a>新增凭证</h2><p>添加凭证实际上就是给redis中的key设置一个值。核心方法如下：</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> RFuture&lt;Void&gt; <span class="title">addPermitsAsync</span><span class="params">(<span class="keyword">int</span> permits)</span> </span>{</span><br><span class="line">    <span class="keyword">return</span> commandExecutor.evalWriteAsync(getRawName(), LongCodec.INSTANCE, RedisCommands.EVAL_VOID,</span><br><span class="line">            <span class="string">"local value = redis.call('get', KEYS[1]); "</span> +</span><br><span class="line">            <span class="string">"if (value == false) then "</span></span><br><span class="line">              + <span class="string">"value = 0;"</span></span><br><span class="line">          + <span class="string">"end;"</span></span><br><span class="line">          + <span class="string">"redis.call('set', KEYS[1], value + ARGV[1]); "</span></span><br><span class="line">          + <span class="string">"redis.call('publish', KEYS[2], value + ARGV[1]); "</span>,</span><br><span class="line">            Arrays.asList(getRawName(), getChannelName()), permits);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="获取凭证"><a href="#获取凭证" class="headerlink" title="获取凭证"></a>获取凭证</h2><p>获取凭证时，只需判断剩余凭证大于要申请的凭证数量即可申请成功，如果获取失败就订阅凭证释放消息，收到释放凭证消息后循环获取。获取凭证核心方法如下：</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> RFuture&lt;Boolean&gt; <span class="title">tryAcquireAsync</span><span class="params">(<span class="keyword">int</span> permits)</span> </span>{</span><br><span class="line">    <span class="keyword">if</span> (permits &lt; <span class="number">0</span>) {</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Permits amount can't be negative"</span>);</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">if</span> (permits == <span class="number">0</span>) {</span><br><span class="line">        <span class="keyword">return</span> RedissonPromise.newSucceededFuture(<span class="keyword">true</span>);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> commandExecutor.evalWriteAsync(getRawName(), LongCodec.INSTANCE, RedisCommands.EVAL_BOOLEAN,</span><br><span class="line">              <span class="comment">// 查询信号量</span></span><br><span class="line">              <span class="string">"local value = redis.call('get', KEYS[1]); "</span> +</span><br><span class="line">              <span class="comment">// 如果存在，并且剩余数量大于申请的数量</span></span><br><span class="line">              <span class="string">"if (value ~= false and tonumber(value) &gt;= tonumber(ARGV[1])) then "</span> +</span><br><span class="line">                  <span class="comment">// 扣减申请的数量，返回成功</span></span><br><span class="line">                  <span class="string">"local val = redis.call('decrby', KEYS[1], ARGV[1]); "</span> +</span><br><span class="line">                  <span class="string">"return 1; "</span> +</span><br><span class="line">              <span class="string">"end; "</span> +</span><br><span class="line">              <span class="comment">// 否则返回失败</span></span><br><span class="line">              <span class="string">"return 0;"</span>,</span><br><span class="line">              <span class="comment">// KEY[1] 信号量名称，KEY[2] 信号数量</span></span><br><span class="line">              Collections.&lt;Object&gt;singletonList(getRawName()), permits);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="释放凭证"><a href="#释放凭证" class="headerlink" title="释放凭证"></a>释放凭证</h2><p>释放凭证时直接给信号量增加相应数量的凭证，然后发布一条释放凭证的消息通知订阅的等待线程。释放凭证核心方法如下：</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> RFuture&lt;Void&gt; <span class="title">releaseAsync</span><span class="params">(<span class="keyword">int</span> permits)</span> </span>{</span><br><span class="line">    <span class="keyword">if</span> (permits &lt; <span class="number">0</span>) {</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Permits amount can't be negative"</span>);</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">if</span> (permits == <span class="number">0</span>) {</span><br><span class="line">        <span class="keyword">return</span> RedissonPromise.newSucceededFuture(<span class="keyword">null</span>);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    RFuture&lt;Void&gt; future = commandExecutor.evalWriteAsync(getRawName(), StringCodec.INSTANCE, RedisCommands.EVAL_VOID,</span><br><span class="line">            <span class="comment">// 直接给信号量加释放的个数</span></span><br><span class="line">            <span class="string">"local value = redis.call('incrby', KEYS[1], ARGV[1]); "</span> +</span><br><span class="line">                    <span class="comment">// 发布一条释放信号消息给等待的线程</span></span><br><span class="line">                    <span class="string">"redis.call('publish', KEYS[2], value); "</span>,</span><br><span class="line">            Arrays.asList(getRawName(), getChannelName()), permits);</span><br><span class="line">    <span class="keyword">if</span> (log.isDebugEnabled()) {</span><br><span class="line">        future.onComplete((o, e) -&gt; {</span><br><span class="line">            <span class="keyword">if</span> (e == <span class="keyword">null</span>) {</span><br><span class="line">                log.debug(<span class="string">"released, permits: {}, name: {}"</span>, permits, getName());</span><br><span class="line">            }</span><br><span class="line">        });</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> future;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="闭锁-CountDownLatch"><a href="#闭锁-CountDownLatch" class="headerlink" title="闭锁 CountDownLatch"></a>闭锁 CountDownLatch</h1><p>Redission提供闭锁功能，接口和用法与juc.CountDownLatch相似，使用方式如下：</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">RCountDownLatch latch = redisson.getCountDownLatch(<span class="string">"anyCountDownLatch"</span>);</span><br><span class="line">latch.trySetCount(<span class="number">1</span>);</span><br><span class="line">latch.await();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 在其他线程或其他JVM里</span></span><br><span class="line">RCountDownLatch latch = redisson.getCountDownLatch(<span class="string">"anyCountDownLatch"</span>);</span><br><span class="line">latch.countDown();</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="设置计数器值"><a href="#设置计数器值" class="headerlink" title="设置计数器值"></a>设置计数器值</h2><p>CountDownLatch计数器值只有在未设置过才能设置成功，Redission提供的CountDownLatch设置计数器值核心方法如下：</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> RFuture&lt;Boolean&gt; <span class="title">trySetCountAsync</span><span class="params">(<span class="keyword">long</span> count)</span> </span>{</span><br><span class="line">    <span class="keyword">return</span> commandExecutor.evalWriteAsync(getRawName(), LongCodec.INSTANCE, RedisCommands.EVAL_BOOLEAN,</span><br><span class="line">            <span class="comment">// 如果CountDownLatch name不存在</span></span><br><span class="line">            <span class="string">"if redis.call('exists', KEYS[1]) == 0 then "</span></span><br><span class="line">                <span class="comment">// 新增CountDownLatch</span></span><br><span class="line">                + <span class="string">"redis.call('set', KEYS[1], ARGV[2]); "</span></span><br><span class="line">                <span class="comment">// 发布一条新增计数器的消息</span></span><br><span class="line">                + <span class="string">"redis.call('publish', KEYS[2], ARGV[1]); "</span></span><br><span class="line">                + <span class="string">"return 1 "</span></span><br><span class="line">            <span class="comment">// 存在直接返回失败</span></span><br><span class="line">            + <span class="string">"else "</span></span><br><span class="line">                + <span class="string">"return 0 "</span></span><br><span class="line">            + <span class="string">"end"</span>,</span><br><span class="line">            Arrays.&lt;Object&gt;asList(getRawName(), getChannelName()), CountDownLatchPubSub.NEW_COUNT_MESSAGE, count);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="减少计数器值"><a href="#减少计数器值" class="headerlink" title="减少计数器值"></a>减少计数器值</h2><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> RFuture&lt;Void&gt; <span class="title">countDownAsync</span><span class="params">()</span> </span>{</span><br><span class="line">    <span class="keyword">return</span> commandExecutor.evalWriteNoRetryAsync(getRawName(), LongCodec.INSTANCE, RedisCommands.EVAL_BOOLEAN,</span><br><span class="line">                    <span class="comment">// 减少CountDownLatch计数器数量</span></span><br><span class="line">                    <span class="string">"local v = redis.call('decr', KEYS[1]);"</span> +</span><br><span class="line">                    <span class="comment">// 如果剩余的计数器小于0就直接删除</span></span><br><span class="line">                    <span class="string">"if v &lt;= 0 then redis.call('del', KEYS[1]) end;"</span> +</span><br><span class="line">                    <span class="comment">// 如果剩余计数器等于0，就发布一条计数器为零的消息通知订阅的线程</span></span><br><span class="line">                    <span class="string">"if v == 0 then redis.call('publish', KEYS[2], ARGV[1]) end;"</span>,</span><br><span class="line">                Arrays.&lt;Object&gt;asList(getRawName(), getChannelName()), CountDownLatchPubSub.ZERO_COUNT_MESSAGE);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="等待计数器值达到0"><a href="#等待计数器值达到0" class="headerlink" title="等待计数器值达到0"></a>等待计数器值达到0</h2><p>当某一个线程调用awite方法时，线程会阻塞直到CountDownLatch计数器被扣减为1，实际上就是不断循环查询计数器值，直到为0时返回。</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">await</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException </span>{</span><br><span class="line">    <span class="comment">// 如果计数器为0直接返回</span></span><br><span class="line">    <span class="keyword">if</span> (getCount() == <span class="number">0</span>) {</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    RFuture&lt;RedissonCountDownLatchEntry&gt; future = subscribe();</span><br><span class="line">    <span class="keyword">try</span> {</span><br><span class="line">        commandExecutor.syncSubscriptionInterrupted(future);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 如果计数器大于0，就等待计数器为0的消息，循环判断直到计数器到0</span></span><br><span class="line">        <span class="keyword">while</span> (getCount() &gt; <span class="number">0</span>) {</span><br><span class="line">            <span class="comment">// waiting for open state</span></span><br><span class="line">            future.getNow().getLatch().await();</span><br><span class="line">        }</span><br><span class="line">    } <span class="keyword">finally</span> {</span><br><span class="line">        unsubscribe(future);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://haifuns.com/2021/12/15/stringmatch-02/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -199,7 +307,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2021-12-15 23:05:00 / 修改时间：15:17:12" itemprop="dateCreated datePublished" datetime="2021-12-15T23:05:00+00:00">2021-12-15</time>
+              <time title="创建时间：2021-12-15 23:05:00 / 修改时间：16:19:01" itemprop="dateCreated datePublished" datetime="2021-12-15T23:05:00+00:00">2021-12-15</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -302,7 +410,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2021-12-15 23:00:00 / 修改时间：15:17:12" itemprop="dateCreated datePublished" datetime="2021-12-15T23:00:00+00:00">2021-12-15</time>
+              <time title="创建时间：2021-12-15 23:00:00 / 修改时间：16:19:01" itemprop="dateCreated datePublished" datetime="2021-12-15T23:00:00+00:00">2021-12-15</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -397,7 +505,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2021-12-15 00:15:00 / 修改时间：15:17:12" itemprop="dateCreated datePublished" datetime="2021-12-15T00:15:00+00:00">2021-12-15</time>
+              <time title="创建时间：2021-12-15 00:15:00 / 修改时间：16:19:01" itemprop="dateCreated datePublished" datetime="2021-12-15T00:15:00+00:00">2021-12-15</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -514,7 +622,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-12-15 15:17:12" itemprop="dateModified" datetime="2021-12-15T15:17:12+00:00">2021-12-15</time>
+                <time title="修改时间：2021-12-15 16:19:01" itemprop="dateModified" datetime="2021-12-15T16:19:01+00:00">2021-12-15</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -631,7 +739,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-12-15 15:17:12" itemprop="dateModified" datetime="2021-12-15T15:17:12+00:00">2021-12-15</time>
+                <time title="修改时间：2021-12-15 16:19:01" itemprop="dateModified" datetime="2021-12-15T16:19:01+00:00">2021-12-15</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -728,7 +836,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-12-15 15:17:12" itemprop="dateModified" datetime="2021-12-15T15:17:12+00:00">2021-12-15</time>
+                <time title="修改时间：2021-12-15 16:19:01" itemprop="dateModified" datetime="2021-12-15T16:19:01+00:00">2021-12-15</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -845,7 +953,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-12-15 15:17:12" itemprop="dateModified" datetime="2021-12-15T15:17:12+00:00">2021-12-15</time>
+                <time title="修改时间：2021-12-15 16:19:01" itemprop="dateModified" datetime="2021-12-15T16:19:01+00:00">2021-12-15</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -955,7 +1063,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-12-15 15:17:12" itemprop="dateModified" datetime="2021-12-15T15:17:12+00:00">2021-12-15</time>
+                <time title="修改时间：2021-12-15 16:19:01" itemprop="dateModified" datetime="2021-12-15T16:19:01+00:00">2021-12-15</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1092,7 +1200,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-12-15 15:17:12" itemprop="dateModified" datetime="2021-12-15T15:17:12+00:00">2021-12-15</time>
+                <time title="修改时间：2021-12-15 16:19:01" itemprop="dateModified" datetime="2021-12-15T16:19:01+00:00">2021-12-15</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1161,106 +1269,6 @@
 <li>英文版：<a target="_blank" rel="noopener" href="http://thesecretlivesofdata.com/raft/">http://thesecretlivesofdata.com/raft/</a></li>
 <li>中文版：<a target="_blank" rel="noopener" href="http://www.kailing.pub/raft/index.html">http://www.kailing.pub/raft/index.html</a></li>
 </ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://haifuns.com/2021/11/17/multi-paxos/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.jpg">
-      <meta itemprop="name" content="HAIFUN">
-      <meta itemprop="description" content="无限进步<br/>">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="With Silence">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/11/17/multi-paxos/" class="post-title-link" itemprop="url">分布式共识算法之Multi Paxos算法</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-11-17 21:30:00" itemprop="dateCreated datePublished" datetime="2021-11-17T21:30:00+00:00">2021-11-17</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-12-15 15:17:12" itemprop="dateModified" datetime="2021-12-15T15:17:12+00:00">2021-12-15</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">分布式</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2021/11/17/multi-paxos/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2021/11/17/multi-paxos/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>分布式共识的复杂性主要来源于网络的不可靠和请求可并发两个因素。相应的，Basic Paxos算法的活锁问题（两个提案节点互不相让地争相提出自己的提案，抢占同一个值的修改权限，导致整个系统持续性地“反复横跳”，在外部看就像是被锁住了一样），以及许多Basic Paxos异常场景中的问题，都源于任何一个提案都能完全平等地与其他节点并发地提出提案而带来的复杂问题。</p>
-<p>为此，Lamport提出了一种Paxos的改进版本，<strong>“Multi Paxos”算法，其目的是在既不破坏Paxos中“众节点平等”的原则，又能在提案节点中实现主次之分，限制每个节点都有不受控的提案权利</strong>。</p>
-<h1 id="算法过程"><a href="#算法过程" class="headerlink" title="算法过程"></a>算法过程</h1><p>Multi Paxos对Basic Paxos的核心改进是增加了“选主”的过程。提案节点通过定时轮询（心跳），确定当前网络中所有节点里是否存在一个主提案节点，如果不存在主节点，那么节点会在心跳超时之后使用Basic Paxos中定义的准备、批准的两轮网络交互过程，向其他所有节点广播竞选主节点的请求。如果得到了多数派决策节点的批准，那么就认为竞选成功。</p>
-<p>在选主完成后，除非主节点失联后重新竞选，否则从此以后就只有主节点本身才能发起提案。此时，无论是哪个提案节点收到客户端的操作请求，都会将请求转发给主节点来完成提案，<strong>主节点的提案过程中无需再进行准备过程，因为可以视为经过选举时的一次准备之后，后续的提案都是对相同提案ID的一连串批准过程</strong>。</p>
-<blockquote>
-<p>在选主完成后，不存在其他节点与主节点竞争，相当于处在无并发环境中进行有序操作，此时系统中要对某个值达成一致只需要一轮批准交互。</p>
-</blockquote>
-<p>此时算法流程如下图所示：</p>
-<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/distributed/paxos/multi-paxos-01.png" alt="image"></p>
-<p>如上图所示，请求中Accept请求中多了一个i，i为主节点的“任期编号”，任期编号必须是单调递增的，用于应对主节点陷于网络分区中恢复，但是另外一部分节点仍然有多数派且已经完成选举的情况。此时必须以任期编号大的主节点为准。</p>
-<p>当节点有了选主机制，从整体上看，节点角色不再区分为提案节点、决策节点、记录节点，而是同样的角色，只有主和从的区别。</p>
-<p>此时算法流程如下图所示：</p>
-<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/distributed/paxos/multi-paxos-02.png" alt="image"></p>
 
       
     </div>
@@ -1347,7 +1355,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">72</span>
+          <span class="site-state-item-count">73</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>

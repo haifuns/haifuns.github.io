@@ -29,34 +29,16 @@
   </url>
   
   <url>
-    <loc>https://haifuns.com/2021/12/11/redission-01/</loc>
-    
-    <lastmod>2021-12-15</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://haifuns.com/2021/12/13/redission-02/</loc>
-    
-    <lastmod>2021-12-15</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://haifuns.com/2021/12/14/redission-03/</loc>
-    
-    <lastmod>2021-12-15</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://haifuns.com/2021/12/15/redission-04/</loc>
+    
+    <lastmod>2021-12-15</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://haifuns.com/2021/12/16/redission-05/</loc>
     
     <lastmod>2021-12-15</lastmod>
     
@@ -507,6 +489,33 @@
   
   <url>
     <loc>https://haifuns.com/2021/11/18/raft/</loc>
+    
+    <lastmod>2021-12-15</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://haifuns.com/2021/12/11/redission-01/</loc>
+    
+    <lastmod>2021-12-15</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://haifuns.com/2021/12/13/redission-02/</loc>
+    
+    <lastmod>2021-12-15</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://haifuns.com/2021/12/14/redission-03/</loc>
     
     <lastmod>2021-12-15</lastmod>
     

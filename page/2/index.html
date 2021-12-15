@@ -174,6 +174,106 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://haifuns.com/2021/11/17/multi-paxos/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.jpg">
+      <meta itemprop="name" content="HAIFUN">
+      <meta itemprop="description" content="无限进步<br/>">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="With Silence">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/11/17/multi-paxos/" class="post-title-link" itemprop="url">分布式共识算法之Multi Paxos算法</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2021-11-17 21:30:00" itemprop="dateCreated datePublished" datetime="2021-11-17T21:30:00+00:00">2021-11-17</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-12-15 16:19:01" itemprop="dateModified" datetime="2021-12-15T16:19:01+00:00">2021-12-15</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">分布式</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2021/11/17/multi-paxos/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/11/17/multi-paxos/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>分布式共识的复杂性主要来源于网络的不可靠和请求可并发两个因素。相应的，Basic Paxos算法的活锁问题（两个提案节点互不相让地争相提出自己的提案，抢占同一个值的修改权限，导致整个系统持续性地“反复横跳”，在外部看就像是被锁住了一样），以及许多Basic Paxos异常场景中的问题，都源于任何一个提案都能完全平等地与其他节点并发地提出提案而带来的复杂问题。</p>
+<p>为此，Lamport提出了一种Paxos的改进版本，<strong>“Multi Paxos”算法，其目的是在既不破坏Paxos中“众节点平等”的原则，又能在提案节点中实现主次之分，限制每个节点都有不受控的提案权利</strong>。</p>
+<h1 id="算法过程"><a href="#算法过程" class="headerlink" title="算法过程"></a>算法过程</h1><p>Multi Paxos对Basic Paxos的核心改进是增加了“选主”的过程。提案节点通过定时轮询（心跳），确定当前网络中所有节点里是否存在一个主提案节点，如果不存在主节点，那么节点会在心跳超时之后使用Basic Paxos中定义的准备、批准的两轮网络交互过程，向其他所有节点广播竞选主节点的请求。如果得到了多数派决策节点的批准，那么就认为竞选成功。</p>
+<p>在选主完成后，除非主节点失联后重新竞选，否则从此以后就只有主节点本身才能发起提案。此时，无论是哪个提案节点收到客户端的操作请求，都会将请求转发给主节点来完成提案，<strong>主节点的提案过程中无需再进行准备过程，因为可以视为经过选举时的一次准备之后，后续的提案都是对相同提案ID的一连串批准过程</strong>。</p>
+<blockquote>
+<p>在选主完成后，不存在其他节点与主节点竞争，相当于处在无并发环境中进行有序操作，此时系统中要对某个值达成一致只需要一轮批准交互。</p>
+</blockquote>
+<p>此时算法流程如下图所示：</p>
+<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/distributed/paxos/multi-paxos-01.png" alt="image"></p>
+<p>如上图所示，请求中Accept请求中多了一个i，i为主节点的“任期编号”，任期编号必须是单调递增的，用于应对主节点陷于网络分区中恢复，但是另外一部分节点仍然有多数派且已经完成选举的情况。此时必须以任期编号大的主节点为准。</p>
+<p>当节点有了选主机制，从整体上看，节点角色不再区分为提案节点、决策节点、记录节点，而是同样的角色，只有主和从的区别。</p>
+<p>此时算法流程如下图所示：</p>
+<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/distributed/paxos/multi-paxos-02.png" alt="image"></p>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://haifuns.com/2021/11/17/paxos/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -205,7 +305,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-12-15 15:17:12" itemprop="dateModified" datetime="2021-12-15T15:17:12+00:00">2021-12-15</time>
+                <time title="修改时间：2021-12-15 16:19:01" itemprop="dateModified" datetime="2021-12-15T16:19:01+00:00">2021-12-15</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -330,7 +430,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-12-15 15:17:12" itemprop="dateModified" datetime="2021-12-15T15:17:12+00:00">2021-12-15</time>
+                <time title="修改时间：2021-12-15 16:19:01" itemprop="dateModified" datetime="2021-12-15T16:19:01+00:00">2021-12-15</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -432,7 +532,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-12-15 15:17:12" itemprop="dateModified" datetime="2021-12-15T15:17:12+00:00">2021-12-15</time>
+                <time title="修改时间：2021-12-15 16:19:01" itemprop="dateModified" datetime="2021-12-15T16:19:01+00:00">2021-12-15</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -534,7 +634,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-12-15 15:17:12" itemprop="dateModified" datetime="2021-12-15T15:17:12+00:00">2021-12-15</time>
+                <time title="修改时间：2021-12-15 16:19:01" itemprop="dateModified" datetime="2021-12-15T16:19:01+00:00">2021-12-15</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -636,7 +736,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-12-15 15:17:12" itemprop="dateModified" datetime="2021-12-15T15:17:12+00:00">2021-12-15</time>
+                <time title="修改时间：2021-12-15 16:19:01" itemprop="dateModified" datetime="2021-12-15T16:19:01+00:00">2021-12-15</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -731,7 +831,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-12-15 15:17:12" itemprop="dateModified" datetime="2021-12-15T15:17:12+00:00">2021-12-15</time>
+                <time title="修改时间：2021-12-15 16:19:01" itemprop="dateModified" datetime="2021-12-15T16:19:01+00:00">2021-12-15</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -834,7 +934,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-12-15 15:17:12" itemprop="dateModified" datetime="2021-12-15T15:17:12+00:00">2021-12-15</time>
+                <time title="修改时间：2021-12-15 16:19:01" itemprop="dateModified" datetime="2021-12-15T16:19:01+00:00">2021-12-15</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -934,7 +1034,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-12-15 15:17:12" itemprop="dateModified" datetime="2021-12-15T15:17:12+00:00">2021-12-15</time>
+                <time title="修改时间：2021-12-15 16:19:01" itemprop="dateModified" datetime="2021-12-15T16:19:01+00:00">2021-12-15</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1030,7 +1130,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-12-15 15:17:12" itemprop="dateModified" datetime="2021-12-15T15:17:12+00:00">2021-12-15</time>
+                <time title="修改时间：2021-12-15 16:19:01" itemprop="dateModified" datetime="2021-12-15T16:19:01+00:00">2021-12-15</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1076,102 +1176,6 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2021/05/22/kafka-03/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://haifuns.com/2021/05/22/kafka-02/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.jpg">
-      <meta itemprop="name" content="HAIFUN">
-      <meta itemprop="description" content="无限进步<br/>">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="With Silence">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/05/22/kafka-02/" class="post-title-link" itemprop="url">【Kafka】：生产者</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-05-22 20:00:00" itemprop="dateCreated datePublished" datetime="2021-05-22T20:00:00+00:00">2021-05-22</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-12-15 15:17:12" itemprop="dateModified" datetime="2021-12-15T15:17:12+00:00">2021-12-15</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6/" itemprop="url" rel="index"><span itemprop="name">消息中间件</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2021/05/22/kafka-02/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2021/05/22/kafka-02/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>Kafka Producer负责向Kafka发送消息，最新的客户端为Java语言编写，但Kafka社区有提供其他语言的客户端，包括C/C++、Python、Go等。</p>
-<p>Kafka Producer支持三种消息发送模式：发后即忘、同步发送、异步发送。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/05/22/kafka-02/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1262,7 +1266,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">72</span>
+          <span class="site-state-item-count">73</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
