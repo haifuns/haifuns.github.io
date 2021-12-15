@@ -174,6 +174,205 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://haifuns.com/2021/12/15/stringmatch-02/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.jpg">
+      <meta itemprop="name" content="HAIFUN">
+      <meta itemprop="description" content="无限进步<br/>">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="With Silence">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/12/15/stringmatch-02/" class="post-title-link" itemprop="url">【字符串匹配】Rabin-Karp 算法</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-12-15 23:05:00 / 修改时间：15:09:10" itemprop="dateCreated datePublished" datetime="2021-12-15T23:05:00+00:00">2021-12-15</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">算法</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2021/12/15/stringmatch-02/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/12/15/stringmatch-02/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>[toc]</p>
+<p>与朴素字符串匹配算法相同，Rabin-Karp 算法也是通过滑动一个大小为m的窗口n-m+1次进行匹配判断，不同之处在于Rabin-Karp 算法把字符串转换为字符集长度进制的哈希值，由数值比较代替了字符串直接比较，并且在匹配过程中利用了上一次匹配的信息。</p>
+<h1 id="数值计算"><a href="#数值计算" class="headerlink" title="数值计算"></a>数值计算</h1><p>对于模式P[1…m]数值计算公式为：</p>
+<p>$H(P,j)=\sum_{i=0}^{m-1}\alpha^{m-(i+1)} char(P_i)$</p>
+<ul>
+<li>P为模式字符串</li>
+<li>m为P的长度</li>
+<li>α为字符集长度也就是多少进制</li>
+<li>char(*) 得到当前字符对应的进制数</li>
+</ul>
+<p>例如字符集[0,1,2…9]，为十进制，那么字符串“123”计算方式为：</p>
+<p>$H(P,j)=\sum_{i=0}^{2}\alpha^{3-(i+1)} char(P_i) = 10^2 * 1 + 10 * 2 + 3 = 123$</p>
+<p>当我们已经知道了上一个窗口的数值时，可以在此基础上计算当前窗口数值：</p>
+<p>$H(P,j+1)=\alpha(H(P,j) - \alpha^{m-1} char(P_j)) + char(P_{j+m})$</p>
+<p>从以上计算公式中可以看出，计算窗口数值复杂度为O(m)，窗口移动n-m+1次，最坏情况下，整个算法复杂度为O((n-m+1)m)。但是在实际应用中，算法的期望复杂度为O(n+m)。</p>
+<h1 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h1><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RabinKarpStringMatcher</span> </span>{</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 固定字符集字符数</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="keyword">int</span> d = <span class="number">256</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>{</span><br><span class="line">        String txt = <span class="string">"我爱北京天安门，天安门在北京，北京城在北方"</span>;</span><br><span class="line">        String pat = <span class="string">"北京"</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// hash平均值</span></span><br><span class="line">        <span class="keyword">int</span> q = <span class="number">101</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">long</span> start = System.currentTimeMillis();</span><br><span class="line">        search(pat, txt, q);</span><br><span class="line">        System.out.println(System.currentTimeMillis() - start);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">search</span><span class="params">(String pat, String txt, <span class="keyword">int</span> q)</span> </span>{</span><br><span class="line">        <span class="keyword">int</span> m = pat.length();</span><br><span class="line">        <span class="keyword">int</span> n = txt.length();</span><br><span class="line">        <span class="keyword">int</span> i, j;</span><br><span class="line">        <span class="keyword">int</span> p = <span class="number">0</span>; <span class="comment">// 模式hash值</span></span><br><span class="line">        <span class="keyword">int</span> t = <span class="number">0</span>; <span class="comment">// 文本hash值</span></span><br><span class="line">        <span class="keyword">int</span> h = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 进制数m-1次幂</span></span><br><span class="line">        <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; m - <span class="number">1</span>; i++) {</span><br><span class="line">            h = (h * d) % q;</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 计算第一个窗口hash值</span></span><br><span class="line">        <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; m; i++) {</span><br><span class="line">            p = (d * p + pat.charAt(i)) % q;</span><br><span class="line">            t = (d * t + txt.charAt(i)) % q;</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 滑动窗口匹配</span></span><br><span class="line">        <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt;= n - m; i++) {</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 检查模式和当前窗口hash值</span></span><br><span class="line">            <span class="keyword">if</span> (p == t) {</span><br><span class="line">                <span class="comment">// 检查所有字符</span></span><br><span class="line">                <span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; m; j++) {</span><br><span class="line">                    <span class="keyword">if</span> (txt.charAt(i + j) != pat.charAt(j))</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                }</span><br><span class="line"></span><br><span class="line">                <span class="comment">// p == t and pat[0...m-1] = txt[i, i+1, ...i+m-1]</span></span><br><span class="line">                <span class="keyword">if</span> (j == m) {</span><br><span class="line">                    System.out.println(<span class="string">"有效偏移量："</span> + i);</span><br><span class="line">                }</span><br><span class="line">            }</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 计算下一个窗口hash值</span></span><br><span class="line">            <span class="keyword">if</span> (i &lt; n - m) {</span><br><span class="line">                t = (d * (t - txt.charAt(i) * h) + txt.charAt(i + m)) % q;</span><br><span class="line"></span><br><span class="line">                <span class="comment">// hash为负处理为正</span></span><br><span class="line">                <span class="keyword">if</span> (t &lt; <span class="number">0</span>) {</span><br><span class="line">                    t = (t + q);</span><br><span class="line">                }</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<ul>
+<li>算法导论</li>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/christianl/p/13747580.html">Rabin-Karp算法概述</a></li>
+<li>Rabin-Karp 算法数值计算的通俗理解参考这篇文章：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/golove/p/3234673.html">Rabin-Karp 算法（字符串快速查找）</a></li>
+<li>代码参考：<a target="_blank" rel="noopener" href="https://www.geeksforgeeks.org/rabin-karp-algorithm-for-pattern-searching/">https://www.geeksforgeeks.org/rabin-karp-algorithm-for-pattern-searching/</a></li>
+</ul>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://haifuns.com/2021/12/15/stringmatch-01/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.jpg">
+      <meta itemprop="name" content="HAIFUN">
+      <meta itemprop="description" content="无限进步<br/>">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="With Silence">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/12/15/stringmatch-01/" class="post-title-link" itemprop="url">【字符串匹配】朴素字符串匹配算法</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2021-12-15 23:00:00 / 修改时间：15:09:10" itemprop="dateCreated datePublished" datetime="2021-12-15T23:00:00+00:00">2021-12-15</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">算法</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2021/12/15/stringmatch-01/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/12/15/stringmatch-01/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>字符串匹配问题是指在一个大字符串T中查找另一个字符串S出现的所有位置，其中T、S都是定义在有限字符集合上的字符串。</p>
+<p>字符串匹配的典型应用场景是在文本中查找特定关键字，用来有效解决这个问题的算法就是<em>字符串匹配算法</em>。在很多其他应用中字符串匹配算法也有所应用，例如：用来在DNA序列中查找特定序列；在网络搜索引擎中查找网页地址等。</p>
+<p>进一步定义字符串匹配问题如下：假设文本是一个长度为n的数据T[1…n]，而模式是一个长度为m的数组P[1…m]，其中m &lt;= n，T和P中的元素都来自一个有限字符集∑，<br>当0 &lt;= s &lt;= n-m，并且T[s+1…s+m] = P[1…m]（即T[s+j] = P[j]，其中1 &lt;= j  &lt;= m），那么称模式P在文本T中出现，且偏移量为s。字符串匹配问题就是找到所有有效偏移。</p>
+<p>常见的字符串匹配算法如下：</p>
+<ul>
+<li>朴素字符串匹配算法</li>
+<li>Rabin-Karp 算法</li>
+<li>KMP 算法</li>
+<li>DFA 算法（确定性有穷自动机）</li>
+<li>AC 自动机</li>
+</ul>
+<h1 id="朴素字符串匹配"><a href="#朴素字符串匹配" class="headerlink" title="朴素字符串匹配"></a>朴素字符串匹配</h1><p>朴素字符串匹配是一种直接的暴力匹配算法，在[0,n-m]范围内通过循环偏移量s，检测是否满足T[s+1…s+m] = P[1…m]，从而找到所有有效偏移。</p>
+<p>在最坏情况下，朴素字符串匹配算法时间复杂度为O((n-m+1)m)。</p>
+<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NativeStringMatcher</span> </span>{</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>{</span><br><span class="line"></span><br><span class="line">        String text = <span class="string">"我爱北京天安门，天安门在北京，北京城在北方"</span>;</span><br><span class="line">        String pattern = <span class="string">"北京"</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">long</span> start = System.currentTimeMillis();</span><br><span class="line">        stringMatch(text.toCharArray(), pattern.toCharArray());</span><br><span class="line">        System.out.println(System.currentTimeMillis() - start);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">stringMatch</span><span class="params">(<span class="keyword">char</span>[] t, <span class="keyword">char</span>[] p)</span> </span>{</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (t == <span class="keyword">null</span> || p == <span class="keyword">null</span> || t.length &lt; p.length) {</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> n = t.length;</span><br><span class="line">        <span class="keyword">int</span> m = p.length;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> s = <span class="number">0</span>; s &lt; n - m + <span class="number">1</span>; s++) {</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; m; i++) {</span><br><span class="line">                <span class="keyword">if</span> (t[s + i] != p[i]) {</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                }</span><br><span class="line">                <span class="keyword">if</span> (i == m - <span class="number">1</span>) {</span><br><span class="line">                    System.out.println(<span class="string">"有效偏移量："</span> + s);</span><br><span class="line">                }</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://haifuns.com/2021/12/15/redission-04/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -197,16 +396,10 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2021-12-15 00:15:00" itemprop="dateCreated datePublished" datetime="2021-12-15T00:15:00+00:00">2021-12-15</time>
+              <time title="创建时间：2021-12-15 00:15:00 / 修改时间：15:09:10" itemprop="dateCreated datePublished" datetime="2021-12-15T00:15:00+00:00">2021-12-15</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-12-14 16:22:49" itemprop="dateModified" datetime="2021-12-14T16:22:49+00:00">2021-12-14</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -314,10 +507,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2021-12-14 00:15:00 / 修改时间：16:22:49" itemprop="dateCreated datePublished" datetime="2021-12-14T00:15:00+00:00">2021-12-14</time>
+              <time title="创建时间：2021-12-14 00:15:00" itemprop="dateCreated datePublished" datetime="2021-12-14T00:15:00+00:00">2021-12-14</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-12-15 15:09:10" itemprop="dateModified" datetime="2021-12-15T15:09:10+00:00">2021-12-15</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="far fa-folder"></i>
@@ -433,7 +632,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-12-14 16:22:49" itemprop="dateModified" datetime="2021-12-14T16:22:49+00:00">2021-12-14</time>
+                <time title="修改时间：2021-12-15 15:09:10" itemprop="dateModified" datetime="2021-12-15T15:09:10+00:00">2021-12-15</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -530,7 +729,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-12-14 16:22:49" itemprop="dateModified" datetime="2021-12-14T16:22:49+00:00">2021-12-14</time>
+                <time title="修改时间：2021-12-15 15:09:10" itemprop="dateModified" datetime="2021-12-15T15:09:10+00:00">2021-12-15</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -647,7 +846,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-12-14 16:22:49" itemprop="dateModified" datetime="2021-12-14T16:22:49+00:00">2021-12-14</time>
+                <time title="修改时间：2021-12-15 15:09:10" itemprop="dateModified" datetime="2021-12-15T15:09:10+00:00">2021-12-15</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -757,7 +956,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-12-14 16:22:49" itemprop="dateModified" datetime="2021-12-14T16:22:49+00:00">2021-12-14</time>
+                <time title="修改时间：2021-12-15 15:09:10" itemprop="dateModified" datetime="2021-12-15T15:09:10+00:00">2021-12-15</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -894,7 +1093,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-12-14 16:22:49" itemprop="dateModified" datetime="2021-12-14T16:22:49+00:00">2021-12-14</time>
+                <time title="修改时间：2021-12-15 15:09:10" itemprop="dateModified" datetime="2021-12-15T15:09:10+00:00">2021-12-15</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1013,7 +1212,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-12-14 16:22:49" itemprop="dateModified" datetime="2021-12-14T16:22:49+00:00">2021-12-14</time>
+                <time title="修改时间：2021-12-15 15:09:10" itemprop="dateModified" datetime="2021-12-15T15:09:10+00:00">2021-12-15</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1078,237 +1277,10 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://haifuns.com/2021/11/17/paxos/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.jpg">
-      <meta itemprop="name" content="HAIFUN">
-      <meta itemprop="description" content="无限进步<br/>">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="With Silence">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/11/17/paxos/" class="post-title-link" itemprop="url">分布式共识算法之Paxos算法</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-11-17 12:00:00" itemprop="dateCreated datePublished" datetime="2021-11-17T12:00:00+00:00">2021-11-17</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-12-14 16:22:49" itemprop="dateModified" datetime="2021-12-14T16:22:49+00:00">2021-12-14</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">分布式</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2021/11/17/paxos/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2021/11/17/paxos/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>Paxos是Leslie Lamport提出的一种基于消息传递的协商共识算法，现已是当今分布式系统最重要的理论基础。</p>
-<h1 id="节点分类"><a href="#节点分类" class="headerlink" title="节点分类"></a>节点分类</h1><p>Paxos算法将分布式系统中的节点分为三类：</p>
-<ul>
-<li>提案节点（Proposer），提出对某个值进行设置操作的节点，设置值的行为称为提案，值一旦设置成功就是不会丢失也是不可变的。</li>
-<li>决策节点（Acceptor），应答提案的节点，决定该提案是否可以被投票、是否可以被接受。提案一旦得到半数决策节点接受，即称为该提案被批准，提案被批准意味着该值不能再更改也不会丢失，且最终所有节点都会接受它。</li>
-<li>记录节点（Learner），不参与提案，也不参与决策，只是从提案、决策节点学习已经达成共识的提案。例如少数派节点从网络分区中恢复时将会进入这种状态。</li>
-</ul>
-<p>在使用Paxos的分布式系统中，所有节点都是平等的，它们可以承担一种或者多种角色。需要注意的是，为了确保有明确的多数派，决策节点的数量应该被设置为奇数个，且在系统初始化时，网络中每个节点都需要知道整个网络中的决策节点的数量、地址等信息。</p>
-<h1 id="算法流程"><a href="#算法流程" class="headerlink" title="算法流程"></a>算法流程</h1><p>Paxos算法包含准备和批准两个阶段来协商已达成共识。</p>
-<h2 id="准备（Prepare）阶段"><a href="#准备（Prepare）阶段" class="headerlink" title="准备（Prepare）阶段"></a>准备（Prepare）阶段</h2><p>准备阶段相当于分布式系统中锁抢占的过程。如果某个提案节点准备发起提案，必须先向所有决策节点广播一个许可申请（称为Prepare请求）。Parepare请求中包含一个全局唯一的数字n作为提案ID，决策节点收到请求后，将会给予提案节点两个承诺和一个应答。</p>
-<p>两个承诺指：</p>
-<ul>
-<li>承诺不会再接受提案ID小于或等于n的Prepare请求。</li>
-<li>承诺不会再接受提案ID小于n的Accept请求（下一阶段）。</li>
-</ul>
-<p>一个应答指：</p>
-<ul>
-<li>在不违背以上承诺的前提下，回复已经批准过的提案ID中最大的提案所设定的值，如果从未被设定过就返回空。如果违反此前做出的承诺，即收到的提案ID不是决策节点收到过最大的，那么不会对此Prepare请求作出应答。</li>
-</ul>
-<h2 id="批准（Accept）阶段"><a href="#批准（Accept）阶段" class="headerlink" title="批准（Accept）阶段"></a>批准（Accept）阶段</h2><p>当提案节点收到多数派节点的应答（称为Promise应答）后，就开始第二阶段即批准阶段。此时可能有以下两种可能：</p>
-<ul>
-<li>如果提案节点发现所有响应的决策节点此前都没有批准过其他提案（即返回空），那么说明它是第一个设置值得节点，可以随意的决定要设置的值，此时提案节点会将自己选定的值与提案ID组成一个二元组(id,value)结构，再次广播给所有的决策节点（称为Accept请求）。</li>
-<li>如果提案节点收到的响应中至少有一个应答已经有值了，那么就不能随意取值，必须从响应中找到提案ID最大的值并接受，组成一个二元组(id,value)结构，再次广播给所有的决策节点。</li>
-</ul>
-<p>每一个决策节点在收到Accept请求时，都会在不违背此前承诺的前提下，接受并持久化对当前提案ID对应的值。如果违背承诺，即收到的提案ID不是收到的Prepare请求中最大的，那么不会理会此Accept请求。</p>
-<p>当提案节点收到了多数派决策节点的应答（称为 Accepted 应答）后，协商结束，共识决议形成，将形成的决议发送给所有记录节点进行学习。整个过程时序图如下所示：</p>
-<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/distributed/paxos/paxos01.png" alt="image"></p>
-<h1 id="工作实例"><a href="#工作实例" class="headerlink" title="工作实例"></a>工作实例</h1><p>假设在一个分布式系统中包含五个节点（正常通信场景，不涉及网络分区），记为S1、S2、S3、S4、S5，其中每个节点都同时扮演提案节点和决策节点。</p>
-<p>某一时刻，有两个并发请求分别希望将同一个值设定为X（S1节点提案）和Y（S5节点提案），以P表示准备阶段，以A表示批准阶段，此时有可能发生以下几种情况：</p>
-<p><strong>情况1</strong>：S1选定提案ID是3.1，先取得了多数派决策节点的Promise和Accepted应答，此时S5选定的提案ID为4.5，发起Prepare请求，此时收到的多数派应答中至少会包含一个此前已经应答过S1的决策节点，假设为S3，那么S3返回的应答中必将包含S1已经设定的值X，S5就必须无条件地使用X代替Y作为自己的提案值，此时整个系统对“取值为X”这个事实达成一致。如下图所示：</p>
-<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/distributed/paxos/paxos-example-01.png" alt="image"></p>
-<p><strong>情况2</strong>：对于情况1，X被选定为最终值是必然结果，从上图可以看出X被选定为最终值并不是必定经过多数派批准，只取决于S5提案时得到的Promise应答中是否包含批准过X值的决策节点，例如下图所示，当S5发起提案的Prepare请求时，X并为获得多数派批准，但由于S3已经批准，最终共识结果仍然是X。</p>
-<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/distributed/paxos/paxos-example-02.png" alt="image"></p>
-<p><strong>情况3</strong>：S5提案时Promise应答中不包含批准过X的决策节点，例如应答S5提案时，节点S1已经批准了X，节点S2、S3未批准但返回了Promise应答，此时S5以更大的提案ID获得了S3、S4、S5的Promise应答，这三个节点均未批准过任何值，那么S3将不会再接收来自S1的Accept请求，因为S1的提案ID已经不是最大的了，这三个节点将批准Y的取值，整个系统最终将会对取值“Y”达成一致，如下图所示：</p>
-<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/distributed/paxos/paxos-example-03.png" alt="image"></p>
-<p><strong>情况4</strong>：从情况3可以推导出一种极端情况，如果两个提案节点交替使用最大ID使得准备阶段成功，但是批准阶段失败，那么就会形成活锁（Live Lock），如下图所示。在算法实现中需要引入随机超时机制来避免活锁的产生。</p>
-<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/distributed/paxos/paxos-example-04.png" alt="image"></p>
-<p>以上是基于Basic Paxos、以未出现网络分区的正常流程进行讲解Paxos算法。Basic Paxos的价值在于开拓了分布式共识算法的发展思路，但是它仍存在以下缺陷，一般不会直接用于实践：Basic Paxos只能对单个值形成决议，并且决议的形成至少需要两次网络请求和应答（准备和批准），在高并发情况下将会产生较大的网络开销，极端情况下甚至可能形成活锁。在实际的应用中都是基于Multi Paxos和Fast Paxos算法以及一些等价的算法（如Raft、ZAB等）。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://haifuns.com/2021/08/12/databus/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.jpg">
-      <meta itemprop="name" content="HAIFUN">
-      <meta itemprop="description" content="无限进步<br/>">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="With Silence">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/08/12/databus/" class="post-title-link" itemprop="url">Databus简介</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-08-12 21:50:00" itemprop="dateCreated datePublished" datetime="2021-08-12T21:50:00+00:00">2021-08-12</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-12-14 16:22:49" itemprop="dateModified" datetime="2021-12-14T16:22:49+00:00">2021-12-14</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%97%A5%E5%BF%97%E6%8C%96%E6%8E%98/" itemprop="url" rel="index"><span itemprop="name">日志挖掘</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2021/08/12/databus/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2021/08/12/databus/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="问题引入"><a href="#问题引入" class="headerlink" title="问题引入"></a>问题引入</h1><p>在互联网架构中，数据系统通常可以分为真实数据系统以及衍生数据系统。前者作为基础数据库存储用户产生的写操作，后者通常复制自主数据并对数据进行转换或业务处理，提供读取和其他复杂查询操作。</p>
-<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/databus/dataflow.png" alt="dataflow"></p>
-<h1 id="数据同步方案"><a href="#数据同步方案" class="headerlink" title="数据同步方案"></a>数据同步方案</h1><p>以缓存数据为例，缓存数据来自主数据，当主数据发生变化时，缓存中的数据也需要随之更新。要实现数据同步有两种常用解决方案：应用驱动双写和数据库日志挖掘。</p>
-<h2 id="应用双写"><a href="#应用双写" class="headerlink" title="应用双写"></a>应用双写</h2><p>应用双写指在写数据到DB时，同时写入缓存。但是应用双写存在数据不一致的情况，如下图所示：</p>
-<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/databus/databus-redis.png" alt="image"></p>
-<p>另外，在变更DB后更新缓存时，如果出现操作失败的情况，也有可能造成数据不一致。在需要保证严格数据一致时，使用应用双写策略并不容易实现。</p>
-<h2 id="日志挖掘"><a href="#日志挖掘" class="headerlink" title="日志挖掘"></a>日志挖掘</h2><p>日志挖掘通过提取数据库变更日志实现数据同步，这从根本上解决了数据一致性问题。如下图所示：</p>
-<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/databus/databus-flow.png" alt="image"></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/08/12/databus/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
   </nav>
 
 
@@ -1376,20 +1348,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">70</span>
+          <span class="site-state-item-count">72</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-count">15</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">26</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -1535,6 +1507,61 @@
 
 
   
+
+  
+      
+
+<script>
+  if (typeof MathJax === 'undefined') {
+    window.MathJax = {
+      loader: {
+        source: {
+          '[tex]/amsCd': '[tex]/amscd',
+          '[tex]/AMScd': '[tex]/amscd'
+        }
+      },
+      tex: {
+        inlineMath: {'[+]': [['$', '$']]},
+        tags: 'ams'
+      },
+      options: {
+        renderActions: {
+          findScript: [10, doc => {
+            document.querySelectorAll('script[type^="math/tex"]').forEach(node => {
+              const display = !!node.type.match(/; *mode=display/);
+              const math = new doc.options.MathItem(node.textContent, doc.inputJax[0], display);
+              const text = document.createTextNode('');
+              node.parentNode.replaceChild(text, node);
+              math.start = {node: text, delim: '', n: 0};
+              math.end = {node: text, delim: '', n: 0};
+              doc.math.push(math);
+            });
+          }, '', false],
+          insertedScript: [200, () => {
+            document.querySelectorAll('mjx-container').forEach(node => {
+              let target = node.parentNode;
+              if (target.nodeName.toLowerCase() === 'li') {
+                target.parentNode.classList.add('has-jax');
+              }
+            });
+          }, '', false]
+        }
+      }
+    };
+    (function () {
+      var script = document.createElement('script');
+      script.src = '//cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+      script.defer = true;
+      document.head.appendChild(script);
+    })();
+  } else {
+    MathJax.startup.document.state(0);
+    MathJax.texReset();
+    MathJax.typeset();
+  }
+</script>
+
+    
 
   
 
