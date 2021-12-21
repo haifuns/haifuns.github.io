@@ -174,6 +174,103 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://haifuns.com/2020/12/26/java-concurrent-10/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.jpg">
+      <meta itemprop="name" content="HAIFUN">
+      <meta itemprop="description" content="无限进步<br/>">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="With Silence">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/12/26/java-concurrent-10/" class="post-title-link" itemprop="url">【Java 并发编程系列】【J.U.C】：AQS</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-26 17:52:00" itemprop="dateCreated datePublished" datetime="2020-12-26T17:52:00+00:00">2020-12-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-12-21 05:40:24" itemprop="dateModified" datetime="2021-12-21T05:40:24+00:00">2021-12-21</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%B9%B6%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">并发</span></a>
+                </span>
+            </span>
+
+          
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/12/26/java-concurrent-10/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/12/26/java-concurrent-10/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h2 id="锁的底层支持"><a href="#锁的底层支持" class="headerlink" title="锁的底层支持"></a>锁的底层支持</h2><p>AbstractQueuedSynchronizer 抽象同步队列简称AQS，它是实现同步器的基础组件，并发包中锁的底层就是使用AQS 实现的。</p>
+<p>AQS 类图结构如图：</p>
+<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/AQS-uml.png" alt="image"></p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/12/26/java-concurrent-10/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="https://haifuns.com/2020/12/26/java-concurrent-9/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -205,7 +302,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-12-19 14:32:15" itemprop="dateModified" datetime="2021-12-19T14:32:15+00:00">2021-12-19</time>
+                <time title="修改时间：2021-12-21 05:40:24" itemprop="dateModified" datetime="2021-12-21T05:40:24+00:00">2021-12-21</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -300,7 +397,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-12-19 14:32:15" itemprop="dateModified" datetime="2021-12-19T14:32:15+00:00">2021-12-19</time>
+                <time title="修改时间：2021-12-21 05:40:24" itemprop="dateModified" datetime="2021-12-21T05:40:24+00:00">2021-12-21</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -398,7 +495,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-12-19 14:32:15" itemprop="dateModified" datetime="2021-12-19T14:32:15+00:00">2021-12-19</time>
+                <time title="修改时间：2021-12-21 05:40:24" itemprop="dateModified" datetime="2021-12-21T05:40:24+00:00">2021-12-21</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -494,7 +591,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-12-19 14:32:15" itemprop="dateModified" datetime="2021-12-19T14:32:15+00:00">2021-12-19</time>
+                <time title="修改时间：2021-12-21 05:40:24" itemprop="dateModified" datetime="2021-12-21T05:40:24+00:00">2021-12-21</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -589,7 +686,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-12-19 14:32:15" itemprop="dateModified" datetime="2021-12-19T14:32:15+00:00">2021-12-19</time>
+                <time title="修改时间：2021-12-21 05:40:24" itemprop="dateModified" datetime="2021-12-21T05:40:24+00:00">2021-12-21</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -686,7 +783,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-12-19 14:32:15" itemprop="dateModified" datetime="2021-12-19T14:32:15+00:00">2021-12-19</time>
+                <time title="修改时间：2021-12-21 05:40:24" itemprop="dateModified" datetime="2021-12-21T05:40:24+00:00">2021-12-21</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -788,7 +885,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-12-19 14:32:15" itemprop="dateModified" datetime="2021-12-19T14:32:15+00:00">2021-12-19</time>
+                <time title="修改时间：2021-12-21 05:40:24" itemprop="dateModified" datetime="2021-12-21T05:40:24+00:00">2021-12-21</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -889,7 +986,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-12-19 14:32:15" itemprop="dateModified" datetime="2021-12-19T14:32:15+00:00">2021-12-19</time>
+                <time title="修改时间：2021-12-21 05:40:24" itemprop="dateModified" datetime="2021-12-21T05:40:24+00:00">2021-12-21</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -988,7 +1085,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-12-19 14:32:15" itemprop="dateModified" datetime="2021-12-19T14:32:15+00:00">2021-12-19</time>
+                <time title="修改时间：2021-12-21 05:40:24" itemprop="dateModified" datetime="2021-12-21T05:40:24+00:00">2021-12-21</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -1031,113 +1128,6 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2020/12/26/java-concurrent-1/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://haifuns.com/2020/12/26/netty/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.jpg">
-      <meta itemprop="name" content="HAIFUN">
-      <meta itemprop="description" content="无限进步<br/>">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="With Silence">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/12/26/netty/" class="post-title-link" itemprop="url">【Netty】工作原理解析</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-12-26 17:34:00" itemprop="dateCreated datePublished" datetime="2020-12-26T17:34:00+00:00">2020-12-26</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2021-12-19 14:32:15" itemprop="dateModified" datetime="2021-12-19T14:32:15+00:00">2021-12-19</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Netty/" itemprop="url" rel="index"><span itemprop="name">Netty</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2020/12/26/netty/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2020/12/26/netty/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="线程模型介绍"><a href="#线程模型介绍" class="headerlink" title="线程模型介绍"></a>线程模型介绍</h1><p>不同的线程模式，对程序的性能有很大影响，为了搞清 Netty 线程模式，下面来系统的讲解下各个线程模式， 最后看看 Netty 线程模型有什么优越性。</p>
-<p>目前存在的线程模型有： </p>
-<ul>
-<li>传统阻塞 I/O 服务模型</li>
-<li>Reactor 模式</li>
-</ul>
-<p>根据 Reactor 的数量和处理资源池线程的数量不同，有 3 种典型的实现：</p>
-<ul>
-<li> 单 Reactor 单线程</li>
-<li> 单 Reactor 多线程</li>
-<li> 主从 Reactor 多线程</li>
-</ul>
-<p>Netty 线程模式：Netty 主要基于主从 Reactor 多线程模型做了一定的改进，其中主从 Reactor 多线程模型有多个 Reactor。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/12/26/netty/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1228,7 +1218,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">73</span>
+          <span class="site-state-item-count">74</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
