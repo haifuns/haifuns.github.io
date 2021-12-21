@@ -14,7 +14,7 @@ mathjax: true
 
 - $Q$是状态的有限集合
 - $q_0 \in Q$是初始状态
-- $A \sube Q$是一个特殊的接受状态集合
+- $A \subseteq Q$是一个特殊的接受状态集合
 - $\Sigma$是有限输入字母表
 - $\delta$是一个从$Q \times \Sigma \to Q$的函数，称为`M`的转移函数
 
