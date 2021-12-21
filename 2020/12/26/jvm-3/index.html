@@ -23,8 +23,8 @@
 <meta property="og:description" content="概述JVM字节码执行引擎功能基本上就是输入字节码文件，然后对字节码进行解析并处理，最后输出执行结果。实现方式可能有通过解释器直接解释执行字节码，或者通过即时编译器产生本地代码，也就是编译执行，也可能两者皆有。">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/jvm/stackframe.png">
-<meta property="article:published_time" content="2020-12-26T09:19:00.000Z">
-<meta property="article:modified_time" content="2021-12-21T09:29:48.112Z">
+<meta property="article:published_time" content="2020-12-26T17:19:00.000Z">
+<meta property="article:modified_time" content="2021-12-21T15:06:29.296Z">
 <meta property="article:author" content="haifun">
 <meta property="article:tag" content="JVM">
 <meta name="twitter:card" content="summary">
@@ -48,8 +48,33 @@
   
 
   
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?d3c8edb388553a2084296cbfe9a0785a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
 
   
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
 
 
   
@@ -109,6 +134,17 @@
             target="_self"
             >
             标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/roaming/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            漫游
           </a>
         </li>
       
@@ -204,7 +240,7 @@
 <span id="more"></span>
 
 <h2 id="栈帧"><a href="#栈帧" class="headerlink" title="栈帧"></a>栈帧</h2><p>栈帧是用于支持JVM进行方法调用和方法执行的数据结构，栈帧随方法调用创建，方法结束销毁。栈帧中存储方法局部变量表、操作数栈、动态连接、方法返回地址等信息。</p>
-<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/jvm/stackframe.png" alt="image"></p>
+<p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/jvm/stackframe.png" alt="image"></p>
 <h3 id="局部变量表"><a href="#局部变量表" class="headerlink" title="局部变量表"></a>局部变量表</h3><p>局部变量表用来存放方法参数和方法内部定义的局部变量存储空间。</p>
 <ul>
 <li>以变量槽slot为单位，目前一个slot存放32位以内的数据类型</li>
@@ -335,6 +371,17 @@
           <li class="item-toolbox">
             <a
               class="CIRCLE"
+              href="/roaming/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              漫游
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
               href="/about/"
               rel="noopener noreferrer"
               target="_self"
@@ -447,20 +494,5 @@
   }
 </script>
 
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-            processEscapes: true
-        }
-    });
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax();
-        for (var i = 0; i < all.length; ++i)
-            all[i].SourceElement().parentNode.className += ' has-jax';
-    });
-</script>
-<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 </html>

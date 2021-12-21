@@ -25,8 +25,8 @@
 <meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/AQS-uml.png">
 <meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/AQS-Queue.png">
 <meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/AQS-Condition.png">
-<meta property="article:published_time" content="2020-12-26T09:52:00.000Z">
-<meta property="article:modified_time" content="2021-12-21T09:29:48.109Z">
+<meta property="article:published_time" content="2020-12-26T17:52:00.000Z">
+<meta property="article:modified_time" content="2021-12-21T15:06:29.296Z">
 <meta property="article:author" content="haifun">
 <meta property="article:tag" content="并发">
 <meta name="twitter:card" content="summary">
@@ -50,8 +50,33 @@
   
 
   
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?d3c8edb388553a2084296cbfe9a0785a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
 
   
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
 
 
   
@@ -111,6 +136,17 @@
             target="_self"
             >
             标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/roaming/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            漫游
           </a>
         </li>
       
@@ -204,7 +240,7 @@
     
       <h2 id="锁的底层支持"><a href="#锁的底层支持" class="headerlink" title="锁的底层支持"></a>锁的底层支持</h2><p>AbstractQueuedSynchronizer 抽象同步队列简称AQS，它是实现同步器的基础组件，并发包中锁的底层就是使用AQS 实现的。</p>
 <p>AQS 类图结构如图：</p>
-<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/AQS-uml.png" alt="image"></p>
+<p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/AQS-uml.png" alt="image"></p>
 <span id="more"></span>
 
 <p>由该图可以看到， AQS 是一个FIFO 的双向队列，其内部通过节点head 和tail 记录队首和队尾元素，队列元素的类型为Node 。其中Node 中的thread 变量用来存放进入AQS 队列里面的线程： Node 节点内部的SHARED 用来标记该线程是获取共享资源时被阻塞挂起后放入AQS 队列的， EXCLUSIVE 用来标记线程是获取独占资源时被挂起后放入AQS 队列的； waitStatus 记录当前线程等待状态，可以为CANCELLED（线程被取消了）、SIGNAL（ 线程需要被唤醒）、CONDITION （线程在条件队列里面等待）、PROPAGATE（释放共享资源时需要通知其他节点）；prev 记录当前节点的前驱节点， next 记录当前节点的后继节点。</p>
@@ -280,7 +316,7 @@
 <figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> Node <span class="title">enq</span><span class="params">(<span class="keyword">final</span> Node node)</span> </span>{</span><br><span class="line">    <span class="keyword">for</span> (;;) {</span><br><span class="line">        Node t = tail;</span><br><span class="line">        <span class="keyword">if</span> (t == <span class="keyword">null</span>) { <span class="comment">// Must initialize</span></span><br><span class="line">            <span class="keyword">if</span> (compareAndSetHead(<span class="keyword">new</span> Node()))</span><br><span class="line">                tail = head;</span><br><span class="line">        } <span class="keyword">else</span> {</span><br><span class="line">            node.prev = t;</span><br><span class="line">            <span class="keyword">if</span> (compareAndSetTail(t, node)) {</span><br><span class="line">                t.next = node;</span><br><span class="line">                <span class="keyword">return</span> t;</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
 
 <p>如上代码，当要在AQS 队列尾部插入元素时， AQS 队列头、尾节点都指向null 时，使用CAS 算法设置一个哨兵节点为头节点，如果CAS 设置成功，则让尾部节点也指向哨兵节点，这时候队列状态如下图中（2）所示；<br>然后再插入node 节点，设置node 的前驱节点为尾部节点（4），然后通过CAS 算法设置node 节点为尾部节点（5），CAS 成功后再设置原来的尾部节点的后驱节点为node（6）。</p>
-<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/AQS-Queue.png" alt="image"></p>
+<p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/AQS-Queue.png" alt="image"></p>
 <h2 id="条件变量的支持"><a href="#条件变量的支持" class="headerlink" title="条件变量的支持"></a>条件变量的支持</h2><p>类比配合synchronized 内置锁实现线程间同步的 notify 和wait ，条件变量的signal 和await 方法也是用来配合锁（使用AQS 实现的锁）实现线程间同步的基础设施。</p>
 <p>它们的不同在于，synchronized 同时只能与一个共享变量的notify 或wait 方法实现同步， 而AQS 的一个锁可以对应多个条件变量。</p>
 <p>使用方法示例如下：</p>
@@ -302,7 +338,7 @@
 </ul>
 <p><strong>一个锁对应一个AQS 阻塞队列，对应多个条件变量， 每个条件变量有自己的一个条件队列。</strong></p>
 <p>如图所示：</p>
-<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/AQS-Condition.png" alt="image"></p>
+<p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/AQS-Condition.png" alt="image"></p>
 <h2 id="基于AQS实现自定义同步器"><a href="#基于AQS实现自定义同步器" class="headerlink" title="基于AQS实现自定义同步器"></a>基于AQS实现自定义同步器</h2><p>在如下代码中， NonReentrantLock为自定基于AQS的不可重入独占锁，其内部定义了一个Sync 用来实现具体的锁的操作， Sync 继承于AQS 。由于我们实现的是独占模式的锁，所以Sync重写了tryAcquire、tryRelease 和isHeldExclusively 3 个方法。另外， Sync 提供了newCondition 这个方法用来支持条件变量。</p>
 <figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.io.Serializable;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.TimeUnit;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.locks.AbstractQueuedSynchronizer;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.locks.Condition;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.locks.Lock;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 基于AQS的不可重入独占锁</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NonReentrantLock</span> <span class="keyword">implements</span> <span class="title">Lock</span>, <span class="title">Serializable</span> </span>{</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 内部帮助类</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Sync</span> <span class="keyword">extends</span> <span class="title">AbstractQueuedSynchronizer</span> </span>{</span><br><span class="line"></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * 锁是否已经被持有</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">protected</span> <span class="keyword">boolean</span> <span class="title">isHeldExclusively</span><span class="params">()</span> </span>{</span><br><span class="line">            <span class="keyword">return</span> getState() == <span class="number">1</span>;</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * 如果state为0则尝试获取锁</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">protected</span> <span class="keyword">boolean</span> <span class="title">tryAcquire</span><span class="params">(<span class="keyword">int</span> acquires)</span> </span>{</span><br><span class="line">            <span class="keyword">assert</span> acquires == <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">if</span> (compareAndSetState(<span class="number">0</span>, <span class="number">1</span>)) {</span><br><span class="line">                setExclusiveOwnerThread(Thread.currentThread());</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">            }</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * 尝试释放锁，设置state为0</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">protected</span> <span class="keyword">boolean</span> <span class="title">tryRelease</span><span class="params">(<span class="keyword">int</span> releases)</span> </span>{</span><br><span class="line">            <span class="keyword">assert</span> releases == <span class="number">1</span>;</span><br><span class="line">            <span class="keyword">if</span> (getState() == <span class="number">0</span>) {</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> IllegalMonitorStateException();</span><br><span class="line">            }</span><br><span class="line">            setExclusiveOwnerThread(<span class="keyword">null</span>);</span><br><span class="line">            setState(<span class="number">0</span>);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * 提供条件变量接口</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="function">Condition <span class="title">newCondition</span><span class="params">()</span> </span>{</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> ConditionObject();</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 创建一个Sync来做具体的工作</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Sync sync = <span class="keyword">new</span> Sync();</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">lock</span><span class="params">()</span> </span>{</span><br><span class="line">        sync.acquire(<span class="number">1</span>);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">lockInterruptibly</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException </span>{</span><br><span class="line">        sync.acquireInterruptibly(<span class="number">1</span>);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">tryLock</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="keyword">return</span> sync.tryAcquire(<span class="number">1</span>);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">tryLock</span><span class="params">(<span class="keyword">long</span> time, TimeUnit unit)</span> <span class="keyword">throws</span> InterruptedException </span>{</span><br><span class="line">        <span class="keyword">return</span> sync.tryAcquireNanos(<span class="number">1</span>, unit.toNanos(time));</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">unlock</span><span class="params">()</span> </span>{</span><br><span class="line">        sync.release(<span class="number">1</span>);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Condition <span class="title">newCondition</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="keyword">return</span> sync.newCondition();</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isLocked</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="keyword">return</span> sync.isHeldExclusively();</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
     
@@ -376,6 +412,17 @@
               target="_self"
               >
               标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/roaming/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              漫游
             </a>
           </li>
         
@@ -494,20 +541,5 @@
   }
 </script>
 
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-            processEscapes: true
-        }
-    });
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax();
-        for (var i = 0; i < all.length; ++i)
-            all[i].SourceElement().parentNode.className += ' has-jax';
-    });
-</script>
-<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 </html>

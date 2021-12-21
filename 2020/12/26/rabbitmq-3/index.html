@@ -27,8 +27,8 @@
 <meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/mq/rabbitmq-flowcontrol2.png">
 <meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/mq/rabbitmq-mirror-queue.png">
 <meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/mq/rabbitmq-mirror-queue2.png">
-<meta property="article:published_time" content="2020-12-26T08:30:00.000Z">
-<meta property="article:modified_time" content="2021-12-21T09:29:48.115Z">
+<meta property="article:published_time" content="2020-12-26T16:30:00.000Z">
+<meta property="article:modified_time" content="2021-12-21T15:06:29.296Z">
 <meta property="article:author" content="haifun">
 <meta property="article:tag" content="RabbitMQ">
 <meta name="twitter:card" content="summary">
@@ -52,8 +52,33 @@
   
 
   
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?d3c8edb388553a2084296cbfe9a0785a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
 
   
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
 
 
   
@@ -113,6 +138,17 @@
             target="_self"
             >
             标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/roaming/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            漫游
           </a>
         </li>
       
@@ -247,7 +283,7 @@
 </ul>
 <p>对于普通的没有设置优先级和镜像的队列来说， backing_queue 的默认实现是rabbit_variable_queue，其内部通过5 个子队列 Q1、Q2、Delta、Q3、Q4 来体现消息的各个状态。整个队列包括 rabbit_amqqueue_process、backing_queue 的各个子队列。</p>
 <p>队列的结构可以参考下图：</p>
-<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/mq/rabbitmq-queue.png" alt="image"></p>
+<p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/mq/rabbitmq-queue.png" alt="image"></p>
 <p>其中：</p>
 <ul>
 <li>Q1、Q4 只包含 alpha 状态的消息</li>
@@ -346,11 +382,11 @@
 <h2 id="流控原理"><a href="#流控原理" class="headerlink" title="流控原理"></a>流控原理</h2><p>Erlang 进程之间并不共享内存(binary类型的除外)，而是通过消息传递来通信，每个进程都有自己的进程邮箱(mailbox) 。默认情况下 Erlang 并没有对进程邮箱的大小进行限制，所以当有大量消息持续发往某个进程时，会导致该进程邮箱过大，最终内存溢出并崩溃。RabbitMQ 中，如果生产者持续高速发送，而消费者消费速度较低时，如果没有流控，很快就使内部进程邮箱的大小达到内存阀值。</p>
 <p>RabbitMQ 使用了一种基于信用证算法 (credit-based algorithm) 的流控机制来限制发送消息的速率以解决前面所提出的问题，它通过监控各个进程的进程邮箱，当某个进程负载过高而来不及处理消息时，这个进程的进程邮箱就会开始堆积消息。当堆积到一定量时，就会阻塞而不接收上游的新消息。从而慢慢地，上游进程的进程邮箱也会开始堆积消息。当堆积到一定量时也会阻塞而停止接收上游的消息，最后就会使负责网络数据包接收的进程阻塞而暂停接收新的数据。</p>
 <p>以下图为例，进程A 接收消息并转发至进程B ，进程B 接收消息并转发至进程C 。每个进程中都有一对关于收发消息的credit 值。以进程B 为例， {{credit_from, C}, value} 表示能发送多少条消息给C ，每发送一条消息该值减 1，当为 0 时，进程B 不再往进程C 发送消息也不再接收进程 A 的消息。 {{credit_to, A}, value} 表示再接收多少条消息就向进程A 发送增加 credit 值的通知，进程A 接收到该通知后就增加 {{credit_from, B}, value} 所对应的值，这样进程A 就能持续发送消息。当上游发送速率高于下游接收速率时，credit<br>值就会被逐渐耗光，这时进程就会被阻塞，阻塞的情况会一直传递到最上游。当上游进程收到来自下游进程的增加 credit 值的通知时，若此时上游进程处于阻塞状态则解除阻塞，开始接收更上游进程的消息，一个个传导最终能够解除最上游的阻塞状态。由此可知，基于信用证的流控机制最终将消息发送进程的发送速率限制在消息处理进程的处理能力范围之内。</p>
-<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/mq/rabbitmq-flowcontrol1.png" alt="image"></p>
+<p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/mq/rabbitmq-flowcontrol1.png" alt="image"></p>
 <p>一个连接 (Connection) 触发流控时会处于 “flow” 的状态，也就意味着这个 Connection 的状态每秒在 blocked 和unblocked 之间来回切换数次，这样可以将消息发送的速率控制在服务器能够支撑的范围之内。可以通过 <code>rabbitmqctl_list_connections</code> 命令或者 Web 管理页面来查看Connection 状态。</p>
 <p>处于 flow 状态的 Connection 和处于 running 状态的 Connection 并没有什么不同，这个状态只是告诉系统管理员相应的发送速率受限了，而对于客户端而言，它看到的只是服务器的带宽要比正常情况下要小一些。</p>
 <p>流控机制不只是作用于Connection ，同样作用于信道(Channel)和队列。从Connection 到Channel，再到队列，最后是消息持久化存储形成一个完整的流控链，对于处于整个流控链中的任意进程，只要该进程阻塞，上游的进程必定全部被阻塞，也就是说，如果某个进程达到性能瓶颈，必然会导致上游所有的进程被阻塞。所以我们可以利用流控机制的这个特点找出瓶颈之所在。处理消息的几个关键进程及其对应的顺序关系如下图所示：</p>
-<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/mq/rabbitmq-flowcontrol2.png" alt="image"></p>
+<p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/mq/rabbitmq-flowcontrol2.png" alt="image"></p>
 <p>其中的各个进程如下所述：</p>
 <ul>
 <li>rabbit_reader: Connection 的处理进程，负责接收、解析 AMQP 协议数据包等；</li>
@@ -363,7 +399,7 @@
 <p>当某个 Connection 处于 flow 状态，同时这个 Connection 中也有若干个 Channel 处于 flow<br>状态，并且也有若干个对应的队列处于 flow 状态时，这就意味着在消息持久化时出现了性能瓶颈。在将队列中的消息存入磁盘的过程中引起服务器 I/O 负载过高而引起的此种情形。尤其是在发送大量较大的持久化消息时，此种情形最易显现。</p>
 <h1 id="镜像队列"><a href="#镜像队列" class="headerlink" title="镜像队列"></a>镜像队列</h1><p>如果 RabbitMQ 集群是由多个 Broker 节点组成的，那么从服务的整体可用性上来讲，该集群对于单点故障是有弹性的，但是同时也需要注：尽管交换器和绑定关系能够在单点故障问题上幸免于难，但是队列和其上的存储的消息却不行，这是因为队列进程及其内容仅仅维持在单个节点之上，所以一个节点的失效表现为其对应的队列不可用。</p>
 <p>引入镜像队列 (Mirror Queue) 的机制，可以将队列镜像到集群中的其他 Broker 节点之上，如果集群中的一个节点失效了，队列能自动地切换到镜像中的另一个节点上以保证服务的可用性。在通常的用法中，针对每一个配置镜像的队列(以下简称镜像队列)都包含一个主节点(master) 和若干个从节点(slave)，相应的结构可以参考下图：</p>
-<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/mq/rabbitmq-mirror-queue.png" alt="image"></p>
+<p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/mq/rabbitmq-mirror-queue.png" alt="image"></p>
 <p>slave 会准确地按照 master 执行命令的顺序进行动作，故slave 与master 上维护的状态应该是相同的。如果master 由于某种原因失效，那么”资历最老”的slave 会被提升为新的 master。根据slave 加入的时间排序，时间最长的slave即为”资历最老”。发送到镜像队列的所有消息会<br>被同时发往master 和所有的slave 上，如果此时master 挂掉了，消息还会在slave 上，这样slave 提升为master 的时候消息也不会丢失。除发送消息(Basic.Publish) 外的所有动作都只会向master 发送，然后再由master 将命令执行的结果广播给各个slave。</p>
 <p>如果消费者与slave 建立连接并进行订阅消费，其实质上都是从master 上获取消息。比如消费者与slave 建立了TCP 连接之后执行一个 Basic.Get 的操作，那么首先是由slave 将 Basic.Get 请求发往master ，再由master 准备好数据返回给slave ，最后由slave 投递给消费者。</p>
 <blockquote>
@@ -372,7 +408,7 @@
 <p>注意要点：</p>
 <p>RabbitMQ 的镜像队列同时支持 publisher confirm 和事务两种机制。在事务机制中，只有当前事务在全部镜像中执行之后，客户端才会收到Tx.Commit-Ok 的消息。同样的，在publisher confirm 机制中生产者进行当前消息确认的前提是该消息被全部进行所接收了。</p>
 <p>不同于普通的非镜像队列，镜像队列的 backing_queue 比较特殊，其实现并非是 <code>rabbit_variable_queue</code>，它内部包裹了普通 backing_queue 进行本地消息消息持久化处理，在此基础上增加了将消息和ack 复制到所有镜像的功能。镜像队列的结构可以参考下图，master 的backing_queue 采用的是 <code>rabbit_mirror_queue_master</code>，而slave 的backing queue 实现是 <code>rabbit_mirror_queue_slave</code>。</p>
-<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/mq/rabbitmq-mirror-queue2.png" alt="image"></p>
+<p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/mq/rabbitmq-mirror-queue2.png" alt="image"></p>
 <p>所有对 <code>rabbit_mirror_queue_master</code> 的操作都会通过组播 GM (Guaranteed Multicast) 的方式同步到各个slave 中。GM 负责消息的广播，<code>rabbit_mirror_queue_slave</code> 负责回调处理，而 master 上的回调处理是由 coordinator 负责完成的，如前所述，除了Basic.Publish，所有的操作都是通过master 来完成的，master 消息进行处理的同时将消息的处理通过 GM 广播给所有的 slave，slave GM 收到消息后，通过回调交由<br><code>rabbit_mirror queue_slave</code> 进行实际的处理。</p>
 <p>GM 模块实现的是一种可靠的组播通信协议，该协议能够保证组播消息的原子性，即保证组中活着的节点要么都收到消息要么都收不到，它的实现大致为：</p>
 <p>将所有的节点形成一个循环链表，每个节点都会监控位于自己左右两边的节点，当有节点新增时，相邻的节点保证当前广播的消息会复制到新的节点上，当有节点失效时，相邻的节点会接管以保证本次广播的消息会复制到所有的节点。在master 和slave 上的这些 GM 形成一个组(gm_group)，这个组的信息<br>会记录在Mnesia 中。不同的镜像队列形成不同的组。操作命令从master 对应的GM 发出后，顺着链表传送到所有的节点。由于所有节点组成了一个循环链表，master 对应的GM 最终会收<br>到自己发送的操作命令，这个时候master 就知道该操作命令都同步到了所有的slave 上。</p>
@@ -476,6 +512,17 @@
               target="_self"
               >
               标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/roaming/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              漫游
             </a>
           </li>
         
@@ -594,20 +641,5 @@
   }
 </script>
 
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-            processEscapes: true
-        }
-    });
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax();
-        for (var i = 0; i < all.length; ++i)
-            all[i].SourceElement().parentNode.className += ' has-jax';
-    });
-</script>
-<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 </html>

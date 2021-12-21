@@ -24,8 +24,8 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/mq/rabbitmq-network-partition1.png">
 <meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/mq/rabbitmq-network-partition2.png">
-<meta property="article:published_time" content="2020-12-26T09:00:00.000Z">
-<meta property="article:modified_time" content="2021-12-21T09:29:48.115Z">
+<meta property="article:published_time" content="2020-12-26T17:00:00.000Z">
+<meta property="article:modified_time" content="2021-12-21T15:06:29.296Z">
 <meta property="article:author" content="haifun">
 <meta property="article:tag" content="RabbitMQ">
 <meta name="twitter:card" content="summary">
@@ -49,8 +49,33 @@
   
 
   
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?d3c8edb388553a2084296cbfe9a0785a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
 
   
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
 
 
   
@@ -110,6 +135,17 @@
             target="_self"
             >
             标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/roaming/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            漫游
           </a>
         </li>
       
@@ -206,14 +242,14 @@
 <p>RabbitMQ 网络分区带来的影响大多是负面的，极端情况下不仅会造成数据丢失，还会影响服务的可用性。那为什么RabbitMQ 还要引入网络分区的设计理念呢？其中一个原因就与它本身的数据一致性复制原理有关，RabbitMQ 采用的镜像队列是一种环形的逻辑结构 ，如下图所示：</p>
 <span id="more"></span>
 
-<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/mq/rabbitmq-network-partition1.png" alt="image"></p>
+<p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/mq/rabbitmq-network-partition1.png" alt="image"></p>
 <p>图中为某队列配置了4 个镜像，其中A 节点作为 master 节点，其余B、C、D 节点为 slave 节点，4 个镜像节点组成一个环形结构。</p>
 <p>假如需要确认(ack)一条消息，先会在A 节点即master 节点上执行确认命令，之后转向B 节点，然后是C 节点，最后由D 将执行操作返回给A 节点，这样才真正确认了一条消息，之后才可以继续相应的处理。</p>
 <p>这种复制原理与ZooKeeper 的Quorum 原理不同，它可以保证更强的一致性。在这种一致性数据模型下，如果出现网络波动或者网络故障等异常情况，那么整个数据链的性能就会大大降低。如果C 节点网络异常，那么整个 A -&gt; B -&gt; C -&gt; D -&gt; A 数据链就会被阻塞，继而相关服务也会被阻塞，所以这里就需要引入网络分区来将异常的节点剥离出整个分区，以确保 RabbitMQ 服务的可用性及可靠性。等待网络恢复之后，可以进行相应的处理来将此前的异常节点加入集群中。</p>
 <h2 id="网络分区判定"><a href="#网络分区判定" class="headerlink" title="网络分区判定"></a>网络分区判定</h2><p>RabbitMQ 集群节点内部通信端口默认为25672 ，两两节点之间都会有信息交互，如果某节点出现网络故障，或者是端口不通，会致使与此节点的交互出现中断，这里就会有个超时判定机制，继而判定网络分区。</p>
 <p>对于网络分区的判定是与 net_ticktime 参数息息相关的，此参数默认值为60 秒。注意与heartbeat_time 的区别heartbeat_time 是指客户端与 RabbitMQ 服务之间通信的心跳时间，针对 5672 端口而言。如果发生超时则会有 net_tick_timeout 的信息报出RabbitMQ 集群内部的每个节点之间会每隔四分之一的 net_ticktime 次应答(tick)。如果有任何数据被写入节点中，则此节点被认为已经被应答(ticked)了。如果连续4 次，某节点都没有被 ticked，则可以判定此节点已处于 “down” 状态，其余节点可将此节点剥离出当前分区。</p>
 <p>将连续4 次的 tick 时间记为 T，那么T 的取值范围为 <code>0.75 * net_ticktime &lt; T &lt; 1.25 * net_ticktime</code>。下图可以形象地描绘出这个取值范围的缘由：</p>
-<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/mq/rabbitmq-network-partition2.png" alt="image"></p>
+<p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/mq/rabbitmq-network-partition2.png" alt="image"></p>
 <p>图中每个节点代表一次 tick 判定的时间戳，在2 个临界值 0.75  * net_ticktime 和<br>1.25 * net_ticktime 之间可以连续执行4 次的 tick 判定。默认情况下，在 45s &lt; T &lt; 75s 之间会判定出net_tick_timeout。</p>
 <p>RabbtMQ 不仅会将队列、交换器及绑定等信息存储在 Mnesia 数据库中，而且许多围绕网络分区的一些细节也都和这个 Mneia 的行为相关。如果一个节点不能在T 时间连上另一个节点，那么 Mnesia 通常认为这个节点己经挂了，就算之后两个节点又重新恢复了内部通信，但是这两个节点都会认为对方已经挂了，Mnesia 此时认定了发生网络分区的情况。这些会被记录到RabbitMQ 的服务日志之中如下：</p>
 <figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Mnesia('rabbit@node1'): ** ERROR ** mnesia event got</span><br><span class="line">{inconsistent_database, running_partitioned_network, 'rabbit@node2'}</span><br></pre></td></tr></tbody></table></figure>
@@ -698,6 +734,17 @@
           <li class="item-toolbox">
             <a
               class="CIRCLE"
+              href="/roaming/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              漫游
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
               href="/about/"
               rel="noopener noreferrer"
               target="_self"
@@ -810,20 +857,5 @@
   }
 </script>
 
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-            processEscapes: true
-        }
-    });
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax();
-        for (var i = 0; i < all.length; ++i)
-            all[i].SourceElement().parentNode.className += ' has-jax';
-    });
-</script>
-<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 </html>

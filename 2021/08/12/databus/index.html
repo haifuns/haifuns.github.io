@@ -31,8 +31,8 @@
 <meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/databus/databus-as-a-service.png">
 <meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/databus/databus-relays.png">
 <meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/databus/databus-clients.png">
-<meta property="article:published_time" content="2021-08-12T13:50:00.000Z">
-<meta property="article:modified_time" content="2021-12-21T09:29:48.107Z">
+<meta property="article:published_time" content="2021-08-12T21:50:00.000Z">
+<meta property="article:modified_time" content="2021-12-21T15:06:29.292Z">
 <meta property="article:author" content="haifun">
 <meta property="article:tag" content="Databus">
 <meta name="twitter:card" content="summary">
@@ -56,8 +56,33 @@
   
 
   
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?d3c8edb388553a2084296cbfe9a0785a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
 
   
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
 
 
   
@@ -117,6 +142,17 @@
             target="_self"
             >
             标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/roaming/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            漫游
           </a>
         </li>
       
@@ -209,17 +245,17 @@
   <div class="article-content">
     
       <h1 id="问题引入"><a href="#问题引入" class="headerlink" title="问题引入"></a>问题引入</h1><p>在互联网架构中，数据系统通常可以分为真实数据系统以及衍生数据系统。前者作为基础数据库存储用户产生的写操作，后者通常复制自主数据并对数据进行转换或业务处理，提供读取和其他复杂查询操作。</p>
-<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/databus/dataflow.png" alt="dataflow"></p>
+<p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/databus/dataflow.png" alt="dataflow"></p>
 <h1 id="数据同步方案"><a href="#数据同步方案" class="headerlink" title="数据同步方案"></a>数据同步方案</h1><p>以缓存数据为例，缓存数据来自主数据，当主数据发生变化时，缓存中的数据也需要随之更新。要实现数据同步有两种常用解决方案：应用驱动双写和数据库日志挖掘。</p>
 <h2 id="应用双写"><a href="#应用双写" class="headerlink" title="应用双写"></a>应用双写</h2><p>应用双写指在写数据到DB时，同时写入缓存。但是应用双写存在数据不一致的情况，如下图所示：</p>
-<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/databus/databus-redis.png" alt="image"></p>
+<p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/databus/databus-redis.png" alt="image"></p>
 <p>另外，在变更DB后更新缓存时，如果出现操作失败的情况，也有可能造成数据不一致。在需要保证严格数据一致时，使用应用双写策略并不容易实现。</p>
 <h2 id="日志挖掘"><a href="#日志挖掘" class="headerlink" title="日志挖掘"></a>日志挖掘</h2><p>日志挖掘通过提取数据库变更日志实现数据同步，这从根本上解决了数据一致性问题。如下图所示：</p>
-<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/databus/databus-flow.png" alt="image"></p>
+<p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/databus/databus-flow.png" alt="image"></p>
 <span id="more"></span>
 
 <h1 id="Databus-概述"><a href="#Databus-概述" class="headerlink" title="Databus 概述"></a>Databus 概述</h1><p>Databus是LinkedIn于2013年开源的低延迟数据变更抓取系统。Databus支持端到端毫秒级别的延时，每台服务器每秒可处理数千更改事件，同时支持无限回溯并且有丰富的订阅功能。</p>
-<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/databus/databus-usecases.jpg" alt="image"></p>
+<p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/databus/databus-usecases.jpg" alt="image"></p>
 <p>如上图所示，搜索引擎和只读副本等系统充当事件消费者，当主OLTP数据库发生写入时，连接到此数据库的中继服务会将更改事件同步给事件消费者，从而实现索引或副本与源数据保持一致。</p>
 <h1 id="Databus-功能特性"><a href="#Databus-功能特性" class="headerlink" title="Databus 功能特性"></a>Databus 功能特性</h1><ul>
 <li>来源独立：Databus支持Oracle和Mysql两种数据源变更抓取，并且数据变更的抓取独立于数据源，不会对数据源产生影响。</li>
@@ -244,9 +280,9 @@
 <blockquote>
 <p>在使用Databus时，binlog_format需要设置为ROW模式。</p>
 </blockquote>
-<h3 id="主从同步"><a href="#主从同步" class="headerlink" title="主从同步"></a>主从同步</h3><p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/databus/mysql-replication.png" alt="image"></p>
-<h2 id="Databus日志挖掘方式"><a href="#Databus日志挖掘方式" class="headerlink" title="Databus日志挖掘方式"></a>Databus日志挖掘方式</h2><p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/databus/databus-replication.png" alt="image"></p>
-<h1 id="Databus-整体架构"><a href="#Databus-整体架构" class="headerlink" title="Databus 整体架构"></a>Databus 整体架构</h1><p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/databus/databus-as-a-service.png" alt="image"></p>
+<h3 id="主从同步"><a href="#主从同步" class="headerlink" title="主从同步"></a>主从同步</h3><p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/databus/mysql-replication.png" alt="image"></p>
+<h2 id="Databus日志挖掘方式"><a href="#Databus日志挖掘方式" class="headerlink" title="Databus日志挖掘方式"></a>Databus日志挖掘方式</h2><p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/databus/databus-replication.png" alt="image"></p>
+<h1 id="Databus-整体架构"><a href="#Databus-整体架构" class="headerlink" title="Databus 整体架构"></a>Databus 整体架构</h1><p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/databus/databus-as-a-service.png" alt="image"></p>
 <p>Databus系统的构成如上图所示，其中包括中继（Relay）、Bootstrap服务和客户端库。Bootstrap服务中包括Bootstrap Producer和Bootstrap Server。消费者从Relay中获取最新事件，如果一个消费者的数据更新大幅落后，就需要到Bootstrap Producer里获取，提交给它的将会是自消费者上次处理变更之后的所有数据变更快照。</p>
 <p>Databus Relay的主要功能包括：</p>
 <ol>
@@ -275,7 +311,7 @@
 <li>从源数据库中的读取变化的行并序列化为Databus中的更改事件保存在内存缓冲区中。</li>
 <li>监听Databus客户端的请求，并将Databus中的更改事件传输到客户端。</li>
 </ol>
-<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/databus/databus-relays.png" alt="image"></p>
+<p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/databus/databus-relays.png" alt="image"></p>
 <h2 id="Event-Producer"><a href="#Event-Producer" class="headerlink" title="Event Producer"></a>Event Producer</h2><p>Event Producer会轮询数据库并读取源数据中变更的行然后转换为<a target="_blank" rel="noopener" href="https://avro.apache.org/docs/current/">Apache Avro</a>记录。</p>
 <p>从JDBC RowSets到AvroRecords的转换是根据存储在Schema Registry中的Avro Schemas完成的，然后AvroRecords被序列化成Databus事件。</p>
 <h2 id="Event-Buffers"><a href="#Event-Buffers" class="headerlink" title="Event Buffers"></a>Event Buffers</h2><p>Databus Relays中有一个或多个Circular Buffer 循环事件缓冲区（内存或mmap内存映射文件），用于按系统更改号（SCN）递增的顺序存储数据总线事件。每个缓冲区对应一个SCN稀疏索引，以及一个MaxSCN读写器，MaxSCN读写器会定时保存Relays中的SCN最大值。Relays通过netty channel接收客户端请求，并由Request Processor处理。</p>
@@ -293,7 +329,7 @@
 <li>自动负载均衡和过渡节流</li>
 </ul>
 <h1 id="Databus-Clients"><a href="#Databus-Clients" class="headerlink" title="Databus Clients"></a>Databus Clients</h1><p>Databus Clients负责拉取Relays中的事件，处理后发送给感兴趣的消费者。</p>
-<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/databus/databus-clients.png" alt="image"></p>
+<p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/databus/databus-clients.png" alt="image"></p>
 <ul>
 <li>Relay Puller：负责从Relay拉取数据，具体工作有挑选Relay，请求Source，请求Register，校验Schema，设置Dispatcher等。</li>
 <li>Bootstrap Puller：负责从Bootstrap servers拉取数据，功能类似Relay Puller。</li>
@@ -444,6 +480,17 @@
           <li class="item-toolbox">
             <a
               class="CIRCLE"
+              href="/roaming/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              漫游
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
               href="/about/"
               rel="noopener noreferrer"
               target="_self"
@@ -556,20 +603,5 @@
   }
 </script>
 
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-            processEscapes: true
-        }
-    });
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax();
-        for (var i = 0; i < all.length; ++i)
-            all[i].SourceElement().parentNode.className += ' has-jax';
-    });
-</script>
-<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 </html>

@@ -18,14 +18,14 @@
   <meta name="description" content="为了满足故障恢复和负载均衡等需求，Redis提供了复制功能，实现了相同数据的多个副本。复制功能是高可用Redis的基础，哨兵和集群也都是在复制的基础上实现高可用。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【Redis】主从复制">
-<meta property="og:url" content="https://haifuns.com/2021/01/22/redis-04/index.html">
+<meta property="og:url" content="https://haifuns.com/2021/01/23/redis-04/index.html">
 <meta property="og:site_name" content="haifun的博客">
 <meta property="og:description" content="为了满足故障恢复和负载均衡等需求，Redis提供了复制功能，实现了相同数据的多个副本。复制功能是高可用Redis的基础，哨兵和集群也都是在复制的基础上实现高可用。">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/redis/redis-psync.png">
 <meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/redis/redis-psync2.png">
-<meta property="article:published_time" content="2021-01-22T16:00:05.000Z">
-<meta property="article:modified_time" content="2021-12-21T09:29:48.117Z">
+<meta property="article:published_time" content="2021-01-23T00:00:05.000Z">
+<meta property="article:modified_time" content="2021-12-21T15:06:29.300Z">
 <meta property="article:author" content="haifun">
 <meta property="article:tag" content="Redis">
 <meta name="twitter:card" content="summary">
@@ -49,8 +49,33 @@
   
 
   
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?d3c8edb388553a2084296cbfe9a0785a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
 
   
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
 
 
   
@@ -116,6 +141,17 @@
         <li class="item-toolbox">
           <a
             class="CIRCLE"
+            href="/roaming/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            漫游
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
             href="/about/"
             rel="noopener noreferrer"
             target="_self"
@@ -168,7 +204,7 @@
     <div class="article-meta">
       <span>
         <i class="icon-calendar"></i>
-        <span>2021.01.22</span>
+        <span>2021.01.23</span>
       </span>
 
       
@@ -284,7 +320,7 @@
 </ol>
 <h2 id="全量复制"><a href="#全量复制" class="headerlink" title="全量复制"></a>全量复制</h2><p>全量复制是主从第一次建立复制时必须要经历的阶段。触发全量复制的命令时sync (Redis&lt;2.8)和psync(Redis&gt;=2.8)。</p>
 <p>psync全量复制流程与2.8前的sync全量复制机制基本一致，psync全量复制完整运行流程如图所示：</p>
-<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/redis/redis-psync.png" alt="全量复制流程"></p>
+<p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/redis/redis-psync.png" alt="全量复制流程"></p>
 <ol>
 <li>发送psync命令进行数据同步，由于是第一次进行复制，从节点没有复制偏移量和主节点运行ID，发送psync ? -1</li>
 <li>主节点回复+FULLRESYNC {runId} {offset}响应</li>
@@ -298,7 +334,7 @@
 </ol>
 <h2 id="部分复制"><a href="#部分复制" class="headerlink" title="部分复制"></a>部分复制</h2><p>部分复制使用psync {runId} {offset}命令实现。当从节点正在复制主节点时出现网络闪断或者命令丢失等异常情况时，从节点会向主节点要求补发丢失的命令数据，如果主节点的复制积压缓冲区内存在这部分数据则直接发送给从节点，由于补发的这部分数据一般远远小于全量数据从而做到节省开销。</p>
 <p>部分复制的流程如下图所示：</p>
-<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/redis/redis-psync2.png" alt="部分复制流程"></p>
+<p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/redis/redis-psync2.png" alt="部分复制流程"></p>
 <ol>
 <li>当主从节点之间出现网络中断时，如果超过repl-timeout时间，主节点会认为从节点故障并中断复制连接</li>
 <li>主从连接中断期间主节点依然响应命令同时写入复制积压缓冲区</li>
@@ -396,6 +432,17 @@
               target="_self"
               >
               标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/roaming/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              漫游
             </a>
           </li>
         
@@ -514,20 +561,5 @@
   }
 </script>
 
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-            processEscapes: true
-        }
-    });
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax();
-        for (var i = 0; i < all.length; ++i)
-            all[i].SourceElement().parentNode.className += ' has-jax';
-    });
-</script>
-<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 </html>

@@ -25,8 +25,8 @@
 <meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/ReentrantLock-uml.png">
 <meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/ReentrantReadWriteLock-uml.png">
 <meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/StampedLock.png">
-<meta property="article:published_time" content="2020-12-26T09:54:00.000Z">
-<meta property="article:modified_time" content="2021-12-21T09:29:48.109Z">
+<meta property="article:published_time" content="2020-12-26T17:54:00.000Z">
+<meta property="article:modified_time" content="2021-12-21T15:06:29.296Z">
 <meta property="article:author" content="haifun">
 <meta property="article:tag" content="并发">
 <meta name="twitter:card" content="summary">
@@ -50,8 +50,33 @@
   
 
   
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?d3c8edb388553a2084296cbfe9a0785a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
 
   
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
 
 
   
@@ -111,6 +136,17 @@
             target="_self"
             >
             标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/roaming/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            漫游
           </a>
         </li>
       
@@ -204,7 +240,7 @@
     
       <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><h2 id="ReentrantLock"><a href="#ReentrantLock" class="headerlink" title="ReentrantLock"></a>ReentrantLock</h2><p>ReentrantLock 是可重入的独占锁，同时只能有一个线程可以获取该锁，其他获取该锁的线程会被阻塞而被放入该锁的AQS 阻塞队列里。</p>
 <h3 id="类图"><a href="#类图" class="headerlink" title="类图"></a>类图</h3><p>ReentrantLock 类图如下：</p>
-<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/ReentrantLock-uml.png" alt="image"></p>
+<p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/ReentrantLock-uml.png" alt="image"></p>
 <span id="more"></span>
 
 <p>从类图可以看到， ReentrantLock 最终还是使用AQS来实现的，并且根据参数来决定其内部是一个公平还是非公平锁，默认是非公平锁。</p>
@@ -242,7 +278,7 @@
 
 <h2 id="ReentrantReadWriteLock"><a href="#ReentrantReadWriteLock" class="headerlink" title="ReentrantReadWriteLock"></a>ReentrantReadWriteLock</h2><p>ReentrantReadWriteLock 采用读写分离的策略，允许多个线程可以同时获取读锁。</p>
 <h3 id="类图-1"><a href="#类图-1" class="headerlink" title="类图"></a>类图</h3><p>ReentrantReadWriteLock 类图如下：</p>
-<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/ReentrantReadWriteLock-uml.png" alt="image"></p>
+<p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/ReentrantReadWriteLock-uml.png" alt="image"></p>
 <p>读写锁的内部维护了一个ReadLock 和一个WriteLock ，它们依赖Sync 实现具体功能。而Sync 继承自AQS ，并且也提供了公平和非公平的实现。</p>
 <ul>
 <li>state 高16位表示读状态，也就是获取到读锁的次数；低16位表示获取到写锁的线程的可重入次数。</li>
@@ -295,7 +331,7 @@
 
 <h2 id="StampedLock"><a href="#StampedLock" class="headerlink" title="StampedLock"></a>StampedLock</h2><p>StampedLock 是并发包里面JDK8 版本新增的一个锁，该锁提供了三种模式的读写控制，当调用获取锁的系列函数时，会返回一个long 型的变量，称为戳记(stamp),这个戳记代表了锁的状态。其中try 系列获取锁的函数，当获取锁失败后会返回为0 的stamp 值。当调用释放锁和转换锁的方法时需要传入获取锁时返回的stamp 值。</p>
 <p>StampedLock 内部组成如图所示：</p>
-<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/StampedLock.png" alt="image"></p>
+<p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/StampedLock.png" alt="image"></p>
 <p>StampedLock 提供的三种读写模式的锁分别如下：</p>
 <ul>
 <li>写锁 writeLock: 是一个排它锁或者独占锁</li>
@@ -376,6 +412,17 @@
               target="_self"
               >
               标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/roaming/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              漫游
             </a>
           </li>
         
@@ -494,20 +541,5 @@
   }
 </script>
 
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-            processEscapes: true
-        }
-    });
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax();
-        for (var i = 0; i < all.length; ++i)
-            all[i].SourceElement().parentNode.className += ' has-jax';
-    });
-</script>
-<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 </html>

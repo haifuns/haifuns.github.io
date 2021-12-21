@@ -25,8 +25,8 @@
 <meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/redis/redis-cluster-start.png">
 <meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/redis/redis-cluster-meet.png">
 <meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/redis/redis-gossip.png">
-<meta property="article:published_time" content="2021-02-01T14:50:00.000Z">
-<meta property="article:modified_time" content="2021-12-21T09:29:48.117Z">
+<meta property="article:published_time" content="2021-02-01T22:50:00.000Z">
+<meta property="article:modified_time" content="2021-12-21T15:06:29.300Z">
 <meta property="article:author" content="haifun">
 <meta property="article:tag" content="Redis">
 <meta name="twitter:card" content="summary">
@@ -50,8 +50,33 @@
   
 
   
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?d3c8edb388553a2084296cbfe9a0785a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
 
   
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
 
 
   
@@ -111,6 +136,17 @@
             target="_self"
             >
             标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/roaming/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            漫游
           </a>
         </li>
       
@@ -276,10 +312,10 @@
 <figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">redis-server conf/redis-6379.conf</span><br><span class="line">redis-server conf/redis-6380.conf</span><br><span class="line">redis-server conf/redis-6381.conf</span><br><span class="line">redis-server conf/redis-6382.conf</span><br><span class="line">redis-server conf/redis-6383.conf</span><br><span class="line">redis-server conf/redis-6384.conf</span><br></pre></td></tr></tbody></table></figure>
 
 <p>Redis节点第一次启动时如果没有配置文件则会自动创建，文件名由cluster-config-file参数项控制，建议使用node-{port}.conf格式定义，使用端口号区分不同节点，防止同一机器侠多个节点彼此覆盖，造成集群信息异常。如果启动时存在集群配置文件，节点会使用配置文件内容初始化集群信息。启动过程如下图所示：</p>
-<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/redis/redis-cluster-start.png" alt="Redis集群模式启动过程"></p>
+<p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/redis/redis-cluster-start.png" alt="Redis集群模式启动过程"></p>
 <p>集群文件中记录着集群的状态信息，其中最重要的是节点Id，是一个40位16进制的字符串，用于唯一标识集群内的节点，节点Id重启不会变化。</p>
 <h2 id="节点握手"><a href="#节点握手" class="headerlink" title="节点握手"></a>节点握手</h2><p>节点握手是指一批运行在集群模式下的节点通过Gossip协议彼此通信，达到感知对方的过程。节点握手是集群彼此通信的第一步，由客户端发起命令：<code>cluster meet {ip} {port}</code>，cluster meet是一个异步命令，执行后立刻返回。节点内部发起与目标节点进行握手通信，如下图所示：</p>
-<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/redis/redis-cluster-meet.png" alt="cluster meet命令进行节点握手的过程"></p>
+<p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/redis/redis-cluster-meet.png" alt="cluster meet命令进行节点握手的过程"></p>
 <ol>
 <li>节点6379本地创建6380节点信息对象，并发送meet消息</li>
 <li>节点6380接收到meet消息后，保存6379节点信息并回复pong消息</li>
@@ -305,7 +341,7 @@
 </ol>
 <h2 id="Gossip消息"><a href="#Gossip消息" class="headerlink" title="Gossip消息"></a>Gossip消息</h2><p>Gossip协议的主要职责是信息交换。消息交换的载体是节点彼此发送的Gossip消息。</p>
 <p>常用的Gossip消息可分为：ping消息、pong消息、meet消息、fail消息等。它们之间的通信模式如下图所示：</p>
-<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/redis/redis-gossip.png" alt="Gossip 通信模式"></p>
+<p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/redis/redis-gossip.png" alt="Gossip 通信模式"></p>
 <ul>
 <li>meet消息：用于通知新节点加入。</li>
 <li>ping消息：用于检测节点是否在线和交换彼此状态信息，ping消息发送封装了自身节点和其他节点的状态信息。ping消息是集群内交换最频繁的消息。</li>
@@ -479,6 +515,17 @@
           <li class="item-toolbox">
             <a
               class="CIRCLE"
+              href="/roaming/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              漫游
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
               href="/about/"
               rel="noopener noreferrer"
               target="_self"
@@ -591,20 +638,5 @@
   }
 </script>
 
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-            processEscapes: true
-        }
-    });
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax();
-        for (var i = 0; i < all.length; ++i)
-            all[i].SourceElement().parentNode.className += ' has-jax';
-    });
-</script>
-<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 </html>

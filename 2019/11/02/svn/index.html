@@ -22,8 +22,8 @@
 <meta property="og:site_name" content="haifun的博客">
 <meta property="og:description" content="现象svn因为版本冲突等问题导致的报错，无法cleanup、update、commit，报错”Previous operation has not finished; run ‘cleanup’ if it was interrupted” 解决步骤1.下载sqlite3.exehttps:&#x2F;&#x2F;www.sqlite.org&#x2F;2019&#x2F;sqlite-tools-win32-x86-3300100.z">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2019-11-02T13:21:00.000Z">
-<meta property="article:modified_time" content="2021-02-25T12:22:11.636Z">
+<meta property="article:published_time" content="2019-11-02T21:21:00.000Z">
+<meta property="article:modified_time" content="2021-12-21T15:06:29.300Z">
 <meta property="article:author" content="haifun">
 <meta property="article:tag" content="SVN">
 <meta name="twitter:card" content="summary">
@@ -46,8 +46,33 @@
   
 
   
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?d3c8edb388553a2084296cbfe9a0785a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
 
   
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
 
 
   
@@ -107,6 +132,17 @@
             target="_self"
             >
             标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/roaming/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            漫游
           </a>
         </li>
       
@@ -203,7 +239,7 @@
 <p>2.将sqlite3.exe复制到项目.svn文件夹中，通wc.db文件同目录</p>
 <p>3.执行命令</p>
 <p>cd 到.svn目录</p>
-<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">D:\SVN\***\.svn&gt;sqlite3.exe wc.db</span><br><span class="line">SQLite version 3.30.1 2019-10-10 20:19:45</span><br><span class="line">Enter ".help" for usage hints.</span><br><span class="line">sqlite&gt; .table</span><br><span class="line">ACTUAL_NODE    NODES          PRISTINE       WC_LOCK</span><br><span class="line">EXTERNALS      NODES_BASE     REPOSITORY     WORK_QUEUE</span><br><span class="line">LOCK           NODES_CURRENT  WCROOT</span><br><span class="line">sqlite&gt; DELETE FROM WORK_QUEUE;</span><br><span class="line">sqlite&gt;</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">D:\SVN\***\.svn&gt;sqlite3.exe wc.db</span><br><span class="line">SQLite version 3.30.1 2019-10-10 20:19:45</span><br><span class="line">Enter ".help" for usage hints.</span><br><span class="line">sqlite&gt; .table</span><br><span class="line">ACTUAL_NODE    NODES          PRISTINE       WC_LOCK</span><br><span class="line">EXTERNALS      NODES_BASE     REPOSITORY     WORK_QUEUE</span><br><span class="line">LOCK           NODES_CURRENT  WCROOT</span><br><span class="line">sqlite&gt; DELETE FROM WORK_QUEUE;</span><br><span class="line">sqlite&gt;</span><br></pre></td></tr></tbody></table></figure>
 <p>4.执行svn的clean up操作</p>
 
     
@@ -277,6 +313,17 @@
               target="_self"
               >
               标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/roaming/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              漫游
             </a>
           </li>
         
@@ -395,20 +442,5 @@
   }
 </script>
 
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-            processEscapes: true
-        }
-    });
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax();
-        for (var i = 0; i < all.length; ++i)
-            all[i].SourceElement().parentNode.className += ' has-jax';
-    });
-</script>
-<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 </html>

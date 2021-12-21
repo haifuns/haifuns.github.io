@@ -26,8 +26,8 @@
 <meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/volatile.png">
 <meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/volatile02.png">
 <meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/volatile03.png">
-<meta property="article:published_time" content="2020-12-26T09:41:00.000Z">
-<meta property="article:modified_time" content="2021-12-21T09:29:48.110Z">
+<meta property="article:published_time" content="2020-12-26T17:41:00.000Z">
+<meta property="article:modified_time" content="2021-12-21T15:06:29.296Z">
 <meta property="article:author" content="haifun">
 <meta property="article:tag" content="并发">
 <meta name="twitter:card" content="summary">
@@ -51,8 +51,33 @@
   
 
   
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?d3c8edb388553a2084296cbfe9a0785a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
 
   
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
 
 
   
@@ -112,6 +137,17 @@
             target="_self"
             >
             标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/roaming/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            漫游
           </a>
         </li>
       
@@ -231,7 +267,7 @@
 <h4 id="volatile如何禁止指令重排序？"><a href="#volatile如何禁止指令重排序？" class="headerlink" title="volatile如何禁止指令重排序？"></a>volatile如何禁止指令重排序？</h4><p>下面是一段标准的双锁检测（Double Check Lock，DCL）单例代码，通过观察加入volatile<br>和未加入volatile关键字时所生成的汇编代码的差别（如何获得即时编译的汇编代码？请参考附录关于HSDIS插件的介绍）。</p>
 <figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton</span> </span>{</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">static</span> Singleton instance;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Singleton</span><span class="params">()</span> </span>{</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Singleton <span class="title">getInstance</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="keyword">if</span> (instance == <span class="keyword">null</span>) {</span><br><span class="line">	    <span class="keyword">synchronized</span> (Singleton.class) {</span><br><span class="line">		<span class="keyword">if</span> (instance == <span class="keyword">null</span>) {</span><br><span class="line">		    instance = <span class="keyword">new</span> Singleton();</span><br><span class="line">		}</span><br><span class="line">	    }</span><br><span class="line">	}</span><br><span class="line">	<span class="keyword">return</span> instance;</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
 <p>通过对比发现，关键变化在于有volatile修饰的变量，赋值后多执行了一个<code>“lock addl $0x0,(%rsp)”</code>操作，</p>
-<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/volatile01.png" alt="image"></p>
+<p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/volatile01.png" alt="image"></p>
 <p>这个操作的作用相当于一个内存屏障<br>（Memory Barrier或Memory Fence，指令重排序时不能把后面的指令重排序到内存屏障之前的位置）。</p>
 <p>IA-32架构软件开发者手册中规定，Lock前缀的指令在多核处理器下会引发了两件事情：</p>
 <ol>
@@ -243,16 +279,16 @@
 <p>在多处理器下，为了保证各个处理器的缓存是一致的，就会实现<code>缓存一致性协议</code>，每个处理器通过<code>嗅探</code>在总线上传播的数据来检查自己缓存的值是不是过期了，当处理器发现自己缓存行对应的内存地址被修改，就会将当前处理器的缓存行设置成无效状态，当处理器对这个数据进行修改操作的时候，会重新从系统内存中把数据读到处理器缓存里。</p>
 <p><strong>由此可见，Java编译器会在生成指令系列时在适当的位置插入<code>内存屏障</code>指令来禁止特定类型的处理器重排序。</strong></p>
 <p>JMM针对编译器制定volatile重排序规则表：</p>
-<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/volatile.png" alt="image"></p>
+<p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/volatile.png" alt="image"></p>
 <p>需要注意的是：volatile写是在前面和后面分别插入内存屏障，而volatile读操作是在后面插入两个内存屏障。</p>
 <ul>
 <li>写操作：</li>
 </ul>
-<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/volatile02.png" alt="image"></p>
+<p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/volatile02.png" alt="image"></p>
 <ul>
 <li>读操作：</li>
 </ul>
-<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/volatile03.png" alt="image"></p>
+<p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/volatile03.png" alt="image"></p>
 <h2 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h2><h3 id="解决单例双重检查对象初始化代码执行乱序问题"><a href="#解决单例双重检查对象初始化代码执行乱序问题" class="headerlink" title="解决单例双重检查对象初始化代码执行乱序问题"></a>解决单例双重检查对象初始化代码执行乱序问题</h3><p>创建对象步骤：</p>
 <ul>
 <li>分配内存空间</li>
@@ -351,6 +387,17 @@
               target="_self"
               >
               标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/roaming/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              漫游
             </a>
           </li>
         
@@ -469,20 +516,5 @@
   }
 </script>
 
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-            processEscapes: true
-        }
-    });
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax();
-        for (var i = 0; i < all.length; ++i)
-            all[i].SourceElement().parentNode.className += ' has-jax';
-    });
-</script>
-<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 </html>

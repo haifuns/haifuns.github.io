@@ -23,8 +23,8 @@
 <meta property="og:description" content="什么是线程线程是进程中的一个实体，线程本身是不会独立存在。进程是代码在数据集合上的一次运行活动， 是系统进行资源分配和调度的基本单位，线程则是进程的一个执行路径， 一个进程中至少有一个线程，进程中的多个线程共享进程的资源。 操作系统在分配资源时是把资源分配给进程的， 但是CPU 资源比较特殊， 它是被分配到线程的， 因为真正要占用CPU 运行的是线程，所以也说线程是CPU 分配的基本单位。 线程创">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/threadstatus.png">
-<meta property="article:published_time" content="2020-12-26T09:44:00.000Z">
-<meta property="article:modified_time" content="2021-12-21T09:29:48.110Z">
+<meta property="article:published_time" content="2020-12-26T17:44:00.000Z">
+<meta property="article:modified_time" content="2021-12-21T15:06:29.296Z">
 <meta property="article:author" content="haifun">
 <meta property="article:tag" content="并发">
 <meta name="twitter:card" content="summary">
@@ -48,8 +48,33 @@
   
 
   
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?d3c8edb388553a2084296cbfe9a0785a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
 
   
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
 
 
   
@@ -109,6 +134,17 @@
             target="_self"
             >
             标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/roaming/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            漫游
           </a>
         </li>
       
@@ -293,7 +329,7 @@
 <td>终止状态，线程已执行完毕</td>
 </tr>
 </tbody></table>
-<h3 id="线程状态转换"><a href="#线程状态转换" class="headerlink" title="线程状态转换"></a>线程状态转换</h3><p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/threadstatus.png" alt="image"></p>
+<h3 id="线程状态转换"><a href="#线程状态转换" class="headerlink" title="线程状态转换"></a>线程状态转换</h3><p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/threadstatus.png" alt="image"></p>
 <h2 id="线程上下文切换"><a href="#线程上下文切换" class="headerlink" title="线程上下文切换"></a>线程上下文切换</h2><p>CPU 一般是使用时间片轮转方式让线程轮询占用，所以当前线程CPU 时间片用完后，就会处于就绪状态并让出CPU ，等下次轮到自己的时候再执行，这就是上下文切换。（通过程序计数器记录线程让出CPU 时的执行地址，待再次分配到时间片时线程就从自己私有的计数器指定地址继续执行。另外需要注意的是，如果执行的是native 方法，那么pc 计数器记录的是undefined 地址，只有执行的是Java 代码时pc 计数器记录的才是下一条指令的地址。）</p>
 <p>线程上下文切换时机有：</p>
 <ul>
@@ -384,6 +420,17 @@
               target="_self"
               >
               标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/roaming/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              漫游
             </a>
           </li>
         
@@ -502,20 +549,5 @@
   }
 </script>
 
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-            processEscapes: true
-        }
-    });
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax();
-        for (var i = 0; i < all.length; ++i)
-            all[i].SourceElement().parentNode.className += ' has-jax';
-    });
-</script>
-<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 </html>

@@ -25,8 +25,8 @@
 <meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/kafka/kafka05.png">
 <meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/kafka/kafka06.png">
 <meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/kafka/kafka07.png">
-<meta property="article:published_time" content="2021-05-29T15:10:00.000Z">
-<meta property="article:modified_time" content="2021-12-21T09:29:48.113Z">
+<meta property="article:published_time" content="2021-05-29T23:10:00.000Z">
+<meta property="article:modified_time" content="2021-12-21T15:06:29.296Z">
 <meta property="article:author" content="haifun">
 <meta property="article:tag" content="Kafka">
 <meta name="twitter:card" content="summary">
@@ -50,8 +50,33 @@
   
 
   
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?d3c8edb388553a2084296cbfe9a0785a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
 
   
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
 
 
   
@@ -111,6 +136,17 @@
             target="_self"
             >
             标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/roaming/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            漫游
           </a>
         </li>
       
@@ -214,7 +250,7 @@
 <span id="more"></span>
 
 <h1 id="日志格式"><a href="#日志格式" class="headerlink" title="日志格式"></a>日志格式</h1><h2 id="V1版本"><a href="#V1版本" class="headerlink" title="V1版本"></a>V1版本</h2><p>Kafka消息格式（V1版本，未压缩）如下图所示，图中RECORD为消息体，offset和message size为日志头部（LOG_OVERHEAD）。与消息对应的还有消息集的概念，消息集中包含一条或者多条消息，消息集不仅是存储于磁盘及在网络上传输（Produce &amp; Fetch）的基本形式，而且是Kafka中压缩的基本单元，结构如图中右边部分。</p>
-<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/kafka/kafka05.png" alt="image"></p>
+<p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/kafka/kafka05.png" alt="image"></p>
 <p>消息格式中的各个字段如下：</p>
 <ul>
 <li>crc32（4B）：crc32校验值，校验范围为magic到value之间。</li>
@@ -229,10 +265,10 @@
 <h2 id="消息压缩"><a href="#消息压缩" class="headerlink" title="消息压缩"></a>消息压缩</h2><p>为了得到更好的压缩效果，Kafka实现的压缩方案是将多条消息一起压缩。一般情况下，生产者发送的压缩消息在broker中也是保持压缩状态进行存储的，消费者从broker拉取到的也是压缩消息，在处理消息前才会进行解压。</p>
 <p>Kafka日志压缩方式通过参数<code>compression.type</code>配置，默认值为producer，即保留生产者使用的压缩方式。压缩方式还可以配置为gzip/snappy/lz4三种压缩算法，以及可以配置不压缩（uncompressed）。</p>
 <p>消息压缩时，将整个消息集作为内层消息，内层消息整体作为外层的value。压缩后的消息key为null，value是多条压缩消息。当生产者创建压缩消息时，对内部压缩消息设置的offset从0开始，offset由broker进行转换，保存内层最后一条的绝对位移在外层offset。如下图所示：</p>
-<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/kafka/kafka06.png" alt="image"></p>
+<p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/kafka/kafka06.png" alt="image"></p>
 <h2 id="V2版本"><a href="#V2版本" class="headerlink" title="V2版本"></a>V2版本</h2><p>V2版本中的消息集称为Record Batch，而不是Messgage Set，其内部也包含一条或者多条消息，如下图中部和右边。在消息压缩时，Record Batch Header部分（图左，first offset到records count字段）是不被压缩的，被压缩的是records字段中的所有内容。</p>
 <p>生产者客户端中的ProducerBatch对应RecordBatch，而ProducerRecord对应Record。</p>
-<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/kafka/kafka07.png" alt="image"></p>
+<p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/kafka/kafka07.png" alt="image"></p>
 <p>消息格式中Record部分字段为varints变长字段，Kafka会根据具体值确定需要几个字节保存。部分字段解释如下：</p>
 <ul>
 <li>length：消息总长度。</li>
@@ -368,6 +404,17 @@
           <li class="item-toolbox">
             <a
               class="CIRCLE"
+              href="/roaming/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              漫游
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
               href="/about/"
               rel="noopener noreferrer"
               target="_self"
@@ -480,20 +527,5 @@
   }
 </script>
 
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
-            processEscapes: true
-        }
-    });
-    MathJax.Hub.Queue(function() {
-        var all = MathJax.Hub.getAllJax();
-        for (var i = 0; i < all.length; ++i)
-            all[i].SourceElement().parentNode.className += ' has-jax';
-    });
-</script>
-<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 </html>
