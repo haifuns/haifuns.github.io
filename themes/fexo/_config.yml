@@ -127,7 +127,7 @@ pagination_dir: page
 # =========================================================
 # Stats
 google_analytics:
-baidu_analytics:
+baidu_analytics: d3c8edb388553a2084296cbfe9a0785a
 
 # Comment service
 
