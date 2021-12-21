@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>【字符串匹配】DFA 算法（确定有限自动机） | haifun的博客</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="文本匹配," />
+  
+
+  <meta name="description" content="有限自动机一个有限自动机M是一个5元组$(Q, q_0, A, \Sigma, \delta)$，其中：  $Q$是状态的有限集合 $q_0 \in Q$是初始状态 $A \subseteq Q$是一个特殊的接受状态集合 $\Sigma$是有限输入字母表 $\delta$是一个从$Q \times \Sigma \to Q$的函数，称为M的转移函数  有限自动机开始于状态$q_0$，每次读入输入字">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【字符串匹配】DFA 算法（确定有限自动机）">
+<meta property="og:url" content="https://haifuns.com/2021/12/21/stringmatch-03/index.html">
+<meta property="og:site_name" content="haifun的博客">
+<meta property="og:description" content="有限自动机一个有限自动机M是一个5元组$(Q, q_0, A, \Sigma, \delta)$，其中：  $Q$是状态的有限集合 $q_0 \in Q$是初始状态 $A \subseteq Q$是一个特殊的接受状态集合 $\Sigma$是有限输入字母表 $\delta$是一个从$Q \times \Sigma \to Q$的函数，称为M的转移函数  有限自动机开始于状态$q_0$，每次读入输入字">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/algorithm/stringmatch/dfa-01.png">
+<meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/algorithm/stringmatch/dfa-02.png">
+<meta property="article:published_time" content="2021-12-21T05:40:00.000Z">
+<meta property="article:modified_time" content="2021-12-21T09:29:48.118Z">
+<meta property="article:author" content="haifun">
+<meta property="article:tag" content="文本匹配">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/algorithm/stringmatch/dfa-01.png">
+
+  
+
+  
+    <link rel="icon" href="/images/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbeddx" rel="stylesheet">
+
+
+  
+    
+<link rel="stylesheet" href="/css/personal-style.css">
+
+  
+
+  
+
+  
+
+  
+
+
+  
+    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
+
+<meta name="generator" content="Hexo 5.4.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="haifun的博客" type="application/atom+xml">
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header CENTER">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/categories/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            分类
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/atom.xml"
+            rel="noopener noreferrer"
+            target="_blank"
+            >
+            RSS
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/search/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9C%89%E9%99%90%E8%87%AA%E5%8A%A8%E6%9C%BA"><span class="toc-text">有限自动机</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%B9%E9%85%8D%E8%87%AA%E5%8A%A8%E6%9C%BA"><span class="toc-text">字符串匹配自动机</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="toc-text">代码实现</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post CENTER">
+   <article id="post-stringmatch-03" class="article article-type-post" itemprop="blogPost">
+  <header class="article-header">
+    <h1 class="post-title">【字符串匹配】DFA 算法（确定有限自动机）</h1>
+
+    <div class="article-meta">
+      <span>
+        <i class="icon-calendar"></i>
+        <span>2021.12.21</span>
+      </span>
+
+      
+        <span class="article-author">
+          <i class="icon-user"></i>
+          <span>haifun</span>
+        </span>
+      
+
+      
+  <span class="article-category">
+    <i class="icon-list"></i>
+    <a class="article-category-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a>
+  </span>
+
+
+
+      
+
+      
+      <i class="fa fa-eye"></i> 
+        <span id="busuanzi_container_page_pv">
+           &nbsp热度 <span id="busuanzi_value_page_pv">
+           <i class="fa fa-spinner fa-spin"></i></span>℃
+        </span>
+      
+      
+    </div>
+  </header>
+
+  <div class="article-content">
+    
+      <h1 id="有限自动机"><a href="#有限自动机" class="headerlink" title="有限自动机"></a>有限自动机</h1><p>一个有限自动机M是一个5元组$(Q, q_0, A, \Sigma, \delta)$，其中：</p>
+<ul>
+<li>$Q$是状态的有限集合</li>
+<li>$q_0 \in Q$是初始状态</li>
+<li>$A \subseteq Q$是一个特殊的接受状态集合</li>
+<li>$\Sigma$是有限输入字母表</li>
+<li>$\delta$是一个从$Q \times \Sigma \to Q$的函数，称为M的转移函数</li>
+</ul>
+<p>有限自动机开始于状态$q_0$，每次读入输入字符串的一个字符。如果有限自动机在状态q时读入了字符a，则它将从状态q转移为状态$\delta(q,a)$。每当其当前状态q属于A时，就认为自动机M接受了读入的所有字符串。</p>
+<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/algorithm/stringmatch/dfa-01.png" alt="image"></p>
+<p>如上图，一个拥有状态集Q={0,1}的简单状态自动机，开始状态$q_0$为0，字母表$\Sigma$ = {a, b}，图左用表格表示转移函数$\delta$，图右为等价的状态转换图。状态1是唯一的接受状态。这个自动机接收奇数个a结尾的字符串，例如对于输入abaaa，包含初始状态，这个自动机输入状态序列为{0,1,0,1,0,1}，因此它接收这个输入，如果输入是abbaa，自动机输入状态序列为{0,1,0,0,1,0}，因此它拒绝这个输入。</p>
+<p>有限自动机M引入一个函数$\phi$，称为终态函数，它是从$\Sigma^* \to Q$的函数，满足$\phi(\omega)$是M在扫描字符串$\omega$后终止时的状态。</p>
+<h1 id="字符串匹配自动机"><a href="#字符串匹配自动机" class="headerlink" title="字符串匹配自动机"></a>字符串匹配自动机</h1><p>对于给定模式P[1…m]，其相应的字符串匹配自动机定义如下：</p>
+<ul>
+<li>状态集合Q为{0,1,…,m}，开始状态$q_0$是0状态，并且只有状态m是唯一被接受的状态。</li>
+<li>对任意的状态q和字符a，转移函数$\delta$定义如下：</li>
+</ul>
+<p>$$\delta(q,a) = \sigma(P_qa)$$</p>
+<p>其中$\sigma$为辅助函数，称为P的后缀函数，$\sigma$是一个从$\Sigma^*$到{0,1,…,m}上的映射，满足$\sigma(x)$是x的后缀P的最长前缀的长度，例如，对模式P=ab，有$\sigma(ccaca) = 1，\sigma(ccab) = 2$。</p>
+<p>对于给定模式P[1…m]，转移函数$\delta$计算伪代码如下：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">m = P.length</span><br><span class="line">for q = 0 to m</span><br><span class="line">    for each charater a ∈ Σ</span><br><span class="line">        k = min(m+1,q+2)</span><br><span class="line">        repeat</span><br><span class="line">            k = k - 1</span><br><span class="line">        until Pk ⊃ Pq a // Pq a是Pk的前缀</span><br><span class="line">        δ(q,a) = k</span><br><span class="line">return δ</span><br></pre></td></tr></tbody></table></figure>
+
+<p>由此可以得到自动机准备时间复杂度为$O(m^3 \Sigma)$（通过改进转移函数可以使准备时间复杂度提升为$O(m \Sigma)$，这里暂时不探讨），运行时间复杂度为O(n)。</p>
+<p>匹配示例：</p>
+<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/algorithm/stringmatch/dfa-02.png" alt="image"></p>
+<p>上图中：</p>
+<ul>
+<li>(A)是字符串匹配自动机的状态转换图，它可以接受所有以字符串ababaca结尾的字符串。状态0是初始状态，状态7是仅有的接受状态</li>
+<li>(B)为转移函数</li>
+<li>(C)是自动机在文本abababacaba上的操作</li>
+</ul>
+<h1 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h1><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FiniteAutomatonMatcher</span> </span>{</span><br><span class="line"></span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">int</span> NO_OF_CHARS = <span class="number">65536</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">getNextState</span><span class="params">(<span class="keyword">char</span>[] pat, <span class="keyword">int</span> m, <span class="keyword">int</span> state, <span class="keyword">int</span> x)</span> </span>{</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 如果当前字符与模式中下一个字符相同，则直接+1</span></span><br><span class="line">        <span class="keyword">if</span> (state &lt; m &amp;&amp; x == pat[state]) {</span><br><span class="line">            <span class="keyword">return</span> state + <span class="number">1</span>;</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        <span class="comment">// ns是下一个状态</span></span><br><span class="line">        <span class="keyword">int</span> ns, i;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">// 倒序遍历状态</span></span><br><span class="line">        <span class="keyword">for</span> (ns = state; ns &gt; <span class="number">0</span>; ns--) {</span><br><span class="line">            <span class="comment">// 如果模式中包含这个字符，ns-1是符号下标</span></span><br><span class="line">            <span class="keyword">if</span> (pat[ns - <span class="number">1</span>] == x) {</span><br><span class="line">                <span class="comment">// 遍历前缀所有字符</span></span><br><span class="line">                <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; ns - <span class="number">1</span>; i++) {</span><br><span class="line">                    <span class="comment">// 比较 pat[0..i] 前缀，pat[0..state-1]c 后缀</span></span><br><span class="line">                    <span class="comment">// ns-1是c的位置，i为前缀，state-(ns-1)-i为后缀</span></span><br><span class="line">                    <span class="keyword">if</span> (pat[i] != pat[state - ns + <span class="number">1</span> + i]) {</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                    }</span><br><span class="line">                }</span><br><span class="line">                <span class="comment">// 前缀=后缀</span></span><br><span class="line">                <span class="keyword">if</span> (i == ns - <span class="number">1</span>) {</span><br><span class="line">                    <span class="keyword">return</span> ns;</span><br><span class="line">                }</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">computeTransFun</span><span class="params">(<span class="keyword">char</span>[] pat, <span class="keyword">int</span> m, <span class="keyword">int</span>[][] tf)</span> </span>{</span><br><span class="line">        <span class="keyword">int</span> state, x;</span><br><span class="line">        <span class="keyword">for</span> (state = <span class="number">0</span>; state &lt;= m; ++state) {</span><br><span class="line">            <span class="keyword">for</span> (x = <span class="number">0</span>; x &lt; NO_OF_CHARS; ++x) {</span><br><span class="line">                tf[state][x] = getNextState(pat, m, state, x);</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">search</span><span class="params">(<span class="keyword">char</span>[] pat, <span class="keyword">char</span>[] txt)</span> </span>{</span><br><span class="line">        <span class="keyword">int</span> m = pat.length;</span><br><span class="line">        <span class="keyword">int</span> n = txt.length;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span>[][] tf = <span class="keyword">new</span> <span class="keyword">int</span>[m + <span class="number">1</span>][NO_OF_CHARS];</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 构建转换函数</span></span><br><span class="line">        computeTransFun(pat, m, tf);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> i, state = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; n; i++) {</span><br><span class="line">            state = tf[state][txt[i]];</span><br><span class="line">            <span class="keyword">if</span> (state == m) {</span><br><span class="line">                System.out.println(<span class="string">"Pattern found at index "</span> + (i - m + <span class="number">1</span>));</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>{</span><br><span class="line">        <span class="keyword">char</span>[] txt = <span class="string">"我爱北京天安门，天安门在北京，北京城在北方"</span>.toCharArray();</span><br><span class="line">        <span class="keyword">char</span>[] pat = <span class="string">"北京"</span>.toCharArray();</span><br><span class="line">        search(pat, txt);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+
+<ul>
+<li>算法导论</li>
+<li>自动机代码：<a target="_blank" rel="noopener" href="https://www.geeksforgeeks.org/finite-automata-algorithm-for-pattern-searching">https://www.geeksforgeeks.org/finite-automata-algorithm-for-pattern-searching</a></li>
+<li>改进转移函数自动机代码：<a target="_blank" rel="noopener" href="https://www.geeksforgeeks.org/pattern-searching-set-5-efficient-constructtion-of-finite-automata">https://www.geeksforgeeks.org/pattern-searching-set-5-efficient-constructtion-of-finite-automata</a></li>
+</ul>
+
+    
+  </div>
+
+</article>
+
+
+   
+
+   
+  <div class="box-prev-next clearfix">
+    <a class="show pull-left" href="/2021/12/15/redission-05/">
+        <i class="icon icon-angle-left"></i>
+    </a>
+    <a class="hide pull-right" href="/">
+        <i class="icon icon-angle-right"></i>
+    </a>
+  </div>
+
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/categories/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              分类
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/atom.xml"
+              rel="noopener noreferrer"
+              target="_blank"
+              >
+              RSS
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/search/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              搜索
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+    
+    
+
+    
+
+    
+    
+
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script>
+    <div id="comment" class="vcomment" ></div>
+    <script>
+        var notify = 'false' == true ? true : false;
+        var verify = 'false' == true ? true : false;
+        var GUEST_INFO = ['nick','mail','link'];
+        var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+            return GUEST_INFO.indexOf(item) > -1
+        });
+        guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+        window.valine = new Valine({
+            el: '.vcomment',
+            notify: notify,
+            verify: verify,
+            appId: "masttnqEt9G69mj43i9oaA1C-gzGzoHsz",
+            appKey: "hgIx9VKn0GLDhRcLxQuNMl0E",
+            avatar:'mm',
+            placeholder: "Just go go",
+            guest_info:guest_info,
+            pageSize:'10'
+        });
+    </script>
+  
+    
+
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+</html>

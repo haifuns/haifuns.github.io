@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>【字符串匹配】Rabin-Karp 算法 | haifun的博客</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="文本匹配," />
+  
+
+  <meta name="description" content="与朴素字符串匹配算法相同，Rabin-Karp 算法也是通过滑动一个大小为m的窗口n-m+1次进行匹配判断，不同之处在于Rabin-Karp 算法把字符串转换为字符集长度进制的哈希值，由数值比较代替了字符串直接比较，并且在匹配过程中利用了上一次匹配的信息。 数值计算给定一个模式P[1…m]，假设p表示其对应的$\alpha$进制（$\alpha$为字符集长度）值，相应的，给定文本T[1…n]，假设">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【字符串匹配】Rabin-Karp 算法">
+<meta property="og:url" content="https://haifuns.com/2021/12/15/stringmatch-02/index.html">
+<meta property="og:site_name" content="haifun的博客">
+<meta property="og:description" content="与朴素字符串匹配算法相同，Rabin-Karp 算法也是通过滑动一个大小为m的窗口n-m+1次进行匹配判断，不同之处在于Rabin-Karp 算法把字符串转换为字符集长度进制的哈希值，由数值比较代替了字符串直接比较，并且在匹配过程中利用了上一次匹配的信息。 数值计算给定一个模式P[1…m]，假设p表示其对应的$\alpha$进制（$\alpha$为字符集长度）值，相应的，给定文本T[1…n]，假设">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-12-15T15:05:00.000Z">
+<meta property="article:modified_time" content="2021-12-21T09:29:48.118Z">
+<meta property="article:author" content="haifun">
+<meta property="article:tag" content="文本匹配">
+<meta name="twitter:card" content="summary">
+
+  
+
+  
+    <link rel="icon" href="/images/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbeddx" rel="stylesheet">
+
+
+  
+    
+<link rel="stylesheet" href="/css/personal-style.css">
+
+  
+
+  
+
+  
+
+  
+
+
+  
+    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
+
+<meta name="generator" content="Hexo 5.4.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="haifun的博客" type="application/atom+xml">
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header CENTER">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/categories/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            分类
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/atom.xml"
+            rel="noopener noreferrer"
+            target="_blank"
+            >
+            RSS
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/search/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%95%B0%E5%80%BC%E8%AE%A1%E7%AE%97"><span class="toc-text">数值计算</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="toc-text">代码实现</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post CENTER">
+   <article id="post-stringmatch-02" class="article article-type-post" itemprop="blogPost">
+  <header class="article-header">
+    <h1 class="post-title">【字符串匹配】Rabin-Karp 算法</h1>
+
+    <div class="article-meta">
+      <span>
+        <i class="icon-calendar"></i>
+        <span>2021.12.15</span>
+      </span>
+
+      
+        <span class="article-author">
+          <i class="icon-user"></i>
+          <span>haifun</span>
+        </span>
+      
+
+      
+  <span class="article-category">
+    <i class="icon-list"></i>
+    <a class="article-category-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a>
+  </span>
+
+
+
+      
+
+      
+      <i class="fa fa-eye"></i> 
+        <span id="busuanzi_container_page_pv">
+           &nbsp热度 <span id="busuanzi_value_page_pv">
+           <i class="fa fa-spinner fa-spin"></i></span>℃
+        </span>
+      
+      
+    </div>
+  </header>
+
+  <div class="article-content">
+    
+      <p>与朴素字符串匹配算法相同，Rabin-Karp 算法也是通过滑动一个大小为m的窗口n-m+1次进行匹配判断，不同之处在于Rabin-Karp 算法把字符串转换为字符集长度进制的哈希值，由数值比较代替了字符串直接比较，并且在匹配过程中利用了上一次匹配的信息。</p>
+<h1 id="数值计算"><a href="#数值计算" class="headerlink" title="数值计算"></a>数值计算</h1><p>给定一个模式P[1…m]，假设p表示其对应的$\alpha$进制（$\alpha$为字符集长度）值，相应的，给定文本T[1…n]，假设$t_s$表示长度为m的子字符串T[s+1…s+m]所对应的的$\alpha$进制值，只有在T[s+1…s+m] = P[1…m]时，$t_s$ = p。如果能在O(m)时间计算出p值，并且在总时间O(n-m+1)内计算出所有<code>$t_s$</code>值，那么通过比较p和每一个<code>$t_s$</code>值，就能在O(m) - O(n-m+1) = O(n) </p>
+<p>对于模式P[1…m]数值计算公式为：</p>
+<p>$$H(P,j)=\sum_{i=0}^{m-1}\alpha^{m-(i+1)} char(P_i)$$</p>
+<ul>
+<li>P为模式字符串</li>
+<li>m为P的长度</li>
+<li>$\alpha$为字符集长度也就是多少进制</li>
+<li>char(*) 得到当前字符对应的进制数</li>
+</ul>
+<p>例如字符集[0,1,2…9]，为十进制，那么字符串“123”计算方式为：</p>
+<p>$$H(P,j)=\sum_{i=0}^{2}\alpha^{3-(i+1)} char(P_i) = 10^2 * 1 + 10 * 2 + 3 = 123$$</p>
+<p>当我们已经知道了上一个窗口的数值时，可以在此基础上计算当前窗口数值：</p>
+<p>$$H(P,j+1)=\alpha(H(P,j) - \alpha^{m-1} char(P_j)) + char(P_{j+m})$$</p>
+<p>在不考虑p和$t_s$值很大的情况下，计算p复杂度为O(m)，计算所有$t_s$复杂度为O(n)。</p>
+<p>当考虑到p和$t_s$值很大的情况下，在计算p时的每次算术计算所需时间不再为常数时间，此时，可以选取一个合适的模q来计算出p和$t_s$的模。可以在O(m)的时间计算出模q的p值，并且可以在O(n-m+1)时间内计算出模q的所有$t_s$值，此时hash计算函数调整为：</p>
+<p>$$H(P,j)=\sum_{i=0}^{m-1}\alpha^{m-(i+1)} char(P_i) % q$$</p>
+<p>$$H(P,j+1)=(\alpha(H(P,j) - \alpha^{m-1} char(P_j)) + char(P_{j+m})) % q$$</p>
+<p>但是基于模q得到的结果并不完美，模q的p和$t_s$不相等可以断定p和$t_s$不相等，模q的p和$t_s$相等并不能说明p和$t_s$相等，还需要进一步检测。在这种最终形态下，算法预处理时间复杂度为O(m)，最坏情况下，匹配时间复杂度为O((n-m+1)m)。</p>
+<p>在许多实际应用中，我们希望有效偏移的个数少一些（如只有常数c个），此时加上处理未命中点所需时间，算法的期望匹配时间为 O((n-m+1) + cm) = O(n+m)。</p>
+<h1 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h1><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RabinKarpStringMatcher</span> </span>{</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 固定字符集字符数</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="keyword">int</span> d = <span class="number">256</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>{</span><br><span class="line">        String txt = <span class="string">"我爱北京天安门，天安门在北京，北京城在北方"</span>;</span><br><span class="line">        String pat = <span class="string">"北京"</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// hash值对q取模</span></span><br><span class="line">        <span class="keyword">int</span> q = <span class="number">101</span>;</span><br><span class="line"></span><br><span class="line">        search(pat, txt, q);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">search</span><span class="params">(String pat, String txt, <span class="keyword">int</span> q)</span> </span>{</span><br><span class="line">        <span class="keyword">int</span> m = pat.length();</span><br><span class="line">        <span class="keyword">int</span> n = txt.length();</span><br><span class="line">        <span class="keyword">int</span> i, j;</span><br><span class="line">        <span class="keyword">int</span> p = <span class="number">0</span>; <span class="comment">// 模式hash值</span></span><br><span class="line">        <span class="keyword">int</span> t = <span class="number">0</span>; <span class="comment">// 文本hash值</span></span><br><span class="line">        <span class="keyword">int</span> h = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 进制数m-1次幂</span></span><br><span class="line">        <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; m - <span class="number">1</span>; i++) {</span><br><span class="line">            h = (h * d) % q;</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 计算第一个窗口hash值</span></span><br><span class="line">        <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; m; i++) {</span><br><span class="line">            p = (d * p + pat.charAt(i)) % q;</span><br><span class="line">            t = (d * t + txt.charAt(i)) % q;</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 滑动窗口匹配</span></span><br><span class="line">        <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt;= n - m; i++) {</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 检查模式和当前窗口hash值</span></span><br><span class="line">            <span class="keyword">if</span> (p == t) {</span><br><span class="line">                <span class="comment">// 检查所有字符</span></span><br><span class="line">                <span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; m; j++) {</span><br><span class="line">                    <span class="keyword">if</span> (txt.charAt(i + j) != pat.charAt(j))</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                }</span><br><span class="line"></span><br><span class="line">                <span class="comment">// p == t and pat[0...m-1] = txt[i, i+1, ...i+m-1]</span></span><br><span class="line">                <span class="keyword">if</span> (j == m) {</span><br><span class="line">                    System.out.println(<span class="string">"有效偏移量："</span> + i);</span><br><span class="line">                }</span><br><span class="line">            }</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 计算下一个窗口hash值</span></span><br><span class="line">            <span class="keyword">if</span> (i &lt; n - m) {</span><br><span class="line">                t = (d * (t - txt.charAt(i) * h) + txt.charAt(i + m)) % q;</span><br><span class="line"></span><br><span class="line">                <span class="comment">// hash为负处理为正</span></span><br><span class="line">                <span class="keyword">if</span> (t &lt; <span class="number">0</span>) {</span><br><span class="line">                    t = (t + q);</span><br><span class="line">                }</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<ul>
+<li>算法导论</li>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/christianl/p/13747580.html">Rabin-Karp算法概述</a></li>
+<li>Rabin-Karp 算法数值计算的通俗理解参考这篇文章：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/golove/p/3234673.html">Rabin-Karp 算法（字符串快速查找）</a></li>
+<li>代码参考：<a target="_blank" rel="noopener" href="https://www.geeksforgeeks.org/rabin-karp-algorithm-for-pattern-searching/">https://www.geeksforgeeks.org/rabin-karp-algorithm-for-pattern-searching/</a></li>
+</ul>
+
+    
+  </div>
+
+</article>
+
+
+   
+
+   
+  <div class="box-prev-next clearfix">
+    <a class="show pull-left" href="/2021/12/15/stringmatch-01/">
+        <i class="icon icon-angle-left"></i>
+    </a>
+    <a class="show pull-right" href="/2021/12/15/redission-05/">
+        <i class="icon icon-angle-right"></i>
+    </a>
+  </div>
+
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/categories/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              分类
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/atom.xml"
+              rel="noopener noreferrer"
+              target="_blank"
+              >
+              RSS
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/search/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              搜索
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+    
+    
+
+    
+
+    
+    
+
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script>
+    <div id="comment" class="vcomment" ></div>
+    <script>
+        var notify = 'false' == true ? true : false;
+        var verify = 'false' == true ? true : false;
+        var GUEST_INFO = ['nick','mail','link'];
+        var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+            return GUEST_INFO.indexOf(item) > -1
+        });
+        guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+        window.valine = new Valine({
+            el: '.vcomment',
+            notify: notify,
+            verify: verify,
+            appId: "masttnqEt9G69mj43i9oaA1C-gzGzoHsz",
+            appKey: "hgIx9VKn0GLDhRcLxQuNMl0E",
+            avatar:'mm',
+            placeholder: "Just go go",
+            guest_info:guest_info,
+            pageSize:'10'
+        });
+    </script>
+  
+    
+
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+</html>

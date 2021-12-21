@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>【Java 并发编程系列】【J.U.C】：LockSupport | haifun的博客</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="并发," />
+  
+
+  <meta name="description" content="介绍LockSupport 工具类的主要作用是挂起和唤醒线程，该工具类是创建锁和其他同步类的基础。LockSupport 类与每个使用它的线程都会关联一个许可证，在默认情况下调用LockSupport 类的方法的线程是不持有许可证的。LockSupport 是使用Unsafe 类实现的。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Java 并发编程系列】【J.U.C】：LockSupport">
+<meta property="og:url" content="https://haifuns.com/2020/12/26/java-concurrent-9/index.html">
+<meta property="og:site_name" content="haifun的博客">
+<meta property="og:description" content="介绍LockSupport 工具类的主要作用是挂起和唤醒线程，该工具类是创建锁和其他同步类的基础。LockSupport 类与每个使用它的线程都会关联一个许可证，在默认情况下调用LockSupport 类的方法的线程是不持有许可证的。LockSupport 是使用Unsafe 类实现的。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-12-26T09:50:00.000Z">
+<meta property="article:modified_time" content="2021-12-21T09:29:48.111Z">
+<meta property="article:author" content="haifun">
+<meta property="article:tag" content="并发">
+<meta name="twitter:card" content="summary">
+
+  
+
+  
+    <link rel="icon" href="/images/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbeddx" rel="stylesheet">
+
+
+  
+    
+<link rel="stylesheet" href="/css/personal-style.css">
+
+  
+
+  
+
+  
+
+  
+
+
+  
+    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
+
+<meta name="generator" content="Hexo 5.4.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="haifun的博客" type="application/atom+xml">
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header CENTER">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/categories/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            分类
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/atom.xml"
+            rel="noopener noreferrer"
+            target="_blank"
+            >
+            RSS
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/search/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%8B%E7%BB%8D"><span class="toc-text">介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BB%E8%A6%81%E5%87%BD%E6%95%B0"><span class="toc-text">主要函数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#static-void-park"><span class="toc-text">static void park()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#static-void-unpark-Thread-thread"><span class="toc-text">static void unpark(Thread thread)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#static-void-parkNanos-long-nanos"><span class="toc-text">static void parkNanos(long nanos)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#static-void-park-Object-blocker"><span class="toc-text">static void park(Object blocker)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#static-void-parkNanos-Object-blocker-long-nanos"><span class="toc-text">static void parkNanos(Object blocker, long nanos)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#static-void-parkUntil-Object-blocker-long-deadline"><span class="toc-text">static void parkUntil(Object blocker, long deadline)</span></a></li></ol></li></ol>
+  </div>
+
+
+
+<div class="content content-post CENTER">
+   <article id="post-java-concurrent-9" class="article article-type-post" itemprop="blogPost">
+  <header class="article-header">
+    <h1 class="post-title">【Java 并发编程系列】【J.U.C】：LockSupport</h1>
+
+    <div class="article-meta">
+      <span>
+        <i class="icon-calendar"></i>
+        <span>2020.12.26</span>
+      </span>
+
+      
+        <span class="article-author">
+          <i class="icon-user"></i>
+          <span>haifun</span>
+        </span>
+      
+
+      
+  <span class="article-category">
+    <i class="icon-list"></i>
+    <a class="article-category-link" href="/categories/%E5%B9%B6%E5%8F%91/">并发</a>
+  </span>
+
+
+
+      
+
+      
+      <i class="fa fa-eye"></i> 
+        <span id="busuanzi_container_page_pv">
+           &nbsp热度 <span id="busuanzi_value_page_pv">
+           <i class="fa fa-spinner fa-spin"></i></span>℃
+        </span>
+      
+      
+    </div>
+  </header>
+
+  <div class="article-content">
+    
+      <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>LockSupport 工具类的主要作用是挂起和唤醒线程，该工具类是创建锁和其他同步类的基础。LockSupport 类与每个使用它的线程都会关联一个许可证，在默认情况下调用LockSupport 类的方法的线程是不持有许可证的。LockSupport 是使用Unsafe 类实现的。</p>
+<span id="more"></span>
+
+<h2 id="主要函数"><a href="#主要函数" class="headerlink" title="主要函数"></a>主要函数</h2><h3 id="static-void-park"><a href="#static-void-park" class="headerlink" title="static void park()"></a>static void park()</h3><p>如果调用park 方法的线程已经拿到了与LockSupport 关联的许可证，则调用LockSupport.park() 时会马上返回，否则调用线程会被禁止参与线程的调度，也就是会被阻塞挂起。</p>
+<p>在如下代码中，在main 函数中直接调用park 方法，最终只会输出begin park!，然后当前线程被挂起，这是因为默认情况下调用线程是不持有许可证的。</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>{</span><br><span class="line"></span><br><span class="line">      System.out.println(<span class="string">"begin park!"</span>);</span><br><span class="line"></span><br><span class="line">      LockSupport.park();</span><br><span class="line">		</span><br><span class="line">      System.out.println(<span class="string">"end park!"</span>);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>在其他线程调用unpark(Thread thread) 方法并且将当前线程作为参数时，调用park 方法而被阻塞的线程会返回。另外，如果其他线程调用了阻塞线程的interrupt()方法，设置了中断标志或者线程被虚假唤醒，则阻塞线程也会返回。所以在调用park 方法时最好也使用循环条件判断方式。需要注意的是，因调用park() 方法而被阻塞的线程被其他线程中断而返回时并不会抛出InterruptedException 异常。</p>
+<h3 id="static-void-unpark-Thread-thread"><a href="#static-void-unpark-Thread-thread" class="headerlink" title="static void unpark(Thread thread)"></a>static void unpark(Thread thread)</h3><p>当一个线程调用unpark 时，如果参数thread 线程没有持有thread 与LockSupport 类关联的许可证， 则让thread 线程持有。如果thread 之前因调用park() 而被挂起，则调用unpark 后，该线程会被唤醒。如果thread 之前没有调用park ，则调用unpark 方法后， 再调用park 方法，其会立刻返回。</p>
+<p>修改代码如下：</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>{</span><br><span class="line"></span><br><span class="line">      System.out.println(<span class="string">"begin park!"</span>);</span><br><span class="line"></span><br><span class="line">      <span class="comment">// 使当前线程获得许可证</span></span><br><span class="line">      LockSupport.unpark(Thread.currentThread());</span><br><span class="line">	</span><br><span class="line">      <span class="comment">// 再次调用park方法</span></span><br><span class="line">      LockSupport.park();</span><br><span class="line">		</span><br><span class="line">      System.out.println(<span class="string">"end park!"</span>);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>输出结果为：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">begin park!</span><br><span class="line">end park!</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="static-void-parkNanos-long-nanos"><a href="#static-void-parkNanos-long-nanos" class="headerlink" title="static void parkNanos(long nanos)"></a>static void parkNanos(long nanos)</h3><p>如果调用park 方法的线程已经拿到了与LockSupport 关联的许可证，则调用LockSupport.parkNanos(long nanos) 方法后会马上返回。该方法的不同在于，如果没有拿到许可证，则调用线程会被挂起nanos 时间后修改为自动返回。</p>
+<p>另外park 方法还支持带有blocker 参数的方法void park(Object blocker) 方法，当线程在没有持有许可证的情况下调用park 方法而被阻塞挂起时，这个blocker 对象会被记录到该线程内部。</p>
+<p>使用诊断工具可以观察线程被阻塞的原因，诊断工具是通过调用getBlocker(T hread) 方法来获取blocker 对象的，所以JDK 推荐我们使用带有blocker 参数的park 方法，并且blocker 被设置为this ，这样当在打印线程堆横排查问题时就能知道是哪个类被阻塞了。</p>
+<p>例如下面的代码：</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ParkTest</span> </span>{</span><br><span class="line"></span><br><span class="line">      <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">parkTest</span><span class="params">()</span> </span>{</span><br><span class="line">            LockSupport.park(); <span class="comment">// 1</span></span><br><span class="line">      }</span><br><span class="line"></span><br><span class="line">      <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>{</span><br><span class="line">            ParkTest test = <span class="keyword">new</span> ParkTest();</span><br><span class="line">            test.parkTest();</span><br><span class="line">      }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+<p>运行代码后，使用jstack <pid> 命令查看线程堆栈可以看下如下结果：</pid></p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"main"</span> #<span class="number">1</span> prio=<span class="number">5</span> os_prio=<span class="number">0</span> tid=<span class="number">0x0000000003652800</span> nid=<span class="number">0x345c</span> waiting on condition [<span class="number">0x000000000341f000</span>]</span><br><span class="line">   java.lang.Thread.State: WAITING (parking)</span><br><span class="line">        at sun.misc.Unsafe.park(Native Method)</span><br><span class="line">        at java.util.concurrent.locks.LockSupport.park(LockSupport.java:<span class="number">304</span>)</span><br><span class="line">        at ParkTest.parkTest(ParkTest.java:<span class="number">6</span>)</span><br><span class="line">        at ParkTest.main(ParkTest.java:<span class="number">11</span>)</span><br></pre></td></tr></tbody></table></figure>
+<p>修改代码1 为LockSupport.park(this);后，再次输出线程堆栈结果如下：</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">"main"</span> #<span class="number">1</span> prio=<span class="number">5</span> os_prio=<span class="number">0</span> tid=<span class="number">0x0000000002a12800</span> nid=<span class="number">0x2a28</span> waiting on condition [<span class="number">0x000000000247f000</span>]</span><br><span class="line">   java.lang.Thread.State: WAITING (parking)</span><br><span class="line">        at sun.misc.Unsafe.park(Native Method)</span><br><span class="line">        - parking to wait <span class="keyword">for</span>  &lt;<span class="number">0x00000000d5bf4418</span>&gt; (a ParkTest)</span><br><span class="line">        at java.util.concurrent.locks.LockSupport.park(LockSupport.java:<span class="number">175</span>)</span><br><span class="line">        at ParkTest.parkTest(ParkTest.java:<span class="number">6</span>)</span><br><span class="line">        at ParkTest.main(ParkTest.java:<span class="number">11</span>)</span><br></pre></td></tr></tbody></table></figure>
+
+<p>使用带blocker 参数的park 方法，线程堆栈可以提供更多有关阻塞对象的信息。</p>
+<h3 id="static-void-park-Object-blocker"><a href="#static-void-park-Object-blocker" class="headerlink" title="static void park(Object blocker)"></a>static void park(Object blocker)</h3><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">park</span><span class="params">(Object blocker)</span> </span>{</span><br><span class="line">    <span class="comment">// 获取调用线程</span></span><br><span class="line">    Thread t = Thread.currentThread();</span><br><span class="line">    <span class="comment">// 设置此线程blocker变量</span></span><br><span class="line">    setBlocker(t, blocker);</span><br><span class="line">    <span class="comment">// 挂起线程</span></span><br><span class="line">    UNSAFE.park(<span class="keyword">false</span>, <span class="number">0L</span>);</span><br><span class="line">    <span class="comment">// 线程被激活后清除blocker变量，因为一般都是在线程阻塞时才分析原因</span></span><br><span class="line">    setBlocker(t, <span class="keyword">null</span>);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>Thread 类里面有个变量volatile Object parkBlocker ， 用来存放park 方法传递的blocker 对象，也就是把blocker 变量存放到了调用park 方法的线程的成员变量里面。</p>
+<h3 id="static-void-parkNanos-Object-blocker-long-nanos"><a href="#static-void-parkNanos-Object-blocker-long-nanos" class="headerlink" title="static void parkNanos(Object blocker, long nanos)"></a>static void parkNanos(Object blocker, long nanos)</h3><p>相比park(Object blocker) 方法多了超时时间。</p>
+<h3 id="static-void-parkUntil-Object-blocker-long-deadline"><a href="#static-void-parkUntil-Object-blocker-long-deadline" class="headerlink" title="static void parkUntil(Object blocker, long deadline)"></a>static void parkUntil(Object blocker, long deadline)</h3><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">parkUntil</span><span class="params">(Object blocker, <span class="keyword">long</span> deadline)</span> </span>{</span><br><span class="line">    Thread t = Thread.currentThread();</span><br><span class="line">    setBlocker(t, blocker);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// isAbsolute=true,time=deadline;表示到deadline 时间后返回</span></span><br><span class="line">    UNSAFE.park(<span class="keyword">true</span>, deadline);</span><br><span class="line">    setBlocker(t, <span class="keyword">null</span>);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>其中参数deadline 的时间单位为ms ，该时间是从1970 年到现在某一个时间点的毫秒值。这个方法和parkNanos(Object blocker, long nanos) 方法的区别是，后者是从当前算等待nanos 秒时间，而前者是指定一个时间点，比如需要等到2017.12.11 12:00:00 ，则把这个时间点转换为从1970 年到这个时间点的总毫秒数。</p>
+
+    
+  </div>
+
+</article>
+
+
+   
+
+   
+  <div class="box-prev-next clearfix">
+    <a class="show pull-left" href="/2020/12/26/java-concurrent-8/">
+        <i class="icon icon-angle-left"></i>
+    </a>
+    <a class="show pull-right" href="/2020/12/26/java-concurrent-10/">
+        <i class="icon icon-angle-right"></i>
+    </a>
+  </div>
+
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/categories/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              分类
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/atom.xml"
+              rel="noopener noreferrer"
+              target="_blank"
+              >
+              RSS
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/search/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              搜索
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+    
+    
+
+    
+
+    
+    
+
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script>
+    <div id="comment" class="vcomment" ></div>
+    <script>
+        var notify = 'false' == true ? true : false;
+        var verify = 'false' == true ? true : false;
+        var GUEST_INFO = ['nick','mail','link'];
+        var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+            return GUEST_INFO.indexOf(item) > -1
+        });
+        guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+        window.valine = new Valine({
+            el: '.vcomment',
+            notify: notify,
+            verify: verify,
+            appId: "masttnqEt9G69mj43i9oaA1C-gzGzoHsz",
+            appKey: "hgIx9VKn0GLDhRcLxQuNMl0E",
+            avatar:'mm',
+            placeholder: "Just go go",
+            guest_info:guest_info,
+            pageSize:'10'
+        });
+    </script>
+  
+    
+
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+</html>

@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>【Redis】主从复制 | haifun的博客</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="Redis," />
+  
+
+  <meta name="description" content="为了满足故障恢复和负载均衡等需求，Redis提供了复制功能，实现了相同数据的多个副本。复制功能是高可用Redis的基础，哨兵和集群也都是在复制的基础上实现高可用。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Redis】主从复制">
+<meta property="og:url" content="https://haifuns.com/2021/01/22/redis-04/index.html">
+<meta property="og:site_name" content="haifun的博客">
+<meta property="og:description" content="为了满足故障恢复和负载均衡等需求，Redis提供了复制功能，实现了相同数据的多个副本。复制功能是高可用Redis的基础，哨兵和集群也都是在复制的基础上实现高可用。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/redis/redis-psync.png">
+<meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/redis/redis-psync2.png">
+<meta property="article:published_time" content="2021-01-22T16:00:05.000Z">
+<meta property="article:modified_time" content="2021-12-21T09:29:48.117Z">
+<meta property="article:author" content="haifun">
+<meta property="article:tag" content="Redis">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/redis/redis-psync.png">
+
+  
+
+  
+    <link rel="icon" href="/images/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbeddx" rel="stylesheet">
+
+
+  
+    
+<link rel="stylesheet" href="/css/personal-style.css">
+
+  
+
+  
+
+  
+
+  
+
+
+  
+    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
+
+<meta name="generator" content="Hexo 5.4.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="haifun的博客" type="application/atom+xml">
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header CENTER">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/categories/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            分类
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/atom.xml"
+            rel="noopener noreferrer"
+            target="_blank"
+            >
+            RSS
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/search/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE"><span class="toc-text">配置</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BB%BA%E7%AB%8B%E5%A4%8D%E5%88%B6"><span class="toc-text">建立复制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%AD%E5%BC%80%E5%A4%8D%E5%88%B6"><span class="toc-text">断开复制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E5%85%A8%E6%80%A7"><span class="toc-text">安全性</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%AA%E8%AF%BB"><span class="toc-text">只读</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BC%A0%E8%BE%93%E5%BB%B6%E8%BF%9F"><span class="toc-text">传输延迟</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%8B%93%E6%89%91"><span class="toc-text">拓扑</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E4%B8%BB%E4%B8%80%E4%BB%8E"><span class="toc-text">一主一从</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E4%B8%BB%E5%A4%9A%E4%BB%8E"><span class="toc-text">一主多从</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%91%E7%8A%B6%E4%B8%BB%E4%BB%8E"><span class="toc-text">树状主从</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8E%9F%E7%90%86"><span class="toc-text">原理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%8D%E5%88%B6%E8%BF%87%E7%A8%8B"><span class="toc-text">复制过程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%90%8C%E6%AD%A5"><span class="toc-text">数据同步</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%8D%E5%88%B6%E5%81%8F%E7%A7%BB%E9%87%8F"><span class="toc-text">复制偏移量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%8D%E5%88%B6%E7%A7%AF%E5%8E%8B%E7%BC%93%E5%86%B2%E5%8C%BA"><span class="toc-text">复制积压缓冲区</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BB%E8%8A%82%E7%82%B9%E8%BF%90%E8%A1%8CID"><span class="toc-text">主节点运行ID</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#psync%E5%91%BD%E4%BB%A4"><span class="toc-text">psync命令</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%A8%E9%87%8F%E5%A4%8D%E5%88%B6"><span class="toc-text">全量复制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%83%A8%E5%88%86%E5%A4%8D%E5%88%B6"><span class="toc-text">部分复制</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BF%83%E8%B7%B3"><span class="toc-text">心跳</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%82%E6%AD%A5%E5%A4%8D%E5%88%B6"><span class="toc-text">异步复制</span></a></li></ol></li></ol>
+  </div>
+
+
+
+<div class="content content-post CENTER">
+   <article id="post-redis-04" class="article article-type-post" itemprop="blogPost">
+  <header class="article-header">
+    <h1 class="post-title">【Redis】主从复制</h1>
+
+    <div class="article-meta">
+      <span>
+        <i class="icon-calendar"></i>
+        <span>2021.01.22</span>
+      </span>
+
+      
+        <span class="article-author">
+          <i class="icon-user"></i>
+          <span>haifun</span>
+        </span>
+      
+
+      
+  <span class="article-category">
+    <i class="icon-list"></i>
+    <a class="article-category-link" href="/categories/NoSQL/">NoSQL</a>
+  </span>
+
+
+
+      
+
+      
+      <i class="fa fa-eye"></i> 
+        <span id="busuanzi_container_page_pv">
+           &nbsp热度 <span id="busuanzi_value_page_pv">
+           <i class="fa fa-spinner fa-spin"></i></span>℃
+        </span>
+      
+      
+    </div>
+  </header>
+
+  <div class="article-content">
+    
+      <p>为了满足故障恢复和负载均衡等需求，Redis提供了复制功能，实现了相同数据的多个副本。复制功能是高可用Redis的基础，哨兵和集群也都是在复制的基础上实现高可用。</p>
+<span id="more"></span>
+
+<h1 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h1><h2 id="建立复制"><a href="#建立复制" class="headerlink" title="建立复制"></a>建立复制</h2><p>参与复制的Redis实例划分为主节点（master）和从节点（slave）。默认情况下，Redis都是主节点。每个从节点只能有一个主节点，而主节点可以同时具有多个从节点。复制的数据流是单向的，只能由主节点复制到从节点。</p>
+<p>配置复制的方式有以下三种：</p>
+<ol>
+<li>在配置文件中加入slaveof {masterHost} {masterPort} 随Redis启动生效</li>
+<li>在redis-server启动命令后加入–slaveof {masterHost} {masterPort}</li>
+<li>直接使用命令：slaveof {masterHost} {masterPort}</li>
+</ol>
+<p>slaveof本身是异步命令，执行slaveof命令时，节点只保存主节点信息后返回，后续复制流程在节点内部异步执行。主从节点复制成功建立后，可以使用info replication命令查看复制相关状态。</p>
+<h2 id="断开复制"><a href="#断开复制" class="headerlink" title="断开复制"></a>断开复制</h2><p>slaveof no one命令用来在从节点执行断开与主节点的复制关系。</p>
+<p>断开复制主要流程：</p>
+<ol>
+<li>断开与主节点复制关系</li>
+<li>从节点晋升为主节点</li>
+</ol>
+<p>通过slaveof {newMasterIp} {new MasterPort}命令还可以实现切主操作，把当前节点对主节点的复制切换到另一个主节点。</p>
+<p>切主流程如下：</p>
+<ol>
+<li>断开与旧主节点的复制关系</li>
+<li>与新主节点建立复制关系</li>
+<li>删除从节点当前所有数据</li>
+<li>对新主节点进行复制操作</li>
+</ol>
+<h2 id="安全性"><a href="#安全性" class="headerlink" title="安全性"></a>安全性</h2><p>主节点设置requirepass参数进行密码验证时，从节点需要配置masterauth参数与主节点密码保持一致。</p>
+<h2 id="只读"><a href="#只读" class="headerlink" title="只读"></a>只读</h2><p>默认情况下，从节点使用slave-read-only=yes配置成只读模式。由于复制关系只能从主节点到从节点，对于从节点的任何修改主节点都无法感知，修改从节点会造成主从数据不一致，因此不建议修改线上从节点的只读模式。</p>
+<h2 id="传输延迟"><a href="#传输延迟" class="headerlink" title="传输延迟"></a>传输延迟</h2><p>主从节点一般部署在不同机器上，考虑到复制时的网络延迟问题，Redis提供repl-disable-tcp-nodelay参数用于控制是否关闭TCP_NODELAY，默认关闭。</p>
+<ul>
+<li>当关闭时，主节点产生的命令数据无论大小都会及时地发送给从节点，这样主从之间延时变小，但是增加了网络带宽的消耗。适用于主从之间网络环境良好的场景，如同机架或机房部署。</li>
+<li>当开启时，主节点会合并较小的TCP数据包从而节省带宽。默认发送时间间隔取决于Linux内核，一般默认40ms。这样节省了带宽但是增大了主从之间的延迟，适用于主从网络环境复杂或带宽紧张的场景，如跨机房部署。</li>
+</ul>
+<h1 id="拓扑"><a href="#拓扑" class="headerlink" title="拓扑"></a>拓扑</h1><p>Redis的复制拓扑结构可以支持单层或多层复制关系，根据拓扑复杂性可以分为三种：一主一从、一主多从、树状主从结构。</p>
+<h2 id="一主一从"><a href="#一主一从" class="headerlink" title="一主一从"></a>一主一从</h2><p>一主一从结构是最简单的复制拓扑结构，用于主节点出现宕机时从节点提供故障转移支持。</p>
+<p>当应用写命令并发量较高且需要持久化时，可以只在从节点上开启AOF，这样既保证数据安全性同时也避免了持久化对主节点的性能干扰。</p>
+<p>需要注意的是，当主节点关闭持久化功能时，如果主节点脱机要避免自动重启操作。因为主节点之前没有开启持久化功能自动重启后数据集为空，这时从节点如果继续复制主节点会导致从节点数据也被清空。</p>
+<h2 id="一主多从"><a href="#一主多从" class="headerlink" title="一主多从"></a>一主多从</h2><p>一主多从结构（又称为星形拓扑结构）使得应用端可以利用多个从节点实现读写分离。对于读占比较大的场景，可以把读命令发送到从节点来分担主节点压力。</p>
+<h2 id="树状主从"><a href="#树状主从" class="headerlink" title="树状主从"></a>树状主从</h2><p>树状主从结构（又称为树状拓扑结构）使得从节点不但可以复制主节点数据，同时可以作为其他从节点的主节点继续向下层复制。通过引入复制中间层，可以有效降低主节点负载和需要传送给从节点的数据量。</p>
+<h1 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h1><h2 id="复制过程"><a href="#复制过程" class="headerlink" title="复制过程"></a>复制过程</h2><p>复制过程大致分为6个过程：</p>
+<ol>
+<li>保存主节点信息：执行slaveof后从节点保存主节点的地址信息后直接返回</li>
+<li>主从建立socket连接：从节点（slave）内部通过每秒运行的定时任务维护复制相关逻辑，当发现存在新主节点会尝试与之建立网络连接</li>
+<li>发送ping命令：连接建立成功后从节点发送ping请求进行首次通信，如果失败会定时重连。发送ping请求主要目的如下：<ul>
+<li>检测主从之间网络套接字是否可用</li>
+<li>检测主节点当前是否可接受处理命令</li>
+</ul>
+</li>
+<li>权限验证：如果主节点设置了requirepass参数，需要进行密码验证（从节点masterauth参数）</li>
+<li>同步数据集：主从复制连接正常通信后，对于首次建立复制的场景，主节点会把持有的数据全部发送给从节点</li>
+<li>命令持续复制：数据集同步完成后，主节点会持续地把写命令发送到从节点，保证主从数据一致性</li>
+</ol>
+<h2 id="数据同步"><a href="#数据同步" class="headerlink" title="数据同步"></a>数据同步</h2><p>Redis在2.8及以上版本使用psync命令完成主从数据同步，2.8以下使用sync命令，同步过程分为全量复制和部分复制。</p>
+<p>全量复制一般用于初次复制场景，把主节点全部数据一次性发送到从节点，当数据量较大时，会对主从节点和网络造成很大的开销。</p>
+<p>部分复制用于处理在主从复制中因网络闪断等原因造成的数据丢失场景，当从节点再次连接主节点，如果条件允许，主节点会补发丢失数据给从节点。部分复制有效避免了不必要的全量复制操作。</p>
+<p>psync命令运行需要以下组件支持：</p>
+<ul>
+<li>主从节点各自复制偏移量</li>
+<li>主节点复制积压缓冲区</li>
+<li>主节点运行id</li>
+</ul>
+<h3 id="复制偏移量"><a href="#复制偏移量" class="headerlink" title="复制偏移量"></a>复制偏移量</h3><p>参与复制的主从节点都会维护自身复制偏移量。主节点在处理完写入命令后，会把命令的字节长度做累加记录，统计信息info replication中的master_repl_offset指标中。</p>
+<p>从节点每秒钟上报自身的复制偏移量给从主节点，因此主节点也会保存从节点的复制偏移量。从节点在接收到主节点发送的命令后，也会累加记录自身的偏移量，统计信息在info replication中的slave_repl_offset指标中。</p>
+<p>通过对比主从节点的复制偏移量，可以判断主从节点数据是否一致。</p>
+<h3 id="复制积压缓冲区"><a href="#复制积压缓冲区" class="headerlink" title="复制积压缓冲区"></a>复制积压缓冲区</h3><p>复制积压缓冲区是保存在主节点上的一个固定长度的队列，默认大小是1MB。当主节点有连接的从节点时被创建，这时主节点响应写命令时，不但会把命令发送给从节点，还会写到复制积压缓冲区。</p>
+<p>缓冲区本质上是先进先出的定长队列，实现保存最近已复制数据的功能，用于部分复制和复制命令丢失数据的补救。</p>
+<p>复制缓冲区相关信息保存在主节点info replication中：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">127.0.0.1:6379&gt; info replication</span><br><span class="line"># Replication</span><br><span class="line">role:master</span><br><span class="line">//...</span><br><span class="line">repl_backlog_active:1 // 开启复制缓冲区</span><br><span class="line">repl_backlog_size:1048576 // 缓冲区最大长度</span><br><span class="line">repl_backlog_first_byte_offset:7479 // 起始偏移量，计算当前缓冲区可用范围</span><br><span class="line">repl_backlog_histlen:1048576 // 已保存数据的有效长度。</span><br></pre></td></tr></tbody></table></figure>
+
+<p>复制积压缓冲区内可用偏移量范围是：[repl_backlog_first_byte_offset, repl_backlog_first_byte_offset + repl_backlog_histlen]。</p>
+<h3 id="主节点运行ID"><a href="#主节点运行ID" class="headerlink" title="主节点运行ID"></a>主节点运行ID</h3><p>每个Redis节点启动后都会动态分配一个40位的十六进制字符串作为运行ID。运行ID的主要作用是唯一标识Redis节点，比如从节点保存主节点的运行ID识别正在复制的是哪个主节点。使用info server命令可查看当前节点的运行ID。</p>
+<h3 id="psync命令"><a href="#psync命令" class="headerlink" title="psync命令"></a>psync命令</h3><p>psync命令格式为<code>psync {runId} {offset}</code>，runId为主节点运行id，offset为当前从节点已复制的数据偏移量。</p>
+<p>psync命令运行流程如下：</p>
+<ol>
+<li>从节点发送psync命令给主节点，第一次参与复制时offset为-1</li>
+<li>主节点根据psync参数和自身数据决定响应结果：<ul>
+<li>回复+FULLRESYNC {runId} {offset}，此时从节点将触发全量复制流程</li>
+<li>回复+CONTINUE，从节点将触发部分复制流程</li>
+<li>回复+ERR，说明主节点版本低于2.8无法识别psync命令，从节点将发送旧版的sync命令触发全量复制流程</li>
+</ul>
+</li>
+</ol>
+<h2 id="全量复制"><a href="#全量复制" class="headerlink" title="全量复制"></a>全量复制</h2><p>全量复制是主从第一次建立复制时必须要经历的阶段。触发全量复制的命令时sync (Redis&lt;2.8)和psync(Redis&gt;=2.8)。</p>
+<p>psync全量复制流程与2.8前的sync全量复制机制基本一致，psync全量复制完整运行流程如图所示：</p>
+<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/redis/redis-psync.png" alt="全量复制流程"></p>
+<ol>
+<li>发送psync命令进行数据同步，由于是第一次进行复制，从节点没有复制偏移量和主节点运行ID，发送psync ? -1</li>
+<li>主节点回复+FULLRESYNC {runId} {offset}响应</li>
+<li>从节点接收主节点的响应数据保存运行ID和偏移量offset</li>
+<li>主节点执行bgsave保存RDB文件到本地</li>
+<li>主节点发送RDB文件给从节点，从节点接收RDB文件保存在本地直接作为从节点数据文件（Redis支持无盘复制，RDB文件不落盘，通过参数repl-diskless-sync参数控制，默认关闭）</li>
+<li>RDB传输期间，主节点响应读写命令，同时会把写命令写到复制积压缓冲区，当从节点加载完成RDB文件后，主节点在把缓冲区的数据发送到从节点，保证主从数据一致</li>
+<li>从节点接收完主节点传输的所有数据后会清空自身旧数据</li>
+<li>从节点清空旧数据后，开始加载RDB文件</li>
+<li>从节点成功加载RDB后，如果当前节点开启了AOF持久化功能，会立即做bgrewriteaof操作，为了保证全量复制后AOF持久化功能立即可以使用</li>
+</ol>
+<h2 id="部分复制"><a href="#部分复制" class="headerlink" title="部分复制"></a>部分复制</h2><p>部分复制使用psync {runId} {offset}命令实现。当从节点正在复制主节点时出现网络闪断或者命令丢失等异常情况时，从节点会向主节点要求补发丢失的命令数据，如果主节点的复制积压缓冲区内存在这部分数据则直接发送给从节点，由于补发的这部分数据一般远远小于全量数据从而做到节省开销。</p>
+<p>部分复制的流程如下图所示：</p>
+<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/redis/redis-psync2.png" alt="部分复制流程"></p>
+<ol>
+<li>当主从节点之间出现网络中断时，如果超过repl-timeout时间，主节点会认为从节点故障并中断复制连接</li>
+<li>主从连接中断期间主节点依然响应命令同时写入复制积压缓冲区</li>
+<li>从节点网络恢复再次连接主节点</li>
+<li>从节点发送psync {runId} {offset}命令到主节点要求进行部分复制操作</li>
+<li>主节点校验runId，根据offset在复制积压缓冲区查找，如果偏移量之后的数据在缓冲区中则向从节点回复+CONTINUE响应，表示可以进行部分复制</li>
+<li>主节点根据偏移量把复制积压缓冲区数据发送给从节点，保证主从复制进入正常状态</li>
+</ol>
+<h2 id="心跳"><a href="#心跳" class="headerlink" title="心跳"></a>心跳</h2><p>主从节点建立复制后维护着长连接并彼此发送心跳命令。</p>
+<p>主从心跳判断机制：</p>
+<ol>
+<li>主从节点彼此都有心跳检测机制，各自模拟成对方的客户端进行通信，通过client list命令查看复制相关的客户端信息，主节点连接状态为flag=M，从节点连接状态为flag=S。</li>
+<li>主节点默认每隔10s对从节点发送ping命令，判断从节点存活性和连接状态。通过参数repl-ping-slave-period控制发送频率</li>
+<li>从节点在主线程中每个1s发送replconf ack {offset}命令给主节点上报自身当前的复制偏移量</li>
+</ol>
+<h2 id="异步复制"><a href="#异步复制" class="headerlink" title="异步复制"></a>异步复制</h2><p>主节点进行数据读写的同时还会把写命令同步给从节点，发送过程是异步完成的，也就是说主节点自身处理完写命令后直接返回给客户端，并不等待从节点复制完成。</p>
+<p>主节点复制流程如下：</p>
+<ol>
+<li>主节点接收处理命令</li>
+<li>命令处理完之后返回响应结果</li>
+<li>对于修改命令异步发送给从节点，从节点在主线程中执行复制的命令</li>
+</ol>
+<p>由于主从复制过程是异步的，就会造成从节点的数据相对主节点存在延迟。具体延迟多少字节，可以在主节点执行info replication命令查看相关指标获得。例如以下信息：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">slave0:ip=127.0.0.1,port=6380,state=online,offset=841,lag=1</span><br><span class="line">master_repl_offset:841</span><br></pre></td></tr></tbody></table></figure>
+<p>从节点slave0信息中offset表示当前从节点的复制偏移量，master_repl_offset表示当前主节点的复制偏移量，两者的差值就是当前从节点复制延迟量。</p>
+
+    
+  </div>
+
+</article>
+
+
+   
+
+   
+  <div class="box-prev-next clearfix">
+    <a class="show pull-left" href="/2021/01/18/redis-03/">
+        <i class="icon icon-angle-left"></i>
+    </a>
+    <a class="show pull-right" href="/2021/01/24/redis-05/">
+        <i class="icon icon-angle-right"></i>
+    </a>
+  </div>
+
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/categories/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              分类
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/atom.xml"
+              rel="noopener noreferrer"
+              target="_blank"
+              >
+              RSS
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/search/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              搜索
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+    
+    
+
+    
+
+    
+    
+
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script>
+    <div id="comment" class="vcomment" ></div>
+    <script>
+        var notify = 'false' == true ? true : false;
+        var verify = 'false' == true ? true : false;
+        var GUEST_INFO = ['nick','mail','link'];
+        var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+            return GUEST_INFO.indexOf(item) > -1
+        });
+        guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+        window.valine = new Valine({
+            el: '.vcomment',
+            notify: notify,
+            verify: verify,
+            appId: "masttnqEt9G69mj43i9oaA1C-gzGzoHsz",
+            appKey: "hgIx9VKn0GLDhRcLxQuNMl0E",
+            avatar:'mm',
+            placeholder: "Just go go",
+            guest_info:guest_info,
+            pageSize:'10'
+        });
+    </script>
+  
+    
+
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+</html>

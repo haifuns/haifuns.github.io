@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>内网穿透工具 -- Frp | haifun的博客</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="Frp," />
+  
+
+  <meta name="description" content="简介frp 是一个可用于内网穿透的高性能的反向代理应用，支持 tcp, udp 协议，为 http 和 https 应用协议提供了额外的能力，且尝试性支持了点对点穿透。  github:https:&#x2F;&#x2F;github.com&#x2F;fatedier&#x2F;frp  FRP 安装 软件包下载  1234567-- 服务端wget https:&#x2F;&#x2F;github.com&#x2F;fatedier&#x2F;frp&#x2F;releases&#x2F;d">
+<meta property="og:type" content="article">
+<meta property="og:title" content="内网穿透工具 -- Frp">
+<meta property="og:url" content="https://haifuns.com/2019/11/02/frp/index.html">
+<meta property="og:site_name" content="haifun的博客">
+<meta property="og:description" content="简介frp 是一个可用于内网穿透的高性能的反向代理应用，支持 tcp, udp 协议，为 http 和 https 应用协议提供了额外的能力，且尝试性支持了点对点穿透。  github:https:&#x2F;&#x2F;github.com&#x2F;fatedier&#x2F;frp  FRP 安装 软件包下载  1234567-- 服务端wget https:&#x2F;&#x2F;github.com&#x2F;fatedier&#x2F;frp&#x2F;releases&#x2F;d">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-11-02T13:13:00.000Z">
+<meta property="article:modified_time" content="2020-12-26T08:52:16.201Z">
+<meta property="article:author" content="haifun">
+<meta property="article:tag" content="Frp">
+<meta name="twitter:card" content="summary">
+
+  
+
+  
+    <link rel="icon" href="/images/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbeddx" rel="stylesheet">
+
+
+  
+    
+<link rel="stylesheet" href="/css/personal-style.css">
+
+  
+
+  
+
+  
+
+  
+
+
+  
+    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
+
+<meta name="generator" content="Hexo 5.4.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="haifun的博客" type="application/atom+xml">
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header CENTER">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/categories/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            分类
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/atom.xml"
+            rel="noopener noreferrer"
+            target="_blank"
+            >
+            RSS
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/search/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AE%80%E4%BB%8B"><span class="toc-text">简介</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#FRP-%E5%AE%89%E8%A3%85"><span class="toc-text">FRP 安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B5%B7%E6%AD%A5"><span class="toc-text">起步</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AE%80%E5%8D%95%E8%BF%9E%E6%8E%A5"><span class="toc-text">简单连接</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%9A%E8%BF%87-TCP-%E8%AE%BF%E9%97%AE%E5%86%85%E7%BD%91%E6%9C%BA%E5%99%A8"><span class="toc-text">通过 TCP 访问内网机器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%9A%E8%BF%87%E8%87%AA%E5%AE%9A%E4%B9%89%E5%9F%9F%E5%90%8D%E8%AE%BF%E9%97%AE%E9%83%A8%E7%BD%B2%E4%BA%8E%E5%86%85%E7%BD%91%E7%9A%84-Web-%E6%9C%8D%E5%8A%A1"><span class="toc-text">通过自定义域名访问部署于内网的 Web 服务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BA%E6%9C%AC%E5%9C%B0-HTTP-%E6%9C%8D%E5%8A%A1%E5%90%AF%E7%94%A8-HTTPS"><span class="toc-text">为本地 HTTP 服务启用 HTTPS</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E4%BA%8C%E7%BA%A7%E5%9F%9F%E5%90%8D"><span class="toc-text">自定义二级域名</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%9A%E8%BF%87%E5%AF%86%E7%A0%81%E4%BF%9D%E6%8A%A4%E4%BD%A0%E7%9A%84-web-%E6%9C%8D%E5%8A%A1"><span class="toc-text">通过密码保护你的 web 服务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9B%B4%E5%A4%9A%E5%8A%9F%E8%83%BD"><span class="toc-text">更多功能</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post CENTER">
+   <article id="post-frp" class="article article-type-post" itemprop="blogPost">
+  <header class="article-header">
+    <h1 class="post-title">内网穿透工具 -- Frp</h1>
+
+    <div class="article-meta">
+      <span>
+        <i class="icon-calendar"></i>
+        <span>2019.11.02</span>
+      </span>
+
+      
+        <span class="article-author">
+          <i class="icon-user"></i>
+          <span>haifun</span>
+        </span>
+      
+
+      
+  <span class="article-category">
+    <i class="icon-list"></i>
+    <a class="article-category-link" href="/categories/%E5%B7%A5%E5%85%B7/">工具</a>
+  </span>
+
+
+
+      
+
+      
+      <i class="fa fa-eye"></i> 
+        <span id="busuanzi_container_page_pv">
+           &nbsp热度 <span id="busuanzi_value_page_pv">
+           <i class="fa fa-spinner fa-spin"></i></span>℃
+        </span>
+      
+      
+    </div>
+  </header>
+
+  <div class="article-content">
+    
+      <h3 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h3><p>frp 是一个可用于内网穿透的高性能的反向代理应用，支持 tcp, udp 协议，为 http 和 https 应用协议提供了额外的能力，且尝试性支持了点对点穿透。</p>
+<blockquote>
+<p>github:<a target="_blank" rel="noopener" href="https://github.com/fatedier/frp">https://github.com/fatedier/frp</a></p>
+</blockquote>
+<h3 id="FRP-安装"><a href="#FRP-安装" class="headerlink" title="FRP 安装"></a>FRP 安装</h3><ul>
+<li>软件包下载</li>
+</ul>
+<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">-- 服务端</span><br><span class="line">wget https://github.com/fatedier/frp/releases/download/v0.29.0/frp_0.29.0_linux_amd64.tar.gz</span><br><span class="line">tar xzvf frp_0.29.0_linux_amd64.tar.gz</span><br><span class="line">mv frp_0.29.0_linux_amd64 frp</span><br><span class="line"></span><br><span class="line">-- 客户端</span><br><span class="line">https://github.com/fatedier/frp/releases/download/v0.29.0/frp_0.29.0_windows_amd64.zip</span><br></pre></td></tr></tbody></table></figure>
+<blockquote>
+<p>更多版本前往：<a target="_blank" rel="noopener" href="https://github.com/fatedier/frp/releases">https://github.com/fatedier/frp/releases</a></p>
+</blockquote>
+<a id="more"></a>
+
+<h3 id="起步"><a href="#起步" class="headerlink" title="起步"></a>起步</h3><blockquote>
+<p>这里以linux作为服务端，windows作为客户端实现web服务http/https穿透</p>
+</blockquote>
+<h3 id="简单连接"><a href="#简单连接" class="headerlink" title="简单连接"></a>简单连接</h3><ul>
+<li>服务端</li>
+</ul>
+<p>默认配置中监听的是 7000 端口，可根据自己实际情况修改</p>
+<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">$ vi frps.ini</span><br><span class="line"></span><br><span class="line">[common]</span><br><span class="line">bind_port = 7000 </span><br><span class="line"></span><br><span class="line"># 最大连接数 </span><br><span class="line">max_pool_count = 500   </span><br><span class="line"># 客户端映射的端口  </span><br><span class="line">vhost_http_port = 9527                                                                 </span><br><span class="line"># 服务器看板的访问端口                                                                 </span><br><span class="line">dashboard_port = 7500</span><br><span class="line"># 服务器看板账户       </span><br><span class="line">dashboard_user = root </span><br><span class="line"># 服务器看板密码</span><br><span class="line">dashboard_pwd = 123456 </span><br></pre></td></tr></tbody></table></figure>
+<p>启动</p>
+<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./frps -c ./frps.ini</span><br></pre></td></tr></tbody></table></figure>
+<ul>
+<li>客户端</li>
+</ul>
+<p>修改frpc.ini文件</p>
+<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[common]</span><br><span class="line"># server_addr 为 FRP 服务端的公网 IP</span><br><span class="line">server_addr = 127.0.0.1</span><br><span class="line"># server_port 为 FRP 服务端监听的端口</span><br><span class="line">server_port = 7000</span><br></pre></td></tr></tbody></table></figure>
+<p>cmd cd到目录下执行.\frpc.exe -c frpc.ini<br>这样就可以成功在 FRP 服务端上成功建立一个客户端连接，此时我们还没有注册任何端口映射</p>
+<h3 id="通过-TCP-访问内网机器"><a href="#通过-TCP-访问内网机器" class="headerlink" title="通过 TCP 访问内网机器"></a>通过 TCP 访问内网机器</h3><p>frpc.ini添加</p>
+<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[ssh]</span><br><span class="line">type = tcp</span><br><span class="line">local_ip = 127.0.0.1</span><br><span class="line">local_port = 22</span><br><span class="line">remote_port = 6000</span><br></pre></td></tr></tbody></table></figure>
+<p>这样就在 FRP 服务端上成功注册了一个端口为 6000 的服务，接下来我们就可以通过这个端口访问内网机器上 SSH 服务，假设用户名为 frp：<br>$ ssh -oPort=6000 frp@公网IP</p>
+<h3 id="通过自定义域名访问部署于内网的-Web-服务"><a href="#通过自定义域名访问部署于内网的-Web-服务" class="headerlink" title="通过自定义域名访问部署于内网的 Web 服务"></a>通过自定义域名访问部署于内网的 Web 服务</h3><ul>
+<li>服务端</li>
+</ul>
+<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ vim frps.ini</span><br><span class="line">[common]</span><br><span class="line">bind_port = 7000</span><br><span class="line"># HTTP 访问端口以8080为例，自改</span><br><span class="line">vhost_http_port = 8080</span><br><span class="line"></span><br><span class="line">$ ./frps -c ./frps.ini</span><br></pre></td></tr></tbody></table></figure>
+<ul>
+<li>客户端</li>
+</ul>
+<p>frpc.ini添加</p>
+<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[web]</span><br><span class="line"># type = https对应的服务端vhost_http_port改为vhost_https_port</span><br><span class="line">type = http</span><br><span class="line"># 内网端口</span><br><span class="line">local_port = 80</span><br><span class="line"># 使用域名需要将域名A记录解析到 FRP 服务器的公网 IP</span><br><span class="line">custom_domains = 服务端域名/ip</span><br></pre></td></tr></tbody></table></figure>
+<p>启动客户端即可以通过 http://服务端域名/ip:8080访问内网<a href="http://ip:80服务">http://ip:80服务</a></p>
+<h3 id="为本地-HTTP-服务启用-HTTPS"><a href="#为本地-HTTP-服务启用-HTTPS" class="headerlink" title="为本地 HTTP 服务启用 HTTPS"></a>为本地 HTTP 服务启用 HTTPS</h3><p>通过 https2http 插件可以让本地 HTTP 服务转换成 HTTPS 服务对外提供。</p>
+<p>启用 frpc，启用 https2http 插件，配置如下:<br>frpc.ini</p>
+<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">[common]</span><br><span class="line">server_addr = x.x.x.x</span><br><span class="line">server_port = 7000</span><br><span class="line"></span><br><span class="line">[test_htts2http]</span><br><span class="line">type = https</span><br><span class="line">custom_domains = test.yourdomain.com</span><br><span class="line"></span><br><span class="line">plugin = https2http</span><br><span class="line">plugin_local_addr = 127.0.0.1:80</span><br><span class="line"></span><br><span class="line"># HTTPS 证书相关的配置</span><br><span class="line">plugin_crt_path = ./server.crt</span><br><span class="line">plugin_key_path = ./server.key</span><br><span class="line">plugin_host_header_rewrite = 127.0.0.1</span><br><span class="line">plugin_header_X-From-Where = frp</span><br></pre></td></tr></tbody></table></figure>
+<p>通过浏览器访问 <a target="_blank" rel="noopener" href="https://test.yourdomain.com/">https://test.yourdomain.com</a> 即可。</p>
+<h3 id="自定义二级域名"><a href="#自定义二级域名" class="headerlink" title="自定义二级域名"></a>自定义二级域名</h3><p>在多人同时使用一个 frps 时，通过自定义二级域名的方式来使用会更加方便。<br>只需要将 *.{subdomain_host} 解析到 frps 所在服务器。之后用户可以通过 subdomain 自行指定自己的 web 服务所需要使用的二级域名，通过 {subdomain}.{subdomain_host} 来访问自己的 web 服务。</p>
+<p>frps.ini</p>
+<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[common]</span><br><span class="line">subdomain_host = frps.com</span><br><span class="line">将泛域名 *.frps.com 解析到 frps 所在服务器的 IP 地址。</span><br></pre></td></tr></tbody></table></figure>
+<p>frpc.ini</p>
+<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[web]</span><br><span class="line">type = http</span><br><span class="line">local_port = 80</span><br><span class="line">subdomain = test</span><br></pre></td></tr></tbody></table></figure>
+<p>frps 和 frpc 都启动成功后，通过 test.frps.com 就可以访问到内网的 web 服务。</p>
+<p>注：如果 frps 配置了 subdomain_host，则 custom_domains 中不能是属于 subdomain_host 的子域名或者泛域名。<br>同一个 http 或 https 类型的代理中 custom_domains 和 subdomain 可以同时配置。</p>
+<h3 id="通过密码保护你的-web-服务"><a href="#通过密码保护你的-web-服务" class="headerlink" title="通过密码保护你的 web 服务"></a>通过密码保护你的 web 服务</h3><p>frpc.ini</p>
+<figure class="highlight plain"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[web]</span><br><span class="line">type = http</span><br><span class="line">local_port = 80</span><br><span class="line">custom_domains = test.yourdomain.com</span><br><span class="line">http_user = abc</span><br><span class="line">http_pwd = abc</span><br></pre></td></tr></tbody></table></figure>
+<p>通过浏览器访问 <a target="_blank" rel="noopener" href="http://test.yourdomain.com,需要输入配置的用户名和密码才能访问./">http://test.yourdomain.com，需要输入配置的用户名和密码才能访问。</a></p>
+<h3 id="更多功能"><a href="#更多功能" class="headerlink" title="更多功能"></a>更多功能</h3><ul>
+<li>对外提供简单的文件访问服务</li>
+<li>安全地暴露内网服务</li>
+<li>点对点内网穿透</li>
+<li>···</li>
+</ul>
+
+    
+  </div>
+
+</article>
+
+
+   
+
+   
+  <div class="box-prev-next clearfix">
+    <a class="show pull-left" href="/2019/09/17/pgbench/">
+        <i class="icon icon-angle-left"></i>
+    </a>
+    <a class="show pull-right" href="/2019/11/02/svn/">
+        <i class="icon icon-angle-right"></i>
+    </a>
+  </div>
+
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/categories/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              分类
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/atom.xml"
+              rel="noopener noreferrer"
+              target="_blank"
+              >
+              RSS
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/search/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              搜索
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+    
+    
+
+    
+
+    
+    
+
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script>
+    <div id="comment" class="vcomment" ></div>
+    <script>
+        var notify = 'false' == true ? true : false;
+        var verify = 'false' == true ? true : false;
+        var GUEST_INFO = ['nick','mail','link'];
+        var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+            return GUEST_INFO.indexOf(item) > -1
+        });
+        guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+        window.valine = new Valine({
+            el: '.vcomment',
+            notify: notify,
+            verify: verify,
+            appId: "masttnqEt9G69mj43i9oaA1C-gzGzoHsz",
+            appKey: "hgIx9VKn0GLDhRcLxQuNMl0E",
+            avatar:'mm',
+            placeholder: "Just go go",
+            guest_info:guest_info,
+            pageSize:'10'
+        });
+    </script>
+  
+    
+
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+</html>

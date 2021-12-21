@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>【Kafka】：高级应用 | haifun的博客</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="Kafka," />
+  
+
+  <meta name="description" content="事务幂等Kafka支持幂等功能来避免生产者重试时重复写入消息，开启方式为生产者客户端参数enable.idempotence设置为true（默认为false）。幂等性功能开启需要配合以下参数：  如果显示设置retries则必须大于0，未显示指定默认为Integer.MAX_VALUE。 max.in.flight.requests.per.connection参数不能大于5。 如果显示指定了ac">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Kafka】：高级应用">
+<meta property="og:url" content="https://haifuns.com/2021/06/06/kafka-09/index.html">
+<meta property="og:site_name" content="haifun的博客">
+<meta property="og:description" content="事务幂等Kafka支持幂等功能来避免生产者重试时重复写入消息，开启方式为生产者客户端参数enable.idempotence设置为true（默认为false）。幂等性功能开启需要配合以下参数：  如果显示设置retries则必须大于0，未显示指定默认为Integer.MAX_VALUE。 max.in.flight.requests.per.connection参数不能大于5。 如果显示指定了ac">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-06-06T05:42:00.000Z">
+<meta property="article:modified_time" content="2021-12-21T09:29:48.114Z">
+<meta property="article:author" content="haifun">
+<meta property="article:tag" content="Kafka">
+<meta name="twitter:card" content="summary">
+
+  
+
+  
+    <link rel="icon" href="/images/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbeddx" rel="stylesheet">
+
+
+  
+    
+<link rel="stylesheet" href="/css/personal-style.css">
+
+  
+
+  
+
+  
+
+  
+
+
+  
+    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
+
+<meta name="generator" content="Hexo 5.4.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="haifun的博客" type="application/atom+xml">
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header CENTER">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/categories/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            分类
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/atom.xml"
+            rel="noopener noreferrer"
+            target="_blank"
+            >
+            RSS
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/search/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8B%E5%8A%A1"><span class="toc-text">事务</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B9%82%E7%AD%89"><span class="toc-text">幂等</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8B%E5%8A%A1-1"><span class="toc-text">事务</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8B%E5%8A%A1%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86"><span class="toc-text">事务实现原理</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%BF%87%E6%9C%9F%E6%97%B6%E9%97%B4%EF%BC%88%E6%89%A9%E5%B1%95%EF%BC%89"><span class="toc-text">过期时间（扩展）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%BB%B6%E6%97%B6%E9%98%9F%E5%88%97%EF%BC%88%E6%89%A9%E5%B1%95%EF%BC%89"><span class="toc-text">延时队列（扩展）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E5%BB%B6%E6%97%B6%E4%B8%BB%E9%A2%98"><span class="toc-text">基于延时主题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E7%AB%AF%E5%A2%9E%E5%8A%A0%E5%89%8D%E7%BD%AE%E7%BC%93%E5%AD%98"><span class="toc-text">服务端增加前置缓存</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%AD%BB%E4%BF%A1%E9%98%9F%E5%88%97%E5%92%8C%E9%87%8D%E8%AF%95%E9%98%9F%E5%88%97%EF%BC%88%E6%89%A9%E5%B1%95%EF%BC%89"><span class="toc-text">死信队列和重试队列（扩展）</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post CENTER">
+   <article id="post-kafka-09" class="article article-type-post" itemprop="blogPost">
+  <header class="article-header">
+    <h1 class="post-title">【Kafka】：高级应用</h1>
+
+    <div class="article-meta">
+      <span>
+        <i class="icon-calendar"></i>
+        <span>2021.06.06</span>
+      </span>
+
+      
+        <span class="article-author">
+          <i class="icon-user"></i>
+          <span>haifun</span>
+        </span>
+      
+
+      
+  <span class="article-category">
+    <i class="icon-list"></i>
+    <a class="article-category-link" href="/categories/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6/">消息中间件</a>
+  </span>
+
+
+
+      
+
+      
+      <i class="fa fa-eye"></i> 
+        <span id="busuanzi_container_page_pv">
+           &nbsp热度 <span id="busuanzi_value_page_pv">
+           <i class="fa fa-spinner fa-spin"></i></span>℃
+        </span>
+      
+      
+    </div>
+  </header>
+
+  <div class="article-content">
+    
+      <h1 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h1><h2 id="幂等"><a href="#幂等" class="headerlink" title="幂等"></a>幂等</h2><p>Kafka支持幂等功能来避免生产者重试时重复写入消息，开启方式为生产者客户端参数enable.idempotence设置为true（默认为false）。幂等性功能开启需要配合以下参数：</p>
+<ul>
+<li>如果显示设置retries则必须大于0，未显示指定默认为Integer.MAX_VALUE。</li>
+<li>max.in.flight.requests.per.connection参数不能大于5。</li>
+<li>如果显示指定了acks，需要保证参数值为-1，不设置Kafka会自行设置。</li>
+</ul>
+<p>Kafka的幂等性主要是通过日志格式中RecordBatch的producer id和first sequence两个字段实现，每个生产者在初始化时都会被分配一个pid，对于每个pid，消息发送到的每个分区都有对应的序列号，从0开始递增。生产者每发送一条消息就会将&lt;pid,分区&gt;对应的序列号的值加1。</p>
+<p>broker端会为每一个&lt;pid,分区&gt;维护一个序列号。当收到消息时，只有它的序列号的值比维护的序列号大1时，才能正常接收。</p>
+<span id="more"></span>
+
+<h2 id="事务-1"><a href="#事务-1" class="headerlink" title="事务"></a>事务</h2><p>幂等性并不能跨多个分区运作，而事务可以保证对多个分区写入操作的原子性。在需要使用事务时，需要显示设置transactional.id参数为唯一值，并且开启幂等特性。</p>
+<p>KafkaProducer提供5种事务相关的方法：</p>
+<ul>
+<li>initTransactions：初始化事务</li>
+<li>beginTransactions：开启事务</li>
+<li>sendOffsetsToTransaction：消费者在事务内的位移提交</li>
+<li>commitTransaction：提交事务</li>
+<li>abortTransaction：终止事务（回滚）</li>
+</ul>
+<p>消费端存在参数isolation.level，默认值为read_uncommitted即可以消费未提交的事务，此参数可以设置为read_committd即只能消费已提交的消息。</p>
+<h3 id="事务实现原理"><a href="#事务实现原理" class="headerlink" title="事务实现原理"></a>事务实现原理</h3><p>Kafka事务功能由事务协调器（TransactinoCoordinator）负责处理，TransactionCoordinator会将事务状态持久化到内部主题__transaction_state中。</p>
+<p>事务实现原理如下：</p>
+<ol>
+<li>查找TransactionCoordinator，broker使用生产者请求中的transactionId的哈希值计算主题__transactino_state分区编号，leader所在broker即为要查找的TransactionCoordinator。</li>
+<li>获取pid，生产者发送transactionId到TransactionCoordinator，TransactionCoordinator收到请求后会把transactionId和对应的PID以消息形式保存在主题__transactin_state中。</li>
+<li>开启事务，生产者本地标记开启了一个事务，只有在发送第一条消息之后TransactionCoordinator才会认为此事务已经开启。</li>
+<li>Conusme-Transform-Produce，此阶段包含整个事务的数据处理过程。<ul>
+<li>AddPartitionsToTxnRequest：生产者给新的分区发送数据前，需要先向TransactionCoordinator发送请求将&lt;transactionId,TopicPartition&gt;的对应关系存储到__transaction_state中。</li>
+<li>ProduceRequest：生产者发送消息到用户自定义的主题中，消息中包含PID、producer_epoch和sequence number信息。</li>
+<li>AddOffsetsToTxnRequest：sendOffsetsToTransaction方法可以在一个事务批次里处理的消费和发送。</li>
+<li>TxnOffsetCommitRequest：生产者发送TxnOffsetCommitRequest请求给GroupCoordinator将消费位移信息offsets存储到__consumer_offsets中。</li>
+</ul>
+</li>
+<li>提交或终止事务：生产者通知TransactionCoordinator提交或终止事务。TransactionCoordinator在收到请求后会执行一下操作：<ul>
+<li>将prepare_commit或prepare_abort消息写到__transaction_state中；</li>
+<li>将提交或终止消息写入用户所使用的普通主题和__consumer_offsets中；</li>
+<li>将complete_commit或complete_abort消息写到__transaction_state；</li>
+</ul>
+</li>
+</ol>
+<h1 id="过期时间（扩展）"><a href="#过期时间（扩展）" class="headerlink" title="过期时间（扩展）"></a>过期时间（扩展）</h1><p>消息过期时间功能Kafka本身并没有直接支持，但是我们可以基于消息的timestamp和消费者拦截器实现，在生产端发送消息时设置ttl存放在headers中，消费者拦截器判断消息是否超时。对于超时消息可以配合死信队列使用，即避免了消息丢失也便于进行系统诊断。</p>
+<h1 id="延时队列（扩展）"><a href="#延时队列（扩展）" class="headerlink" title="延时队列（扩展）"></a>延时队列（扩展）</h1><p>对于Kafka的延时队列扩展支持，下面将讨论两种可行方案：基于自定义延时主题；服务端增加前置缓存；</p>
+<h2 id="基于延时主题"><a href="#基于延时主题" class="headerlink" title="基于延时主题"></a>基于延时主题</h2><p>此方案的思路是在发送延时消息时，并不直接投递到真实的主题（real_topic）中，而是先投递到Kafka内部主题（delay_topic），然后通过一个自定义的服务（DelayService）拉取这些内部主题的消息，并将满足条件的消息投递到要发送的真实主题中，消费者订阅的还是真实的主题。</p>
+<p>考虑到延时时间一般以秒计，如果要支持2个小时内的延时消息就创建7200个主题将会造成极度的资源浪费。可以按照不同的延时等级划分，比如5s/10s/30/1min/2min/5min/10min/20min/30min/45min/1h/2h，延时消息按照延时时间投递到不同等级的主题中，同一主题的消息延时时间强制转为一致的延时时间，这样只需增加少量主题就能在误差可控情况下实现延时功能。</p>
+<p>具体实现上，对于生产者客户端需要进行一定封装，通过生产者拦截器，根据消息的timestamp、headers字段（设置延时时间）对延时消息划分等级发送到对应的内部主题中。</p>
+<p>发送到内部主题（delay_topic_*）中的消息会被一个独立的DelayService消费，DelayService进程与Broker进程以一对一配比进行同机部署以保证可用性。对于不同延时级别的主题，DelaySercie内部都有单独的线程进行消息拉取，以及单独的DelayQueue进行消息暂存。DelayService应对主题中每个分区进行计数，当达到一定阈值就暂停该分区消息拉取。同时还会有专门的消息发送线程获取DelayQueue的消息并转发到真实主题中。</p>
+<h2 id="服务端增加前置缓存"><a href="#服务端增加前置缓存" class="headerlink" title="服务端增加前置缓存"></a>服务端增加前置缓存</h2><p>此方案思路为在Kafka服务中增加一个前置缓存，生产者消息正常发送，Kafka在判断是延时消息时（需扩展延时消息协议）就将消息存储在缓存中，待延时操作触发时就将消息发送到真实的主题中。为了保证消息的可靠性，可以引入缓存多副本机制。</p>
+<p>此思路需要对Kafka内核源码进行修改，另外需要衡量后期维护成本以及社区福利等问题，一般不适合实际应用。</p>
+<h1 id="死信队列和重试队列（扩展）"><a href="#死信队列和重试队列（扩展）" class="headerlink" title="死信队列和重试队列（扩展）"></a>死信队列和重试队列（扩展）</h1><p>对于死信队列，指由于某些原因无法被正确投递，为了保证消息不丢失，将其置于的一个特殊角色的队列。死信队列可以在broker端存入也可以在客户端存入，可根据实际场景对Kafka进行扩展实现。</p>
+<p>重试队列指消费端消费消息失败时，为了防止消息丢失而重新将消息回滚到broker中。重试队列一般分为多个等级，每个等级一般会设置重新投递延时，重试次数越多投递延时就越大，当超过投递次数时，消息就进入死信队列。</p>
+
+    
+  </div>
+
+</article>
+
+
+   
+
+   
+  <div class="box-prev-next clearfix">
+    <a class="show pull-left" href="/2021/06/06/kafka-08/">
+        <i class="icon icon-angle-left"></i>
+    </a>
+    <a class="show pull-right" href="/2021/08/12/databus/">
+        <i class="icon icon-angle-right"></i>
+    </a>
+  </div>
+
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/categories/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              分类
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/atom.xml"
+              rel="noopener noreferrer"
+              target="_blank"
+              >
+              RSS
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/search/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              搜索
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+    
+    
+
+    
+
+    
+    
+
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script>
+    <div id="comment" class="vcomment" ></div>
+    <script>
+        var notify = 'false' == true ? true : false;
+        var verify = 'false' == true ? true : false;
+        var GUEST_INFO = ['nick','mail','link'];
+        var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+            return GUEST_INFO.indexOf(item) > -1
+        });
+        guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+        window.valine = new Valine({
+            el: '.vcomment',
+            notify: notify,
+            verify: verify,
+            appId: "masttnqEt9G69mj43i9oaA1C-gzGzoHsz",
+            appKey: "hgIx9VKn0GLDhRcLxQuNMl0E",
+            avatar:'mm',
+            placeholder: "Just go go",
+            guest_info:guest_info,
+            pageSize:'10'
+        });
+    </script>
+  
+    
+
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</body>
+</html>
