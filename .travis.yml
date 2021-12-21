@@ -5,7 +5,7 @@ node_js:
 cache: npm
 branches:
   only:
-    - master
+    - fexo
 install:
   - npm install
 script:
@@ -17,5 +17,5 @@ deploy:
   keep-history: true
   target-branch: gh-pages
   on:
-    branch: master
+    branch: fexo
   local_dir: public
