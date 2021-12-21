@@ -21,7 +21,7 @@ home_nav:
 #    target_blank: true #在新页面打开
   - name: Roaming
     url: /roaming/
-    target_blank: true
+    target_blank: false
   - name: Github
     url: https://github.com/haifuns
     target_blank: true
@@ -66,7 +66,7 @@ toolbox:
 
 search_slogan:
   isShow: true # true|fase
-  text: Can you find the bug of world ~
+  text: Have fun ~
 
 link_slogan:
   isShow: false # true|fase
@@ -175,7 +175,7 @@ valine:
   appkey: hgIx9VKn0GLDhRcLxQuNMl0E # your leancloud application appkey
   notify: false # mail notifier , https://github.com/xCss/Valine/wiki
   verify: false # Verification code
-  placeholder: Just go go # comment box placeholder
+  placeholder: Say something # comment box placeholder
   avatar: mm # gravatar style
   guest_info: nick,mail,link # custom comment header
   pageSize: 10 # pagination size
