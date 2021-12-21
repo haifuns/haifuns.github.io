@@ -119,9 +119,6 @@ blog_name_font_familiy: calligraffittiregular
 
 init_page_content: POST  # HOME_NAV | POST
 
-per_page: 20
-pagination_dir: page
-
 # =========================================================
 # 第三方服务
 # =========================================================
