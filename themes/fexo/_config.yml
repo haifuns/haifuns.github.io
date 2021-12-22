@@ -199,9 +199,9 @@ about:
     text_key: Github
     text_value: "@haifuns"
     text_value_url: https://github.com/haifuns
-  - type: Email
+  - type: mail
     icon: icon-mail
-    text_key: mail
+    text_key: Email
     text_value: "haifuns@163.com"
   - type: location
     icon: icon-location
