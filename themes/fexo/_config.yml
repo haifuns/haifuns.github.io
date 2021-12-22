@@ -1,6 +1,6 @@
 # Blog info
 blog_name: Haifun
-slogan: How should I greet, with tears, with silence.
+slogan: 无限进步
 url: https://haifuns.com
 
 # Set avatar (Absolute url and relative url)
@@ -199,7 +199,7 @@ about:
     text_key: Github
     text_value: "@haifuns"
     text_value_url: https://github.com/haifuns
-  - type: mail
+  - type: Email
     icon: icon-mail
     text_key: mail
     text_value: "haifuns@163.com"
