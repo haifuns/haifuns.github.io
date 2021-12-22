@@ -16,8 +16,6 @@ const clientConfig = {
   },
 };
 
-console.log(clientConfig)
-
 const client = new CdnClient(clientConfig);
 const params = {
     "Paths": [
