@@ -46,7 +46,7 @@ for q = 0 to m
         k = min(m+1,q+2)
         repeat
             k = k - 1
-        until Pk ⊃ Pq a // Pq a是Pk的前缀
+        until P[0:k]==(P[q]+a)[q+1-k:q+1] //P[0:k]=P[q]+a后缀(P[q]+a)[q+1-k:q+1]
         δ(q,a) = k
 return δ
 ```
