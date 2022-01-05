@@ -10,7 +10,7 @@ date: 2022-01-05 20:35:00
 
 curator提供的信号量使用方式如下：
 
-```
+```java
 InterProcessSemaphoreV2 semaphore = new InterProcessSemaphoreV2(client, "/semaphore/semaphore_01", 3);
 // 获取信号
 Lease lease = semaphore.acquire();
