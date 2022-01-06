@@ -20,7 +20,7 @@ interProcessMutex.release();
 
 # 加锁
 
-当需要加锁时，curator会直接为当前线程在当前锁路径下创建一个瞬时有序节点，如果这个节点是排在有序列表第一个元素即获取锁成功，否则需要注册一个watcher监听器，等待上一个瞬时有序节点被删除后重试尝试获取锁。由加锁逻辑可知，curator提供的可重入锁是公平的。
+当需要加锁时，curator会直接为当前线程在当前锁路径下创建一个临时有序节点，如果这个节点是排在有序列表第一个元素即获取锁成功，否则需要注册一个watcher监听器，等待上一个临时有序节点被删除后重试尝试获取锁。由加锁逻辑可知，curator提供的可重入锁是公平的。
 
 ```java
 
@@ -153,7 +153,7 @@ private boolean internalLockLoop(long startMillis, Long millisToWait, String our
 
 # 解锁
 
-当需要解锁时，curator会判断锁是否被重入，如果没有直接删除瞬时节点。此时在这个节点上注册watcher的线程收到删除事件后会被notify结束wait，然后判断是否获取到锁。
+当需要解锁时，curator会判断锁是否被重入，如果没有直接删除临时节点。此时在这个节点上注册watcher的线程收到删除事件后会被notify结束wait，然后判断是否获取到锁。
 
 ```java
 // InterProcessMutex
