@@ -20,7 +20,7 @@ semaphore.returnLease(lease);
 
 # 获取信号
 
-curator信号量内部包含一个可重入锁，在获取信号时，首先会尝试获取内部可重入锁，在获取完成后，直接在path/leases路径下创建一个瞬时有序节点并创建一个watch监听器，然后获取到所有子节点，当且仅当当前的有序节点是子节点中第一个时认为获取信号成功，否则线程wait，直到其他线程返回信号时watcher收到状态变更notify后重新判断。当获取信号成功后释放内部可重入锁。
+curator信号量内部包含一个可重入锁，在获取信号时，首先会尝试获取内部可重入锁，在获取完成后，直接在path/leases路径下创建一个临时有序节点并创建一个watch监听器，然后获取到所有子节点，当且仅当当前的有序节点是子节点中第一个时认为获取信号成功，否则线程wait，直到其他线程返回信号时watcher收到状态变更notify后重新判断。当获取信号成功后释放内部可重入锁。
 
 ```java
 // InterProcessSemaphoreV2
@@ -83,7 +83,7 @@ private InternalAcquireResult internalAcquire1Lease(ImmutableList.Builder<Lease>
 
     try {
         PathAndBytesable<String> createBuilder = client.create().creatingParentContainersIfNeeded().withProtection().withMode(CreateMode.EPHEMERAL_SEQUENTIAL);
-        // 创建瞬时有序节点，path/leases
+        // 创建临时有序节点，path/leases
         String path = (nodeData != null) ? createBuilder.forPath(ZKPaths.makePath(leasesPath, LEASE_BASE_NAME), nodeData) : createBuilder.forPath(ZKPaths.makePath(leasesPath, LEASE_BASE_NAME));
         String nodeName = ZKPaths.getNodeFromPath(path);
         lease = makeLease(path);
@@ -139,7 +139,7 @@ private InternalAcquireResult internalAcquire1Lease(ImmutableList.Builder<Lease>
 
 # 释放信号
 
-在需要释放信号时，直接删除当前瞬时有序节点。
+在需要释放信号时，直接删除当前临时有序节点。
 
 ```java
 public void close() throws IOException {
