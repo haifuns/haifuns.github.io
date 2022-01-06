@@ -2,7 +2,7 @@ title: 【Curator源码】可重入读写锁源码解析
 author: haifun
 tags:
   - Curator
-  - Zookeeper
+  - ZooKeeper
 categories:
   - 分布式锁
 date: 2022-01-06 19:30:00
