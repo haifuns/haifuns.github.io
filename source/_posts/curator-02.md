@@ -2,7 +2,7 @@ title: 【Curator源码】信号量&不可重入锁源码解析
 author: haifun
 tags:
   - Curator
-  - Zookeeper
+  - ZooKeeper
 categories:
   - 分布式锁
 date: 2022-01-05 20:35:00
