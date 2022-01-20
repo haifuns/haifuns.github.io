@@ -10,7 +10,7 @@
     "deploy:refresh-cdn": "node source/js/qcloud.cdn.refresh.js"
   },
   "hexo": {
-    "version": "5.3.0"
+    "version": "5.4.0"
   },
   "dependencies": {
     "hexo": "^5.0.0",
