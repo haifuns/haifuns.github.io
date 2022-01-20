@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://haifuns.com/2021/11/17/paxos/</loc>
+    <lastmod>2022-01-20</lastmod>
+  </url>
+  <url>
+    <loc>https://haifuns.com/2019/09/17/pgbench/</loc>
+    <lastmod>2022-01-20</lastmod>
+  </url>
+  <url>
     <loc>https://haifuns.com/2021/11/18/raft/</loc>
     <lastmod>2022-01-20</lastmod>
   </url>
@@ -45,7 +53,7 @@
     <lastmod>2022-01-20</lastmod>
   </url>
   <url>
-    <loc>https://haifuns.com/2021/12/15/stringmatch-02/</loc>
+    <loc>https://haifuns.com/2021/12/16/redission-05/</loc>
     <lastmod>2022-01-20</lastmod>
   </url>
   <url>
@@ -53,7 +61,7 @@
     <lastmod>2022-01-20</lastmod>
   </url>
   <url>
-    <loc>https://haifuns.com/2021/12/16/redission-05/</loc>
+    <loc>https://haifuns.com/2021/12/15/stringmatch-02/</loc>
     <lastmod>2022-01-20</lastmod>
   </url>
   <url>
@@ -61,11 +69,11 @@
     <lastmod>2022-01-20</lastmod>
   </url>
   <url>
-    <loc>https://haifuns.com/2019/11/02/svn/</loc>
+    <loc>https://haifuns.com/2022/01/10/stringmatch-04/</loc>
     <lastmod>2022-01-20</lastmod>
   </url>
   <url>
-    <loc>https://haifuns.com/2022/01/10/stringmatch-04/</loc>
+    <loc>https://haifuns.com/2019/11/02/svn/</loc>
     <lastmod>2022-01-20</lastmod>
   </url>
   <url>
@@ -85,6 +93,10 @@
     <lastmod>2022-01-20</lastmod>
   </url>
   <url>
+    <loc>https://haifuns.com/2020/12/26/netty/</loc>
+    <lastmod>2022-01-20</lastmod>
+  </url>
+  <url>
     <loc>https://haifuns.com/2020/12/26/rabbitmq-4/</loc>
     <lastmod>2022-01-20</lastmod>
   </url>
@@ -101,15 +113,31 @@
     <lastmod>2022-01-20</lastmod>
   </url>
   <url>
+    <loc>https://haifuns.com/2020/12/26/rabbitmq-2/</loc>
+    <lastmod>2022-01-20</lastmod>
+  </url>
+  <url>
+    <loc>https://haifuns.com/2020/12/26/rabbitmq-3/</loc>
+    <lastmod>2022-01-20</lastmod>
+  </url>
+  <url>
+    <loc>https://haifuns.com/2022/01/04/curator-01/</loc>
+    <lastmod>2022-01-20</lastmod>
+  </url>
+  <url>
+    <loc>https://haifuns.com/2022/01/05/curator-02/</loc>
+    <lastmod>2022-01-20</lastmod>
+  </url>
+  <url>
+    <loc>https://haifuns.com/2022/01/06/curator-03/</loc>
+    <lastmod>2022-01-20</lastmod>
+  </url>
+  <url>
     <loc>https://haifuns.com/2021/08/12/databus/</loc>
     <lastmod>2022-01-20</lastmod>
   </url>
   <url>
     <loc>https://haifuns.com/2021/02/25/devops-01/</loc>
-    <lastmod>2022-01-20</lastmod>
-  </url>
-  <url>
-    <loc>https://haifuns.com/2022/01/06/curator-03/</loc>
     <lastmod>2022-01-20</lastmod>
   </url>
   <url>
@@ -145,19 +173,19 @@
     <lastmod>2022-01-20</lastmod>
   </url>
   <url>
-    <loc>https://haifuns.com/2020/12/26/java-concurrent-10/</loc>
-    <lastmod>2022-01-20</lastmod>
-  </url>
-  <url>
     <loc>https://haifuns.com/2020/12/26/java-concurrent-1/</loc>
     <lastmod>2022-01-20</lastmod>
   </url>
   <url>
-    <loc>https://haifuns.com/2020/12/26/java-concurrent-3/</loc>
+    <loc>https://haifuns.com/2020/12/26/java-concurrent-10/</loc>
     <lastmod>2022-01-20</lastmod>
   </url>
   <url>
     <loc>https://haifuns.com/2020/12/26/java-concurrent-2/</loc>
+    <lastmod>2022-01-20</lastmod>
+  </url>
+  <url>
+    <loc>https://haifuns.com/2020/12/26/java-concurrent-3/</loc>
     <lastmod>2022-01-20</lastmod>
   </url>
   <url>
@@ -185,15 +213,15 @@
     <lastmod>2022-01-20</lastmod>
   </url>
   <url>
-    <loc>https://haifuns.com/2020/12/26/jvm-3/</loc>
-    <lastmod>2022-01-20</lastmod>
-  </url>
-  <url>
     <loc>https://haifuns.com/2020/12/26/jvm-1/</loc>
     <lastmod>2022-01-20</lastmod>
   </url>
   <url>
     <loc>https://haifuns.com/2020/12/26/jvm-2/</loc>
+    <lastmod>2022-01-20</lastmod>
+  </url>
+  <url>
+    <loc>https://haifuns.com/2020/12/26/jvm-3/</loc>
     <lastmod>2022-01-20</lastmod>
   </url>
   <url>
@@ -217,11 +245,11 @@
     <lastmod>2022-01-20</lastmod>
   </url>
   <url>
-    <loc>https://haifuns.com/2021/05/29/kafka-05/</loc>
+    <loc>https://haifuns.com/2021/05/22/kafka-04/</loc>
     <lastmod>2022-01-20</lastmod>
   </url>
   <url>
-    <loc>https://haifuns.com/2021/05/22/kafka-04/</loc>
+    <loc>https://haifuns.com/2021/05/29/kafka-05/</loc>
     <lastmod>2022-01-20</lastmod>
   </url>
   <url>
@@ -249,23 +277,15 @@
     <lastmod>2022-01-20</lastmod>
   </url>
   <url>
-    <loc>https://haifuns.com/2021/11/17/paxos/</loc>
-    <lastmod>2022-01-20</lastmod>
-  </url>
-  <url>
-    <loc>https://haifuns.com/2019/09/17/pgbench/</loc>
-    <lastmod>2022-01-20</lastmod>
-  </url>
-  <url>
     <loc>https://haifuns.com/2020/12/26/java-concurrent-11/</loc>
     <lastmod>2022-01-20</lastmod>
   </url>
   <url>
-    <loc>https://haifuns.com/2020/12/26/java-concurrent-13/</loc>
+    <loc>https://haifuns.com/2020/12/26/java-concurrent-12/</loc>
     <lastmod>2022-01-20</lastmod>
   </url>
   <url>
-    <loc>https://haifuns.com/2020/12/26/java-concurrent-12/</loc>
+    <loc>https://haifuns.com/2020/12/26/java-concurrent-13/</loc>
     <lastmod>2022-01-20</lastmod>
   </url>
   <url>
@@ -289,27 +309,7 @@
     <lastmod>2022-01-20</lastmod>
   </url>
   <url>
-    <loc>https://haifuns.com/2020/12/26/netty/</loc>
-    <lastmod>2022-01-20</lastmod>
-  </url>
-  <url>
     <loc>https://haifuns.com/2020/06/14/docker/</loc>
-    <lastmod>2022-01-20</lastmod>
-  </url>
-  <url>
-    <loc>https://haifuns.com/2020/12/26/rabbitmq-3/</loc>
-    <lastmod>2022-01-20</lastmod>
-  </url>
-  <url>
-    <loc>https://haifuns.com/2020/12/26/rabbitmq-2/</loc>
-    <lastmod>2022-01-20</lastmod>
-  </url>
-  <url>
-    <loc>https://haifuns.com/2022/01/04/curator-01/</loc>
-    <lastmod>2022-01-20</lastmod>
-  </url>
-  <url>
-    <loc>https://haifuns.com/2022/01/05/curator-02/</loc>
     <lastmod>2022-01-20</lastmod>
   </url>
 </urlset> 
