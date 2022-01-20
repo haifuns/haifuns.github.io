@@ -1,244 +1,262 @@
 <!DOCTYPE html>
-
-
-  <html class="light page-post">
-
-
+<html lang="zh-CN">
 <head>
-  <meta charset="utf-8">
-  
-  <title>【Java 并发编程系列】【J.U.C】：CountDownLatch&amp;CyclicBarrier&amp;Semaphore | haifun的博客</title>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="baidu-site-verification" content="code-WD10oii5HB">
 
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<link rel="stylesheet" href="/css/main.css">
 
-  
-    <meta name="keywords" content="并发," />
-  
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
+  <script src="/lib/pace/pace.min.js"></script>
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"haifuns.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
 
   <meta name="description" content="CountDownLatchCountDownLatch 适用于需要在主线程中开启多个线程去并行执行任务并且主线程需要等待所有子线程执行完后再进行汇总的场景。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【Java 并发编程系列】【J.U.C】：CountDownLatch&amp;CyclicBarrier&amp;Semaphore">
 <meta property="og:url" content="https://haifuns.com/2020/12/26/java-concurrent-14/index.html">
-<meta property="og:site_name" content="haifun的博客">
+<meta property="og:site_name" content="With Silence">
 <meta property="og:description" content="CountDownLatchCountDownLatch 适用于需要在主线程中开启多个线程去并行执行任务并且主线程需要等待所有子线程执行完后再进行汇总的场景。">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/CountDownLatch-uml.png">
 <meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/CyclicBarrier-uml.png">
 <meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/Semaphore-uml.png">
 <meta property="article:published_time" content="2020-12-26T17:58:00.000Z">
-<meta property="article:modified_time" content="2022-01-20T15:54:24.711Z">
-<meta property="article:author" content="haifun">
+<meta property="article:modified_time" content="2022-01-20T16:12:30.192Z">
+<meta property="article:author" content="HAIFUN">
 <meta property="article:tag" content="并发">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/CountDownLatch-uml.png">
 
+<link rel="canonical" href="https://haifuns.com/2020/12/26/java-concurrent-14/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>【Java 并发编程系列】【J.U.C】：CountDownLatch&CyclicBarrier&Semaphore | With Silence</title>
   
 
-  
-    <link rel="icon" href="/images/favicon.ico">
-  
-
-  <link href="/css/styles.css?v=c114cbeddx" rel="stylesheet">
-
-
-  
-    
-<link rel="stylesheet" href="/css/personal-style.css">
-
-  
-
-  
-
-  
-  <script type="text/javascript">
-    var _hmt = _hmt || [];
-    (function() {
-      var hm = document.createElement("script");
-      hm.src = "//hm.baidu.com/hm.js?d3c8edb388553a2084296cbfe9a0785a";
-      var s = document.getElementsByTagName("script")[0];
-      s.parentNode.insertBefore(hm, s);
-    })();
-  </script>
-
-
-  
-  <script type="text/javascript">
-	(function(){
-	    var bp = document.createElement('script');
-	    var curProtocol = window.location.protocol.split(':')[0];
-	    if (curProtocol === 'https') {
-	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
-	    }
-	    else {
-	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
-	    }
-	    var s = document.getElementsByTagName("script")[0];
-	    s.parentNode.insertBefore(bp, s);
-	})();
-  </script>
 
 
 
-  
-    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
-  
 
-<meta name="generator" content="Hexo 5.4.0">
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+
 <style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
-<link rel="alternate" href="/atom.xml" title="haifun的博客" type="application/atom+xml">
 </head>
 
-<body>
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
 
-
-  
-    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
-  
-
-  <div class="post-header CENTER">
-   
-  <div class="toolbox">
-    <a class="toolbox-entry" href="/">
-      <span class="toolbox-entry-text">盒子</span>
-      <i class="icon-angle-down"></i>
-      <i class="icon-home"></i>
-    </a>
-    <ul class="list-toolbox">
-      
-        <li class="item-toolbox">
-          <a
-            class="CIRCLE"
-            href="/archives/"
-            rel="noopener noreferrer"
-            target="_self"
-            >
-            博客
-          </a>
-        </li>
-      
-        <li class="item-toolbox">
-          <a
-            class="CIRCLE"
-            href="/categories/"
-            rel="noopener noreferrer"
-            target="_self"
-            >
-            分类
-          </a>
-        </li>
-      
-        <li class="item-toolbox">
-          <a
-            class="CIRCLE"
-            href="/tags/"
-            rel="noopener noreferrer"
-            target="_self"
-            >
-            标签
-          </a>
-        </li>
-      
-        <li class="item-toolbox">
-          <a
-            class="CIRCLE"
-            href="/roaming/"
-            rel="noopener noreferrer"
-            target="_self"
-            >
-            漫游
-          </a>
-        </li>
-      
-        <li class="item-toolbox">
-          <a
-            class="CIRCLE"
-            href="/about/"
-            rel="noopener noreferrer"
-            target="_self"
-            >
-            关于
-          </a>
-        </li>
-      
-        <li class="item-toolbox">
-          <a
-            class="CIRCLE"
-            href="/atom.xml"
-            rel="noopener noreferrer"
-            target="_blank"
-            >
-            RSS
-          </a>
-        </li>
-      
-        <li class="item-toolbox">
-          <a
-            class="CIRCLE"
-            href="/search/"
-            rel="noopener noreferrer"
-            target="_self"
-            >
-            搜索
-          </a>
-        </li>
-      
-    </ul>
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
   </div>
 
+  <div class="site-meta">
 
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">With Silence</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
 </div>
 
 
-  <div id="toc" class="toc-article">
-    <strong class="toc-title">文章目录</strong>
-    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#CountDownLatch"><span class="toc-text">CountDownLatch</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B"><span class="toc-text">使用示例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86"><span class="toc-text">实现原理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#UML"><span class="toc-text">UML</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#void-await-%E6%96%B9%E6%B3%95"><span class="toc-text">void await 方法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#boolean-await-long-timeout-TimeUnit-unit-%E6%96%B9%E6%B3%95"><span class="toc-text">boolean await(long timeout, TimeUnit unit) 方法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#void-countDown-%E6%96%B9%E6%B3%95"><span class="toc-text">void countDown 方法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#long-getCount-%E6%96%B9%E6%B3%95"><span class="toc-text">long getCount 方法</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9E%E7%8E%AF%E5%B1%8F%E9%9A%9C-CyclicBarrier"><span class="toc-text">回环屏障 CyclicBarrier</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B-1"><span class="toc-text">使用示例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86-1"><span class="toc-text">实现原理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#UML-1"><span class="toc-text">UML</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#int-await-%E6%96%B9%E6%B3%95"><span class="toc-text">int await 方法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#boolean-await-long-timeout-TimeUnit-unit-%E6%96%B9%E6%B3%95-1"><span class="toc-text">boolean await(long timeout, TimeUnit unit) 方法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#int-dowait-boolean-timed-long-nanos-%E6%96%B9%E6%B3%95"><span class="toc-text">int dowait(boolean timed, long nanos) 方法</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BF%A1%E5%8F%B7%E9%87%8F-Semaphore"><span class="toc-text">信号量 Semaphore</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B-2"><span class="toc-text">使用示例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86-2"><span class="toc-text">实现原理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#UML-2"><span class="toc-text">UML</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#void-acquire-%E6%96%B9%E6%B3%95"><span class="toc-text">void acquire 方法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#void-acquire-int-permits-%E6%96%B9%E6%B3%95"><span class="toc-text">void acquire(int permits) 方法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#void-acquireUninterruptibly-%E6%96%B9%E6%B3%95"><span class="toc-text">void acquireUninterruptibly() 方法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#void-acquireUninterruptibly-int-permits-%E6%96%B9%E6%B3%95"><span class="toc-text">void acquireUninterruptibly(int permits) 方法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#void-release-%E6%96%B9%E6%B3%95"><span class="toc-text">void release() 方法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#void-release-int-permits-%E6%96%B9%E6%B3%95"><span class="toc-text">void release(int permits) 方法</span></a></li></ol></li></ol></li></ol>
-  </div>
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-roaming">
+
+    <a href="/roaming/" rel="section"><i class="fa fa-rocket fa-fw"></i>漫游</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-info-circle fa-fw"></i>关于</a>
+
+  </li>
+  </ul>
+</nav>
 
 
 
-<div class="content content-post CENTER">
-   <article id="post-java-concurrent-14" class="article article-type-post" itemprop="blogPost">
-  <header class="article-header">
-    <h1 class="post-title">【Java 并发编程系列】【J.U.C】：CountDownLatch&amp;CyclicBarrier&amp;Semaphore</h1>
 
-    <div class="article-meta">
-      <span>
-        <i class="icon-calendar"></i>
-        <span>2020.12.26</span>
-      </span>
+</div>
+    </header>
 
-      
-        <span class="article-author">
-          <i class="icon-user"></i>
-          <span>haifun</span>
-        </span>
-      
-
-      
-  <span class="article-category">
-    <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/%E5%B9%B6%E5%8F%91/">并发</a>
-  </span>
-
-
-
-      
-
-      
-      <i class="fa fa-eye"></i> 
-        <span id="busuanzi_container_page_pv">
-           &nbsp热度 <span id="busuanzi_value_page_pv">
-           <i class="fa fa-spinner fa-spin"></i></span>℃
-        </span>
-      
-      
-    </div>
-  </header>
-
-  <div class="article-content">
     
-      <h2 id="CountDownLatch"><a href="#CountDownLatch" class="headerlink" title="CountDownLatch"></a>CountDownLatch</h2><p>CountDownLatch 适用于需要在主线程中开启多个线程去并行执行任务并且主线程需要等待所有子线程执行完后再进行汇总的场景。</p>
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://haifuns.com/2020/12/26/java-concurrent-14/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/avatar.jpg">
+      <meta itemprop="name" content="HAIFUN">
+      <meta itemprop="description" content="无限进步<br/>">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="With Silence">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          【Java 并发编程系列】【J.U.C】：CountDownLatch&CyclicBarrier&Semaphore
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-12-26 17:58:00" itemprop="dateCreated datePublished" datetime="2020-12-26T17:58:00+00:00">2020-12-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2022-01-20 16:12:30" itemprop="dateModified" datetime="2022-01-20T16:12:30+00:00">2022-01-20</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%B9%B6%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">并发</span></a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2020/12/26/java-concurrent-14/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/12/26/java-concurrent-14/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="CountDownLatch"><a href="#CountDownLatch" class="headerlink" title="CountDownLatch"></a>CountDownLatch</h2><p>CountDownLatch 适用于需要在主线程中开启多个线程去并行执行任务并且主线程需要等待所有子线程执行完后再进行汇总的场景。</p>
 <span id="more"></span>
 
 <h3 id="使用示例"><a href="#使用示例" class="headerlink" title="使用示例"></a>使用示例</h3><p>实例代码如下：</p>
@@ -252,7 +270,7 @@
 <li>调用一个子线程的join() 方法后，该线程会一直被阻塞直到子线程运行完毕，而CountDownLatch 使用计数器来允许子线程运行完毕或者在运行中递减计数，也就是CountDownLatch 可以在子线程运行的任何时候让await 方法返回而不一定必须等到线程结束。</li>
 <li>使用线程池来管理线程时一般都是直接添加Runable 到线程池，这时候就没有办法再调用线程的join 方法，CountDownLatch 相比join 对线程同步控制更加灵活。</li>
 </ol>
-<h3 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h3><h4 id="UML"><a href="#UML" class="headerlink" title="UML"></a>UML</h4><p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/CountDownLatch-uml.png" alt="image"></p>
+<h3 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h3><h4 id="UML"><a href="#UML" class="headerlink" title="UML"></a>UML</h4><p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/CountDownLatch-uml.png" alt="image"></p>
 <p>从类图可以看出，CountDownLatch 是使用AQS 实现的。通过下面的构造函数可知，实际上是把计数器的值赋给了AQS 的状态变量state ，也就是使用AQS 状态值来表示计数器值。</p>
 <figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">CountDownLatch</span><span class="params">(<span class="keyword">int</span> count)</span> </span>{</span><br><span class="line">    <span class="keyword">if</span> (count &lt; <span class="number">0</span>) <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"count &lt; 0"</span>);</span><br><span class="line">    <span class="keyword">this</span>.sync = <span class="keyword">new</span> Sync(count);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">Sync(<span class="keyword">int</span> count) {</span><br><span class="line">    setState(count);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
 
@@ -284,7 +302,7 @@
 <p>输出结果：</p>
 <figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Thread[pool-1-thread-1,5,main] task-1 start</span><br><span class="line">Thread[pool-1-thread-1,5,main] task-1 enter in barrier</span><br><span class="line">Thread[pool-1-thread-2,5,main] task-2 start</span><br><span class="line">Thread[pool-1-thread-2,5,main] task-2 enter in barrier</span><br><span class="line">Thread[pool-1-thread-2,5,main] task merge result</span><br><span class="line">Thread[pool-1-thread-2,5,main] task-2 enter out barrier</span><br><span class="line">Thread[pool-1-thread-1,5,main] task-1 enter out barrier</span><br></pre></td></tr></tbody></table></figure>
 
-<h3 id="实现原理-1"><a href="#实现原理-1" class="headerlink" title="实现原理"></a>实现原理</h3><h4 id="UML-1"><a href="#UML-1" class="headerlink" title="UML"></a>UML</h4><p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/CyclicBarrier-uml.png" alt="image"></p>
+<h3 id="实现原理-1"><a href="#实现原理-1" class="headerlink" title="实现原理"></a>实现原理</h3><h4 id="UML-1"><a href="#UML-1" class="headerlink" title="UML"></a>UML</h4><p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/CyclicBarrier-uml.png" alt="image"></p>
 <p>由类图可知，CyclicBarrier 基于独占锁实现，其底层还是基于AQS 的。parties 用来记录线程个数，这里表示多少线程调用await 后，所有线程才会冲破屏障。而count 一开始等于parties ，每当有线程调用await 就减1 ，当count 为0 表示所有线程都到了屏障点。</p>
 <p>barrierCommand 任务，这个任务的执行时机是当所有线程都到达屏障点后。</p>
 <p>在变量 generation 部有一 变量 broken ，其用来记录当前屏障是否被打破。</p>
@@ -315,7 +333,7 @@
 <p>输出结果：</p>
 <figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Thread[pool-<span class="number">1</span>-thread-<span class="number">1</span>,<span class="number">5</span>,main] over</span><br><span class="line">Thread[pool-<span class="number">1</span>-thread-<span class="number">2</span>,<span class="number">5</span>,main] over</span><br><span class="line">all child thread over</span><br></pre></td></tr></tbody></table></figure>
 
-<h3 id="实现原理-2"><a href="#实现原理-2" class="headerlink" title="实现原理"></a>实现原理</h3><h4 id="UML-2"><a href="#UML-2" class="headerlink" title="UML"></a>UML</h4><p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/Semaphore-uml.png" alt="image"></p>
+<h3 id="实现原理-2"><a href="#实现原理-2" class="headerlink" title="实现原理"></a>实现原理</h3><h4 id="UML-2"><a href="#UML-2" class="headerlink" title="UML"></a>UML</h4><p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/Semaphore-uml.png" alt="image"></p>
 <p>由类图可知，Semaphor 还是使用AQS 实现的。 Sync 只是对AQS 的一个修饰，并且Sync 有两个实现类，用来指定获取信号量时是否采用公平策略。例如，下面的代码在创建Semaphore 时会使用一个变量指定是否使用非公平策略。</p>
 <figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">Semaphore</span><span class="params">(<span class="keyword">int</span> permits)</span> </span>{</span><br><span class="line">    sync = <span class="keyword">new</span> NonfairSync(permits);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">Semaphore</span><span class="params">(<span class="keyword">int</span> permits, <span class="keyword">boolean</span> fair)</span> </span>{</span><br><span class="line">    sync = fair ? <span class="keyword">new</span> FairSync(permits) : <span class="keyword">new</span> NonfairSync(permits);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line">Sync(<span class="keyword">int</span> permits) {</span><br><span class="line">    setState(permits);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
 
@@ -337,204 +355,314 @@
 
 <h4 id="void-release-int-permits-方法"><a href="#void-release-int-permits-方法" class="headerlink" title="void release(int permits) 方法"></a>void release(int permits) 方法</h4><p>该方法与不带参数的release 方法的不同之处在于，前者每次调用会在原信号量值的基础上增加 permit ，而后者每次增加1 。</p>
 <figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">release</span><span class="params">(<span class="keyword">int</span> permits)</span> </span>{</span><br><span class="line">    <span class="keyword">if</span> (permits &lt; <span class="number">0</span>) <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException();</span><br><span class="line">    sync.releaseShared(permits);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+    </div>
+
     
-  </div>
+    
+    
+        
 
-</article>
-
-
-   
-
-   
-  <div class="box-prev-next clearfix">
-    <a class="show pull-left" href="/2020/12/26/java-concurrent-13/">
-        <i class="icon icon-angle-left"></i>
-    </a>
-    <a class="show pull-right" href="/2021/01/15/redis-01/">
-        <i class="icon icon-angle-right"></i>
-    </a>
-  </div>
-
-
-
-
+<div>
+<ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Haif.
+  </li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="https://haifuns.com/2020/12/26/java-concurrent-14/" title="【Java 并发编程系列】【J.U.C】：CountDownLatch&amp;CyclicBarrier&amp;Semaphore">https://haifuns.com/2020/12/26/java-concurrent-14/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
 </div>
 
 
-  <a id="backTop" class="back-top">
-    <i class="icon-angle-up"></i>
-  </a>
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/%E5%B9%B6%E5%8F%91/" rel="tag"><i class="fa fa-tag"></i> 并发</a>
+          </div>
+
+        
 
 
-
-
-  <div class="modal" id="modal">
-  <span id="cover" class="cover hide"></span>
-  <div id="modal-dialog" class="modal-dialog hide-dialog">
-    <div class="modal-header">
-      <span id="close" class="btn-close">关闭</span>
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/12/26/java-concurrent-13/" rel="prev" title="【Java 并发编程系列】【J.U.C】：ThreadPoolExecutor">
+      <i class="fa fa-chevron-left"></i> 【Java 并发编程系列】【J.U.C】：ThreadPoolExecutor
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/01/15/redis-01/" rel="next" title="【Redis】内存模型">
+      【Redis】内存模型 <i class="fa fa-chevron-right"></i>
+    </a></div>
     </div>
-    <hr>
-    <div class="modal-body">
-      <ul class="list-toolbox">
-        
-          <li class="item-toolbox">
-            <a
-              class="CIRCLE"
-              href="/archives/"
-              rel="noopener noreferrer"
-              target="_self"
-              >
-              博客
-            </a>
-          </li>
-        
-          <li class="item-toolbox">
-            <a
-              class="CIRCLE"
-              href="/categories/"
-              rel="noopener noreferrer"
-              target="_self"
-              >
-              分类
-            </a>
-          </li>
-        
-          <li class="item-toolbox">
-            <a
-              class="CIRCLE"
-              href="/tags/"
-              rel="noopener noreferrer"
-              target="_self"
-              >
-              标签
-            </a>
-          </li>
-        
-          <li class="item-toolbox">
-            <a
-              class="CIRCLE"
-              href="/roaming/"
-              rel="noopener noreferrer"
-              target="_self"
-              >
-              漫游
-            </a>
-          </li>
-        
-          <li class="item-toolbox">
-            <a
-              class="CIRCLE"
-              href="/about/"
-              rel="noopener noreferrer"
-              target="_self"
-              >
-              关于
-            </a>
-          </li>
-        
-          <li class="item-toolbox">
-            <a
-              class="CIRCLE"
-              href="/atom.xml"
-              rel="noopener noreferrer"
-              target="_blank"
-              >
-              RSS
-            </a>
-          </li>
-        
-          <li class="item-toolbox">
-            <a
-              class="CIRCLE"
-              href="/search/"
-              rel="noopener noreferrer"
-              target="_self"
-              >
-              搜索
-            </a>
-          </li>
-        
-      </ul>
-
-    </div>
-  </div>
-</div>
-
-
-
+      </footer>
+    
+  </article>
   
-      <div class="fexo-comments comments-post">
-    
-
-    
-
-    
-    
-
-    
-
-    
-    
-
-    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
-    <script src="//cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script>
-    <div id="comment" class="vcomment" ></div>
-    <script>
-        var notify = 'false' == true ? true : false;
-        var verify = 'false' == true ? true : false;
-        var GUEST_INFO = ['nick','mail','link'];
-        var guest_info = 'nick,mail,link'.split(',').filter(function(item){
-            return GUEST_INFO.indexOf(item) > -1
-        });
-        guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
-        window.valine = new Valine({
-            el: '.vcomment',
-            notify: notify,
-            verify: verify,
-            appId: "masttnqEt9G69mj43i9oaA1C-gzGzoHsz",
-            appKey: "hgIx9VKn0GLDhRcLxQuNMl0E",
-            avatar:'mm',
-            placeholder: "Say something",
-            guest_info:guest_info,
-            pageSize:'10'
-        });
-    </script>
   
-    
-
-  </div>
-
   
 
-  <script type="text/javascript">
-  function loadScript(url, callback) {
-    var script = document.createElement('script')
-    script.type = 'text/javascript';
 
-    if (script.readyState) { //IE
-      script.onreadystatechange = function() {
-        if (script.readyState == 'loaded' ||
-          script.readyState == 'complete') {
-          script.onreadystatechange = null;
-          callback();
-        }
-      };
-    } else { //Others
-      script.onload = function() {
-        callback();
-      };
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
     }
-
-    script.src = url;
-    document.getElementsByTagName('head')[0].appendChild(script);
-  }
-
-  window.onload = function() {
-    loadScript('/js/bundle.js?235683', function() {
-      // load success
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
     });
   }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#CountDownLatch"><span class="nav-number">1.</span> <span class="nav-text">CountDownLatch</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B"><span class="nav-number">1.1.</span> <span class="nav-text">使用示例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86"><span class="nav-number">1.2.</span> <span class="nav-text">实现原理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#UML"><span class="nav-number">1.2.1.</span> <span class="nav-text">UML</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#void-await-%E6%96%B9%E6%B3%95"><span class="nav-number">1.2.2.</span> <span class="nav-text">void await 方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#boolean-await-long-timeout-TimeUnit-unit-%E6%96%B9%E6%B3%95"><span class="nav-number">1.2.3.</span> <span class="nav-text">boolean await(long timeout, TimeUnit unit) 方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#void-countDown-%E6%96%B9%E6%B3%95"><span class="nav-number">1.2.4.</span> <span class="nav-text">void countDown 方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#long-getCount-%E6%96%B9%E6%B3%95"><span class="nav-number">1.2.5.</span> <span class="nav-text">long getCount 方法</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9E%E7%8E%AF%E5%B1%8F%E9%9A%9C-CyclicBarrier"><span class="nav-number">2.</span> <span class="nav-text">回环屏障 CyclicBarrier</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B-1"><span class="nav-number">2.1.</span> <span class="nav-text">使用示例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86-1"><span class="nav-number">2.2.</span> <span class="nav-text">实现原理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#UML-1"><span class="nav-number">2.2.1.</span> <span class="nav-text">UML</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#int-await-%E6%96%B9%E6%B3%95"><span class="nav-number">2.2.2.</span> <span class="nav-text">int await 方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#boolean-await-long-timeout-TimeUnit-unit-%E6%96%B9%E6%B3%95-1"><span class="nav-number">2.2.3.</span> <span class="nav-text">boolean await(long timeout, TimeUnit unit) 方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#int-dowait-boolean-timed-long-nanos-%E6%96%B9%E6%B3%95"><span class="nav-number">2.2.4.</span> <span class="nav-text">int dowait(boolean timed, long nanos) 方法</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BF%A1%E5%8F%B7%E9%87%8F-Semaphore"><span class="nav-number">3.</span> <span class="nav-text">信号量 Semaphore</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B-2"><span class="nav-number">3.1.</span> <span class="nav-text">使用示例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86-2"><span class="nav-number">3.2.</span> <span class="nav-text">实现原理</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#UML-2"><span class="nav-number">3.2.1.</span> <span class="nav-text">UML</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#void-acquire-%E6%96%B9%E6%B3%95"><span class="nav-number">3.2.2.</span> <span class="nav-text">void acquire 方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#void-acquire-int-permits-%E6%96%B9%E6%B3%95"><span class="nav-number">3.2.3.</span> <span class="nav-text">void acquire(int permits) 方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#void-acquireUninterruptibly-%E6%96%B9%E6%B3%95"><span class="nav-number">3.2.4.</span> <span class="nav-text">void acquireUninterruptibly() 方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#void-acquireUninterruptibly-int-permits-%E6%96%B9%E6%B3%95"><span class="nav-number">3.2.5.</span> <span class="nav-text">void acquireUninterruptibly(int permits) 方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#void-release-%E6%96%B9%E6%B3%95"><span class="nav-number">3.2.6.</span> <span class="nav-text">void release() 方法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#void-release-int-permits-%E6%96%B9%E6%B3%95"><span class="nav-number">3.2.7.</span> <span class="nav-text">void release(int permits) 方法</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="HAIFUN"
+      src="/uploads/avatar.jpg">
+  <p class="site-author-name" itemprop="name">HAIFUN</p>
+  <div class="site-description" itemprop="description">无限进步<br/></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">78</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/haifuns" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;haifuns" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:haifuns@163.com" title="E-Mail → mailto:haifuns@163.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+  </div>
+  <div class="cc-license motion-element" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">鲁ICP备19052103号 </a>
+      <img src="/images/beian.png" style="display: inline-block;">
+  </div>
+
+<div class="copyright">
+  
+  &copy; 2019 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">HAIFUN</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+  <script>
+    (function(){
+      var canonicalURL, curProtocol;
+      //Get the <link> tag
+      var x=document.getElementsByTagName("link");
+		//Find the last canonical URL
+		if(x.length > 0){
+			for (i=0;i<x.length;i++){
+				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
+					canonicalURL=x[i].href;
+				}
+			}
+		}
+    //Get protocol
+	    if (!canonicalURL){
+	    	curProtocol = window.location.protocol.split(':')[0];
+	    }
+	    else{
+	    	curProtocol = canonicalURL.split(':')[0];
+	    }
+      //Get current URL if the canonical URL does not exist
+	    if (!canonicalURL) canonicalURL = window.location.href;
+	    //Assign script content. Replace current URL with the canonical URL
+      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : true,
+      notify     : false,
+      appId      : 'masttnqEt9G69mj43i9oaA1C-gzGzoHsz',
+      appKey     : 'hgIx9VKn0GLDhRcLxQuNMl0E',
+      placeholder: ":)",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : 'https://leancloud.haifuns.com'
+    });
+  }, window.Valine);
+});
 </script>
 
 </body>
