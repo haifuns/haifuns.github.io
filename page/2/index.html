@@ -1,1544 +1,488 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+
+
+  <html class="light page-home">
+
+
 <head>
-  <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
-<meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 5.4.0">
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico">
-  <link rel="mask-icon" href="/images/logo.svg" color="#222">
-  <meta name="baidu-site-verification" content="code-WD10oii5HB">
+  <meta charset="utf-8">
+  
+  <title>haifun的博客</title>
 
-<link rel="stylesheet" href="/css/main.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
+  
+    <meta name="keywords" content="haifun,后端,JAVA,架构,算法" />
+  
 
-<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
-  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
-  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
-  <script src="/lib/pace/pace.min.js"></script>
-
-<script id="hexo-configurations">
-    var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"haifuns.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
-  </script>
-
-  <meta name="description" content="无限进步">
+  <meta name="description" content="haifun,后端,JAVA,架构,算法">
 <meta property="og:type" content="website">
-<meta property="og:title" content="With Silence">
+<meta property="og:title" content="haifun的博客">
 <meta property="og:url" content="https://haifuns.com/page/2/index.html">
-<meta property="og:site_name" content="With Silence">
-<meta property="og:description" content="无限进步">
+<meta property="og:site_name" content="haifun的博客">
+<meta property="og:description" content="haifun,后端,JAVA,架构,算法">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:author" content="HAIFUN">
+<meta property="article:author" content="haifun">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://haifuns.com/page/2/">
-
-
-<script id="page-configurations">
-  // https://hexo.io/docs/variables.html
-  CONFIG.page = {
-    sidebar: "",
-    isHome : true,
-    isPost : false,
-    lang   : 'zh-CN'
-  };
-</script>
-
-  <title>With Silence</title>
-  
-
-
-
-
-
-
-  <noscript>
-  <style>
-  .use-motion .brand,
-  .use-motion .menu-item,
-  .sidebar-inner,
-  .use-motion .post-block,
-  .use-motion .pagination,
-  .use-motion .comments,
-  .use-motion .post-header,
-  .use-motion .post-body,
-  .use-motion .collection-header { opacity: initial; }
-
-  .use-motion .site-title,
-  .use-motion .site-subtitle {
-    opacity: initial;
-    top: initial;
-  }
-
-  .use-motion .logo-line-before i { left: initial; }
-  .use-motion .logo-line-after i { right: initial; }
-  </style>
-</noscript>
-
-
-<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
-</head>
-
-<body itemscope itemtype="http://schema.org/WebPage">
-  <div class="container use-motion">
-    <div class="headband"></div>
-
-    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-container">
-  <div class="site-nav-toggle">
-    <div class="toggle" aria-label="切换导航栏">
-      <span class="toggle-line toggle-line-first"></span>
-      <span class="toggle-line toggle-line-middle"></span>
-      <span class="toggle-line toggle-line-last"></span>
-    </div>
-  </div>
-
-  <div class="site-meta">
-
-    <a href="/" class="brand" rel="start">
-      <span class="logo-line-before"><i></i></span>
-      <h1 class="site-title">With Silence</h1>
-      <span class="logo-line-after"><i></i></span>
-    </a>
-  </div>
-
-  <div class="site-nav-right">
-    <div class="toggle popup-trigger">
-    </div>
-  </div>
-</div>
-
-
-
-
-<nav class="site-nav">
-  <ul id="menu" class="main-menu menu">
-        <li class="menu-item menu-item-home">
-
-    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
-
-  </li>
-        <li class="menu-item menu-item-roaming">
-
-    <a href="/roaming/" rel="section"><i class="fa fa-rocket fa-fw"></i>漫游</a>
-
-  </li>
-        <li class="menu-item menu-item-tags">
-
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
-
-  </li>
-        <li class="menu-item menu-item-categories">
-
-    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
-
-  </li>
-        <li class="menu-item menu-item-archives">
-
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
-
-  </li>
-        <li class="menu-item menu-item-about">
-
-    <a href="/about/" rel="section"><i class="fa fa-info-circle fa-fw"></i>关于</a>
-
-  </li>
-  </ul>
-</nav>
-
-
-
-
-</div>
-    </header>
-
-    
-  <div class="back-to-top">
-    <i class="fa fa-arrow-up"></i>
-    <span>0%</span>
-  </div>
-  <div class="reading-progress-bar"></div>
-
-
-    <main class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-          
-
-          <div class="content index posts-expand">
-            
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://haifuns.com/2021/12/13/redission-02/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.jpg">
-      <meta itemprop="name" content="HAIFUN">
-      <meta itemprop="description" content="无限进步<br/>">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="With Silence">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/12/13/redission-02/" class="post-title-link" itemprop="url">【Redission源码】公平锁源码解析</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-12-13 00:15:00" itemprop="dateCreated datePublished" datetime="2021-12-13T00:15:00+00:00">2021-12-13</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-01-20 15:43:31" itemprop="dateModified" datetime="2022-01-20T15:43:31+00:00">2022-01-20</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/" itemprop="url" rel="index"><span itemprop="name">分布式锁</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2021/12/13/redission-02/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2021/12/13/redission-02/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>Redission提供RedissonFairLock实现公平锁，使用方式如下：</p>
-<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">RLock fairLock = redisson.getFairLock(<span class="string">"anyLock"</span>);</span><br><span class="line">fairLock.lock();</span><br><span class="line">fairLock.unlock();</span><br></pre></td></tr></tbody></table></figure>
-
-<p>RedissionFairLock可以保证当多个Residdion客户端线程同时请求加锁时，优先分配给先发起请求的线程。所有请求线程会在一个队列中排队，当某个线程宕机时，Redission会等待5秒后继续下一个线程。也就是说如果前面有5个线程都处于等待状态，那么后面的线程会等待至少25秒。</p>
-<h1 id="排队加锁"><a href="#排队加锁" class="headerlink" title="排队加锁"></a>排队加锁</h1><p>RedissionFairLock继承自RedissionLock，加锁逻辑中重写了#tryLockInnerAsync方法，加锁lua有所不同，除了hash存放锁外，还存在一个list结构存在等待队列，一个zset结构存在等待队列timeout时间。详细处理如下所示：</p>
-<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br></pre></td><td class="code"><pre><span class="line">&lt;T&gt; <span class="function">RFuture&lt;T&gt; <span class="title">tryLockInnerAsync</span><span class="params">(<span class="keyword">long</span> waitTime, <span class="keyword">long</span> leaseTime, TimeUnit unit, <span class="keyword">long</span> threadId, RedisStrictCommand&lt;T&gt; command)</span> </span>{</span><br><span class="line">    <span class="keyword">long</span> wait = threadWaitTime;</span><br><span class="line">    <span class="keyword">if</span> (waitTime != -<span class="number">1</span>) {</span><br><span class="line">        wait = unit.toMillis(waitTime);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">long</span> currentTime = System.currentTimeMillis();</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (command == RedisCommands.EVAL_LONG) {</span><br><span class="line">        <span class="keyword">return</span> evalWriteAsync(getRawName(), LongCodec.INSTANCE, command,</span><br><span class="line">                <span class="comment">// remove stale threads</span></span><br><span class="line">                <span class="string">"while true do "</span> +</span><br><span class="line">                    <span class="comment">// 从等待队列redisson_lock_queue:{锁名}中获取第1个元素</span></span><br><span class="line">                    <span class="string">"local firstThreadId2 = redis.call('lindex', KEYS[2], 0);"</span> +</span><br><span class="line">                    <span class="comment">// 如果没有排队加锁的线程，就跳出循环执行加锁逻辑</span></span><br><span class="line">                    <span class="string">"if firstThreadId2 == false then "</span> +</span><br><span class="line">                        <span class="string">"break;"</span> +</span><br><span class="line">                    <span class="string">"end;"</span> +</span><br><span class="line"></span><br><span class="line">                    <span class="comment">// 获取当前线程剩余超时时间</span></span><br><span class="line">                    <span class="string">"local timeout = tonumber(redis.call('zscore', KEYS[3], firstThreadId2));"</span> +</span><br><span class="line">                    <span class="comment">// 如果超时时间小于当前时间，那么直接移除当前等待的线程</span></span><br><span class="line">                    <span class="string">"if timeout &lt;= tonumber(ARGV[4]) then "</span> +</span><br><span class="line">                        <span class="comment">// remove the item from the queue and timeout set</span></span><br><span class="line">                        <span class="comment">// NOTE we do not alter any other timeout</span></span><br><span class="line">                        <span class="string">"redis.call('zrem', KEYS[3], firstThreadId2);"</span> +</span><br><span class="line">                        <span class="string">"redis.call('lpop', KEYS[2]);"</span> +</span><br><span class="line">                    <span class="string">"else "</span> +</span><br><span class="line">                        <span class="string">"break;"</span> +</span><br><span class="line">                    <span class="string">"end;"</span> +</span><br><span class="line">                <span class="string">"end;"</span> +</span><br><span class="line"></span><br><span class="line">                <span class="comment">// 如果锁不存在或者队列redisson_lock_queue:{锁名}不存在或者队列中第一个元素是uuid:threadId</span></span><br><span class="line">                <span class="comment">// check if the lock can be acquired now</span></span><br><span class="line">                <span class="string">"if (redis.call('exists', KEYS[1]) == 0) "</span> +</span><br><span class="line">                    <span class="string">"and ((redis.call('exists', KEYS[2]) == 0) "</span> +</span><br><span class="line">                        <span class="string">"or (redis.call('lindex', KEYS[2], 0) == ARGV[2])) then "</span> +</span><br><span class="line"></span><br><span class="line">                    <span class="comment">// remove this thread from the queue and timeout set</span></span><br><span class="line">                    <span class="comment">// 从redisson_lock_queue:{锁名}中移除第一个元素</span></span><br><span class="line">                    <span class="string">"redis.call('lpop', KEYS[2]);"</span> +</span><br><span class="line">                    <span class="comment">// 从zset结构redisson_lock_timeout:{锁名}中弹出uuid:threadId</span></span><br><span class="line">                    <span class="string">"redis.call('zrem', KEYS[3], ARGV[2]);"</span> +</span><br><span class="line"></span><br><span class="line">                    <span class="comment">// 遍历timeout zset，给每个元素减5秒</span></span><br><span class="line">                    <span class="comment">// decrease timeouts for all waiting in the queue</span></span><br><span class="line">                    <span class="string">"local keys = redis.call('zrange', KEYS[3], 0, -1);"</span> +</span><br><span class="line">                    <span class="string">"for i = 1, #keys, 1 do "</span> +</span><br><span class="line">                        <span class="string">"redis.call('zincrby', KEYS[3], -tonumber(ARGV[3]), keys[i]);"</span> +</span><br><span class="line">                    <span class="string">"end;"</span> +</span><br><span class="line"></span><br><span class="line">                    <span class="comment">// add hash 锁名，field uuid:threadId，value 1</span></span><br><span class="line">                    <span class="comment">// 设置过期时间，默认30秒，返回空</span></span><br><span class="line">                    <span class="comment">// acquire the lock and set the TTL for the lease</span></span><br><span class="line">                    <span class="string">"redis.call('hset', KEYS[1], ARGV[2], 1);"</span> +</span><br><span class="line">                    <span class="string">"redis.call('pexpire', KEYS[1], ARGV[1]);"</span> +</span><br><span class="line">                    <span class="string">"return nil;"</span> +</span><br><span class="line">                <span class="string">"end;"</span> +</span><br><span class="line"></span><br><span class="line">                <span class="comment">// 如果当前线程已经加过锁了，就把value加1，更新过期时间，返回空</span></span><br><span class="line">                <span class="comment">// check if the lock is already held, and this is a re-entry</span></span><br><span class="line">                <span class="string">"if redis.call('hexists', KEYS[1], ARGV[2]) == 1 then "</span> +</span><br><span class="line">                    <span class="string">"redis.call('hincrby', KEYS[1], ARGV[2],1);"</span> +</span><br><span class="line">                    <span class="string">"redis.call('pexpire', KEYS[1], ARGV[1]);"</span> +</span><br><span class="line">                    <span class="string">"return nil;"</span> +</span><br><span class="line">                <span class="string">"end;"</span> +</span><br><span class="line"></span><br><span class="line">                <span class="comment">// 获取当前线程等待超时时间，如果存在就返回剩余的超时时间</span></span><br><span class="line">                <span class="comment">// the lock cannot be acquired</span></span><br><span class="line">                <span class="comment">// check if the thread is already in the queue</span></span><br><span class="line">                <span class="string">"local timeout = redis.call('zscore', KEYS[3], ARGV[2]);"</span> +</span><br><span class="line">                <span class="string">"if timeout ~= false then "</span> +</span><br><span class="line">                    <span class="comment">// the real timeout is the timeout of the prior thread</span></span><br><span class="line">                    <span class="comment">// in the queue, but this is approximately correct, and</span></span><br><span class="line">                    <span class="comment">// avoids having to traverse the queue</span></span><br><span class="line">                    <span class="string">"return timeout - tonumber(ARGV[3]) - tonumber(ARGV[4]);"</span> +</span><br><span class="line">                <span class="string">"end;"</span> +</span><br><span class="line"></span><br><span class="line">                <span class="comment">// add the thread to the queue at the end, and set its timeout in the timeout set to the timeout of</span></span><br><span class="line">                <span class="comment">// the prior thread in the queue (or the timeout of the lock if the queue is empty) plus the</span></span><br><span class="line">                <span class="comment">// threadWaitTime</span></span><br><span class="line">                <span class="comment">// 从等待队列里取出最后一个线程</span></span><br><span class="line">                <span class="string">"local lastThreadId = redis.call('lindex', KEYS[2], -1);"</span> +</span><br><span class="line">                <span class="string">"local ttl;"</span> +</span><br><span class="line">                <span class="string">"if lastThreadId ~= false and lastThreadId ~= ARGV[2] then "</span> +</span><br><span class="line">                    <span class="comment">// 最后一个线程等待ttl</span></span><br><span class="line">                    <span class="string">"ttl = tonumber(redis.call('zscore', KEYS[3], lastThreadId)) - tonumber(ARGV[4]);"</span> +</span><br><span class="line">                <span class="string">"else "</span> +</span><br><span class="line">                    <span class="comment">// 正在加锁的线程ttl</span></span><br><span class="line">                    <span class="string">"ttl = redis.call('pttl', KEYS[1]);"</span> +</span><br><span class="line">                <span class="string">"end;"</span> +</span><br><span class="line">                <span class="comment">// timeout = 上一个锁ttl + 30s + 当前时间</span></span><br><span class="line">                <span class="string">"local timeout = ttl + tonumber(ARGV[3]) + tonumber(ARGV[4]);"</span> +</span><br><span class="line">                <span class="comment">// 把当前线程添加到超时zset里，值为timeout</span></span><br><span class="line">                <span class="string">"if redis.call('zadd', KEYS[3], timeout, ARGV[2]) == 1 then "</span> +</span><br><span class="line">                    <span class="comment">// 把当前线程添加到等待队列</span></span><br><span class="line">                    <span class="string">"redis.call('rpush', KEYS[2], ARGV[2]);"</span> +</span><br><span class="line">                <span class="string">"end;"</span> +</span><br><span class="line">                <span class="string">"return ttl;"</span>,</span><br><span class="line">                <span class="comment">// key[1] 锁名；key[2] 等待队列 redisson_lock_queue:{锁名}；key[3] 超时zset redisson_lock_timeout:{锁名}</span></span><br><span class="line">                Arrays.asList(getRawName(), threadsQueueName, timeoutSetName),</span><br><span class="line">                <span class="comment">// ARGV[1] 超时时间；ARGV[2] field uuid:threadId；ARGV[3] 等待时间，默认5秒；ARGV[4] 当前时间</span></span><br><span class="line">                unit.toMillis(leaseTime), getLockName(threadId), wait, currentTime);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException();</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-
-<h1 id="可重入加锁"><a href="#可重入加锁" class="headerlink" title="可重入加锁"></a>可重入加锁</h1><p>RedissionFairLock公平锁可重入加锁逻辑同可重入锁RedissionFairLock，当加锁线程是当前线程，那么把lock key对应的field value值加1，然后更新lock key过期时间。</p>
-<h1 id="超时重新入队"><a href="#超时重新入队" class="headerlink" title="超时重新入队"></a>超时重新入队</h1><p>如果当前线程已经加入等待队列开始排队，并且超过了等待时间（前面每个锁5秒），那么再次获取锁时，首先会移除当前线程（以及之前线程）在等待队列和超时集合中的值，然后尝试获取锁，如果获取锁失败会重新把当前线程添加到等待队列末尾，并且重新放到超时集合中，timeout为队列中最后一个线程超时时间 + 5秒。</p>
-<h1 id="释放锁"><a href="#释放锁" class="headerlink" title="释放锁"></a>释放锁</h1><p>在解锁时，RedissionFairLock会先删除等待队列中已经超时的线程，然后开始处理解锁，如果被当前线程重入了多次就把value减1，否则直接删除锁，同时发布一条解锁消息通知订阅的等待线程。</p>
-<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> RFuture&lt;Boolean&gt; <span class="title">unlockInnerAsync</span><span class="params">(<span class="keyword">long</span> threadId)</span> </span>{</span><br><span class="line">    <span class="keyword">return</span> evalWriteAsync(getRawName(), LongCodec.INSTANCE, RedisCommands.EVAL_BOOLEAN,</span><br><span class="line">            <span class="comment">// remove stale threads</span></span><br><span class="line">            <span class="string">"while true do "</span></span><br><span class="line">            + <span class="string">"local firstThreadId2 = redis.call('lindex', KEYS[2], 0);"</span></span><br><span class="line">            + <span class="string">"if firstThreadId2 == false then "</span></span><br><span class="line">                + <span class="string">"break;"</span></span><br><span class="line">            + <span class="string">"end; "</span></span><br><span class="line">            <span class="comment">// 删除等待队列中已经过期的线程</span></span><br><span class="line">            + <span class="string">"local timeout = tonumber(redis.call('zscore', KEYS[3], firstThreadId2));"</span></span><br><span class="line">            + <span class="string">"if timeout &lt;= tonumber(ARGV[4]) then "</span></span><br><span class="line">                + <span class="string">"redis.call('zrem', KEYS[3], firstThreadId2); "</span></span><br><span class="line">                + <span class="string">"redis.call('lpop', KEYS[2]); "</span></span><br><span class="line">            + <span class="string">"else "</span></span><br><span class="line">                + <span class="string">"break;"</span></span><br><span class="line">            + <span class="string">"end; "</span></span><br><span class="line">          + <span class="string">"end;"</span></span><br><span class="line">            </span><br><span class="line">          <span class="comment">// 如果锁不存在</span></span><br><span class="line">          + <span class="string">"if (redis.call('exists', KEYS[1]) == 0) then "</span> + </span><br><span class="line">                <span class="string">"local nextThreadId = redis.call('lindex', KEYS[2], 0); "</span> + </span><br><span class="line">                <span class="string">"if nextThreadId ~= false then "</span> +</span><br><span class="line">                    <span class="string">"redis.call('publish', KEYS[4] .. ':' .. nextThreadId, ARGV[1]); "</span> +</span><br><span class="line">                <span class="string">"end; "</span> +</span><br><span class="line">                <span class="string">"return 1; "</span> +</span><br><span class="line">            <span class="string">"end;"</span> +</span><br><span class="line">            <span class="string">"if (redis.call('hexists', KEYS[1], ARGV[3]) == 0) then "</span> +</span><br><span class="line">                <span class="string">"return nil;"</span> +</span><br><span class="line">            <span class="string">"end; "</span> +</span><br><span class="line">            <span class="comment">// 重入加锁处理</span></span><br><span class="line">            <span class="string">"local counter = redis.call('hincrby', KEYS[1], ARGV[3], -1); "</span> +</span><br><span class="line">            <span class="string">"if (counter &gt; 0) then "</span> +</span><br><span class="line">                <span class="string">"redis.call('pexpire', KEYS[1], ARGV[2]); "</span> +</span><br><span class="line">                <span class="string">"return 0; "</span> +</span><br><span class="line">            <span class="string">"end; "</span> +</span><br><span class="line">                </span><br><span class="line">            <span class="comment">// 如果只重入了一次直接删除</span></span><br><span class="line">            <span class="string">"redis.call('del', KEYS[1]); "</span> +</span><br><span class="line">            <span class="string">"local nextThreadId = redis.call('lindex', KEYS[2], 0); "</span> + </span><br><span class="line">            <span class="string">"if nextThreadId ~= false then "</span> +</span><br><span class="line">                <span class="comment">// 发布一条解锁消息，通知等待加锁的线程</span></span><br><span class="line">                <span class="string">"redis.call('publish', KEYS[4] .. ':' .. nextThreadId, ARGV[1]); "</span> +</span><br><span class="line">            <span class="string">"end; "</span> +</span><br><span class="line">            <span class="string">"return 1; "</span>,</span><br><span class="line">            Arrays.asList(getRawName(), threadsQueueName, timeoutSetName, getChannelName()),</span><br><span class="line">            LockPubSub.UNLOCK_MESSAGE, internalLockLeaseTime, getLockName(threadId), System.currentTimeMillis());</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://haifuns.com/2021/12/11/redission-01/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.jpg">
-      <meta itemprop="name" content="HAIFUN">
-      <meta itemprop="description" content="无限进步<br/>">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="With Silence">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/12/11/redission-01/" class="post-title-link" itemprop="url">【Redission源码】可重入锁源码解析</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-12-11 23:15:00" itemprop="dateCreated datePublished" datetime="2021-12-11T23:15:00+00:00">2021-12-11</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-01-20 15:43:31" itemprop="dateModified" datetime="2022-01-20T15:43:31+00:00">2022-01-20</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/" itemprop="url" rel="index"><span itemprop="name">分布式锁</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2021/12/11/redission-01/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2021/12/11/redission-01/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>Redission提供的可重入锁RedissonLock实现了java.util.concurrent.locks.Lock接口，使用起来非常简单，示例如下：</p>
-<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">RLock lock = redisson.getLock(<span class="string">"anyLock"</span>);</span><br><span class="line">lock.lock();</span><br></pre></td></tr></tbody></table></figure>
-
-<p>同时，还支持指定锁超时时间、指定获取锁最大等待时间以及异步获取锁的方式：</p>
-<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 加锁后10秒钟自动解锁</span></span><br><span class="line"><span class="comment">// 无需调用unlock方法手动解锁</span></span><br><span class="line">lock.lock(<span class="number">10</span>, TimeUnit.SECONDS);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 尝试加锁，最多等待100秒，加锁后10秒钟自动解锁</span></span><br><span class="line"><span class="keyword">boolean</span> res = lock.tryLock(<span class="number">100</span>, <span class="number">10</span>, TimeUnit.SECONDS);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 异步加锁</span></span><br><span class="line">RLock lock = redisson.getLock(<span class="string">"anyLock"</span>);</span><br><span class="line">lock.lockAsync();</span><br><span class="line">lock.lockAsync(<span class="number">10</span>, TimeUnit.SECONDS);</span><br><span class="line">Future&lt;Boolean&gt; res = lock.tryLockAsync(<span class="number">100</span>, <span class="number">10</span>, TimeUnit.SECONDS);</span><br></pre></td></tr></tbody></table></figure>
-
-<p>接下来我们来探究一下RedissionLock可重入锁加锁原理。</p>
-<h1 id="lua脚本加锁"><a href="#lua脚本加锁" class="headerlink" title="lua脚本加锁"></a>lua脚本加锁</h1><p>在调用#lock加锁时，redission会先尝试加锁，成功直接返回，失败就订阅锁状态变更消息，循环重试。</p>
-<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">lock</span><span class="params">()</span> </span>{</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    lock(-<span class="number">1</span>, <span class="keyword">null</span>, <span class="keyword">false</span>);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">lock</span><span class="params">(<span class="keyword">long</span> leaseTime, TimeUnit unit, <span class="keyword">boolean</span> interruptibly)</span> <span class="keyword">throws</span> InterruptedException </span>{</span><br><span class="line">    <span class="keyword">long</span> threadId = Thread.currentThread().getId();</span><br><span class="line">    Long ttl = tryAcquire(-<span class="number">1</span>, leaseTime, unit, threadId);</span><br><span class="line">    <span class="comment">// 获取成功</span></span><br><span class="line">    <span class="comment">// lock acquired</span></span><br><span class="line">    <span class="keyword">if</span> (ttl == <span class="keyword">null</span>) {</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 订阅解锁的消息</span></span><br><span class="line">    RFuture&lt;RedissonLockEntry&gt; future = subscribe(threadId);</span><br><span class="line">    <span class="keyword">if</span> (interruptibly) {</span><br><span class="line">        commandExecutor.syncSubscriptionInterrupted(future);</span><br><span class="line">    } <span class="keyword">else</span> {</span><br><span class="line">        commandExecutor.syncSubscription(future);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span> {</span><br><span class="line">        <span class="comment">// 获取锁失败就循环重试</span></span><br><span class="line">        <span class="keyword">while</span> (<span class="keyword">true</span>) {</span><br><span class="line">            ttl = tryAcquire(-<span class="number">1</span>, leaseTime, unit, threadId);</span><br><span class="line">            <span class="comment">// lock acquired</span></span><br><span class="line">            <span class="keyword">if</span> (ttl == <span class="keyword">null</span>) {</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            }</span><br><span class="line"></span><br><span class="line">            <span class="comment">// waiting for message</span></span><br><span class="line">            <span class="keyword">if</span> (ttl &gt;= <span class="number">0</span>) {</span><br><span class="line">                <span class="keyword">try</span> {</span><br><span class="line">                    <span class="comment">// 等待解锁继续执行，超时时间为当前锁ttl</span></span><br><span class="line">                    future.getNow().getLatch().tryAcquire(ttl, TimeUnit.MILLISECONDS);</span><br><span class="line">                } <span class="keyword">catch</span> (InterruptedException e) {</span><br><span class="line">                    <span class="keyword">if</span> (interruptibly) {</span><br><span class="line">                        <span class="keyword">throw</span> e;</span><br><span class="line">                    }</span><br><span class="line">                    future.getNow().getLatch().tryAcquire(ttl, TimeUnit.MILLISECONDS);</span><br><span class="line">                }</span><br><span class="line">            } <span class="keyword">else</span> {</span><br><span class="line">                <span class="keyword">if</span> (interruptibly) {</span><br><span class="line">                    future.getNow().getLatch().acquire();</span><br><span class="line">                } <span class="keyword">else</span> {</span><br><span class="line">                    future.getNow().getLatch().acquireUninterruptibly();</span><br><span class="line">                }</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">    } <span class="keyword">finally</span> {</span><br><span class="line">        <span class="comment">// 取消订阅锁状态消息</span></span><br><span class="line">        unsubscribe(future, threadId);</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> Long <span class="title">tryAcquire</span><span class="params">(<span class="keyword">long</span> waitTime, <span class="keyword">long</span> leaseTime, TimeUnit unit, <span class="keyword">long</span> threadId)</span> </span>{</span><br><span class="line">    <span class="keyword">return</span> get(tryAcquireAsync(waitTime, leaseTime, unit, threadId));</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-
-<p>核心加锁方法如下，使用lua加锁实现原子加锁，分布式缓存中的锁为hash结构，key为lock key，field 为 ConnectionManagerId:threadId（uuid:threadId），value为锁重入次数，过期时间默认为30s。</p>
-<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">&lt;T&gt; <span class="function">RFuture&lt;T&gt; <span class="title">tryLockInnerAsync</span><span class="params">(<span class="keyword">long</span> waitTime, <span class="keyword">long</span> leaseTime, TimeUnit unit, <span class="keyword">long</span> threadId, RedisStrictCommand&lt;T&gt; command)</span> </span>{</span><br><span class="line">    <span class="comment">// 使用lua脚本加锁</span></span><br><span class="line">    <span class="comment">// KEYS[1] getLock指定的key，作为redis hash key</span></span><br><span class="line">    <span class="comment">// ARGV[1] LockWatchdogTimeout，默认过期时间，30s</span></span><br><span class="line">    <span class="comment">// ARGV[2] ConnectionManagerId:threadId uuid:threadId，作为redis field key</span></span><br><span class="line">    <span class="comment">// 如果hash key不存在，新增hash {key:{uuid:threadId:1}}，过期时间默认30s，返回空</span></span><br><span class="line">    <span class="comment">// 如果hash key.uuid:threadId存在，给field uuid:threadId的值加1，更新过期时间，返回空</span></span><br><span class="line">    <span class="comment">// 如果hash key存在，并且uuid:threadId不存在，说明已经被其他线程锁定，返回key过期时间</span></span><br><span class="line">    <span class="keyword">return</span> evalWriteAsync(getRawName(), LongCodec.INSTANCE, command,</span><br><span class="line">            <span class="string">"if (redis.call('exists', KEYS[1]) == 0) then "</span> +</span><br><span class="line">                    <span class="string">"redis.call('hincrby', KEYS[1], ARGV[2], 1); "</span> +</span><br><span class="line">                    <span class="string">"redis.call('pexpire', KEYS[1], ARGV[1]); "</span> +</span><br><span class="line">                    <span class="string">"return nil; "</span> +</span><br><span class="line">                    <span class="string">"end; "</span> +</span><br><span class="line">                    <span class="string">"if (redis.call('hexists', KEYS[1], ARGV[2]) == 1) then "</span> +</span><br><span class="line">                    <span class="string">"redis.call('hincrby', KEYS[1], ARGV[2], 1); "</span> +</span><br><span class="line">                    <span class="string">"redis.call('pexpire', KEYS[1], ARGV[1]); "</span> +</span><br><span class="line">                    <span class="string">"return nil; "</span> +</span><br><span class="line">                    <span class="string">"end; "</span> +</span><br><span class="line">                    <span class="string">"return redis.call('pttl', KEYS[1]);"</span>,</span><br><span class="line">            Collections.singletonList(getRawName()), unit.toMillis(leaseTime), getLockName(threadId));</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-
-<p>在内部接下来的调用中可以看到：</p>
-<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> &lt;T, R&gt; <span class="function">RFuture&lt;R&gt; <span class="title">evalWriteAsync</span><span class="params">(String key, Codec codec, RedisCommand&lt;T&gt; evalCommandType, String script, List&lt;Object&gt; keys, Object... params)</span> </span>{</span><br><span class="line">    <span class="comment">// 关键代码</span></span><br><span class="line">    NodeSource source = getNodeSource(key);</span><br><span class="line">    <span class="keyword">return</span> evalAsync(source, <span class="keyword">false</span>, codec, evalCommandType, script, keys, <span class="keyword">false</span>, params);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> NodeSource <span class="title">getNodeSource</span><span class="params">(String key)</span> </span>{</span><br><span class="line">    <span class="keyword">int</span> slot = connectionManager.calcSlot(key);</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> NodeSource(slot);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// ClusterConnectionManager.class</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">calcSlot</span><span class="params">(String key)</span> </span>{</span><br><span class="line">    <span class="keyword">if</span> (key == <span class="keyword">null</span>) {</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> start = key.indexOf(<span class="string">'{'</span>);</span><br><span class="line">    <span class="keyword">if</span> (start != -<span class="number">1</span>) {</span><br><span class="line">        <span class="keyword">int</span> end = key.indexOf(<span class="string">'}'</span>);</span><br><span class="line">        <span class="keyword">if</span> (end != -<span class="number">1</span> &amp;&amp; start + <span class="number">1</span> &lt; end) {</span><br><span class="line">            key = key.substring(start + <span class="number">1</span>, end);</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> result = CRC16.crc16(key.getBytes()) % MAX_SLOT;</span><br><span class="line">    log.debug(<span class="string">"slot {} for {}"</span>, result, key);</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-
-<p>从如上代码可以看到在发起请求之前Redission先基于key计算出了slot的位置（slot=CRC16(key)&amp;16383），在发起请求时，redission会从缓存中找到slot对应的redis节点直接向其发起请求，这样就可以节省一次重定向，这也是Redission作为smart client的体现。</p>
-<h1 id="watchdog维持加锁"><a href="#watchdog维持加锁" class="headerlink" title="watchdog维持加锁"></a>watchdog维持加锁</h1><p>在加锁完成后，可以看到redission添加了一个更新锁过期时间的定时任务，每10秒钟过期一次，如果锁还在就更新过期时间。</p>
-<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> &lt;T&gt; <span class="function">RFuture&lt;Long&gt; <span class="title">tryAcquireAsync</span><span class="params">(<span class="keyword">long</span> waitTime, <span class="keyword">long</span> leaseTime, TimeUnit unit, <span class="keyword">long</span> threadId)</span> </span>{</span><br><span class="line">    RFuture&lt;Long&gt; ttlRemainingFuture;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    <span class="comment">// #lock加锁真实处理逻辑</span></span><br><span class="line">    ttlRemainingFuture = tryLockInnerAsync(waitTime, internalLockLeaseTime,</span><br><span class="line">            TimeUnit.MILLISECONDS, threadId, RedisCommands.EVAL_LONG);</span><br><span class="line"></span><br><span class="line">    ttlRemainingFuture.onComplete((ttlRemaining, e) -&gt; {</span><br><span class="line">        <span class="keyword">if</span> (e != <span class="keyword">null</span>) {</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 加锁成功</span></span><br><span class="line">        <span class="comment">// lock acquired</span></span><br><span class="line">        <span class="keyword">if</span> (ttlRemaining == <span class="keyword">null</span>) {</span><br><span class="line">            <span class="comment">// ...</span></span><br><span class="line">            <span class="comment">// 加锁成功后维持锁定时任务</span></span><br><span class="line">            scheduleExpirationRenewal(threadId);</span><br><span class="line">        }</span><br><span class="line">    });</span><br><span class="line">    <span class="keyword">return</span> ttlRemainingFuture;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">scheduleExpirationRenewal</span><span class="params">(<span class="keyword">long</span> threadId)</span> </span>{</span><br><span class="line">    ExpirationEntry entry = <span class="keyword">new</span> ExpirationEntry();</span><br><span class="line">    ExpirationEntry oldEntry = EXPIRATION_RENEWAL_MAP.putIfAbsent(getEntryName(), entry);</span><br><span class="line">     <span class="comment">// 如果当前锁没有续期任务就创建，如果已经存在就更新一下线程id</span></span><br><span class="line">    <span class="keyword">if</span> (oldEntry != <span class="keyword">null</span>) {</span><br><span class="line">        oldEntry.addThreadId(threadId);</span><br><span class="line">    } <span class="keyword">else</span> {</span><br><span class="line">        entry.addThreadId(threadId);</span><br><span class="line">        <span class="keyword">try</span> {</span><br><span class="line">            renewExpiration();</span><br><span class="line">        } <span class="keyword">finally</span> {</span><br><span class="line">            <span class="keyword">if</span> (Thread.currentThread().isInterrupted()) {</span><br><span class="line">                cancelExpirationRenewal(threadId);</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">renewExpiration</span><span class="params">()</span> </span>{</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    <span class="comment">// 每10秒钟执行一次</span></span><br><span class="line">    Timeout task = commandExecutor.getConnectionManager().newTimeout(<span class="keyword">new</span> TimerTask() {</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">(Timeout timeout)</span> <span class="keyword">throws</span> Exception </span>{</span><br><span class="line">            </span><br><span class="line">            <span class="comment">// ...</span></span><br><span class="line">            <span class="comment">// 维持锁过期</span></span><br><span class="line">            RFuture&lt;Boolean&gt; future = renewExpirationAsync(threadId);</span><br><span class="line">            future.onComplete((res, e) -&gt; {</span><br><span class="line">                <span class="comment">// ..</span></span><br><span class="line">                </span><br><span class="line">                <span class="keyword">if</span> (res) {</span><br><span class="line">                    <span class="comment">// // 如果锁过期时间被更新了，就重新定义一个任务</span></span><br><span class="line">                    <span class="comment">// reschedule itself</span></span><br><span class="line">                    renewExpiration();</span><br><span class="line">                } <span class="keyword">else</span> {</span><br><span class="line">                    <span class="comment">// 如果锁过期时间更新失败，说明锁已经释放了，释放任务</span></span><br><span class="line">                    cancelExpirationRenewal(<span class="keyword">null</span>);</span><br><span class="line">                }</span><br><span class="line">            });</span><br><span class="line">        }</span><br><span class="line">    }, internalLockLeaseTime / <span class="number">3</span>, TimeUnit.MILLISECONDS);</span><br><span class="line">    </span><br><span class="line">    ee.setTimeout(task);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-
-<p>维持锁过期时间也是使用了lua脚本，如果锁还在就更新过期时间为30秒。</p>
-<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> RFuture&lt;Boolean&gt; <span class="title">renewExpirationAsync</span><span class="params">(<span class="keyword">long</span> threadId)</span> </span>{</span><br><span class="line">    <span class="comment">// 维持锁lua</span></span><br><span class="line">    <span class="comment">// 如果lock key存在managerId:threadId这个field，就更新锁过期时间</span></span><br><span class="line">    <span class="keyword">return</span> evalWriteAsync(getRawName(), LongCodec.INSTANCE, RedisCommands.EVAL_BOOLEAN,</span><br><span class="line">            <span class="string">"if (redis.call('hexists', KEYS[1], ARGV[2]) == 1) then "</span> +</span><br><span class="line">                    <span class="string">"redis.call('pexpire', KEYS[1], ARGV[1]); "</span> +</span><br><span class="line">                    <span class="string">"return 1; "</span> +</span><br><span class="line">                    <span class="string">"end; "</span> +</span><br><span class="line">                    <span class="string">"return 0;"</span>,</span><br><span class="line">            Collections.singletonList(getRawName()),</span><br><span class="line">            internalLockLeaseTime, getLockName(threadId));</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-
-<h1 id="释放锁"><a href="#释放锁" class="headerlink" title="释放锁"></a>释放锁</h1><p>在需要释放锁时，redission会判断锁是否存在，锁重入次数是否小于等于1，满足条件就进行删除，然后向指定通道发送一条解锁消息，以通知获取锁的线程。</p>
-<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">unlock</span><span class="params">()</span> </span>{</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    get(unlockAsync(Thread.currentThread().getId()));</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> RFuture&lt;Void&gt; <span class="title">unlockAsync</span><span class="params">(<span class="keyword">long</span> threadId)</span> </span>{</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    RFuture&lt;Boolean&gt; future = unlockInnerAsync(threadId);</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">protected</span> RFuture&lt;Boolean&gt; <span class="title">unlockInnerAsync</span><span class="params">(<span class="keyword">long</span> threadId)</span> </span>{</span><br><span class="line">    <span class="comment">// 如果lock key.thread不存在，直接返回空</span></span><br><span class="line">    <span class="comment">// 如果lock key.thread存在，就把value先减1</span></span><br><span class="line">    <span class="comment">//      如果值大于0，说明不可以释放，重置过期时间返回0</span></span><br><span class="line">    <span class="comment">//      否则，说明可以解锁了，删除锁，向redisson_lock__channe:{lockkey}发布一条内容为0的消息，返回1</span></span><br><span class="line">    <span class="keyword">return</span> evalWriteAsync(getRawName(), LongCodec.INSTANCE, RedisCommands.EVAL_BOOLEAN,</span><br><span class="line">            <span class="string">"if (redis.call('hexists', KEYS[1], ARGV[3]) == 0) then "</span> +</span><br><span class="line">                    <span class="string">"return nil;"</span> +</span><br><span class="line">                    <span class="string">"end; "</span> +</span><br><span class="line">                    <span class="string">"local counter = redis.call('hincrby', KEYS[1], ARGV[3], -1); "</span> +</span><br><span class="line">                    <span class="string">"if (counter &gt; 0) then "</span> +</span><br><span class="line">                    <span class="string">"redis.call('pexpire', KEYS[1], ARGV[2]); "</span> +</span><br><span class="line">                    <span class="string">"return 0; "</span> +</span><br><span class="line">                    <span class="string">"else "</span> +</span><br><span class="line">                    <span class="string">"redis.call('del', KEYS[1]); "</span> +</span><br><span class="line">                    <span class="string">"redis.call('publish', KEYS[2], ARGV[1]); "</span> +</span><br><span class="line">                    <span class="string">"return 1; "</span> +</span><br><span class="line">                    <span class="string">"end; "</span> +</span><br><span class="line">                    <span class="string">"return nil;"</span>,</span><br><span class="line">            Arrays.asList(getRawName(), getChannelName()), LockPubSub.UNLOCK_MESSAGE, internalLockLeaseTime, getLockName(threadId));</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-
-<h1 id="加锁超时与自动释放"><a href="#加锁超时与自动释放" class="headerlink" title="加锁超时与自动释放"></a>加锁超时与自动释放</h1><p>redission支持指定加锁超时时间以及锁过期时间，可以调用#tryLock(long waitTime, long leaseTime, TimeUnit unit)方法进行加锁。</p>
-<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">tryLock</span><span class="params">(<span class="keyword">long</span> waitTime, <span class="keyword">long</span> leaseTime, TimeUnit unit)</span> <span class="keyword">throws</span> InterruptedException </span>{</span><br><span class="line">    <span class="keyword">long</span> time = unit.toMillis(waitTime);</span><br><span class="line">    <span class="keyword">long</span> current = System.currentTimeMillis();</span><br><span class="line">    <span class="keyword">long</span> threadId = Thread.currentThread().getId();</span><br><span class="line">    <span class="comment">// 直接加锁，没有watchdog机制</span></span><br><span class="line">    Long ttl = tryAcquire(waitTime, leaseTime, unit, threadId);</span><br><span class="line">    <span class="comment">// lock acquired</span></span><br><span class="line">    <span class="keyword">if</span> (ttl == <span class="keyword">null</span>) {</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    }</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 如果超时直接返回</span></span><br><span class="line">    time -= System.currentTimeMillis() - current;</span><br><span class="line">    <span class="keyword">if</span> (time &lt;= <span class="number">0</span>) {</span><br><span class="line">        acquireFailed(waitTime, unit, threadId);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    }</span><br><span class="line">    </span><br><span class="line">    current = System.currentTimeMillis();</span><br><span class="line">    RFuture&lt;RedissonLockEntry&gt; subscribeFuture = subscribe(threadId);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 设置最大等待时间，如果指定时间没有收到解锁状态变更直接超时返回</span></span><br><span class="line">    <span class="keyword">if</span> (!subscribeFuture.await(time, TimeUnit.MILLISECONDS)) {</span><br><span class="line">        <span class="keyword">if</span> (!subscribeFuture.cancel(<span class="keyword">false</span>)) {</span><br><span class="line">            subscribeFuture.onComplete((res, e) -&gt; {</span><br><span class="line">                <span class="keyword">if</span> (e == <span class="keyword">null</span>) {</span><br><span class="line">                    unsubscribe(subscribeFuture, threadId);</span><br><span class="line">                }</span><br><span class="line">            });</span><br><span class="line">        }</span><br><span class="line">        acquireFailed(waitTime, unit, threadId);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 如果收到解锁消息就继续重试</span></span><br><span class="line">    <span class="keyword">try</span> {</span><br><span class="line">        time -= System.currentTimeMillis() - current;</span><br><span class="line">        <span class="keyword">if</span> (time &lt;= <span class="number">0</span>) {</span><br><span class="line">            acquireFailed(waitTime, unit, threadId);</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        }</span><br><span class="line">    </span><br><span class="line">        <span class="keyword">while</span> (<span class="keyword">true</span>) {</span><br><span class="line">            <span class="keyword">long</span> currentTime = System.currentTimeMillis();</span><br><span class="line">            ttl = tryAcquire(waitTime, leaseTime, unit, threadId);</span><br><span class="line">            <span class="comment">// lock acquired</span></span><br><span class="line">            <span class="keyword">if</span> (ttl == <span class="keyword">null</span>) {</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">            }</span><br><span class="line"></span><br><span class="line">            time -= System.currentTimeMillis() - currentTime;</span><br><span class="line">            <span class="keyword">if</span> (time &lt;= <span class="number">0</span>) {</span><br><span class="line">                acquireFailed(waitTime, unit, threadId);</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">            }</span><br><span class="line"></span><br><span class="line">            <span class="comment">// waiting for message</span></span><br><span class="line">            currentTime = System.currentTimeMillis();</span><br><span class="line">            <span class="keyword">if</span> (ttl &gt;= <span class="number">0</span> &amp;&amp; ttl &lt; time) {</span><br><span class="line">                subscribeFuture.getNow().getLatch().tryAcquire(ttl, TimeUnit.MILLISECONDS);</span><br><span class="line">            } <span class="keyword">else</span> {</span><br><span class="line">                subscribeFuture.getNow().getLatch().tryAcquire(time, TimeUnit.MILLISECONDS);</span><br><span class="line">            }</span><br><span class="line"></span><br><span class="line">            time -= System.currentTimeMillis() - currentTime;</span><br><span class="line">            <span class="keyword">if</span> (time &lt;= <span class="number">0</span>) {</span><br><span class="line">                acquireFailed(waitTime, unit, threadId);</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">    } <span class="keyword">finally</span> {</span><br><span class="line">        unsubscribe(subscribeFuture, threadId);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-
-<p>结合不指定超时时间的加锁逻辑可以看到，在指定超时时间时redission不会设置watchdog机制进行锁续期，因为过期自动解锁时正常行为。此时解锁有锁过期自动删除和手动解锁两种情况。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://haifuns.com/2021/11/22/gossip/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.jpg">
-      <meta itemprop="name" content="HAIFUN">
-      <meta itemprop="description" content="无限进步<br/>">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="With Silence">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/11/22/gossip/" class="post-title-link" itemprop="url">分布式共识算法之Gossip协议</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-11-22 20:30:00" itemprop="dateCreated datePublished" datetime="2021-11-22T20:30:00+00:00">2021-11-22</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-01-20 15:43:31" itemprop="dateModified" datetime="2022-01-20T15:43:31+00:00">2022-01-20</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">分布式</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2021/11/22/gossip/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2021/11/22/gossip/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>Paxos、Raft、ZAB等分布式算法常被称为“强一致性”的分布式共识协议，其意思是尽管系统内部节点可以存在不一致的状态，但是从系统外部看，不一致情况不会被观测到，所以整体上看系统是强一致的。相对的，还有一类“最终一致”的分布式共识协议，表示系统中的不一致状态有可能会在一定时间内被外部观测到。</p>
-<p>最终一致分布式共识协议的一个典型就是DNS协议，在各个节点缓存的ttl过期前是有可能与真实域名翻译结果不一致的情况。另一种具有代表性的则是在比特币网络和许多分布式系统中都有应用的Gossip协议。</p>
-<p>Gossip协议源于施乐公司在论文中提出的一种用于分布式数据库在多节点间复制同步数据的算法，其特点是要同步的消息像流言一样传播、病毒一样扩散，因为也被称为“流言算法”、“瘟疫算法”等。</p>
-<h1 id="算法流程"><a href="#算法流程" class="headerlink" title="算法流程"></a>算法流程</h1><p>Gossip算法的工作流程十分简单，如果有某一项信息需要在整个网络所有节点中传播可以看做是以下两个步骤的简单循环：</p>
-<ul>
-<li>从信息源开始，选择一个固定的传播周期（譬如1秒），随机选择与它相连的k个节点（称为Fan-Out）来传播消息。</li>
-<li>每一个节点收到消息后，如果这个消息是它没收到过的，在下一个周期内，将在会在除发消息的节点外的其他相邻节点中选择k个发送相同的消息，直到最终网络中所有节点都收到了消息。</li>
-</ul>
-<p>尽管以上流程需要一定的时间，但是理论上最终网络中所有节点都会拥有相同的信息。</p>
-<p>算法流程示意图如下所示：</p>
-<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/distributed/gossip.gif" alt="image"></p>
-<p>从上图中我们可以看到Gossip协议对网络节点的连通性和稳定性几乎没有任何要求。Gossip将网络某些节点中能与部分节点连通而不是全网络节点连通作为前提，能够容忍网络上节点的随意增加或者减少、随意宕机或者重启，新增或者重启的节点最终会与其他节点同步达成一致。Gossip把网络中的节点平等看待，没有中心化或者主节点的概念，正因如此，Gossip具有极强的鲁棒性，非常适合在公众网络中使用。</p>
-<p>Gossip的缺点也是显而易见的：</p>
-<ul>
-<li>消息是经过多个轮次的散播到达网络中所有节点的，必然存在各个节点状态不一致的情况。</li>
-<li>由于随机选择发送消息的节点，所以尽管可以在整体上测算出统计学意义上的传播速率，但是对于个体消息而言，无法准确地预计需要多长时间才能达到全网一致。</li>
-<li>由于随机选择发送消息的节点，不可避免的存在重复消息发送给同一个节点的情况，消息冗余带来的是网络传输的压力，也给消息节点带来额外的负载。</li>
-</ul>
-<p>达到一致性耗费的时间与网络传输中消息冗余这两个缺点对立，鱼与熊掌不能兼得，因此，Gossip设计了两种可能的消息传播模式：</p>
-<ul>
-<li>反熵模式，同步的所有数据以消除各个节点之间的差异，目标是整个网络各个节点完全一致，但是在节点本身就会发生变动的前提下，这个目标会使得整个网络中消息的数量非常庞大。</li>
-<li>传谣模式，以传播消息为目标，仅仅发送新达到节点的数据，即只对外发送变更数据，此模式下消息数据量将会显著减少，网络开销也相对较小。</li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://haifuns.com/2021/11/22/zab/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.jpg">
-      <meta itemprop="name" content="HAIFUN">
-      <meta itemprop="description" content="无限进步<br/>">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="With Silence">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/11/22/zab/" class="post-title-link" itemprop="url">分布式共识算法之ZAB协议</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-11-22 20:30:00" itemprop="dateCreated datePublished" datetime="2021-11-22T20:30:00+00:00">2021-11-22</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-01-20 15:43:31" itemprop="dateModified" datetime="2022-01-20T15:43:31+00:00">2022-01-20</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">分布式</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2021/11/22/zab/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2021/11/22/zab/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>ZAB协议，即ZooKeeper Atomic Broadcast，ZooKeeper原子消息广播协议，是分布式协调服务ZooKeeper专门设计的一种支持崩溃恢复的原子广播协议。</p>
-<p>ZAB协议与Paxos算法不完全相同，它不是一种通用的分布式一致性算法，而是一种特别为ZooKeeper设计的崩溃可恢复的原子消息广播算法。</p>
-<p>在ZooKeeper中，主要依赖ZAB协议来实现分布式数据一致性，基于该协议，ZooKeeper实现了一种主备模式的系统架构来保持集群中各副本之间数据的一致性。</p>
-<p>ZAB协议的核心是定义了对于那些会改变ZooKeeper服务器数据状态的事务请求的处理方式，即：所有事务请求必须由一个全局唯一的Leader服务器来协调，其他的服务器为Follower服务器。Leader服务器负责将客户端事务请求转换为一个事务Proposal（提议），并将此Proposal分发给集群中所有的Follower服务器。之后Leader服务器需要等待所有Follower服务器的反馈，一旦超过半数的Follower服务器进行了正确的反馈后，那么Leader服务器就会再次向所有的Follower服务器发送Commit消息，要求其将前一个Proposal进行提交。</p>
-<h1 id="协议模式"><a href="#协议模式" class="headerlink" title="协议模式"></a>协议模式</h1><p>ZAB协议包含两种基本的模式，分别是崩溃恢复和消息广播。</p>
-<p>当分布式系统启动，或者当Leader服务器网络中断、崩溃退出、重启等异常情况时，ZAB协议会进入恢复模式并选举产生新的Leader服务器。当Leader服务器被选出后，同时集群中超过半数的机器与Leader服务器完成状态同步后，ZAB协议就会退出恢复模式进入消息广播模式。当一台机器新加入集群时，这台服务器会进入数据恢复模式，从Leader服务器进行数据同步，同步完成后参与到消息广播流程中。</p>
-<h2 id="消息广播模式"><a href="#消息广播模式" class="headerlink" title="消息广播模式"></a>消息广播模式</h2><p>ZAB协议的消息广播过程使用的是一个原子广播协议，类似于一个二阶段提交过程。</p>
-<p>当客户端发起事务请求，Leader服务器会为其生成事务Proposal，对应一个全局唯一且单调递增的事务id（zxid，64位包含时间戳和计数器两部分），并按照zxid顺序将事务Proposal广播给其他所有Follower机器，如果收到超过半数的Follower的ACK响应，就广播事务提交消息。</p>
-<p>ZAB协议中的二阶段提交过程是一种简化模型，Leader服务器在得到超过半数Follower服务器反馈ACK后就可以开始提交事务Proposal，而不需要等待集群中所有的Follower服务器都反馈响应。这种简化模型无法处理Leader服务器崩溃退出带来的数据不一致问题，因此ZAB协议中添加了崩溃恢复模式来解决这个问题。</p>
-<h2 id="崩溃恢复模式"><a href="#崩溃恢复模式" class="headerlink" title="崩溃恢复模式"></a>崩溃恢复模式</h2><p>在进行故障恢复时，ZAB协议需要保证以下两个特性：</p>
-<ul>
-<li>确保已经在Leader服务器上提交的事务最终被所以服务器提交</li>
-<li>确保丢弃只在Leader服务器上被提出的事务</li>
-</ul>
-<h1 id="算法流程"><a href="#算法流程" class="headerlink" title="算法流程"></a>算法流程</h1><p>ZAB协议包含消息广播和故障恢复两个过程，进一步可以细分为三个阶段：</p>
-<ul>
-<li>发现（Discovery）</li>
-<li>同步（Synchronization）</li>
-<li>广播（Broadcast）</li>
-</ul>
-<h2 id="发现阶段"><a href="#发现阶段" class="headerlink" title="发现阶段"></a>发现阶段</h2><p>发现阶段主要就是Leader选举的过程，用于在多个分布式进程中选举出主进程，准Leader L和Follower F 的工作流程分别如下：</p>
-<ul>
-<li>F.1.1，Follower F将自己最后接受的事务Proposal的epoch值发送给准Leader L。</li>
-<li>L.1.1，当接收到超过半数Follower的epoch消息后，准Leader L会生成一个新的epoch e’ （e’为最大的epoch+1）发送给这些过半的Follower。</li>
-<li>F.1.2，当Follower收到L的新epoch后，如果当前自己的epoch小于收到的值，那么就接受新值，同时向L发送ACK消息，ACK消息中包含epoch值和当前Follower的历史事务Proposal集合。</li>
-<li>L.1.2，当L收到过半Follower的ACK消息之后，会从Quorum中选择一个Follower，将其事务集合中作为初始化事务集合Ie’，被选择的Follower需要满足epoch大于等于其他Follower，并且事务集合需要满足zxid最大。</li>
-</ul>
-<h2 id="同步阶段"><a href="#同步阶段" class="headerlink" title="同步阶段"></a>同步阶段</h2><p>在发现阶段完成后，就进入了同步阶段，在这一阶段，Leader L和Follower F的工作流程如下所示：</p>
-<ul>
-<li>L.2.1，Leader L将e’和选择的初始化事务集合Ie’以NEWLEADER(e’,Ie’)的形式发送给所有Quorum中的Follower。</li>
-<li>F.2.1，当Follower接收到来自L的NEWLEADER(e’,Ie’)消息后，<ul>
-<li>如果epoch != e’，那么直接进入下一轮循环，因为此时Follower还在上一轮或者更上轮，无法参与此轮同步。</li>
-<li>如果epoch = e’，那么Follower会执行事务操作。最后Follower会反馈给Leader，表明自己已经接受并处理了所有的Ie’中的事务。</li>
-</ul>
-</li>
-<li>F.2.2，当Leader收到超过半数Follower针对NEWLEADER的反馈消息后，就会向所有Follower发送Commit消息。至此，Leader完成同步阶段。</li>
-<li>L.2.2，当Follower收到来自Leader的Commit消息后，就会依次处理并提交之前接受的Ie’中的事务。至此，Follower完成同步阶段。</li>
-</ul>
-<blockquote>
-<p>此阶段是ZAB协议中相对Paxos算法额外添加的，能够有效的保证Leader在新的周期中提出Proposal之前，所有的进程都已经完成了对之前所有事务的提交。</p>
-</blockquote>
-<h2 id="广播阶段"><a href="#广播阶段" class="headerlink" title="广播阶段"></a>广播阶段</h2><p>完成同步阶段后，ZAB协议就可以正式开始接受客户端新的事务请求，并进行广播流程。</p>
-<ul>
-<li>L.3.1，Leader接收到客户端新的事务请求后，会生成对应的事务Proposal，并根据ZXID的顺序向所有Follower发送提案。</li>
-<li>F.3.1，Follower根据消息接收的先后顺序来处理来自Leader的事务Proposal，并追加到已接受的事务Proposal集合，之后再反馈给Leader。</li>
-<li>L.3.2，当Leader接收到超过半数的Follower针对事务Proposal的ACK消息后，就会发送相应的Commit消息给所有的Follower，要求它们进行事务提交。</li>
-<li>F.3.2，Follower接收到来自Leader的Commit消息后，就会提交相应的事务Proposal。</li>
-</ul>
-<p>算法流程图如下所示：</p>
-<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/distributed/zab.png" alt="image"></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://haifuns.com/2021/11/18/raft/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.jpg">
-      <meta itemprop="name" content="HAIFUN">
-      <meta itemprop="description" content="无限进步<br/>">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="With Silence">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/11/18/raft/" class="post-title-link" itemprop="url">分布式共识算法之Raft算法</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-11-18 20:40:00" itemprop="dateCreated datePublished" datetime="2021-11-18T20:40:00+00:00">2021-11-18</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-01-20 15:43:31" itemprop="dateModified" datetime="2022-01-20T15:43:31+00:00">2022-01-20</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">分布式</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2021/11/18/raft/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2021/11/18/raft/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
   
 
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>Raft算法是一种等价派生于Multi Paxos的分布式共识算法，它源自于题为《In Search of an Understandable Consensus Algorithm》的论文，后来成为Etcd、LogCabin、Consul等重要分布式系统的理论基础。</p>
-<h1 id="如何达到分布式共识"><a href="#如何达到分布式共识" class="headerlink" title="如何达到分布式共识"></a>如何达到分布式共识</h1><p>Raft算法论文论证了当以下三个问题同时被解决时，即等价于达成共识：</p>
-<ul>
-<li>如何选主（Leader Election）</li>
-<li>如何把数据复制到各个节点（Entity Replication）</li>
-<li>如何保证过程是安全的（Safety）</li>
-</ul>
-<h2 id="如何选主"><a href="#如何选主" class="headerlink" title="如何选主"></a>如何选主</h2><p>前篇Paxos算法详尽介绍了选主的原理，尽管选主问题的实际工程实践中还涉及很多细节，譬如心跳、随机超时、并行竞选等，其本质还是对分布式系统对“谁当主节点”这件事达成共识，不妨碍我们理解。</p>
-<h2 id="如何把数据复制到各个节点"><a href="#如何把数据复制到各个节点" class="headerlink" title="如何把数据复制到各个节点"></a>如何把数据复制到各个节点</h2><p>这里我们需要讨论一下数据（Paxos中的提案、Raft中的日志）在各个网络节点间的复制问题：</p>
-<h3 id="正常情况"><a href="#正常情况" class="headerlink" title="正常情况"></a>正常情况</h3><p>在正常情况下，当客户端向主节点发起一个操作请求，主节点会先写入自己的变更日志，但是不提交，接着把变更信息在下一个心跳包中广播给所有从节点，并要求从节点回复确认收到的消息，从节点收到消息后，将操作写入自己的变更日志，然后给主节点发送确认签收的消息，主节点在收到多数签收消息后，提交自己的变更、应答客户端并且给从节点广播可以提交的消息，从节点收到提交消息后提交自己的变更，此时数据在节点间的复制就完成了。</p>
-<h3 id="异常情况"><a href="#异常情况" class="headerlink" title="异常情况"></a>异常情况</h3><p>在异常情况下，网络出现分区，部分节点失联，但是只要仍能工作的节点满足过半数的要求，分布式系统就仍然可以正常工作，此时，数据复制过程如下：</p>
-<p>假设S1、S2、S3、S4、S5五个节点，S1是主节点，由于网络故障导致S1、S2和S3、S4、S5之间无法通信，形成网络分区。</p>
-<p>一段时间后，S3、S4、S5中的某一个节点（假设是S3）先达到心跳超时阈值，此时S3发起竞选主节点广播并收到S4、S5两个节点的批准响应，加上自己的一票达到了多数派的要求，竞选成功，此时系统中存在S1和S3两个主节点，由于网络分区，它们不知道对方的存在。</p>
-<p>此时如果客户端发起操作请求会有以下两种情况：</p>
-<ul>
-<li>如果客户端连接到S1、S2之一，都将由S1处理，由于操作只能获取两个节点的响应，没有达到多数派的要求，所以任何变更都无法更改。</li>
-<li>如果客户端连接到S3、S4、S5之一，都将由S3处理，此时操作可以满足多数派响应，变更可以被提交，系统可以正常提供服务。</li>
-</ul>
-<blockquote>
-<p>网络分区是由于软、硬件或网络故障构成，内部网络出现分区，但两个分区仍能分别与外部网络中的客户端正常通信的情况非常少见。所以以上两种情况很少能同时出现，更多的场景是算法能容忍网络里下线了部分节点。</p>
-</blockquote>
-<p>假设之后故障恢复，网络分区解除，五个节点恢复通信，此时S1、S3都会向所有节点发送心跳包，从各自的心跳中可以得知S3的任期编号更大，此时五个节点都会承认S3是唯一的主节点，S1、S2会回滚它们所有没有提交的变更，然后从S3的心跳包中获得失联期间所有的变更，将变更写入本地磁盘，此时分布式系统从网络分区中恢复，各个节点的状态达到最终一致。</p>
-<h2 id="如何保证过程安全"><a href="#如何保证过程安全" class="headerlink" title="如何保证过程安全"></a>如何保证过程安全</h2><p>在分布式理论中有两个描述安全性的预定义术语：</p>
-<ul>
-<li>协定性（Safety）：所有的坏事都不会发生（something “bad” will never happen）</li>
-<li>终止性（Liveness）：所有的好事都终将发生，但不知道是啥时候（something “good” will must happen, but we don’t know when）</li>
-</ul>
-<p>术语太过晦涩，以选主问题举例，Safety要保证选主的结果一定是有且只有一个主节点，不可能同时出现两个主节点。Liveness则要保证选举过程一定在某个时刻可以结束。在Liveness整个属性上选主问题存在理论上的瑕疵，即可能由于活锁问题导致无法选出主节点，在Raft论文中只对Safety做了保证，但是由于工程实现上的处理，现实中几乎不会出现终止性问题。</p>
-<h1 id="Raft算法动画演示"><a href="#Raft算法动画演示" class="headerlink" title="Raft算法动画演示"></a>Raft算法动画演示</h1><ul>
-<li>英文版：<a target="_blank" rel="noopener" href="http://thesecretlivesofdata.com/raft/">http://thesecretlivesofdata.com/raft/</a></li>
-<li>中文版：<a target="_blank" rel="noopener" href="http://www.kailing.pub/raft/index.html">http://www.kailing.pub/raft/index.html</a></li>
-</ul>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://haifuns.com/2021/11/17/multi-paxos/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.jpg">
-      <meta itemprop="name" content="HAIFUN">
-      <meta itemprop="description" content="无限进步<br/>">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="With Silence">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/11/17/multi-paxos/" class="post-title-link" itemprop="url">分布式共识算法之Multi Paxos算法</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-11-17 21:30:00" itemprop="dateCreated datePublished" datetime="2021-11-17T21:30:00+00:00">2021-11-17</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-01-20 15:43:31" itemprop="dateModified" datetime="2022-01-20T15:43:31+00:00">2022-01-20</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">分布式</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2021/11/17/multi-paxos/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2021/11/17/multi-paxos/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>分布式共识的复杂性主要来源于网络的不可靠和请求可并发两个因素。相应的，Basic Paxos算法的活锁问题（两个提案节点互不相让地争相提出自己的提案，抢占同一个值的修改权限，导致整个系统持续性地“反复横跳”，在外部看就像是被锁住了一样），以及许多Basic Paxos异常场景中的问题，都源于任何一个提案都能完全平等地与其他节点并发地提出提案而带来的复杂问题。</p>
-<p>为此，Lamport提出了一种Paxos的改进版本，<strong>“Multi Paxos”算法，其目的是在既不破坏Paxos中“众节点平等”的原则，又能在提案节点中实现主次之分，限制每个节点都有不受控的提案权利</strong>。</p>
-<h1 id="算法过程"><a href="#算法过程" class="headerlink" title="算法过程"></a>算法过程</h1><p>Multi Paxos对Basic Paxos的核心改进是增加了“选主”的过程。提案节点通过定时轮询（心跳），确定当前网络中所有节点里是否存在一个主提案节点，如果不存在主节点，那么节点会在心跳超时之后使用Basic Paxos中定义的准备、批准的两轮网络交互过程，向其他所有节点广播竞选主节点的请求。如果得到了多数派决策节点的批准，那么就认为竞选成功。</p>
-<p>在选主完成后，除非主节点失联后重新竞选，否则从此以后就只有主节点本身才能发起提案。此时，无论是哪个提案节点收到客户端的操作请求，都会将请求转发给主节点来完成提案，<strong>主节点的提案过程中无需再进行准备过程，因为可以视为经过选举时的一次准备之后，后续的提案都是对相同提案ID的一连串批准过程</strong>。</p>
-<blockquote>
-<p>在选主完成后，不存在其他节点与主节点竞争，相当于处在无并发环境中进行有序操作，此时系统中要对某个值达成一致只需要一轮批准交互。</p>
-</blockquote>
-<p>此时算法流程如下图所示：</p>
-<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/distributed/paxos/multi-paxos-01.png" alt="image"></p>
-<p>如上图所示，请求中Accept请求中多了一个i，i为主节点的“任期编号”，任期编号必须是单调递增的，用于应对主节点陷于网络分区中恢复，但是另外一部分节点仍然有多数派且已经完成选举的情况。此时必须以任期编号大的主节点为准。</p>
-<p>当节点有了选主机制，从整体上看，节点角色不再区分为提案节点、决策节点、记录节点，而是同样的角色，只有主和从的区别。</p>
-<p>此时算法流程如下图所示：</p>
-<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/distributed/paxos/multi-paxos-02.png" alt="image"></p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://haifuns.com/2021/11/17/paxos/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.jpg">
-      <meta itemprop="name" content="HAIFUN">
-      <meta itemprop="description" content="无限进步<br/>">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="With Silence">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/11/17/paxos/" class="post-title-link" itemprop="url">分布式共识算法之Paxos算法</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-11-17 12:00:00" itemprop="dateCreated datePublished" datetime="2021-11-17T12:00:00+00:00">2021-11-17</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-01-20 15:43:31" itemprop="dateModified" datetime="2022-01-20T15:43:31+00:00">2022-01-20</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">分布式</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2021/11/17/paxos/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2021/11/17/paxos/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>Paxos是Leslie Lamport提出的一种基于消息传递的协商共识算法，现已是当今分布式系统最重要的理论基础。</p>
-<h1 id="节点分类"><a href="#节点分类" class="headerlink" title="节点分类"></a>节点分类</h1><p>Paxos算法将分布式系统中的节点分为三类：</p>
-<ul>
-<li>提案节点（Proposer），提出对某个值进行设置操作的节点，设置值的行为称为提案，值一旦设置成功就是不会丢失也是不可变的。</li>
-<li>决策节点（Acceptor），应答提案的节点，决定该提案是否可以被投票、是否可以被接受。提案一旦得到半数决策节点接受，即称为该提案被批准，提案被批准意味着该值不能再更改也不会丢失，且最终所有节点都会接受它。</li>
-<li>记录节点（Learner），不参与提案，也不参与决策，只是从提案、决策节点学习已经达成共识的提案。例如少数派节点从网络分区中恢复时将会进入这种状态。</li>
-</ul>
-<p>在使用Paxos的分布式系统中，所有节点都是平等的，它们可以承担一种或者多种角色。需要注意的是，为了确保有明确的多数派，决策节点的数量应该被设置为奇数个，且在系统初始化时，网络中每个节点都需要知道整个网络中的决策节点的数量、地址等信息。</p>
-<h1 id="算法流程"><a href="#算法流程" class="headerlink" title="算法流程"></a>算法流程</h1><p>Paxos算法包含准备和批准两个阶段来协商已达成共识。</p>
-<h2 id="准备（Prepare）阶段"><a href="#准备（Prepare）阶段" class="headerlink" title="准备（Prepare）阶段"></a>准备（Prepare）阶段</h2><p>准备阶段相当于分布式系统中锁抢占的过程。如果某个提案节点准备发起提案，必须先向所有决策节点广播一个许可申请（称为Prepare请求）。Parepare请求中包含一个全局唯一的数字n作为提案ID，决策节点收到请求后，将会给予提案节点两个承诺和一个应答。</p>
-<p>两个承诺指：</p>
-<ul>
-<li>承诺不会再接受提案ID小于或等于n的Prepare请求。</li>
-<li>承诺不会再接受提案ID小于n的Accept请求（下一阶段）。</li>
-</ul>
-<p>一个应答指：</p>
-<ul>
-<li>在不违背以上承诺的前提下，回复已经批准过的提案ID中最大的提案所设定的值，如果从未被设定过就返回空。如果违反此前做出的承诺，即收到的提案ID不是决策节点收到过最大的，那么不会对此Prepare请求作出应答。</li>
-</ul>
-<h2 id="批准（Accept）阶段"><a href="#批准（Accept）阶段" class="headerlink" title="批准（Accept）阶段"></a>批准（Accept）阶段</h2><p>当提案节点收到多数派节点的应答（称为Promise应答）后，就开始第二阶段即批准阶段。此时可能有以下两种可能：</p>
-<ul>
-<li>如果提案节点发现所有响应的决策节点此前都没有批准过其他提案（即返回空），那么说明它是第一个设置值得节点，可以随意的决定要设置的值，此时提案节点会将自己选定的值与提案ID组成一个二元组(id,value)结构，再次广播给所有的决策节点（称为Accept请求）。</li>
-<li>如果提案节点收到的响应中至少有一个应答已经有值了，那么就不能随意取值，必须从响应中找到提案ID最大的值并接受，组成一个二元组(id,value)结构，再次广播给所有的决策节点。</li>
-</ul>
-<p>每一个决策节点在收到Accept请求时，都会在不违背此前承诺的前提下，接受并持久化对当前提案ID对应的值。如果违背承诺，即收到的提案ID不是收到的Prepare请求中最大的，那么不会理会此Accept请求。</p>
-<p>当提案节点收到了多数派决策节点的应答（称为 Accepted 应答）后，协商结束，共识决议形成，将形成的决议发送给所有记录节点进行学习。整个过程时序图如下所示：</p>
-<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/distributed/paxos/paxos01.png" alt="image"></p>
-<h1 id="工作实例"><a href="#工作实例" class="headerlink" title="工作实例"></a>工作实例</h1><p>假设在一个分布式系统中包含五个节点（正常通信场景，不涉及网络分区），记为S1、S2、S3、S4、S5，其中每个节点都同时扮演提案节点和决策节点。</p>
-<p>某一时刻，有两个并发请求分别希望将同一个值设定为X（S1节点提案）和Y（S5节点提案），以P表示准备阶段，以A表示批准阶段，此时有可能发生以下几种情况：</p>
-<p><strong>情况1</strong>：S1选定提案ID是3.1，先取得了多数派决策节点的Promise和Accepted应答，此时S5选定的提案ID为4.5，发起Prepare请求，此时收到的多数派应答中至少会包含一个此前已经应答过S1的决策节点，假设为S3，那么S3返回的应答中必将包含S1已经设定的值X，S5就必须无条件地使用X代替Y作为自己的提案值，此时整个系统对“取值为X”这个事实达成一致。如下图所示：</p>
-<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/distributed/paxos/paxos-example-01.png" alt="image"></p>
-<p><strong>情况2</strong>：对于情况1，X被选定为最终值是必然结果，从上图可以看出X被选定为最终值并不是必定经过多数派批准，只取决于S5提案时得到的Promise应答中是否包含批准过X值的决策节点，例如下图所示，当S5发起提案的Prepare请求时，X并为获得多数派批准，但由于S3已经批准，最终共识结果仍然是X。</p>
-<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/distributed/paxos/paxos-example-02.png" alt="image"></p>
-<p><strong>情况3</strong>：S5提案时Promise应答中不包含批准过X的决策节点，例如应答S5提案时，节点S1已经批准了X，节点S2、S3未批准但返回了Promise应答，此时S5以更大的提案ID获得了S3、S4、S5的Promise应答，这三个节点均未批准过任何值，那么S3将不会再接收来自S1的Accept请求，因为S1的提案ID已经不是最大的了，这三个节点将批准Y的取值，整个系统最终将会对取值“Y”达成一致，如下图所示：</p>
-<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/distributed/paxos/paxos-example-03.png" alt="image"></p>
-<p><strong>情况4</strong>：从情况3可以推导出一种极端情况，如果两个提案节点交替使用最大ID使得准备阶段成功，但是批准阶段失败，那么就会形成活锁（Live Lock），如下图所示。在算法实现中需要引入随机超时机制来避免活锁的产生。</p>
-<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/distributed/paxos/paxos-example-04.png" alt="image"></p>
-<p>以上是基于Basic Paxos、以未出现网络分区的正常流程进行讲解Paxos算法。Basic Paxos的价值在于开拓了分布式共识算法的发展思路，但是它仍存在以下缺陷，一般不会直接用于实践：Basic Paxos只能对单个值形成决议，并且决议的形成至少需要两次网络请求和应答（准备和批准），在高并发情况下将会产生较大的网络开销，极端情况下甚至可能形成活锁。在实际的应用中都是基于Multi Paxos和Fast Paxos算法以及一些等价的算法（如Raft、ZAB等）。</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://haifuns.com/2021/08/12/databus/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.jpg">
-      <meta itemprop="name" content="HAIFUN">
-      <meta itemprop="description" content="无限进步<br/>">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="With Silence">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/08/12/databus/" class="post-title-link" itemprop="url">Databus简介</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-08-12 21:50:00" itemprop="dateCreated datePublished" datetime="2021-08-12T21:50:00+00:00">2021-08-12</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-01-20 15:43:31" itemprop="dateModified" datetime="2022-01-20T15:43:31+00:00">2022-01-20</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%97%A5%E5%BF%97%E6%8C%96%E6%8E%98/" itemprop="url" rel="index"><span itemprop="name">日志挖掘</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2021/08/12/databus/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2021/08/12/databus/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="问题引入"><a href="#问题引入" class="headerlink" title="问题引入"></a>问题引入</h1><p>在互联网架构中，数据系统通常可以分为真实数据系统以及衍生数据系统。前者作为基础数据库存储用户产生的写操作，后者通常复制自主数据并对数据进行转换或业务处理，提供读取和其他复杂查询操作。</p>
-<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/databus/dataflow.png" alt="dataflow"></p>
-<h1 id="数据同步方案"><a href="#数据同步方案" class="headerlink" title="数据同步方案"></a>数据同步方案</h1><p>以缓存数据为例，缓存数据来自主数据，当主数据发生变化时，缓存中的数据也需要随之更新。要实现数据同步有两种常用解决方案：应用驱动双写和数据库日志挖掘。</p>
-<h2 id="应用双写"><a href="#应用双写" class="headerlink" title="应用双写"></a>应用双写</h2><p>应用双写指在写数据到DB时，同时写入缓存。但是应用双写存在数据不一致的情况，如下图所示：</p>
-<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/databus/databus-redis.png" alt="image"></p>
-<p>另外，在变更DB后更新缓存时，如果出现操作失败的情况，也有可能造成数据不一致。在需要保证严格数据一致时，使用应用双写策略并不容易实现。</p>
-<h2 id="日志挖掘"><a href="#日志挖掘" class="headerlink" title="日志挖掘"></a>日志挖掘</h2><p>日志挖掘通过提取数据库变更日志实现数据同步，这从根本上解决了数据一致性问题。如下图所示：</p>
-<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/databus/databus-flow.png" alt="image"></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/08/12/databus/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://haifuns.com/2021/06/06/kafka-09/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.jpg">
-      <meta itemprop="name" content="HAIFUN">
-      <meta itemprop="description" content="无限进步<br/>">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="With Silence">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/06/06/kafka-09/" class="post-title-link" itemprop="url">【Kafka】：高级应用</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2021-06-06 13:42:00" itemprop="dateCreated datePublished" datetime="2021-06-06T13:42:00+00:00">2021-06-06</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-01-20 15:43:31" itemprop="dateModified" datetime="2022-01-20T15:43:31+00:00">2022-01-20</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6/" itemprop="url" rel="index"><span itemprop="name">消息中间件</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2021/06/06/kafka-09/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2021/06/06/kafka-09/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h1><h2 id="幂等"><a href="#幂等" class="headerlink" title="幂等"></a>幂等</h2><p>Kafka支持幂等功能来避免生产者重试时重复写入消息，开启方式为生产者客户端参数enable.idempotence设置为true（默认为false）。幂等性功能开启需要配合以下参数：</p>
-<ul>
-<li>如果显示设置retries则必须大于0，未显示指定默认为Integer.MAX_VALUE。</li>
-<li>max.in.flight.requests.per.connection参数不能大于5。</li>
-<li>如果显示指定了acks，需要保证参数值为-1，不设置Kafka会自行设置。</li>
-</ul>
-<p>Kafka的幂等性主要是通过日志格式中RecordBatch的producer id和first sequence两个字段实现，每个生产者在初始化时都会被分配一个pid，对于每个pid，消息发送到的每个分区都有对应的序列号，从0开始递增。生产者每发送一条消息就会将&lt;pid,分区&gt;对应的序列号的值加1。</p>
-<p>broker端会为每一个&lt;pid,分区&gt;维护一个序列号。当收到消息时，只有它的序列号的值比维护的序列号大1时，才能正常接收。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/06/06/kafka-09/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
   
+    <link rel="icon" href="/images/favicon.ico">
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://haifuns.com/2021/06/06/kafka-08/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.jpg">
-      <meta itemprop="name" content="HAIFUN">
-      <meta itemprop="description" content="无限进步<br/>">
-    </span>
 
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="With Silence">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2021/06/06/kafka-08/" class="post-title-link" itemprop="url">【Kafka】：副本剖析</a>
-        </h2>
+  <link href="/css/styles.css?v=c114cbeddx" rel="stylesheet">
 
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2021-06-06 13:40:00" itemprop="dateCreated datePublished" datetime="2021-06-06T13:40:00+00:00">2021-06-06</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-01-20 15:43:31" itemprop="dateModified" datetime="2022-01-20T15:43:31+00:00">2022-01-20</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6/" itemprop="url" rel="index"><span itemprop="name">消息中间件</span></a>
-                </span>
-            </span>
-
-          
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2021/06/06/kafka-08/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2021/06/06/kafka-08/" itemprop="commentCount"></span>
-    </a>
-  </span>
   
-  
-
-        </div>
-      </header>
-
-    
-    
     
-    <div class="post-body" itemprop="articleBody">
+<link rel="stylesheet" href="/css/personal-style.css">
 
-      
-          <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>Kafka为分区引入了副本机制，通过增加副本数量提升数据容灾能力以及故障自动转移。</p>
-<p>相关概念回顾：</p>
-<ul>
-<li>副本是相对分区而言的，即副本是特定分区的副本。</li>
-<li>一个分区包含一个或多个副本，其中一个为leader副本，其余为follower副本，各个副本位于不同的broker节点中。只有leader副本对外提供服务，follower副本只负责数据同步。</li>
-<li>分区中所有副本统称为AR，而ISR指与leader副本保持同步的副本集合（包含leader）。</li>
-<li>LEO标识每个分区最后一条消息的下一个位置，分区每个副本都有自己的LEO，ISR中最小的LEO即为HW，消费者只能拉取到HW之前的消息。</li>
-</ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2021/06/06/kafka-08/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-
-  
-  <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right" aria-label="下一页"></i></a>
-  </nav>
-
-
-
-          </div>
-          
-
-<script>
-  window.addEventListener('tabs:register', () => {
-    let { activeClass } = CONFIG.comments;
-    if (CONFIG.comments.storage) {
-      activeClass = localStorage.getItem('comments_active') || activeClass;
-    }
-    if (activeClass) {
-      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
-      if (activeTab) {
-        activeTab.click();
-      }
-    }
-  });
-  if (CONFIG.comments.storage) {
-    window.addEventListener('tabs:click', event => {
-      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
-      let commentClass = event.target.classList[1];
-      localStorage.setItem('comments_active', commentClass);
-    });
-  }
-</script>
-
-        </div>
-          
   
-  <div class="toggle sidebar-toggle">
-    <span class="toggle-line toggle-line-first"></span>
-    <span class="toggle-line toggle-line-middle"></span>
-    <span class="toggle-line toggle-line-last"></span>
-  </div>
-
-  <aside class="sidebar">
-    <div class="sidebar-inner">
-
-      <ul class="sidebar-nav motion-element">
-        <li class="sidebar-nav-toc">
-          文章目录
-        </li>
-        <li class="sidebar-nav-overview">
-          站点概览
-        </li>
-      </ul>
-
-      <!--noindex-->
-      <div class="post-toc-wrap sidebar-panel">
-      </div>
-      <!--/noindex-->
-
-      <div class="site-overview-wrap sidebar-panel">
-        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <img class="site-author-image" itemprop="image" alt="HAIFUN"
-      src="/uploads/avatar.jpg">
-  <p class="site-author-name" itemprop="name">HAIFUN</p>
-  <div class="site-description" itemprop="description">无限进步<br/></div>
-</div>
-<div class="site-state-wrap motion-element">
-  <nav class="site-state">
-      <div class="site-state-item site-state-posts">
-          <a href="/archives/">
-        
-          <span class="site-state-item-count">78</span>
-          <span class="site-state-item-name">日志</span>
-        </a>
-      </div>
-      <div class="site-state-item site-state-categories">
-        <span class="site-state-item-count">15</span>
-        <span class="site-state-item-name">分类</span>
-      </div>
-      <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">27</span>
-        <span class="site-state-item-name">标签</span>
-      </div>
-  </nav>
-</div>
-  <div class="links-of-author motion-element">
-      <span class="links-of-author-item">
-        <a href="https://github.com/haifuns" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;haifuns" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
-      </span>
-      <span class="links-of-author-item">
-        <a href="mailto:haifuns@163.com" title="E-Mail → mailto:haifuns@163.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
-      </span>
-  </div>
-  <div class="cc-license motion-element" itemprop="license">
-    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
-  </div>
-
-
-
-      </div>
 
-    </div>
-  </aside>
-  <div id="sidebar-dimmer"></div>
-
-
-      </div>
-    </main>
-
-    <footer class="footer">
-      <div class="footer-inner">
-        
-
-        
-  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">鲁ICP备19052103号 </a>
-      <img src="/images/beian.png" style="display: inline-block;">
-  </div>
-
-<div class="copyright">
   
-  &copy; 2019 – 
-  <span itemprop="copyrightYear">2022</span>
-  <span class="with-love">
-    <i class="fa fa-heart"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">HAIFUN</span>
-</div>
-  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
-  </div>
-
-        
-<div class="busuanzi-count">
-  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
-      <span class="post-meta-item-icon">
-        <i class="fa fa-user"></i>
-      </span>
-      <span class="site-uv" title="总访客量">
-        <span id="busuanzi_value_site_uv"></span>
-      </span>
-    </span>
-    <span class="post-meta-divider">|</span>
-    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
-      <span class="post-meta-item-icon">
-        <i class="fa fa-eye"></i>
-      </span>
-      <span class="site-pv" title="总访问量">
-        <span id="busuanzi_value_site_pv"></span>
-      </span>
-    </span>
-</div>
-
-
-
-
-
 
-
-
-      </div>
-    </footer>
-  </div>
-
   
-  <script src="/lib/anime.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
-  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
-  <script src="/lib/velocity/velocity.min.js"></script>
-  <script src="/lib/velocity/velocity.ui.min.js"></script>
-
-<script src="/js/utils.js"></script>
-
-<script src="/js/motion.js"></script>
-
-
-<script src="/js/schemes/pisces.js"></script>
-
-
-<script src="/js/next-boot.js"></script>
-
-
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?d3c8edb388553a2084296cbfe9a0785a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
 
 
   
-  <script>
-    (function(){
-      var canonicalURL, curProtocol;
-      //Get the <link> tag
-      var x=document.getElementsByTagName("link");
-		//Find the last canonical URL
-		if(x.length > 0){
-			for (i=0;i<x.length;i++){
-				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
-					canonicalURL=x[i].href;
-				}
-			}
-		}
-    //Get protocol
-	    if (!canonicalURL){
-	    	curProtocol = window.location.protocol.split(':')[0];
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
 	    }
-	    else{
-	    	curProtocol = canonicalURL.split(':')[0];
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
 	    }
-      //Get current URL if the canonical URL does not exist
-	    if (!canonicalURL) canonicalURL = window.location.href;
-	    //Assign script content. Replace current URL with the canonical URL
-      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
   </script>
 
 
 
+  
+    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
 
+<meta name="generator" content="Hexo 5.4.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="haifun的博客" type="application/atom+xml">
+</head>
 
-
-
-
-
-
-
-
-
+<body>
 
 
   
 
   
+  <div class="content content-archive">
+  <div class="page-header">
+
+  
+    <div class="breadcrumb">
+      <div class="location">博客</div>
+      <i class="icon-location"></i>
+    </div>
+  
+
+  
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/categories/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            分类
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/roaming/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            漫游
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/atom.xml"
+            rel="noopener noreferrer"
+            target="_blank"
+            >
+            RSS
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/search/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+
+  <div class="box-blog-info">
+    <a class="avatar" href="/">
+      <img src="/images/avatar.jpg" alt="" />
+    </a>
+    <div class="info">
+      <h3 class="name" style="font-family: calligraffittiregular">
+        Haifun
+      </h3>
+      <div class="slogan">
+        Later equals never
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+  <div class="post-list-box archive-body">
+    <ul class="list-post">  <li class="item-year item item-title item-title-1">
+    <a href="/archives/2021" class="text-year">
+      2021
+      <i class="icon-niu"></i>
+      
+    </a>
+  </li>
+<li class="item-post item">
+  <span class="post-date">11-17</span>
+
+  
+  <a class="post-title" href="/2021/11/17/multi-paxos/">分布式共识算法之Multi Paxos算法</a>
+
+
+</li>
+<li class="item-post item">
+  <span class="post-date">11-17</span>
+
+  
+  <a class="post-title" href="/2021/11/17/paxos/">分布式共识算法之Paxos算法</a>
+
+
+</li>
+<li class="item-post item">
+  <span class="post-date">08-12</span>
+
+  
+  <a class="post-title" href="/2021/08/12/databus/">Databus简介</a>
+
+
+</li>
+<li class="item-post item">
+  <span class="post-date">06-06</span>
+
+  
+  <a class="post-title" href="/2021/06/06/kafka-09/">【Kafka】：高级应用</a>
+
+
+</li>
+<li class="item-post item">
+  <span class="post-date">06-06</span>
+
+  
+  <a class="post-title" href="/2021/06/06/kafka-08/">【Kafka】：副本剖析</a>
+
+
+</li>
+<li class="item-post item">
+  <span class="post-date">06-06</span>
+
+  
+  <a class="post-title" href="/2021/06/06/kafka-07/">【Kafka】：控制器</a>
+
+
+</li>
+<li class="item-post item">
+  <span class="post-date">05-29</span>
+
+  
+  <a class="post-title" href="/2021/05/29/kafka-06/">【Kafka】：日志存储</a>
+
+
+</li>
+<li class="item-post item">
+  <span class="post-date">05-29</span>
+
+  
+  <a class="post-title" href="/2021/05/29/kafka-05/">【Kafka】：主题与分区</a>
+
+
+</li>
+<li class="item-post item">
+  <span class="post-date">05-22</span>
+
+  
+  <a class="post-title" href="/2021/05/22/kafka-04/">【Kafka】：再均衡原理剖析</a>
+
+
+</li>
+<li class="item-post item">
+  <span class="post-date">05-22</span>
+
+  
+  <a class="post-title" href="/2021/05/22/kafka-03/">【Kafka】：消费者</a>
+
+
+</li>
+<li class="item-post item">
+  <span class="post-date">05-22</span>
+
+  
+  <a class="post-title" href="/2021/05/22/kafka-02/">【Kafka】：生产者</a>
+
+
+</li>
+<li class="item-post item">
+  <span class="post-date">05-15</span>
+
+  
+  <a class="post-title" href="/2021/05/15/kafka-01/">【Kafka】：初识篇</a>
+
+
+</li>
+<li class="item-post item">
+  <span class="post-date">04-04</span>
+
+  
+  <a class="post-title" href="/2021/04/04/distribution-01/">常见限流方案设计</a>
+
+
+</li>
+<li class="item-post item">
+  <span class="post-date">03-21</span>
+
+  
+  <a class="post-title" href="/2021/03/21/zookeeper/">ZooKeeper入门</a>
+
+
+</li>
+<li class="item-post item">
+  <span class="post-date">03-13</span>
+
+  
+  <a class="post-title" href="/2021/03/13/tcpip/">网络基础</a>
+
+
+</li>
+</ul>
+  </div>
+
+  <div class="archive-footer">
+    
+  <div class="pagination">
+    <nav class="page-nav">
+      <a class="extend prev" rel="prev" href="/"><i class="icon-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/3/"><i class="icon-angle-right"></i></a>
+    </nav>
+  </div>
+
+
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/categories/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              分类
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/roaming/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              漫游
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/atom.xml"
+              rel="noopener noreferrer"
+              target="_blank"
+              >
+              RSS
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/search/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              搜索
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
 
   
 
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
 
-<script>
-NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
-  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
-    var GUEST = ['nick', 'mail', 'link'];
-    var guest = 'nick,mail,link';
-    guest = guest.split(',').filter(item => {
-      return GUEST.includes(item);
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
     });
-    new Valine({
-      el         : '#valine-comments',
-      verify     : true,
-      notify     : false,
-      appId      : 'masttnqEt9G69mj43i9oaA1C-gzGzoHsz',
-      appKey     : 'hgIx9VKn0GLDhRcLxQuNMl0E',
-      placeholder: ":)",
-      avatar     : 'mm',
-      meta       : guest,
-      pageSize   : '10' || 10,
-      visitor    : false,
-      lang       : '' || 'zh-cn',
-      path       : location.pathname,
-      recordIP   : false,
-      serverURLs : 'https://leancloud.haifuns.com'
-    });
-  }, window.Valine);
-});
+  }
 </script>
 
 </body>

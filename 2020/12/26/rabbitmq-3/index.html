@@ -1,34 +1,25 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+
+
+  <html class="light page-post">
+
+
 <head>
-  <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
-<meta name="theme-color" content="#222">
-<meta name="generator" content="Hexo 5.4.0">
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico">
-  <link rel="mask-icon" href="/images/logo.svg" color="#222">
-  <meta name="baidu-site-verification" content="code-WD10oii5HB">
+  <meta charset="utf-8">
+  
+  <title>RabbitMQ 存储&amp;告警&amp;流控&amp;镜像队列 | haifun的博客</title>
 
-<link rel="stylesheet" href="/css/main.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-
-<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
-  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
-  <link rel="stylesheet" href="/lib/pace/pace-theme-minimal.min.css">
-  <script src="/lib/pace/pace.min.js"></script>
-
-<script id="hexo-configurations">
-    var NexT = window.NexT || {};
-    var CONFIG = {"hostname":"haifuns.com","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":true,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":null,"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
-  </script>
+  
+    <meta name="keywords" content="RabbitMQ," />
+  
 
   <meta name="description" content="存储机制不管是持久化的消息还是非持久化的消息都可以被写入到磁盘。持久化的消息在到达队列时就被写入到磁盘，并且如果可以，持久化的消息也会在内存中保存一份备份，这样可以提高一定的性能，当内存吃紧的时候会从内存中清除。非持久化的消息一般只保存在内存中，在内存吃紧的时候会被换入到磁盘中，以节省内存空间。这两种类型的消息的落盘处理都在RabbitMQ 的”持久层”中完成。 持久层是一个逻辑上的概念，实际包含">
 <meta property="og:type" content="article">
 <meta property="og:title" content="RabbitMQ 存储&amp;告警&amp;流控&amp;镜像队列">
 <meta property="og:url" content="https://haifuns.com/2020/12/26/rabbitmq-3/index.html">
-<meta property="og:site_name" content="With Silence">
+<meta property="og:site_name" content="haifun的博客">
 <meta property="og:description" content="存储机制不管是持久化的消息还是非持久化的消息都可以被写入到磁盘。持久化的消息在到达队列时就被写入到磁盘，并且如果可以，持久化的消息也会在内存中保存一份备份，这样可以提高一定的性能，当内存吃紧的时候会从内存中清除。非持久化的消息一般只保存在内存中，在内存吃紧的时候会被换入到磁盘中，以节省内存空间。这两种类型的消息的落盘处理都在RabbitMQ 的”持久层”中完成。 持久层是一个逻辑上的概念，实际包含">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/mq/rabbitmq-queue.png">
@@ -37,228 +28,219 @@
 <meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/mq/rabbitmq-mirror-queue.png">
 <meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/mq/rabbitmq-mirror-queue2.png">
 <meta property="article:published_time" content="2020-12-26T16:30:00.000Z">
-<meta property="article:modified_time" content="2022-01-20T15:43:31.720Z">
-<meta property="article:author" content="HAIFUN">
+<meta property="article:modified_time" content="2022-01-20T15:54:24.711Z">
+<meta property="article:author" content="haifun">
 <meta property="article:tag" content="RabbitMQ">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/mq/rabbitmq-queue.png">
 
-<link rel="canonical" href="https://haifuns.com/2020/12/26/rabbitmq-3/">
-
-
-<script id="page-configurations">
-  // https://hexo.io/docs/variables.html
-  CONFIG.page = {
-    sidebar: "",
-    isHome : false,
-    isPost : true,
-    lang   : 'zh-CN'
-  };
-</script>
-
-  <title>RabbitMQ 存储&告警&流控&镜像队列 | With Silence</title>
   
 
+  
+    <link rel="icon" href="/images/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbeddx" rel="stylesheet">
+
+
+  
+    
+<link rel="stylesheet" href="/css/personal-style.css">
+
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?d3c8edb388553a2084296cbfe9a0785a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
 
 
 
+  
+    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
 
-
-  <noscript>
-  <style>
-  .use-motion .brand,
-  .use-motion .menu-item,
-  .sidebar-inner,
-  .use-motion .post-block,
-  .use-motion .pagination,
-  .use-motion .comments,
-  .use-motion .post-header,
-  .use-motion .post-body,
-  .use-motion .collection-header { opacity: initial; }
-
-  .use-motion .site-title,
-  .use-motion .site-subtitle {
-    opacity: initial;
-    top: initial;
-  }
-
-  .use-motion .logo-line-before i { left: initial; }
-  .use-motion .logo-line-after i { right: initial; }
-  </style>
-</noscript>
-
-
+<meta name="generator" content="Hexo 5.4.0">
 <style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="haifun的博客" type="application/atom+xml">
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage">
-  <div class="container use-motion">
-    <div class="headband"></div>
+<body>
 
-    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
-      <div class="header-inner"><div class="site-brand-container">
-  <div class="site-nav-toggle">
-    <div class="toggle" aria-label="切换导航栏">
-      <span class="toggle-line toggle-line-first"></span>
-      <span class="toggle-line toggle-line-middle"></span>
-      <span class="toggle-line toggle-line-last"></span>
-    </div>
-  </div>
 
-  <div class="site-meta">
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
 
-    <a href="/" class="brand" rel="start">
-      <span class="logo-line-before"><i></i></span>
-      <h1 class="site-title">With Silence</h1>
-      <span class="logo-line-after"><i></i></span>
+  <div class="post-header CENTER">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
     </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/categories/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            分类
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/roaming/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            漫游
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/atom.xml"
+            rel="noopener noreferrer"
+            target="_blank"
+            >
+            RSS
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/search/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            搜索
+          </a>
+        </li>
+      
+    </ul>
   </div>
 
-  <div class="site-nav-right">
-    <div class="toggle popup-trigger">
-    </div>
-  </div>
+
 </div>
 
 
-
-
-<nav class="site-nav">
-  <ul id="menu" class="main-menu menu">
-        <li class="menu-item menu-item-home">
-
-    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
-
-  </li>
-        <li class="menu-item menu-item-roaming">
-
-    <a href="/roaming/" rel="section"><i class="fa fa-rocket fa-fw"></i>漫游</a>
-
-  </li>
-        <li class="menu-item menu-item-tags">
-
-    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
-
-  </li>
-        <li class="menu-item menu-item-categories">
-
-    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
-
-  </li>
-        <li class="menu-item menu-item-archives">
-
-    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
-
-  </li>
-        <li class="menu-item menu-item-about">
-
-    <a href="/about/" rel="section"><i class="fa fa-info-circle fa-fw"></i>关于</a>
-
-  </li>
-  </ul>
-</nav>
-
-
-
-
-</div>
-    </header>
-
-    
-  <div class="back-to-top">
-    <i class="fa fa-arrow-up"></i>
-    <span>0%</span>
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AD%98%E5%82%A8%E6%9C%BA%E5%88%B6"><span class="toc-text">存储机制</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%98%9F%E5%88%97%E7%9A%84%E7%BB%93%E6%9E%84"><span class="toc-text">队列的结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%83%B0%E6%80%A7%E9%98%9F%E5%88%97"><span class="toc-text">惰性队列</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E5%8F%8A%E7%A3%81%E7%9B%98%E5%91%8A%E8%AD%A6"><span class="toc-text">内存及磁盘告警</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%85%E5%AD%98%E5%91%8A%E8%AD%A6"><span class="toc-text">内存告警</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%A3%81%E7%9B%98%E5%91%8A%E8%AD%A6"><span class="toc-text">磁盘告警</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%B5%81%E6%8E%A7"><span class="toc-text">流控</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B5%81%E6%8E%A7%E5%8E%9F%E7%90%86"><span class="toc-text">流控原理</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%95%9C%E5%83%8F%E9%98%9F%E5%88%97"><span class="toc-text">镜像队列</span></a></li></ol>
   </div>
-  <div class="reading-progress-bar"></div>
 
 
-    <main class="main">
-      <div class="main-inner">
-        <div class="content-wrap">
-          
 
-          <div class="content post posts-expand">
-            
+<div class="content content-post CENTER">
+   <article id="post-rabbitmq-3" class="article article-type-post" itemprop="blogPost">
+  <header class="article-header">
+    <h1 class="post-title">RabbitMQ 存储&amp;告警&amp;流控&amp;镜像队列</h1>
 
-    
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://haifuns.com/2020/12/26/rabbitmq-3/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/uploads/avatar.jpg">
-      <meta itemprop="name" content="HAIFUN">
-      <meta itemprop="description" content="无限进步<br/>">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="With Silence">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          RabbitMQ 存储&告警&流控&镜像队列
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-
-              <time title="创建时间：2020-12-26 16:30:00" itemprop="dateCreated datePublished" datetime="2020-12-26T16:30:00+00:00">2020-12-26</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2022-01-20 15:43:31" itemprop="dateModified" datetime="2022-01-20T15:43:31+00:00">2022-01-20</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6/" itemprop="url" rel="index"><span itemprop="name">消息中间件</span></a>
-                </span>
-            </span>
-
-          
-            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">阅读次数：</span>
-              <span id="busuanzi_value_page_pv"></span>
-            </span>
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
+    <div class="article-meta">
+      <span>
+        <i class="icon-calendar"></i>
+        <span>2020.12.26</span>
       </span>
-      <span class="post-meta-item-text">Valine：</span>
-    
-    <a title="valine" href="/2020/12/26/rabbitmq-3/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2020/12/26/rabbitmq-3/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="存储机制"><a href="#存储机制" class="headerlink" title="存储机制"></a>存储机制</h1><p>不管是持久化的消息还是非持久化的消息都可以被写入到磁盘。持久化的消息在到达队列时就被写入到磁盘，并且如果可以，持久化的消息也会在内存中保存一份备份，这样可以提高一定的性能，当内存吃紧的时候会从内存中清除。非持久化的消息一般只保存在内存中，在内存吃紧的时候会被换入到磁盘中，以节省内存空间。这两种类型的消息的落盘处理都在RabbitMQ 的”持久层”中完成。</p>
+        <span class="article-author">
+          <i class="icon-user"></i>
+          <span>haifun</span>
+        </span>
+      
+
+      
+  <span class="article-category">
+    <i class="icon-list"></i>
+    <a class="article-category-link" href="/categories/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6/">消息中间件</a>
+  </span>
+
+
+
+      
+
+      
+      <i class="fa fa-eye"></i> 
+        <span id="busuanzi_container_page_pv">
+           &nbsp热度 <span id="busuanzi_value_page_pv">
+           <i class="fa fa-spinner fa-spin"></i></span>℃
+        </span>
+      
+      
+    </div>
+  </header>
+
+  <div class="article-content">
+    
+      <h1 id="存储机制"><a href="#存储机制" class="headerlink" title="存储机制"></a>存储机制</h1><p>不管是持久化的消息还是非持久化的消息都可以被写入到磁盘。持久化的消息在到达队列时就被写入到磁盘，并且如果可以，持久化的消息也会在内存中保存一份备份，这样可以提高一定的性能，当内存吃紧的时候会从内存中清除。非持久化的消息一般只保存在内存中，在内存吃紧的时候会被换入到磁盘中，以节省内存空间。这两种类型的消息的落盘处理都在RabbitMQ 的”持久层”中完成。</p>
 <p>持久层是一个逻辑上的概念，实际包含两个部分队列索引(rabbit_queue_index) 和消息存储 (rabbit_msg_store)。</p>
 <ul>
 <li>rabbit_queue_index 负责维护队列中落盘消息的信息，包括消息的存储地点、是否已被交付给消费者、是否已被消费者 ack 等。</li>
@@ -301,7 +283,7 @@
 </ul>
 <p>对于普通的没有设置优先级和镜像的队列来说， backing_queue 的默认实现是rabbit_variable_queue，其内部通过5 个子队列 Q1、Q2、Delta、Q3、Q4 来体现消息的各个状态。整个队列包括 rabbit_amqqueue_process、backing_queue 的各个子队列。</p>
 <p>队列的结构可以参考下图：</p>
-<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/mq/rabbitmq-queue.png" alt="image"></p>
+<p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/mq/rabbitmq-queue.png" alt="image"></p>
 <p>其中：</p>
 <ul>
 <li>Q1、Q4 只包含 alpha 状态的消息</li>
@@ -400,11 +382,11 @@
 <h2 id="流控原理"><a href="#流控原理" class="headerlink" title="流控原理"></a>流控原理</h2><p>Erlang 进程之间并不共享内存(binary类型的除外)，而是通过消息传递来通信，每个进程都有自己的进程邮箱(mailbox) 。默认情况下 Erlang 并没有对进程邮箱的大小进行限制，所以当有大量消息持续发往某个进程时，会导致该进程邮箱过大，最终内存溢出并崩溃。RabbitMQ 中，如果生产者持续高速发送，而消费者消费速度较低时，如果没有流控，很快就使内部进程邮箱的大小达到内存阀值。</p>
 <p>RabbitMQ 使用了一种基于信用证算法 (credit-based algorithm) 的流控机制来限制发送消息的速率以解决前面所提出的问题，它通过监控各个进程的进程邮箱，当某个进程负载过高而来不及处理消息时，这个进程的进程邮箱就会开始堆积消息。当堆积到一定量时，就会阻塞而不接收上游的新消息。从而慢慢地，上游进程的进程邮箱也会开始堆积消息。当堆积到一定量时也会阻塞而停止接收上游的消息，最后就会使负责网络数据包接收的进程阻塞而暂停接收新的数据。</p>
 <p>以下图为例，进程A 接收消息并转发至进程B ，进程B 接收消息并转发至进程C 。每个进程中都有一对关于收发消息的credit 值。以进程B 为例， {{credit_from, C}, value} 表示能发送多少条消息给C ，每发送一条消息该值减 1，当为 0 时，进程B 不再往进程C 发送消息也不再接收进程 A 的消息。 {{credit_to, A}, value} 表示再接收多少条消息就向进程A 发送增加 credit 值的通知，进程A 接收到该通知后就增加 {{credit_from, B}, value} 所对应的值，这样进程A 就能持续发送消息。当上游发送速率高于下游接收速率时，credit<br>值就会被逐渐耗光，这时进程就会被阻塞，阻塞的情况会一直传递到最上游。当上游进程收到来自下游进程的增加 credit 值的通知时，若此时上游进程处于阻塞状态则解除阻塞，开始接收更上游进程的消息，一个个传导最终能够解除最上游的阻塞状态。由此可知，基于信用证的流控机制最终将消息发送进程的发送速率限制在消息处理进程的处理能力范围之内。</p>
-<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/mq/rabbitmq-flowcontrol1.png" alt="image"></p>
+<p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/mq/rabbitmq-flowcontrol1.png" alt="image"></p>
 <p>一个连接 (Connection) 触发流控时会处于 “flow” 的状态，也就意味着这个 Connection 的状态每秒在 blocked 和unblocked 之间来回切换数次，这样可以将消息发送的速率控制在服务器能够支撑的范围之内。可以通过 <code>rabbitmqctl_list_connections</code> 命令或者 Web 管理页面来查看Connection 状态。</p>
 <p>处于 flow 状态的 Connection 和处于 running 状态的 Connection 并没有什么不同，这个状态只是告诉系统管理员相应的发送速率受限了，而对于客户端而言，它看到的只是服务器的带宽要比正常情况下要小一些。</p>
 <p>流控机制不只是作用于Connection ，同样作用于信道(Channel)和队列。从Connection 到Channel，再到队列，最后是消息持久化存储形成一个完整的流控链，对于处于整个流控链中的任意进程，只要该进程阻塞，上游的进程必定全部被阻塞，也就是说，如果某个进程达到性能瓶颈，必然会导致上游所有的进程被阻塞。所以我们可以利用流控机制的这个特点找出瓶颈之所在。处理消息的几个关键进程及其对应的顺序关系如下图所示：</p>
-<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/mq/rabbitmq-flowcontrol2.png" alt="image"></p>
+<p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/mq/rabbitmq-flowcontrol2.png" alt="image"></p>
 <p>其中的各个进程如下所述：</p>
 <ul>
 <li>rabbit_reader: Connection 的处理进程，负责接收、解析 AMQP 协议数据包等；</li>
@@ -417,7 +399,7 @@
 <p>当某个 Connection 处于 flow 状态，同时这个 Connection 中也有若干个 Channel 处于 flow<br>状态，并且也有若干个对应的队列处于 flow 状态时，这就意味着在消息持久化时出现了性能瓶颈。在将队列中的消息存入磁盘的过程中引起服务器 I/O 负载过高而引起的此种情形。尤其是在发送大量较大的持久化消息时，此种情形最易显现。</p>
 <h1 id="镜像队列"><a href="#镜像队列" class="headerlink" title="镜像队列"></a>镜像队列</h1><p>如果 RabbitMQ 集群是由多个 Broker 节点组成的，那么从服务的整体可用性上来讲，该集群对于单点故障是有弹性的，但是同时也需要注：尽管交换器和绑定关系能够在单点故障问题上幸免于难，但是队列和其上的存储的消息却不行，这是因为队列进程及其内容仅仅维持在单个节点之上，所以一个节点的失效表现为其对应的队列不可用。</p>
 <p>引入镜像队列 (Mirror Queue) 的机制，可以将队列镜像到集群中的其他 Broker 节点之上，如果集群中的一个节点失效了，队列能自动地切换到镜像中的另一个节点上以保证服务的可用性。在通常的用法中，针对每一个配置镜像的队列(以下简称镜像队列)都包含一个主节点(master) 和若干个从节点(slave)，相应的结构可以参考下图：</p>
-<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/mq/rabbitmq-mirror-queue.png" alt="image"></p>
+<p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/mq/rabbitmq-mirror-queue.png" alt="image"></p>
 <p>slave 会准确地按照 master 执行命令的顺序进行动作，故slave 与master 上维护的状态应该是相同的。如果master 由于某种原因失效，那么”资历最老”的slave 会被提升为新的 master。根据slave 加入的时间排序，时间最长的slave即为”资历最老”。发送到镜像队列的所有消息会<br>被同时发往master 和所有的slave 上，如果此时master 挂掉了，消息还会在slave 上，这样slave 提升为master 的时候消息也不会丢失。除发送消息(Basic.Publish) 外的所有动作都只会向master 发送，然后再由master 将命令执行的结果广播给各个slave。</p>
 <p>如果消费者与slave 建立连接并进行订阅消费，其实质上都是从master 上获取消息。比如消费者与slave 建立了TCP 连接之后执行一个 Basic.Get 的操作，那么首先是由slave 将 Basic.Get 请求发往master ，再由master 准备好数据返回给slave ，最后由slave 投递给消费者。</p>
 <blockquote>
@@ -426,7 +408,7 @@
 <p>注意要点：</p>
 <p>RabbitMQ 的镜像队列同时支持 publisher confirm 和事务两种机制。在事务机制中，只有当前事务在全部镜像中执行之后，客户端才会收到Tx.Commit-Ok 的消息。同样的，在publisher confirm 机制中生产者进行当前消息确认的前提是该消息被全部进行所接收了。</p>
 <p>不同于普通的非镜像队列，镜像队列的 backing_queue 比较特殊，其实现并非是 <code>rabbit_variable_queue</code>，它内部包裹了普通 backing_queue 进行本地消息消息持久化处理，在此基础上增加了将消息和ack 复制到所有镜像的功能。镜像队列的结构可以参考下图，master 的backing_queue 采用的是 <code>rabbit_mirror_queue_master</code>，而slave 的backing queue 实现是 <code>rabbit_mirror_queue_slave</code>。</p>
-<p><img data-src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/mq/rabbitmq-mirror-queue2.png" alt="image"></p>
+<p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/mq/rabbitmq-mirror-queue2.png" alt="image"></p>
 <p>所有对 <code>rabbit_mirror_queue_master</code> 的操作都会通过组播 GM (Guaranteed Multicast) 的方式同步到各个slave 中。GM 负责消息的广播，<code>rabbit_mirror_queue_slave</code> 负责回调处理，而 master 上的回调处理是由 coordinator 负责完成的，如前所述，除了Basic.Publish，所有的操作都是通过master 来完成的，master 消息进行处理的同时将消息的处理通过 GM 广播给所有的 slave，slave GM 收到消息后，通过回调交由<br><code>rabbit_mirror queue_slave</code> 进行实际的处理。</p>
 <p>GM 模块实现的是一种可靠的组播通信协议，该协议能够保证组播消息的原子性，即保证组中活着的节点要么都收到消息要么都收不到，它的实现大致为：</p>
 <p>将所有的节点形成一个循环链表，每个节点都会监控位于自己左右两边的节点，当有节点新增时，相邻的节点保证当前广播的消息会复制到新的节点上，当有节点失效时，相邻的节点会接管以保证本次广播的消息会复制到所有的节点。在master 和slave 上的这些 GM 形成一个组(gm_group)，这个组的信息<br>会记录在Mnesia 中。不同的镜像队列形成不同的组。操作命令从master 对应的GM 发出后，顺着链表传送到所有的节点。由于所有节点组成了一个循环链表，master 对应的GM 最终会收<br>到自己发送的操作命令，这个时候master 就知道该操作命令都同步到了所有的slave 上。</p>
@@ -459,310 +441,204 @@
 <p>当所有 slave 都出现未同步状态，并且 <code>ha-promote-on-shutdown</code> 设置为 <code>when-synced</code><br>(默认)时，如果 master 因为主动原因停掉，比如通过 <code>rabbitmqctl stop</code> 命令或者优雅关闭操作系统，那么 slave 不会接管 master ，也就是此时镜像队列不可用；但是如果 master 因为被动原因停掉，比如 Erlang 虚拟机或者操作系统崩溃，那么 slave 会接管 master。这个配置项隐含的价值取向是保证消息可靠不丢失，同时放弃了可用性。如果<code>ha-promote-on-shutdown</code> 设置为always ，那么不论 master 因为何种原因停止，slave 都会接管 master，优先保证可用性，不过消息可能会丢失。</p>
 <p>镜像队列中最后一个停止的节点会是 master ，启动顺序必须是 master 先启动。如果 slave 先启动，它会有 30 秒的等待时间，等待 master 的启动，然后加入到集群中。如果 30 秒内 master<br>没有启动，slave 会自动停止。当所有节点因故(断电等)同时离线时，每个节点都认为自己不是最后一个停止的节点，要恢复镜像队列，可以尝试在 30 秒内启动所有节点。</p>
 
-    </div>
+    
+  </div>
 
-    
-    
-    
-        
+</article>
 
-<div>
-<ul class="post-copyright">
-  <li class="post-copyright-author">
-    <strong>本文作者： </strong>Haif.
-  </li>
-  <li class="post-copyright-link">
-    <strong>本文链接：</strong>
-    <a href="https://haifuns.com/2020/12/26/rabbitmq-3/" title="RabbitMQ 存储&amp;告警&amp;流控&amp;镜像队列">https://haifuns.com/2020/12/26/rabbitmq-3/</a>
-  </li>
-  <li class="post-copyright-license">
-    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
-  </li>
-</ul>
+
+   
+
+   
+  <div class="box-prev-next clearfix">
+    <a class="show pull-left" href="/2020/12/26/rabbitmq-2/">
+        <i class="icon icon-angle-left"></i>
+    </a>
+    <a class="show pull-right" href="/2020/12/26/rabbitmq-4/">
+        <i class="icon icon-angle-right"></i>
+    </a>
+  </div>
+
+
+
+
 </div>
 
 
-      <footer class="post-footer">
-          
-          <div class="post-tags">
-              <a href="/tags/RabbitMQ/" rel="tag"><i class="fa fa-tag"></i> RabbitMQ</a>
-          </div>
-
-        
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
 
 
-        
-    <div class="post-nav">
-      <div class="post-nav-item">
-    <a href="/2020/12/26/rabbitmq-2/" rel="prev" title="RabbitMQ 集群">
-      <i class="fa fa-chevron-left"></i> RabbitMQ 集群
-    </a></div>
-      <div class="post-nav-item">
-    <a href="/2020/12/26/rabbitmq-4/" rel="next" title="RabbitMQ 网络分区&扩展">
-      RabbitMQ 网络分区&扩展 <i class="fa fa-chevron-right"></i>
-    </a></div>
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
     </div>
-      </footer>
-    
-  </article>
-  
-  
-  
-
-
-
-          </div>
-          
-    <div class="comments" id="valine-comments"></div>
-
-<script>
-  window.addEventListener('tabs:register', () => {
-    let { activeClass } = CONFIG.comments;
-    if (CONFIG.comments.storage) {
-      activeClass = localStorage.getItem('comments_active') || activeClass;
-    }
-    if (activeClass) {
-      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
-      if (activeTab) {
-        activeTab.click();
-      }
-    }
-  });
-  if (CONFIG.comments.storage) {
-    window.addEventListener('tabs:click', event => {
-      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
-      let commentClass = event.target.classList[1];
-      localStorage.setItem('comments_active', commentClass);
-    });
-  }
-</script>
-
-        </div>
-          
-  
-  <div class="toggle sidebar-toggle">
-    <span class="toggle-line toggle-line-first"></span>
-    <span class="toggle-line toggle-line-middle"></span>
-    <span class="toggle-line toggle-line-last"></span>
-  </div>
-
-  <aside class="sidebar">
-    <div class="sidebar-inner">
-
-      <ul class="sidebar-nav motion-element">
-        <li class="sidebar-nav-toc">
-          文章目录
-        </li>
-        <li class="sidebar-nav-overview">
-          站点概览
-        </li>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/categories/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              分类
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/roaming/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              漫游
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/atom.xml"
+              rel="noopener noreferrer"
+              target="_blank"
+              >
+              RSS
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/search/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              搜索
+            </a>
+          </li>
+        
       </ul>
 
-      <!--noindex-->
-      <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AD%98%E5%82%A8%E6%9C%BA%E5%88%B6"><span class="nav-number">1.</span> <span class="nav-text">存储机制</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%98%9F%E5%88%97%E7%9A%84%E7%BB%93%E6%9E%84"><span class="nav-number">1.1.</span> <span class="nav-text">队列的结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%83%B0%E6%80%A7%E9%98%9F%E5%88%97"><span class="nav-number">1.2.</span> <span class="nav-text">惰性队列</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E5%8F%8A%E7%A3%81%E7%9B%98%E5%91%8A%E8%AD%A6"><span class="nav-number">2.</span> <span class="nav-text">内存及磁盘告警</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E5%91%8A%E8%AD%A6"><span class="nav-number">2.1.</span> <span class="nav-text">内存告警</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A3%81%E7%9B%98%E5%91%8A%E8%AD%A6"><span class="nav-number">2.2.</span> <span class="nav-text">磁盘告警</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B5%81%E6%8E%A7"><span class="nav-number">3.</span> <span class="nav-text">流控</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%81%E6%8E%A7%E5%8E%9F%E7%90%86"><span class="nav-number">3.1.</span> <span class="nav-text">流控原理</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%95%9C%E5%83%8F%E9%98%9F%E5%88%97"><span class="nav-number">4.</span> <span class="nav-text">镜像队列</span></a></li></ol></div>
-      </div>
-      <!--/noindex-->
-
-      <div class="site-overview-wrap sidebar-panel">
-        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <img class="site-author-image" itemprop="image" alt="HAIFUN"
-      src="/uploads/avatar.jpg">
-  <p class="site-author-name" itemprop="name">HAIFUN</p>
-  <div class="site-description" itemprop="description">无限进步<br/></div>
-</div>
-<div class="site-state-wrap motion-element">
-  <nav class="site-state">
-      <div class="site-state-item site-state-posts">
-          <a href="/archives/">
-        
-          <span class="site-state-item-count">78</span>
-          <span class="site-state-item-name">日志</span>
-        </a>
-      </div>
-      <div class="site-state-item site-state-categories">
-        <span class="site-state-item-count">15</span>
-        <span class="site-state-item-name">分类</span>
-      </div>
-      <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">27</span>
-        <span class="site-state-item-name">标签</span>
-      </div>
-  </nav>
-</div>
-  <div class="links-of-author motion-element">
-      <span class="links-of-author-item">
-        <a href="https://github.com/haifuns" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;haifuns" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
-      </span>
-      <span class="links-of-author-item">
-        <a href="mailto:haifuns@163.com" title="E-Mail → mailto:haifuns@163.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
-      </span>
-  </div>
-  <div class="cc-license motion-element" itemprop="license">
-    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" class="cc-opacity" rel="noopener" target="_blank"><img src="/images/cc-by-nc-sa.svg" alt="Creative Commons"></a>
-  </div>
-
-
-
-      </div>
-
     </div>
-  </aside>
-  <div id="sidebar-dimmer"></div>
-
-
-      </div>
-    </main>
-
-    <footer class="footer">
-      <div class="footer-inner">
-        
-
-        
-  <div class="beian"><a href="https://beian.miit.gov.cn/" rel="noopener" target="_blank">鲁ICP备19052103号 </a>
-      <img src="/images/beian.png" style="display: inline-block;">
   </div>
-
-<div class="copyright">
-  
-  &copy; 2019 – 
-  <span itemprop="copyrightYear">2022</span>
-  <span class="with-love">
-    <i class="fa fa-heart"></i>
-  </span>
-  <span class="author" itemprop="copyrightHolder">HAIFUN</span>
-</div>
-  <div class="powered-by">由 <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://pisces.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
-  </div>
-
-        
-<div class="busuanzi-count">
-  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
-      <span class="post-meta-item-icon">
-        <i class="fa fa-user"></i>
-      </span>
-      <span class="site-uv" title="总访客量">
-        <span id="busuanzi_value_site_uv"></span>
-      </span>
-    </span>
-    <span class="post-meta-divider">|</span>
-    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
-      <span class="post-meta-item-icon">
-        <i class="fa fa-eye"></i>
-      </span>
-      <span class="site-pv" title="总访问量">
-        <span id="busuanzi_value_site_pv"></span>
-      </span>
-    </span>
 </div>
 
 
 
+  
+      <div class="fexo-comments comments-post">
+    
 
+    
 
+    
+    
 
+    
 
+    
+    
 
-      </div>
-    </footer>
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script>
+    <div id="comment" class="vcomment" ></div>
+    <script>
+        var notify = 'false' == true ? true : false;
+        var verify = 'false' == true ? true : false;
+        var GUEST_INFO = ['nick','mail','link'];
+        var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+            return GUEST_INFO.indexOf(item) > -1
+        });
+        guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+        window.valine = new Valine({
+            el: '.vcomment',
+            notify: notify,
+            verify: verify,
+            appId: "masttnqEt9G69mj43i9oaA1C-gzGzoHsz",
+            appKey: "hgIx9VKn0GLDhRcLxQuNMl0E",
+            avatar:'mm',
+            placeholder: "Say something",
+            guest_info:guest_info,
+            pageSize:'10'
+        });
+    </script>
+  
+    
+
   </div>
 
   
-  <script src="/lib/anime.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
-  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
-  <script src="//cdn.jsdelivr.net/npm/lozad@1/dist/lozad.min.js"></script>
-  <script src="/lib/velocity/velocity.min.js"></script>
-  <script src="/lib/velocity/velocity.ui.min.js"></script>
 
-<script src="/js/utils.js"></script>
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
 
-<script src="/js/motion.js"></script>
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
 
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
 
-<script src="/js/schemes/pisces.js"></script>
-
-
-<script src="/js/next-boot.js"></script>
-
-
-
-
-  
-  <script>
-    (function(){
-      var canonicalURL, curProtocol;
-      //Get the <link> tag
-      var x=document.getElementsByTagName("link");
-		//Find the last canonical URL
-		if(x.length > 0){
-			for (i=0;i<x.length;i++){
-				if(x[i].rel.toLowerCase() == 'canonical' && x[i].href){
-					canonicalURL=x[i].href;
-				}
-			}
-		}
-    //Get protocol
-	    if (!canonicalURL){
-	    	curProtocol = window.location.protocol.split(':')[0];
-	    }
-	    else{
-	    	curProtocol = canonicalURL.split(':')[0];
-	    }
-      //Get current URL if the canonical URL does not exist
-	    if (!canonicalURL) canonicalURL = window.location.href;
-	    //Assign script content. Replace current URL with the canonical URL
-      !function(){var e=/([http|https]:\/\/[a-zA-Z0-9\_\.]+\.baidu\.com)/gi,r=canonicalURL,t=document.referrer;if(!e.test(r)){var n=(String(curProtocol).toLowerCase() === 'https')?"https://sp0.baidu.com/9_Q4simg2RQJ8t7jm9iCKT-xh_/s.gif":"//api.share.baidu.com/s.gif";t?(n+="?r="+encodeURIComponent(document.referrer),r&&(n+="&l="+r)):r&&(n+="?l="+r);var i=new Image;i.src=n}}(window);})();
-  </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
-  
-
-  
-
-
-<script>
-NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
-  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
-    var GUEST = ['nick', 'mail', 'link'];
-    var guest = 'nick,mail,link';
-    guest = guest.split(',').filter(item => {
-      return GUEST.includes(item);
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
     });
-    new Valine({
-      el         : '#valine-comments',
-      verify     : true,
-      notify     : false,
-      appId      : 'masttnqEt9G69mj43i9oaA1C-gzGzoHsz',
-      appKey     : 'hgIx9VKn0GLDhRcLxQuNMl0E',
-      placeholder: ":)",
-      avatar     : 'mm',
-      meta       : guest,
-      pageSize   : '10' || 10,
-      visitor    : false,
-      lang       : '' || 'zh-cn',
-      path       : location.pathname,
-      recordIP   : false,
-      serverURLs : 'https://leancloud.haifuns.com'
-    });
-  }, window.Valine);
-});
+  }
 </script>
 
 </body>
