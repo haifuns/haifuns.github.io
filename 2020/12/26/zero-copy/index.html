@@ -7,7 +7,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>零拷贝（zero-copy）原理详解 | haifun的博客</title>
+  <title>零拷贝（zero-copy）原理详解 | haifuns的博客</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
@@ -19,7 +19,7 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="零拷贝（zero-copy）原理详解">
 <meta property="og:url" content="https://haifuns.com/2020/12/26/zero-copy/index.html">
-<meta property="og:site_name" content="haifun的博客">
+<meta property="og:site_name" content="haifuns的博客">
 <meta property="og:description" content="前置概念用户空间与内核空间CPU 将指令分为特权指令和非特权指令，对于危险指令，只允许操作系统及其相关模块使用，普通应用程序只能使用那些不会造成灾难的指令。比如 Intel 的 CPU 将特权等级分为 4 个级别：Ring0~Ring3。 其实 Linux 系统只使用了 Ring0 和 Ring3 两个运行级别（Windows 系统也是一样的）。当进程运行在 Ring3 级别时被称为运行在用户态，">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/io/old-io.png">
@@ -27,8 +27,8 @@
 <meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/io/sendfile.png">
 <meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/io/sendfile-gather.png">
 <meta property="article:published_time" content="2020-12-26T17:33:00.000Z">
-<meta property="article:modified_time" content="2022-01-26T11:45:37.598Z">
-<meta property="article:author" content="haifun">
+<meta property="article:modified_time" content="2022-01-27T06:27:24.817Z">
+<meta property="article:author" content="haifuns">
 <meta property="article:tag" content="Java IO">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/io/old-io.png">
@@ -87,7 +87,7 @@
 
 <meta name="generator" content="Hexo 5.4.0">
 <style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
-<link rel="alternate" href="/atom.xml" title="haifun的博客" type="application/atom+xml">
+<link rel="alternate" href="/atom.xml" title="haifuns的博客" type="application/atom+xml">
 </head>
 
 <body>
@@ -212,7 +212,7 @@
       
         <span class="article-author">
           <i class="icon-user"></i>
-          <span>haifun</span>
+          <span>haifuns</span>
         </span>
       
 
