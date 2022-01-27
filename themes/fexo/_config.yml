@@ -1,5 +1,5 @@
 # Blog info
-blog_name: Haifun
+blog_name: haifuns
 slogan: Later equals never
 url: https://haifuns.com
 
@@ -10,7 +10,7 @@ avatar: /images/avatar.jpg
 favicon: /images/favicon.ico
 
 # For seo
-keywords: haifun,后端,JAVA,架构,算法
+keywords: haifuns,后端,JAVA,架构,算法
 
 home_nav:
   - name: Blog
