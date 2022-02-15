@@ -109,10 +109,6 @@
     <lastmod>2022-02-15</lastmod>
   </url>
   <url>
-    <loc>https://haifuns.com/2020/12/26/rabbitmq-3/</loc>
-    <lastmod>2022-02-15</lastmod>
-  </url>
-  <url>
     <loc>https://haifuns.com/2022/01/04/curator-01/</loc>
     <lastmod>2022-02-15</lastmod>
   </url>
@@ -249,10 +245,6 @@
     <lastmod>2022-02-15</lastmod>
   </url>
   <url>
-    <loc>https://haifuns.com/2021/06/06/kafka-07/</loc>
-    <lastmod>2022-02-15</lastmod>
-  </url>
-  <url>
     <loc>https://haifuns.com/2021/06/06/kafka-08/</loc>
     <lastmod>2022-02-15</lastmod>
   </url>
@@ -266,6 +258,10 @@
   </url>
   <url>
     <loc>https://haifuns.com/2019/11/21/mybatis-sharding/</loc>
+    <lastmod>2022-02-15</lastmod>
+  </url>
+  <url>
+    <loc>https://haifuns.com/2021/06/06/kafka-07/</loc>
     <lastmod>2022-02-15</lastmod>
   </url>
   <url>
@@ -318,6 +314,10 @@
   </url>
   <url>
     <loc>https://haifuns.com/2020/12/26/rabbitmq-2/</loc>
+    <lastmod>2022-02-15</lastmod>
+  </url>
+  <url>
+    <loc>https://haifuns.com/2020/12/26/rabbitmq-3/</loc>
     <lastmod>2022-02-15</lastmod>
   </url>
 </urlset> 
