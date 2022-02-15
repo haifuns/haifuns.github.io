@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>【ZooKeeper源码】 | haifuns的博客</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="ZooKeeper," />
+  
+
+  <meta name="description" content="从zkServer.sh启动脚本中我们可以看到zk启动入口类为QuorumPeerMain，接下来从其main方法入手开始分析zk启动流程。 QuorumPeerMain#main123456789101112131415161718192021222324252627282930313233343536public static void main(String[] args) {    Quo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【ZooKeeper源码】">
+<meta property="og:url" content="https://haifuns.com/2022/02/15/zookeeper-01/index.html">
+<meta property="og:site_name" content="haifuns的博客">
+<meta property="og:description" content="从zkServer.sh启动脚本中我们可以看到zk启动入口类为QuorumPeerMain，接下来从其main方法入手开始分析zk启动流程。 QuorumPeerMain#main123456789101112131415161718192021222324252627282930313233343536public static void main(String[] args) {    Quo">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-02-15T22:30:00.000Z">
+<meta property="article:modified_time" content="2022-02-15T14:28:51.296Z">
+<meta property="article:author" content="haifuns">
+<meta property="article:tag" content="ZooKeeper">
+<meta name="twitter:card" content="summary">
+
+  
+
+  
+    <link rel="icon" href="/images/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbeddx" rel="stylesheet">
+
+
+  
+    
+<link rel="stylesheet" href="/css/personal-style.css">
+
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?d3c8edb388553a2084296cbfe9a0785a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
+
+<meta name="generator" content="Hexo 5.4.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="haifuns的博客" type="application/atom+xml">
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header CENTER">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/categories/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            分类
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/roaming/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            漫游
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/atom.xml"
+            rel="noopener noreferrer"
+            target="_blank"
+            >
+            RSS
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/search/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#QuorumPeerMain-main"><span class="toc-text">QuorumPeerMain#main</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#QuorumPeer-start"><span class="toc-text">QuorumPeer#start</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%B0%8F%E7%BB%93"><span class="toc-text">小结</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post CENTER">
+   <article id="post-zookeeper-01" class="article article-type-post" itemprop="blogPost">
+  <header class="article-header">
+    <h1 class="post-title">【ZooKeeper源码】</h1>
+
+    <div class="article-meta">
+      <span>
+        <i class="icon-calendar"></i>
+        <span>2022.02.15</span>
+      </span>
+
+      
+        <span class="article-author">
+          <i class="icon-user"></i>
+          <span>haifuns</span>
+        </span>
+      
+
+      
+  <span class="article-category">
+    <i class="icon-list"></i>
+    <a class="article-category-link" href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F/">分布式</a>
+  </span>
+
+
+
+      
+
+      
+      <i class="fa fa-eye"></i> 
+        <span id="busuanzi_container_page_pv">
+           &nbsp热度 <span id="busuanzi_value_page_pv">
+           <i class="fa fa-spinner fa-spin"></i></span>℃
+        </span>
+      
+      
+    </div>
+  </header>
+
+  <div class="article-content">
+    
+      <p>从zkServer.sh启动脚本中我们可以看到zk启动入口类为QuorumPeerMain，接下来从其main方法入手开始分析zk启动流程。</p>
+<h1 id="QuorumPeerMain-main"><a href="#QuorumPeerMain-main" class="headerlink" title="QuorumPeerMain#main"></a>QuorumPeerMain#main</h1><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>{</span><br><span class="line">    QuorumPeerMain main = <span class="keyword">new</span> QuorumPeerMain();</span><br><span class="line">    <span class="keyword">try</span> {</span><br><span class="line">        main.initializeAndRun(args);</span><br><span class="line">    } <span class="keyword">catch</span> (Exception e) {</span><br><span class="line">        <span class="comment">// ...</span></span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">initializeAndRun</span><span class="params">(String[] args)</span></span></span><br><span class="line"><span class="function"><span class="keyword">throws</span> ConfigException, IOException </span>{</span><br><span class="line">    <span class="comment">// 用来解析配置文件</span></span><br><span class="line">    QuorumPeerConfig config = <span class="keyword">new</span> QuorumPeerConfig();</span><br><span class="line">    <span class="keyword">if</span> (args.length == <span class="number">1</span>) {</span><br><span class="line">        <span class="comment">// 如果只传了一个参数, 就认为是zoo.cfg文件地址</span></span><br><span class="line">        config.parse(args[<span class="number">0</span>]);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Start and schedule the the purge task</span></span><br><span class="line">    <span class="comment">// 启动后台线程，定期清理日志文件和快照文件</span></span><br><span class="line">    DatadirCleanupManager purgeMgr = <span class="keyword">new</span> DatadirCleanupManager(config</span><br><span class="line">            .getDataDir(), config.getDataLogDir(), config</span><br><span class="line">            .getSnapRetainCount(), config.getPurgeInterval());</span><br><span class="line">    purgeMgr.start();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (args.length == <span class="number">1</span> &amp;&amp; config.servers.size() &gt; <span class="number">0</span>) {</span><br><span class="line">        <span class="comment">// 集群启动</span></span><br><span class="line">        runFromConfig(config);</span><br><span class="line">    } <span class="keyword">else</span> {</span><br><span class="line">        LOG.warn(<span class="string">"Either no config or no quorum defined in config, running "</span></span><br><span class="line">                 + <span class="string">" in standalone mode"</span>);</span><br><span class="line">        <span class="comment">// there is only server in the quorum -- run as standalone</span></span><br><span class="line">        <span class="comment">// 单机启动</span></span><br><span class="line">        ZooKeeperServerMain.main(args);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>从以上代码可以看到，启动过程先对配置文件进行解析，然后启动后台线程定期清理日志和快照文件，接着判断是集群启动还是单机启动，这里我们直接分析集群启动过程。</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">runFromConfig</span><span class="params">(QuorumPeerConfig config)</span> <span class="keyword">throws</span> IOException </span>{</span><br><span class="line">    <span class="keyword">try</span> {</span><br><span class="line">        <span class="comment">// 注册jmx bean</span></span><br><span class="line">        ManagedUtil.registerLog4jMBeans();</span><br><span class="line">    } <span class="keyword">catch</span> (JMException e) {</span><br><span class="line">        LOG.warn(<span class="string">"Unable to register log4j JMX control"</span>, e);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    LOG.info(<span class="string">"Starting quorum peer"</span>);</span><br><span class="line">    <span class="keyword">try</span> {</span><br><span class="line">        <span class="comment">// 网络连接工厂</span></span><br><span class="line">        ServerCnxnFactory cnxnFactory = ServerCnxnFactory.createFactory();</span><br><span class="line">        cnxnFactory.configure(config.getClientPortAddress(),</span><br><span class="line">                              config.getMaxClientCnxns());</span><br><span class="line"></span><br><span class="line">        <span class="comment">// quorumPeer代表一个zk节点</span></span><br><span class="line">        quorumPeer = <span class="keyword">new</span> QuorumPeer();</span><br><span class="line">        quorumPeer.setClientPortAddress(config.getClientPortAddress());</span><br><span class="line">        <span class="comment">// 磁盘数据管理组件 FileTxnSnapLog</span></span><br><span class="line">        quorumPeer.setTxnFactory(<span class="keyword">new</span> FileTxnSnapLog(</span><br><span class="line">                                     <span class="keyword">new</span> File(config.getDataLogDir()),</span><br><span class="line">                                     <span class="keyword">new</span> File(config.getDataDir())));</span><br><span class="line">        quorumPeer.setQuorumPeers(config.getServers());</span><br><span class="line">        quorumPeer.setElectionType(config.getElectionAlg());</span><br><span class="line">        quorumPeer.setMyid(config.getServerId());</span><br><span class="line">        quorumPeer.setTickTime(config.getTickTime());</span><br><span class="line">        quorumPeer.setMinSessionTimeout(config.getMinSessionTimeout());</span><br><span class="line">        quorumPeer.setMaxSessionTimeout(config.getMaxSessionTimeout());</span><br><span class="line">        quorumPeer.setInitLimit(config.getInitLimit());</span><br><span class="line">        quorumPeer.setSyncLimit(config.getSyncLimit());</span><br><span class="line">        quorumPeer.setQuorumVerifier(config.getQuorumVerifier());</span><br><span class="line">        quorumPeer.setCnxnFactory(cnxnFactory);</span><br><span class="line">        <span class="comment">// 内存数据库 ZKDatabase</span></span><br><span class="line">        quorumPeer.setZKDatabase(<span class="keyword">new</span> ZKDatabase(quorumPeer.getTxnFactory()));</span><br><span class="line">        quorumPeer.setLearnerType(config.getPeerType());</span><br><span class="line"></span><br><span class="line">        quorumPeer.start();</span><br><span class="line">        quorumPeer.join();</span><br><span class="line">    } <span class="keyword">catch</span> (InterruptedException e) {</span><br><span class="line">        <span class="comment">// warn, but generally this is ok</span></span><br><span class="line">        LOG.warn(<span class="string">"Quorum Peer interrupted"</span>, e);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>以上代码可以看到，集群启动过程先注册了jmx用于监控，然后配置网络连接工厂，最后创建了一个zk节点线程 QuorumPeer，配置完成后就启动它完成服务启动。</p>
+<h1 id="QuorumPeer-start"><a href="#QuorumPeer-start" class="headerlink" title="QuorumPeer#start"></a>QuorumPeer#start</h1><p>QuorumPeer 详细启动过程如下：</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// QuorumPeer</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">start</span><span class="params">()</span> </span>{</span><br><span class="line">    <span class="comment">// 从磁盘加载快照和事务日志, 恢复数据到内存数据库</span></span><br><span class="line">    loadDataBase();</span><br><span class="line">    <span class="comment">// 建立网络通信</span></span><br><span class="line">    cnxnFactory.start();</span><br><span class="line">    <span class="comment">// 开始leader选举, 初始化相应组件(其实是在initLeaderElection)</span></span><br><span class="line">    startLeaderElection();</span><br><span class="line">    <span class="comment">// 启动当前线程</span></span><br><span class="line">    <span class="keyword">super</span>.start();</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">loadDataBase</span><span class="params">()</span> </span>{</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 从磁盘加载数据到内存数据库</span></span><br><span class="line">    zkDb.loadDataBase();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// QuorumPeer</span></span><br><span class="line"><span class="function"><span class="keyword">synchronized</span> <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">startLeaderElection</span><span class="params">()</span> </span>{</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 初始化选票</span></span><br><span class="line">    currentVote = <span class="keyword">new</span> Vote(myid, getLastLoggedZxid(), getCurrentEpoch());</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 初始化选举算法</span></span><br><span class="line">    <span class="keyword">this</span>.electionAlg = createElectionAlgorithm(electionType);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">protected</span> Election <span class="title">createElectionAlgorithm</span><span class="params">(<span class="keyword">int</span> electionAlgorithm)</span> </span>{</span><br><span class="line">    Election le = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">    qcm = <span class="keyword">new</span> QuorumCnxManager(<span class="keyword">this</span>);</span><br><span class="line">    QuorumCnxManager.Listener listener = qcm.listener;</span><br><span class="line">    <span class="keyword">if</span> (listener != <span class="keyword">null</span>) {</span><br><span class="line">        listener.start();</span><br><span class="line">        le = <span class="keyword">new</span> FastLeaderElection(<span class="keyword">this</span>, qcm);</span><br><span class="line">    } <span class="keyword">else</span> {</span><br><span class="line">        LOG.error(<span class="string">"Null listener when initializing cnx manager"</span>);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> le;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// ZKDatabase</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">long</span> <span class="title">loadDataBase</span><span class="params">()</span> <span class="keyword">throws</span> IOException </span>{</span><br><span class="line">    PlayBackListener listener = <span class="keyword">new</span> PlayBackListener() {</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onTxnLoaded</span><span class="params">(TxnHeader hdr, Record txn)</span> </span>{</span><br><span class="line">            Request r = <span class="keyword">new</span> Request(<span class="keyword">null</span>, <span class="number">0</span>, hdr.getCxid(), hdr.getType(),</span><br><span class="line">                                    <span class="keyword">null</span>, <span class="keyword">null</span>);</span><br><span class="line">            r.txn = txn;</span><br><span class="line">            r.hdr = hdr;</span><br><span class="line">            r.zxid = hdr.getZxid();</span><br><span class="line">            addCommittedProposal(r);</span><br><span class="line">        }</span><br><span class="line">    };</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 读取快照和事务日志后恢复服务器数据库</span></span><br><span class="line">    <span class="keyword">long</span> zxid = snapLog.restore(dataTree, sessionsWithTimeouts, listener);</span><br><span class="line">    initialized = <span class="keyword">true</span>;</span><br><span class="line">    <span class="keyword">return</span> zxid;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// FileTxnSnapLog</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">long</span> <span class="title">restore</span><span class="params">(DataTree dt, Map&lt;Long, Integer&gt; sessions,</span></span></span><br><span class="line"><span class="params"><span class="function">                    PlayBackListener listener)</span> <span class="keyword">throws</span> IOException </span>{</span><br><span class="line">    <span class="comment">// 从最后一个有效快照反序列化DataTree, 获得最后的zxid lastProcessedZxid</span></span><br><span class="line">    snapLog.deserialize(dt, sessions);</span><br><span class="line">    FileTxnLog txnLog = <span class="keyword">new</span> FileTxnLog(dataDir);</span><br><span class="line">    <span class="comment">// 获取大于有效快照zxid的所有事务</span></span><br><span class="line">    TxnIterator itr = txnLog.read(dt.lastProcessedZxid + <span class="number">1</span>);</span><br><span class="line">    <span class="keyword">long</span> highestZxid = dt.lastProcessedZxid;</span><br><span class="line">    TxnHeader hdr;</span><br><span class="line">    <span class="comment">// 循环处理快照之后的事务</span></span><br><span class="line">    <span class="keyword">while</span> (<span class="keyword">true</span>) {</span><br><span class="line">        <span class="comment">// iterator points to</span></span><br><span class="line">        <span class="comment">// the first valid txn when initialized</span></span><br><span class="line">        hdr = itr.getHeader();</span><br><span class="line">        <span class="keyword">if</span> (hdr == <span class="keyword">null</span>) {</span><br><span class="line">            <span class="comment">//empty logs</span></span><br><span class="line">            <span class="keyword">return</span> dt.lastProcessedZxid;</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">if</span> (hdr.getZxid() &lt; highestZxid &amp;&amp; highestZxid != <span class="number">0</span>) {</span><br><span class="line">            LOG.error(highestZxid + <span class="string">"(higestZxid) &gt; "</span></span><br><span class="line">                      + hdr.getZxid() + <span class="string">"(next log) for type "</span></span><br><span class="line">                      + hdr.getType());</span><br><span class="line">        } <span class="keyword">else</span> {</span><br><span class="line">            highestZxid = hdr.getZxid();</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">try</span> {</span><br><span class="line">            <span class="comment">// 处理这条事务</span></span><br><span class="line">            processTransaction(hdr, dt, sessions, itr.getTxn());</span><br><span class="line">        } <span class="keyword">catch</span> (KeeperException.NoNodeException e) {</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IOException(<span class="string">"Failed to process transaction type: "</span> +</span><br><span class="line">                                  hdr.getType() + <span class="string">" error: "</span> + e.getMessage(), e);</span><br><span class="line">        }</span><br><span class="line">        <span class="comment">// 增加一条事务提交日志</span></span><br><span class="line">        listener.onTxnLoaded(hdr, itr.getTxn());</span><br><span class="line">        <span class="keyword">if</span> (!itr.next())</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> highestZxid;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// NettyServerCnxnFactory</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">start</span><span class="params">()</span> </span>{</span><br><span class="line">    LOG.info(<span class="string">"binding to port "</span> + localAddress);</span><br><span class="line">    parentChannel = bootstrap.bind(localAddress);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>从以上代码可以看到，QuorumPeer的启动主要分为数据恢复、建立网络通信以及leader选举三个部分。</p>
+<ul>
+<li>数据恢复过程是利用快照和事务日志文件把数据恢复到内存DateTree中，zk会以最新的有效快照为基础，然后把之后的事务也恢复到内存中。</li>
+<li>建立网络通信过程实际上就是创建了一个netty server服务监听客户端请求。</li>
+<li>leader选举这里只对准备工作分析，包含选票和选举算法两部分的初始化。具体选举过程将在下一篇详细分析。</li>
+</ul>
+<h1 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h1><p>ZooKeeper（集群）启动过程如下：</p>
+<ol>
+<li>解析zoo.cfg配置文件</li>
+<li>启动后台线程定期清理快照和事务日志文件</li>
+<li>根据快照和事务日志恢复数据到内存</li>
+<li>建立网络通信</li>
+<li>选举前的准备工作</li>
+<li>leader选举（下篇分析）</li>
+</ol>
+
+    
+  </div>
+
+</article>
+
+
+   
+
+   
+  <div class="box-prev-next clearfix">
+    <a class="show pull-left" href="/2022/01/26/stringmatch-05/">
+        <i class="icon icon-angle-left"></i>
+    </a>
+    <a class="hide pull-right" href="/">
+        <i class="icon icon-angle-right"></i>
+    </a>
+  </div>
+
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/categories/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              分类
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/roaming/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              漫游
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/atom.xml"
+              rel="noopener noreferrer"
+              target="_blank"
+              >
+              RSS
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/search/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              搜索
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+    
+    
+
+    
+
+    
+    
+
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script>
+    <div id="comment" class="vcomment" ></div>
+    <script>
+        var notify = 'false' == true ? true : false;
+        var verify = 'false' == true ? true : false;
+        var GUEST_INFO = ['nick','mail','link'];
+        var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+            return GUEST_INFO.indexOf(item) > -1
+        });
+        guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+        window.valine = new Valine({
+            el: '.vcomment',
+            notify: notify,
+            verify: verify,
+            appId: "masttnqEt9G69mj43i9oaA1C-gzGzoHsz",
+            appKey: "hgIx9VKn0GLDhRcLxQuNMl0E",
+            avatar:'mm',
+            placeholder: "Say something",
+            guest_info:guest_info,
+            pageSize:'10'
+        });
+    </script>
+  
+    
+
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>
