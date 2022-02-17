@@ -173,7 +173,7 @@ public Vote lookForLeader() throws InterruptedException {
              * Otherwise processes new notification.
              */
             if (n == null) {
-                // 没有拉取到消息重新发送通知
+                // 如果所有通知已经发出去了, 但是没有回复就重新通知
                 if (manager.haveDelivered()) {
                     sendNotifications();
                 } else {
