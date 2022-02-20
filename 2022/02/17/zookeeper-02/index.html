@@ -23,7 +23,7 @@
 <meta property="og:description" content="在前篇ZKServer启动流程分析的最后，QuorumPeer线程被启动，下面我们对线程执行过程中leader选举流程进行详细分析。 QuorumPeer#run12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-02-17T12:10:00.000Z">
-<meta property="article:modified_time" content="2022-02-20T09:14:03.689Z">
+<meta property="article:modified_time" content="2022-02-20T15:09:44.577Z">
 <meta property="article:author" content="haifuns">
 <meta property="article:tag" content="ZooKeeper">
 <meta name="twitter:card" content="summary">
@@ -243,9 +243,9 @@
 <p>以上代码可以看到FastLeaderElection进行一轮leader选举的过程。如果当前节点可以参与选举，首先投自己一票(serverId, 最大zxid, 时间戳epoch)，然后通知所有其他节点。如果节点状态为LOOKING并且选举没有结束，则循环从接受消息的队列里获取消息，然后判断发送消息的节点状态：</p>
 <p>如果发送消息的节点是LOOKING状态时，则选举依然在进行中，比较收到的投票时间戳与本地保存的时间戳：</p>
 <ul>
-<li>如果新的投票时间戳大，说明旧的投票过期了，开始判断是否接受新的提案，当满足<code>(new epoch更大 || (epoch相等 &amp;&amp; new zxid更大) || (epoch相等 &amp;&amp; zxid相等 &amp;&amp; new serverId更大))</code>时，就接受新的提案，否则依然接受旧提案。重新接受提案之后再次通知所有其他节点。</li>
+<li>如果新的投票时间戳大，说明旧的选举轮次过期了，开始判断是否接受新的提案，当满足<code>(new epoch更大 || (epoch相等 &amp;&amp; new zxid更大) || (epoch相等 &amp;&amp; zxid相等 &amp;&amp; new serverId更大))</code>时，就接受新的提案，否则依然接受旧提案。重新接受提案之后再次通知所有其他节点。</li>
 <li>如果新的投票时间戳小，则说明消息过期了，不作任何操作。</li>
-<li>如果相等，判断是否需要接受新的提案，如果接受依然需要通知其他所有节点。</li>
+<li>如果相等，说明是同一轮次选举，判断是否需要接受新的提案，如果接受依然需要通知其他所有节点。</li>
 </ul>
 <p>接下来保存所有投票消息，判断其他节点对当前节点的投票是否满足过半数，如果满足并且消息队列里的其他消息也不会导致当前接受其他节点的提案，则选举已经完成，更新当前节点的状态为LEADING。</p>
 <p>如果发送消息的节点是FOLLOWING或者LEADING状态时，此时说明集群中已经达成了共识，在加入前需要验证leader是否满足大多数跟随，如果检查通过就接受已经存在的leader，根据leader serverId更新当前节点的状态为LEADING/FOWLLING。</p>
