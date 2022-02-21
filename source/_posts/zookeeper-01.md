@@ -212,18 +212,12 @@ public long restore(DataTree dt, Map<Long, Integer> sessions,
     }
     return highestZxid;
 }
-
-// NettyServerCnxnFactory
-public void start() {
-    LOG.info("binding to port " + localAddress);
-    parentChannel = bootstrap.bind(localAddress);
-}
 ```
 
 从以上代码可以看到，QuorumPeer的启动主要分为数据恢复、建立网络通信以及leader选举三个部分。
 
 - 数据恢复过程是利用快照和事务日志文件把数据恢复到内存DateTree中，zk会以最新的有效快照为基础，然后把之后的事务也恢复到内存中。
-- 建立网络通信过程实际上就是创建了一个netty server服务监听客户端请求。
+- 建立网络通信过程实际上就是创建了一个NIOServerSocket服务监听客户端请求。
 - leader选举这里只对准备工作分析，包含选票和选举算法两部分的初始化。具体选举过程将在下一篇详细分析。
 
 # 小结
