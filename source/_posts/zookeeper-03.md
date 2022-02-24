@@ -1,4 +1,4 @@
-title: 【ZooKeeper源码】Leader选举期间网络通信
+title: 【ZooKeeper源码】选举期间网络通信
 author: haifun
 tags:
   - ZooKeeper
