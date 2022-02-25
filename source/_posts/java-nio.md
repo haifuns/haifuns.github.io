@@ -90,7 +90,7 @@ public ByteBuffer put(byte b) // 从当前位置put，put后position自动加1
 public ByteBuffer put(int index, byte b) // 从指定位置put
 ```
 
-## 通道 Chnanel
+## 通道 Channel
 
 NIO 的通道（Channel）类似于流（stream，如FileInputStream），但有些区别如下： 
 * 通道可以同时进行读写，而流只能读或者只能写
