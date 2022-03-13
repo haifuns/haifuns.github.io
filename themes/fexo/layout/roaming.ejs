@@ -1,0 +1,43 @@
+<div class="content content-about">
+  <%- partial('_partial/component/page-header', {location: __('location.roaming')}) %>
+
+  <ul class="about-list">
+    <% theme.roaming.forEach(function(item, i){ %>
+      <li class="item-category-name item-title  item-title-<%= item.id %>">
+          <%= item.year %>
+          <span class="category-count">( <%= item.list.length %> )</span>
+      </li>
+      <div class="tag-list">
+        <% item.list.forEach(function(item, i){ %>
+          <li class="about-item" style="padding: 5px 0;">
+            <% if(item.type === 'movie') {%>
+              <i class="dot dot-3"></i>
+            <% } else { %>
+              <i class="dot dot-2"></i>
+            <% }%>
+    
+            <% if(typeof item.text_value === 'object') {%>
+              <% item.text_value.forEach(function(item) {%>
+                <div class="text"><%= item%></div>
+              <% });%>
+            <% } else { %>
+              <div class="text">
+                <% if(item.text_key) {%>
+                  <a rel="noopener noreferrer" target="_blank" class="text-value-url" href="<%= item.text_value_url || ''%>"><%= item.text_value || ''%></a>
+                <% } else { %>
+                  <span><%= item.text_value || ''%></span>
+                <% }%>
+                <span><%= item.date || ''%></span>
+              </div>
+            <% }%>
+    
+          </li>
+        <% }) %>
+      </div>
+
+    <% }) %>
+  </ul>
+
+</div>
+
+<%- partial('_partial/component/back-top', {showBacktop: theme.backtop.roaming}) %>
