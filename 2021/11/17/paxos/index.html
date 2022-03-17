@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>分布式共识算法之Paxos算法 | haifuns的博客</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="分布式," />
+  
+
+  <meta name="description" content="Paxos是Leslie Lamport提出的一种基于消息传递的协商共识算法，现已是当今分布式系统最重要的理论基础。 节点分类Paxos算法将分布式系统中的节点分为三类：  提案节点（Proposer），提出对某个值进行设置操作的节点，设置值的行为称为提案，值一旦设置成功就是不会丢失也是不可变的。 决策节点（Acceptor），应答提案的节点，决定该提案是否可以被投票、是否可以被接受。提案一旦得到">
+<meta property="og:type" content="article">
+<meta property="og:title" content="分布式共识算法之Paxos算法">
+<meta property="og:url" content="https://haifuns.com/2021/11/17/paxos/index.html">
+<meta property="og:site_name" content="haifuns的博客">
+<meta property="og:description" content="Paxos是Leslie Lamport提出的一种基于消息传递的协商共识算法，现已是当今分布式系统最重要的理论基础。 节点分类Paxos算法将分布式系统中的节点分为三类：  提案节点（Proposer），提出对某个值进行设置操作的节点，设置值的行为称为提案，值一旦设置成功就是不会丢失也是不可变的。 决策节点（Acceptor），应答提案的节点，决定该提案是否可以被投票、是否可以被接受。提案一旦得到">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/distributed/paxos/paxos01.png">
+<meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/distributed/paxos/paxos-example-01.png">
+<meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/distributed/paxos/paxos-example-02.png">
+<meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/distributed/paxos/paxos-example-03.png">
+<meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/distributed/paxos/paxos-example-04.png">
+<meta property="article:published_time" content="2021-11-17T12:00:00.000Z">
+<meta property="article:modified_time" content="2022-03-17T09:37:21.687Z">
+<meta property="article:author" content="haifuns">
+<meta property="article:tag" content="分布式">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/distributed/paxos/paxos01.png">
+
+  
+
+  
+    <link rel="icon" href="/images/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbeddx" rel="stylesheet">
+
+
+  
+    
+<link rel="stylesheet" href="/css/personal-style.css">
+
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?d3c8edb388553a2084296cbfe9a0785a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
+
+<meta name="generator" content="Hexo 5.4.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="haifuns的博客" type="application/atom+xml">
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header CENTER">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/categories/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            分类
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/roaming/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            漫游
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/atom.xml"
+            rel="noopener noreferrer"
+            target="_blank"
+            >
+            RSS
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/search/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%8A%82%E7%82%B9%E5%88%86%E7%B1%BB"><span class="toc-text">节点分类</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AE%97%E6%B3%95%E6%B5%81%E7%A8%8B"><span class="toc-text">算法流程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%87%86%E5%A4%87%EF%BC%88Prepare%EF%BC%89%E9%98%B6%E6%AE%B5"><span class="toc-text">准备（Prepare）阶段</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%89%B9%E5%87%86%EF%BC%88Accept%EF%BC%89%E9%98%B6%E6%AE%B5"><span class="toc-text">批准（Accept）阶段</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%B7%A5%E4%BD%9C%E5%AE%9E%E4%BE%8B"><span class="toc-text">工作实例</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post CENTER">
+   <article id="post-paxos" class="article article-type-post" itemprop="blogPost">
+  <header class="article-header">
+    <h1 class="post-title">分布式共识算法之Paxos算法</h1>
+
+    <div class="article-meta">
+      <span>
+        <i class="icon-calendar"></i>
+        <span>2021.11.17</span>
+      </span>
+
+      
+        <span class="article-author">
+          <i class="icon-user"></i>
+          <span>haifuns</span>
+        </span>
+      
+
+      
+  <span class="article-category">
+    <i class="icon-list"></i>
+    <a class="article-category-link" href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F/">分布式</a>
+  </span>
+
+
+
+      
+
+      
+      <i class="fa fa-eye"></i> 
+        <span id="busuanzi_container_page_pv">
+           &nbsp热度 <span id="busuanzi_value_page_pv">
+           <i class="fa fa-spinner fa-spin"></i></span>℃
+        </span>
+      
+      
+    </div>
+  </header>
+
+  <div class="article-content">
+    
+      <p>Paxos是Leslie Lamport提出的一种基于消息传递的协商共识算法，现已是当今分布式系统最重要的理论基础。</p>
+<h1 id="节点分类"><a href="#节点分类" class="headerlink" title="节点分类"></a>节点分类</h1><p>Paxos算法将分布式系统中的节点分为三类：</p>
+<ul>
+<li>提案节点（Proposer），提出对某个值进行设置操作的节点，设置值的行为称为提案，值一旦设置成功就是不会丢失也是不可变的。</li>
+<li>决策节点（Acceptor），应答提案的节点，决定该提案是否可以被投票、是否可以被接受。提案一旦得到半数决策节点接受，即称为该提案被批准，提案被批准意味着该值不能再更改也不会丢失，且最终所有节点都会接受它。</li>
+<li>记录节点（Learner），不参与提案，也不参与决策，只是从提案、决策节点学习已经达成共识的提案。例如少数派节点从网络分区中恢复时将会进入这种状态。</li>
+</ul>
+<p>在使用Paxos的分布式系统中，所有节点都是平等的，它们可以承担一种或者多种角色。需要注意的是，为了确保有明确的多数派，决策节点的数量应该被设置为奇数个，且在系统初始化时，网络中每个节点都需要知道整个网络中的决策节点的数量、地址等信息。</p>
+<h1 id="算法流程"><a href="#算法流程" class="headerlink" title="算法流程"></a>算法流程</h1><p>Paxos算法包含准备和批准两个阶段来协商已达成共识。</p>
+<h2 id="准备（Prepare）阶段"><a href="#准备（Prepare）阶段" class="headerlink" title="准备（Prepare）阶段"></a>准备（Prepare）阶段</h2><p>准备阶段相当于分布式系统中锁抢占的过程。如果某个提案节点准备发起提案，必须先向所有决策节点广播一个许可申请（称为Prepare请求）。Parepare请求中包含一个全局唯一的数字n作为提案ID，决策节点收到请求后，将会给予提案节点两个承诺和一个应答。</p>
+<p>两个承诺指：</p>
+<ul>
+<li>承诺不会再接受提案ID小于或等于n的Prepare请求。</li>
+<li>承诺不会再接受提案ID小于n的Accept请求（下一阶段）。</li>
+</ul>
+<p>一个应答指：</p>
+<ul>
+<li>在不违背以上承诺的前提下，回复已经批准过的提案ID中最大的提案所设定的值，如果从未被设定过就返回空。如果违反此前做出的承诺，即收到的提案ID不是决策节点收到过最大的，那么不会对此Prepare请求作出应答。</li>
+</ul>
+<h2 id="批准（Accept）阶段"><a href="#批准（Accept）阶段" class="headerlink" title="批准（Accept）阶段"></a>批准（Accept）阶段</h2><p>当提案节点收到多数派节点的应答（称为Promise应答）后，就开始第二阶段即批准阶段。此时可能有以下两种可能：</p>
+<ul>
+<li>如果提案节点发现所有响应的决策节点此前都没有批准过其他提案（即返回空），那么说明它是第一个设置值得节点，可以随意的决定要设置的值，此时提案节点会将自己选定的值与提案ID组成一个二元组(id,value)结构，再次广播给所有的决策节点（称为Accept请求）。</li>
+<li>如果提案节点收到的响应中至少有一个应答已经有值了，那么就不能随意取值，必须从响应中找到提案ID最大的值并接受，组成一个二元组(id,value)结构，再次广播给所有的决策节点。</li>
+</ul>
+<p>每一个决策节点在收到Accept请求时，都会在不违背此前承诺的前提下，接受并持久化对当前提案ID对应的值。如果违背承诺，即收到的提案ID不是收到的Prepare请求中最大的，那么不会理会此Accept请求。</p>
+<p>当提案节点收到了多数派决策节点的应答（称为 Accepted 应答）后，协商结束，共识决议形成，将形成的决议发送给所有记录节点进行学习。整个过程时序图如下所示：</p>
+<p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/distributed/paxos/paxos01.png" alt="image"></p>
+<h1 id="工作实例"><a href="#工作实例" class="headerlink" title="工作实例"></a>工作实例</h1><p>假设在一个分布式系统中包含五个节点（正常通信场景，不涉及网络分区），记为S1、S2、S3、S4、S5，其中每个节点都同时扮演提案节点和决策节点。</p>
+<p>某一时刻，有两个并发请求分别希望将同一个值设定为X（S1节点提案）和Y（S5节点提案），以P表示准备阶段，以A表示批准阶段，此时有可能发生以下几种情况：</p>
+<p><strong>情况1</strong>：S1选定提案ID是3.1，先取得了多数派决策节点的Promise和Accepted应答，此时S5选定的提案ID为4.5，发起Prepare请求，此时收到的多数派应答中至少会包含一个此前已经应答过S1的决策节点，假设为S3，那么S3返回的应答中必将包含S1已经设定的值X，S5就必须无条件地使用X代替Y作为自己的提案值，此时整个系统对“取值为X”这个事实达成一致。如下图所示：</p>
+<p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/distributed/paxos/paxos-example-01.png" alt="image"></p>
+<p><strong>情况2</strong>：对于情况1，X被选定为最终值是必然结果，从上图可以看出X被选定为最终值并不是必定经过多数派批准，只取决于S5提案时得到的Promise应答中是否包含批准过X值的决策节点，例如下图所示，当S5发起提案的Prepare请求时，X并为获得多数派批准，但由于S3已经批准，最终共识结果仍然是X。</p>
+<p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/distributed/paxos/paxos-example-02.png" alt="image"></p>
+<p><strong>情况3</strong>：S5提案时Promise应答中不包含批准过X的决策节点，例如应答S5提案时，节点S1已经批准了X，节点S2、S3未批准但返回了Promise应答，此时S5以更大的提案ID获得了S3、S4、S5的Promise应答，这三个节点均未批准过任何值，那么S3将不会再接收来自S1的Accept请求，因为S1的提案ID已经不是最大的了，这三个节点将批准Y的取值，整个系统最终将会对取值“Y”达成一致，如下图所示：</p>
+<p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/distributed/paxos/paxos-example-03.png" alt="image"></p>
+<p><strong>情况4</strong>：从情况3可以推导出一种极端情况，如果两个提案节点交替使用最大ID使得准备阶段成功，但是批准阶段失败，那么就会形成活锁（Live Lock），如下图所示。在算法实现中需要引入随机超时机制来避免活锁的产生。</p>
+<p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/distributed/paxos/paxos-example-04.png" alt="image"></p>
+<p>以上是基于Basic Paxos、以未出现网络分区的正常流程进行讲解Paxos算法。Basic Paxos的价值在于开拓了分布式共识算法的发展思路，但是它仍存在以下缺陷，一般不会直接用于实践：Basic Paxos只能对单个值形成决议，并且决议的形成至少需要两次网络请求和应答（准备和批准），在高并发情况下将会产生较大的网络开销，极端情况下甚至可能形成活锁。在实际的应用中都是基于Multi Paxos和Fast Paxos算法以及一些等价的算法（如Raft、ZAB等）。</p>
+
+    
+  </div>
+
+</article>
+
+
+   
+
+   
+  <div class="box-prev-next clearfix">
+    <a class="show pull-left" href="/2021/08/12/databus/">
+        <i class="icon icon-angle-left"></i>
+    </a>
+    <a class="show pull-right" href="/2021/11/17/multi-paxos/">
+        <i class="icon icon-angle-right"></i>
+    </a>
+  </div>
+
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/categories/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              分类
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/roaming/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              漫游
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/atom.xml"
+              rel="noopener noreferrer"
+              target="_blank"
+              >
+              RSS
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/search/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              搜索
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+    
+    
+
+    
+
+    
+    
+
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script>
+    <div id="comment" class="vcomment" ></div>
+    <script>
+        var notify = 'false' == true ? true : false;
+        var verify = 'false' == true ? true : false;
+        var GUEST_INFO = ['nick','mail','link'];
+        var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+            return GUEST_INFO.indexOf(item) > -1
+        });
+        guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+        window.valine = new Valine({
+            el: '.vcomment',
+            notify: notify,
+            verify: verify,
+            appId: "masttnqEt9G69mj43i9oaA1C-gzGzoHsz",
+            appKey: "hgIx9VKn0GLDhRcLxQuNMl0E",
+            avatar:'mm',
+            placeholder: "Say something",
+            guest_info:guest_info,
+            pageSize:'10'
+        });
+    </script>
+  
+    
+
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>【Kafka】：副本剖析 | haifuns的博客</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="Kafka," />
+  
+
+  <meta name="description" content="概述Kafka为分区引入了副本机制，通过增加副本数量提升数据容灾能力以及故障自动转移。 相关概念回顾：  副本是相对分区而言的，即副本是特定分区的副本。 一个分区包含一个或多个副本，其中一个为leader副本，其余为follower副本，各个副本位于不同的broker节点中。只有leader副本对外提供服务，follower副本只负责数据同步。 分区中所有副本统称为AR，而ISR指与leader副">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Kafka】：副本剖析">
+<meta property="og:url" content="https://haifuns.com/2021/06/06/kafka-08/index.html">
+<meta property="og:site_name" content="haifuns的博客">
+<meta property="og:description" content="概述Kafka为分区引入了副本机制，通过增加副本数量提升数据容灾能力以及故障自动转移。 相关概念回顾：  副本是相对分区而言的，即副本是特定分区的副本。 一个分区包含一个或多个副本，其中一个为leader副本，其余为follower副本，各个副本位于不同的broker节点中。只有leader副本对外提供服务，follower副本只负责数据同步。 分区中所有副本统称为AR，而ISR指与leader副">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-06-06T13:40:00.000Z">
+<meta property="article:modified_time" content="2022-03-17T09:37:21.683Z">
+<meta property="article:author" content="haifuns">
+<meta property="article:tag" content="Kafka">
+<meta name="twitter:card" content="summary">
+
+  
+
+  
+    <link rel="icon" href="/images/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbeddx" rel="stylesheet">
+
+
+  
+    
+<link rel="stylesheet" href="/css/personal-style.css">
+
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?d3c8edb388553a2084296cbfe9a0785a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
+
+<meta name="generator" content="Hexo 5.4.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="haifuns的博客" type="application/atom+xml">
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header CENTER">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/categories/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            分类
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/roaming/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            漫游
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/atom.xml"
+            rel="noopener noreferrer"
+            target="_blank"
+            >
+            RSS
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/search/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A6%82%E8%BF%B0"><span class="toc-text">概述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A4%B1%E6%95%88%E5%89%AF%E6%9C%AC"><span class="toc-text">失效副本</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#LEO%E4%B8%8EHW"><span class="toc-text">LEO与HW</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Leader-Epoch"><span class="toc-text">Leader Epoch</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post CENTER">
+   <article id="post-kafka-08" class="article article-type-post" itemprop="blogPost">
+  <header class="article-header">
+    <h1 class="post-title">【Kafka】：副本剖析</h1>
+
+    <div class="article-meta">
+      <span>
+        <i class="icon-calendar"></i>
+        <span>2021.06.06</span>
+      </span>
+
+      
+        <span class="article-author">
+          <i class="icon-user"></i>
+          <span>haifuns</span>
+        </span>
+      
+
+      
+  <span class="article-category">
+    <i class="icon-list"></i>
+    <a class="article-category-link" href="/categories/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6/">消息中间件</a>
+  </span>
+
+
+
+      
+
+      
+      <i class="fa fa-eye"></i> 
+        <span id="busuanzi_container_page_pv">
+           &nbsp热度 <span id="busuanzi_value_page_pv">
+           <i class="fa fa-spinner fa-spin"></i></span>℃
+        </span>
+      
+      
+    </div>
+  </header>
+
+  <div class="article-content">
+    
+      <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>Kafka为分区引入了副本机制，通过增加副本数量提升数据容灾能力以及故障自动转移。</p>
+<p>相关概念回顾：</p>
+<ul>
+<li>副本是相对分区而言的，即副本是特定分区的副本。</li>
+<li>一个分区包含一个或多个副本，其中一个为leader副本，其余为follower副本，各个副本位于不同的broker节点中。只有leader副本对外提供服务，follower副本只负责数据同步。</li>
+<li>分区中所有副本统称为AR，而ISR指与leader副本保持同步的副本集合（包含leader）。</li>
+<li>LEO标识每个分区最后一条消息的下一个位置，分区每个副本都有自己的LEO，ISR中最小的LEO即为HW，消费者只能拉取到HW之前的消息。</li>
+</ul>
+<span id="more"></span>
+
+<h1 id="失效副本"><a href="#失效副本" class="headerlink" title="失效副本"></a>失效副本</h1><p>正常情况下，分区的所有副本都处于ISR集合中。处于同步失效或功能失效的副本会被剥离出ISR集合，称为失效副本，失效副本对应的分区为同步失效分区。</p>
+<p>当ISR集合中的follower副本滞后leader副本的时间超过broker端参数replica.lag.time.max.ms参数指定的值（默认1000）就判定为同步失败，此时此broker副本会被剔除ISR集合。具体实现原理为：</p>
+<ol>
+<li>当follower副本将leader副本LEO之前的日志全部同步时，则认为此follower副本已经追上leader副本，此时会更新lastCaughtUpTimeMs标识。</li>
+<li>Kafka的副本管理器存在一个副本过期检测的定时任务，定期检查当前时间与副本的lastCaughtUpTimeMs差值是否大于replica.lag.time.max.ms指定的值。</li>
+</ol>
+<p>以下几种情况可能导致副本失效：</p>
+<ul>
+<li>follower副本进程卡住，在一段时间没有向leader副本发起同步请求，比如频繁FullGC。</li>
+<li>follower副本进程同步过慢，在一段时间内无法追上leader副本，比如I/O开销过大。</li>
+<li>新增加的副本在赶上leader副本之前。</li>
+</ul>
+<h1 id="LEO与HW"><a href="#LEO与HW" class="headerlink" title="LEO与HW"></a>LEO与HW</h1><p>对于多副本分区，整个消息追加过程如下：</p>
+<ol>
+<li>生产者客户端发送消息到leader副本中。</li>
+<li>消息被追加到leader副本的本地日志，并更新日志的偏移量。</li>
+<li>follower副本向leader副本请求同步数据。</li>
+<li>leader副本所在的服务器读取本地日志，并更新对应拉取的follower副本的信息。</li>
+<li>leader副本所在的服务器将拉取结果返回给follower副本。</li>
+<li>follower副本收到leader副本返回的拉取结果，将消息追加到本地日志中，并更新日志的偏移量信息。</li>
+</ol>
+<p>在消息追加过程中各个副本LEO和HW变化情况如下：</p>
+<ol>
+<li>生产者一直向leader副本发送消息，某一时刻leader副本LEO&gt;HW。</li>
+<li>follower副本从leader副本拉取消息，拉取请求中会携带自身LEO信息。</li>
+<li>leader副本将请求中的LEO最小值作为HW，返回给follower副本相应的信息，并且携带自身HW信息。</li>
+<li>follower副本写入消息并更新LEO，然后更新自己的HW为min(owner.LEO,leader.HW)。</li>
+</ol>
+<h1 id="Leader-Epoch"><a href="#Leader-Epoch" class="headerlink" title="Leader Epoch"></a>Leader Epoch</h1><p>在follower与leader副本的数据同步过程中，当发生宕机只依靠HW进行恢复可能会造成数据丢失。Kafka引入了leader epoch（leader的纪元信息，相当于一个版本号），在需要截断数据时使用leader epoch作为参考依据而不是HW。</p>
+
+    
+  </div>
+
+</article>
+
+
+   
+
+   
+  <div class="box-prev-next clearfix">
+    <a class="show pull-left" href="/2021/06/06/kafka-07/">
+        <i class="icon icon-angle-left"></i>
+    </a>
+    <a class="show pull-right" href="/2021/06/06/kafka-09/">
+        <i class="icon icon-angle-right"></i>
+    </a>
+  </div>
+
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/categories/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              分类
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/roaming/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              漫游
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/atom.xml"
+              rel="noopener noreferrer"
+              target="_blank"
+              >
+              RSS
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/search/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              搜索
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+    
+    
+
+    
+
+    
+    
+
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script>
+    <div id="comment" class="vcomment" ></div>
+    <script>
+        var notify = 'false' == true ? true : false;
+        var verify = 'false' == true ? true : false;
+        var GUEST_INFO = ['nick','mail','link'];
+        var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+            return GUEST_INFO.indexOf(item) > -1
+        });
+        guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+        window.valine = new Valine({
+            el: '.vcomment',
+            notify: notify,
+            verify: verify,
+            appId: "masttnqEt9G69mj43i9oaA1C-gzGzoHsz",
+            appKey: "hgIx9VKn0GLDhRcLxQuNMl0E",
+            avatar:'mm',
+            placeholder: "Say something",
+            guest_info:guest_info,
+            pageSize:'10'
+        });
+    </script>
+  
+    
+
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>

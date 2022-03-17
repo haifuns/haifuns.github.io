@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>【Kafka】：消费者 | haifuns的博客</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="Kafka," />
+  
+
+  <meta name="description" content="概述消息的消费一般有两种模式：  推模式：服务端主动将消息推送给消费者。 拉模式：消费者主动从服务端拉取消息。  Kafka中的消费是拉模式，消费者轮训订阅的主题&#x2F;分区进行消息拉取，支持订阅一个或多个主题，同时也支持订阅分区。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Kafka】：消费者">
+<meta property="og:url" content="https://haifuns.com/2021/05/22/kafka-03/index.html">
+<meta property="og:site_name" content="haifuns的博客">
+<meta property="og:description" content="概述消息的消费一般有两种模式：  推模式：服务端主动将消息推送给消费者。 拉模式：消费者主动从服务端拉取消息。  Kafka中的消费是拉模式，消费者轮训订阅的主题&#x2F;分区进行消息拉取，支持订阅一个或多个主题，同时也支持订阅分区。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/kafka/kafka04.png">
+<meta property="article:published_time" content="2021-05-22T20:20:00.000Z">
+<meta property="article:modified_time" content="2022-03-17T09:37:21.683Z">
+<meta property="article:author" content="haifuns">
+<meta property="article:tag" content="Kafka">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/kafka/kafka04.png">
+
+  
+
+  
+    <link rel="icon" href="/images/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbeddx" rel="stylesheet">
+
+
+  
+    
+<link rel="stylesheet" href="/css/personal-style.css">
+
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?d3c8edb388553a2084296cbfe9a0785a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
+
+<meta name="generator" content="Hexo 5.4.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="haifuns的博客" type="application/atom+xml">
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header CENTER">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/categories/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            分类
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/roaming/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            漫游
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/atom.xml"
+            rel="noopener noreferrer"
+            target="_blank"
+            >
+            RSS
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/search/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A6%82%E8%BF%B0"><span class="toc-text">概述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E7%A4%BA%E4%BE%8B"><span class="toc-text">代码示例</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%B6%88%E8%B4%B9%E8%80%85%E4%B8%8E%E6%B6%88%E8%B4%B9%E7%BB%84"><span class="toc-text">消费者与消费组</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%88%86%E5%8C%BA%E5%88%86%E9%85%8D%E7%AD%96%E7%95%A5"><span class="toc-text">分区分配策略</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#RangeAssignor%E5%88%86%E9%85%8D%E7%AD%96%E7%95%A5%EF%BC%88%E9%BB%98%E8%AE%A4%EF%BC%89"><span class="toc-text">RangeAssignor分配策略（默认）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RoundRobinAssignor%E5%88%86%E9%85%8D%E7%AD%96%E7%95%A5"><span class="toc-text">RoundRobinAssignor分配策略</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#StickyAssignor%E5%88%86%E9%85%8D%E7%AD%96%E7%95%A5"><span class="toc-text">StickyAssignor分配策略</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%B6%88%E8%B4%B9%E4%BD%8D%E7%A7%BB"><span class="toc-text">消费位移</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%8D%E7%A7%BB%E6%8F%90%E4%BA%A4"><span class="toc-text">位移提交</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8C%87%E5%AE%9A%E4%BD%8D%E7%A7%BB%E6%B6%88%E8%B4%B9"><span class="toc-text">指定位移消费</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%86%8D%E5%9D%87%E8%A1%A1"><span class="toc-text">再均衡</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%87%8D%E8%A6%81%E5%8F%82%E6%95%B0"><span class="toc-text">重要参数</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post CENTER">
+   <article id="post-kafka-03" class="article article-type-post" itemprop="blogPost">
+  <header class="article-header">
+    <h1 class="post-title">【Kafka】：消费者</h1>
+
+    <div class="article-meta">
+      <span>
+        <i class="icon-calendar"></i>
+        <span>2021.05.22</span>
+      </span>
+
+      
+        <span class="article-author">
+          <i class="icon-user"></i>
+          <span>haifuns</span>
+        </span>
+      
+
+      
+  <span class="article-category">
+    <i class="icon-list"></i>
+    <a class="article-category-link" href="/categories/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6/">消息中间件</a>
+  </span>
+
+
+
+      
+
+      
+      <i class="fa fa-eye"></i> 
+        <span id="busuanzi_container_page_pv">
+           &nbsp热度 <span id="busuanzi_value_page_pv">
+           <i class="fa fa-spinner fa-spin"></i></span>℃
+        </span>
+      
+      
+    </div>
+  </header>
+
+  <div class="article-content">
+    
+      <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>消息的消费一般有两种模式：</p>
+<ul>
+<li>推模式：服务端主动将消息推送给消费者。</li>
+<li>拉模式：消费者主动从服务端拉取消息。</li>
+</ul>
+<p>Kafka中的消费是拉模式，消费者轮训订阅的主题/分区进行消息拉取，支持订阅一个或多个主题，同时也支持订阅分区。</p>
+<span id="more"></span>
+
+<h1 id="代码示例"><a href="#代码示例" class="headerlink" title="代码示例"></a>代码示例</h1><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">KafkaConsumerTest</span> </span>{</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>{</span><br><span class="line">        Properties properties = <span class="keyword">new</span> Properties();</span><br><span class="line">        properties.put(<span class="string">"key.deserializer"</span>,<span class="string">"org.apache.kafka.common.serialization.StringDeserializer"</span>);</span><br><span class="line">        properties.put(<span class="string">"value.deserializer"</span>,<span class="string">"org.apache.kafka.common.serialization.StringDeserializer"</span>);</span><br><span class="line">        properties.put(<span class="string">"bootstrap.servers"</span>, <span class="string">"192.168.40:9092"</span>);</span><br><span class="line">        properties.put(<span class="string">"group.id"</span>, <span class="string">"group.demo"</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 配置消费者实例</span></span><br><span class="line">        KafkaConsumer&lt;String, String&gt; consumer = <span class="keyword">new</span> KafkaConsumer&lt;&gt;(properties);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 订阅主题</span></span><br><span class="line">        consumer.subscribe(Collections.singleton(<span class="string">"topic-demo"</span>));</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 循环消费消息</span></span><br><span class="line">        <span class="keyword">while</span> (<span class="keyword">true</span>) {</span><br><span class="line">            ConsumerRecords&lt;String, String&gt; records = consumer.poll(Duration.ofMillis(<span class="number">1000</span>));</span><br><span class="line"></span><br><span class="line">            <span class="keyword">for</span> (ConsumerRecord&lt;String, String&gt; record : records) {</span><br><span class="line">                System.out.println(record);</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="消费者与消费组"><a href="#消费者与消费组" class="headerlink" title="消费者与消费组"></a>消费者与消费组</h1><p>消费者订阅Kafka中的主题并且拉取消息。每个消费者都对应一个消费组，当消息发布到主题后，只会被投递给订阅它的每个消费组中的一个消费者。</p>
+<p>Kafka支持两种消息投递模式：</p>
+<ul>
+<li>点对点模式：所有消费者隶属于同一个消费组。此时所有消息会被均衡地投递给每一个消费者，即每条消息只会被一个消费者处理。</li>
+<li>发布/订阅模式：所有的消费者都隶属于不同的消费组。此时所有的消息都会被广播给所有的消费者，即每条消息都会被所有的消费者处理。</li>
+</ul>
+<h1 id="分区分配策略"><a href="#分区分配策略" class="headerlink" title="分区分配策略"></a>分区分配策略</h1><p>KafkaConsumer可以通过参数<code>partition.assignment.strategy</code>设置消费者与订阅主题之间的分区分配策略，可配置为多个分配策略。默认情况值为<code>org.apache.kafka.clients.consumer.RangeAssignor</code>，即使用RangeAssignor分配策略。Kafka还支持RoundRobinAssignor和StickyAssignor两种分配策略，</p>
+<h2 id="RangeAssignor分配策略（默认）"><a href="#RangeAssignor分配策略（默认）" class="headerlink" title="RangeAssignor分配策略（默认）"></a>RangeAssignor分配策略（默认）</h2><p>此策略分配原理是按照消费者总数和分区总数进行整除获得跨度，然后将分区按照跨度进行平均分配。</p>
+<p>对于每一个主题，RangeAssignor策略会将消费组内所有订阅主题的消费者按照名称排序，然后为每个消费者划分固定的分区范围，如果不够平均分配，则顺序靠前的消费者会被多分配一个分区。</p>
+<p>例如，消费组中有两个消费者C0和C1，都订阅了主题T0和T1，每个主题都有3个分区，即T0P0/T0P1/T0P2、T1P0/T1P1/T1P2。最终的分配结果为：</p>
+<ul>
+<li>消费者C0：T0P0、T0P1、T1P0、T1P1</li>
+<li>消费者C1：T0P2、T1P2</li>
+</ul>
+<p>RangeAssignor策略存在分配不均的情况，极端情况下可能出现部分消费者过载。</p>
+<h2 id="RoundRobinAssignor分配策略"><a href="#RoundRobinAssignor分配策略" class="headerlink" title="RoundRobinAssignor分配策略"></a>RoundRobinAssignor分配策略</h2><p>此策略分配原理是将消费组内所有的消费者以及消费者订阅的所有主题分区排序，然后通过轮训的方式将分区以此分配给每个消费者。</p>
+<p>例如，消费组中有两个消费者C0和C1，都订阅了主题T0和T1，每个主题都有3个分区，即T0P0/T0P1/T0P2、T1P0/T1P1/T1P2。最终的分配结果为：</p>
+<ul>
+<li>消费者C0：T0P0、T0P2、T1P1</li>
+<li>消费者C1：T0P1、T1P0、T1P2</li>
+</ul>
+<p>如果同一个消费组内的消费者订阅的信息不同，那么在分区分配时就不是完全的轮训分配，也有可能导致分配不均。</p>
+<p>例如，消费组中有三个消费者C0、C1、C2，共订阅了主题T0、T1、T2，分别有1、2、3个分区，即T0P0、T1P0/T1P1、T2P0/T2P1/T2P2。C0订阅T0，C1订阅T0和T1，C2订阅T1和T2，则最终的分配结果为：</p>
+<ul>
+<li>消费者C0：T0P0</li>
+<li>消费者C1：T1P0</li>
+<li>消费者C2：T1P1、T2P0、T2P1、T2P2</li>
+</ul>
+<h2 id="StickyAssignor分配策略"><a href="#StickyAssignor分配策略" class="headerlink" title="StickyAssignor分配策略"></a>StickyAssignor分配策略</h2><p>SkickyAssignor分配策略有两个目的：</p>
+<ol>
+<li>分区的分配尽可能均匀</li>
+<li>分区的分配尽可能与上次分配的保持相同</li>
+</ol>
+<p>当两者发生冲突时第一个目标优先于第二个目标。</p>
+<p>例如，消费组中有两个消费者C0、C1、C2，都订阅了主题T0、T1、T2、T3，每个主题都有2个分区，即T0P0/T0P1、T1P0/T1P1、T2P0/T2P1、T3P0/T3P1。最终的分配结果为：</p>
+<ul>
+<li>消费者C0：T0P0、T1P1、T3P0</li>
+<li>消费者C1：T0P1、T2P0、T3P1</li>
+<li>消费者C2：T1P0、T2P1</li>
+</ul>
+<p>在以上分配完成后，如果C1脱离了消费组，那么消费组就会进行再均衡重新分配分区，此时如果使用RoundRobinAssignor分配策略结果为：</p>
+<ul>
+<li>消费者C0：T0P0、T1P0、T2P0、T3P0</li>
+<li>消费者C2：T0P1、T1P1、T2P1、T3P1</li>
+</ul>
+<p>如上所示，RoundRobinAssignor分配策略会按照CO和C2进行重新轮训分配。但是如果使用SkickyAssignor分配策略会保留上次的分配结果，在此基础上对C1被分配的分区重新分配，再分配结果为：</p>
+<ul>
+<li>消费者C0：T0P0、T1P1、T3P0、T2P0</li>
+<li>消费者C2：T1P0、T2P1、T0P1、T3P1</li>
+</ul>
+<p>对于前文提到的RoundRobinAssignor无法分配不均的情况，消费组中有三个消费者C0、C1、C2，共订阅了主题T0、T1、T2，分别有1、2、3个分区，即T0P0、T1P0/T1P1、T2P0/T2P1/T2P2。C0订阅T0，C1订阅T0和T1，C2订阅T1和T2，StickyAssignor分配策略最终的分配结果为：</p>
+<ul>
+<li>消费者C0：T0P0</li>
+<li>消费者C1：T1P0、T1P1</li>
+<li>消费者C2：T2P0、T2P1、T2P2</li>
+</ul>
+<h1 id="消费位移"><a href="#消费位移" class="headerlink" title="消费位移"></a>消费位移</h1><p>在Kafka分区中每条消息都有唯一的offset用来表示消息在分区中的位置。对于消费者而言，也有offset的概念，用来表示消费到分区中消息的位置，可以称为是消费位移。</p>
+<p>在新的客户端中，消费位移存储在Kafka内部的主题__consumer_offsets中。在消费完消息之后，消费者需要进行消费位移的提交。如下图所示，当前拉取消息的起始位置是上一次提交的消费位移，而本次将要提交的消费位置是拉取到的最大位移+1。</p>
+<p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/kafka/kafka04.png" alt="image"></p>
+<blockquote>
+<p>__consumer_offsets主题在Kafka集群第一次有消费者消费消息时自动创建，副本数由offsets.topic.replication.factor参数设置，默认3，分区数由offsets.topic.num.partitions参数设置，默认50。</p>
+</blockquote>
+<h2 id="位移提交"><a href="#位移提交" class="headerlink" title="位移提交"></a>位移提交</h2><p>Kafka中的消费位移提交支持两种方式：</p>
+<ul>
+<li>自动提交（默认）：默认情况下每隔5s会将拉取到的每个分区中的最大消息位移进行提交。此方式可能会导致重复消费和消息丢失。<ul>
+<li>enable.auto.commit：自动提交开关，默认true</li>
+<li>auto.commit.interval.ms：定期提交周期，默认5s</li>
+</ul>
+</li>
+<li>手动提交：可细分为同步提交和异步提交两种方式。</li>
+</ul>
+<h2 id="指定位移消费"><a href="#指定位移消费" class="headerlink" title="指定位移消费"></a>指定位移消费</h2><p>当一个消费组建立的时候或者消费组中的一个新的消费者订阅了一个新的主题，又或者__consumer_offsets主题中有关这个消费组的位移消息过期而被删除时，Kafka中的消费者查找不到记录的消费位移。<br>此时会根据消费者客户端参数<code>auto.offset.reset</code>参数配置来决定从何处开始进行消费，可选参数如下：</p>
+<ul>
+<li>latest：从分区末尾开始消费消息（默认）</li>
+<li>earliest：从分区起始开始消费消息</li>
+<li>none：抛出异常</li>
+</ul>
+<p>KafkaConsumer支持使用seek()方法从特定位移处开始拉取消息，需要注意的是，在执行seek()方法前需要先执行poll()，在分配到分区之后才可以重置消费位置。</p>
+<h1 id="再均衡"><a href="#再均衡" class="headerlink" title="再均衡"></a>再均衡</h1><p>当添加或删除消费组中的消费者时会发生再均衡，即分区的所属权从一个消费者转移到另一个消费者。在<strong>再均衡发生期间，消费组不可用</strong>，同时当一个分区被重新分配给另一个消费者是，消费者当前状态也会丢失。比如，消费者消费完某个分区中的一部分消息还没来得及提交消息位移就发生了再均衡操作，之后这个分区被分配给了消费组中的另一个消费者，此时消息就会被重复消费。所以应该尽量避免不必要的再均衡发生。</p>
+<h1 id="重要参数"><a href="#重要参数" class="headerlink" title="重要参数"></a>重要参数</h1><ul>
+<li>group.id：消费组名称</li>
+<li>fetch.min.bytes：一次拉取请求能拉取的最小数据量，默认1B</li>
+<li>fetch.max.bytes：一次拉取请求能拉取的最大数据量，默认50M</li>
+<li>fetch.max.wait.ms：等待时间，默认500ms</li>
+<li>max.partition.fetch.bytes：每个分区返回给消费者的最大数据量，默认1M</li>
+<li>max.poll.records：一次请求拉取的最大消息数，默认500条</li>
+<li>connections.max.idle.ms：连接最长空闲时间，默认9min</li>
+<li>exclude.internal.topics：指定内部主题（__consumer_offsets、__transaction_state）是否对消费者公开，默认true</li>
+<li>receive.buffer.bytes：Socket接收缓冲区大小，默认64K</li>
+<li>send.buffer.bytes：Socket发送消息缓冲区大小，默认128K</li>
+<li>request.timeout.ms：消费者请求最长等待时间，默认30s</li>
+<li>metadata.max.age.ms：元数据过期时间，默认5min</li>
+<li>reconnect.backoff.ms：重连等待时间，默认50ms</li>
+<li>retry.backoff.ms：重试间隔时间，默认100ms</li>
+</ul>
+
+    
+  </div>
+
+</article>
+
+
+   
+
+   
+  <div class="box-prev-next clearfix">
+    <a class="show pull-left" href="/2021/05/22/kafka-02/">
+        <i class="icon icon-angle-left"></i>
+    </a>
+    <a class="show pull-right" href="/2021/05/22/kafka-04/">
+        <i class="icon icon-angle-right"></i>
+    </a>
+  </div>
+
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/categories/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              分类
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/roaming/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              漫游
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/atom.xml"
+              rel="noopener noreferrer"
+              target="_blank"
+              >
+              RSS
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/search/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              搜索
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+    
+    
+
+    
+
+    
+    
+
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script>
+    <div id="comment" class="vcomment" ></div>
+    <script>
+        var notify = 'false' == true ? true : false;
+        var verify = 'false' == true ? true : false;
+        var GUEST_INFO = ['nick','mail','link'];
+        var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+            return GUEST_INFO.indexOf(item) > -1
+        });
+        guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+        window.valine = new Valine({
+            el: '.vcomment',
+            notify: notify,
+            verify: verify,
+            appId: "masttnqEt9G69mj43i9oaA1C-gzGzoHsz",
+            appKey: "hgIx9VKn0GLDhRcLxQuNMl0E",
+            avatar:'mm',
+            placeholder: "Say something",
+            guest_info:guest_info,
+            pageSize:'10'
+        });
+    </script>
+  
+    
+
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>

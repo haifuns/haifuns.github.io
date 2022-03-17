@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>【Curator源码】可重入读写锁源码解析 | haifuns的博客</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="Curator,ZooKeeper," />
+  
+
+  <meta name="description" content="curator提供的读写锁使用方式如下： 12345678InterProcessReadWriteLock interProcessReadWriteLock &#x3D; new InterProcessReadWriteLock(client, &quot;&quot;);InterProcessMutex readLock &#x3D; interProcessReadWriteLock.readLock();readLock.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Curator源码】可重入读写锁源码解析">
+<meta property="og:url" content="https://haifuns.com/2022/01/06/curator-03/index.html">
+<meta property="og:site_name" content="haifuns的博客">
+<meta property="og:description" content="curator提供的读写锁使用方式如下： 12345678InterProcessReadWriteLock interProcessReadWriteLock &#x3D; new InterProcessReadWriteLock(client, &quot;&quot;);InterProcessMutex readLock &#x3D; interProcessReadWriteLock.readLock();readLock.">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-01-06T19:30:00.000Z">
+<meta property="article:modified_time" content="2022-03-17T09:37:21.683Z">
+<meta property="article:author" content="haifuns">
+<meta property="article:tag" content="Curator">
+<meta property="article:tag" content="ZooKeeper">
+<meta name="twitter:card" content="summary">
+
+  
+
+  
+    <link rel="icon" href="/images/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbeddx" rel="stylesheet">
+
+
+  
+    
+<link rel="stylesheet" href="/css/personal-style.css">
+
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?d3c8edb388553a2084296cbfe9a0785a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
+
+<meta name="generator" content="Hexo 5.4.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="haifuns的博客" type="application/atom+xml">
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header CENTER">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/categories/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            分类
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/roaming/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            漫游
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/atom.xml"
+            rel="noopener noreferrer"
+            target="_blank"
+            >
+            RSS
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/search/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%AF%BB%E9%94%81"><span class="toc-text">读锁</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%86%99%E9%94%81"><span class="toc-text">写锁</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post CENTER">
+   <article id="post-curator-03" class="article article-type-post" itemprop="blogPost">
+  <header class="article-header">
+    <h1 class="post-title">【Curator源码】可重入读写锁源码解析</h1>
+
+    <div class="article-meta">
+      <span>
+        <i class="icon-calendar"></i>
+        <span>2022.01.06</span>
+      </span>
+
+      
+        <span class="article-author">
+          <i class="icon-user"></i>
+          <span>haifuns</span>
+        </span>
+      
+
+      
+  <span class="article-category">
+    <i class="icon-list"></i>
+    <a class="article-category-link" href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81/">分布式锁</a>
+  </span>
+
+
+
+      
+
+      
+      <i class="fa fa-eye"></i> 
+        <span id="busuanzi_container_page_pv">
+           &nbsp热度 <span id="busuanzi_value_page_pv">
+           <i class="fa fa-spinner fa-spin"></i></span>℃
+        </span>
+      
+      
+    </div>
+  </header>
+
+  <div class="article-content">
+    
+      <p>curator提供的读写锁使用方式如下：</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">InterProcessReadWriteLock interProcessReadWriteLock = <span class="keyword">new</span> InterProcessReadWriteLock(client, <span class="string">""</span>);</span><br><span class="line">InterProcessMutex readLock = interProcessReadWriteLock.readLock();</span><br><span class="line">readLock.acquire();</span><br><span class="line">readLock.release();</span><br><span class="line"></span><br><span class="line">InterProcessMutex writeLock = interProcessReadWriteLock.writeLock();</span><br><span class="line">writeLock.acquire();</span><br><span class="line">writeLock.release();</span><br></pre></td></tr></tbody></table></figure>
+
+<p>curator读写锁加锁情况分析：</p>
+<ul>
+<li>读锁 + 读锁，加锁成功</li>
+<li>读锁 + 写锁，写锁加锁失败</li>
+<li>写锁 + 读锁，同一个线程先加写锁后加读锁可以成功，否则加读锁失败</li>
+<li>写锁 + 写锁，第二个写锁加锁失败</li>
+</ul>
+<h1 id="读锁"><a href="#读锁" class="headerlink" title="读锁"></a>读锁</h1><p>在读锁加锁时，curator会在path下创建一个lockname为_READ_的顺序节点。如果当前线程加写锁成功，加读锁直接成功。否则，判断在所有子节点中，当前顺序节点前面有没有写锁，有就加锁失败开始等待，否则加锁成功。</p>
+<p>在读锁解锁时，同可重入锁，直接删除顺序节点，此时在这个节点上注册watcher的线程会被唤醒，尝试加锁。</p>
+<p>读锁相对于可重入锁重写了获取锁的方法，源码如下：</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line">InterProcessMutex readMutex = <span class="keyword">new</span> InternalInterProcessMutex</span><br><span class="line">(</span><br><span class="line">        client,</span><br><span class="line">        basePath,</span><br><span class="line">        READ_LOCK_NAME,</span><br><span class="line">        lockData,</span><br><span class="line">        <span class="comment">// 读锁最大加锁次数</span></span><br><span class="line">        Integer.MAX_VALUE,</span><br><span class="line">        <span class="keyword">new</span> SortingLockInternalsDriver() {</span><br><span class="line">                <span class="meta">@Override</span></span><br><span class="line">                <span class="function"><span class="keyword">public</span> PredicateResults <span class="title">getsTheLock</span><span class="params">(CuratorFramework client, List&lt;String&gt; children, String sequenceNodeName, <span class="keyword">int</span> maxLeases)</span> <span class="keyword">throws</span> Exception </span>{</span><br><span class="line">                        <span class="keyword">return</span> readLockPredicate(children, sequenceNodeName);</span><br><span class="line">                }</span><br><span class="line">        }</span><br><span class="line">);</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> PredicateResults <span class="title">readLockPredicate</span><span class="params">(List&lt;String&gt; children, String sequenceNodeName)</span> <span class="keyword">throws</span> Exception </span>{</span><br><span class="line">        <span class="comment">// 如果是当前线程加的读锁，那么写锁可以加锁成功</span></span><br><span class="line">        <span class="keyword">if</span> ( writeMutex.isOwnedByCurrentThread() ) {</span><br><span class="line">                <span class="keyword">return</span> <span class="keyword">new</span> PredicateResults(<span class="keyword">null</span>, <span class="keyword">true</span>);</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span>         index = <span class="number">0</span>;</span><br><span class="line">        <span class="comment">// 最前面的写锁位置</span></span><br><span class="line">        <span class="keyword">int</span>         firstWriteIndex = Integer.MAX_VALUE;</span><br><span class="line">        <span class="comment">// 当前读锁的位置</span></span><br><span class="line">        <span class="keyword">int</span>         ourIndex = -<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span> ( String node : children ) {</span><br><span class="line">                <span class="keyword">if</span> ( node.contains(WRITE_LOCK_NAME) ) {</span><br><span class="line">                        firstWriteIndex = Math.min(index, firstWriteIndex);</span><br><span class="line">                } <span class="keyword">else</span> <span class="keyword">if</span> ( node.startsWith(sequenceNodeName) ) {</span><br><span class="line">                        ourIndex = index;</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                }</span><br><span class="line"></span><br><span class="line">                ++index;</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        StandardLockInternalsDriver.validateOurIndex(sequenceNodeName, ourIndex);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 如果当前读锁前面有写锁则加锁失败，否则加锁成功</span></span><br><span class="line">        <span class="keyword">boolean</span>     getsTheLock = (ourIndex &lt; firstWriteIndex);</span><br><span class="line">        String      pathToWatch = getsTheLock ? <span class="keyword">null</span> : children.get(firstWriteIndex);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> PredicateResults(pathToWatch, getsTheLock);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="写锁"><a href="#写锁" class="headerlink" title="写锁"></a>写锁</h1><p>在写锁加锁时，curator会在path下创建一个lockname为_WRITE_的顺序节点，然后判断当前节点是不是所有子节点中第一个，如果是第一个则加写锁成功，否则加锁失败开始等待。</p>
+<p>在写锁解锁时，同读锁，直接删除顺序节点，此时在这个节点上注册watcher的线程会被唤醒，尝试加锁。</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">InterProcessMutex writeMutex = <span class="keyword">new</span> InternalInterProcessMutex</span><br><span class="line">(</span><br><span class="line">        client,</span><br><span class="line">        basePath,</span><br><span class="line">        WRITE_LOCK_NAME,</span><br><span class="line">        lockData,</span><br><span class="line">        <span class="comment">// 写锁只能加一个</span></span><br><span class="line">        <span class="number">1</span>,</span><br><span class="line">        <span class="keyword">new</span> SortingLockInternalsDriver() {</span><br><span class="line">                <span class="meta">@Override</span></span><br><span class="line">                <span class="function"><span class="keyword">public</span> PredicateResults <span class="title">getsTheLock</span><span class="params">(CuratorFramework client, List&lt;String&gt; children, String sequenceNodeName, <span class="keyword">int</span> maxLeases)</span> <span class="keyword">throws</span> Exception </span>{</span><br><span class="line">                        <span class="keyword">return</span> <span class="keyword">super</span>.getsTheLock(client, children, sequenceNodeName, maxLeases);</span><br><span class="line">                }</span><br><span class="line">        }</span><br><span class="line">);</span><br></pre></td></tr></tbody></table></figure>
+
+    
+  </div>
+
+</article>
+
+
+   
+
+   
+  <div class="box-prev-next clearfix">
+    <a class="show pull-left" href="/2022/01/05/curator-02/">
+        <i class="icon icon-angle-left"></i>
+    </a>
+    <a class="show pull-right" href="/2022/01/10/stringmatch-04/">
+        <i class="icon icon-angle-right"></i>
+    </a>
+  </div>
+
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/categories/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              分类
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/roaming/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              漫游
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/atom.xml"
+              rel="noopener noreferrer"
+              target="_blank"
+              >
+              RSS
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/search/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              搜索
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+    
+    
+
+    
+
+    
+    
+
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script>
+    <div id="comment" class="vcomment" ></div>
+    <script>
+        var notify = 'false' == true ? true : false;
+        var verify = 'false' == true ? true : false;
+        var GUEST_INFO = ['nick','mail','link'];
+        var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+            return GUEST_INFO.indexOf(item) > -1
+        });
+        guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+        window.valine = new Valine({
+            el: '.vcomment',
+            notify: notify,
+            verify: verify,
+            appId: "masttnqEt9G69mj43i9oaA1C-gzGzoHsz",
+            appKey: "hgIx9VKn0GLDhRcLxQuNMl0E",
+            avatar:'mm',
+            placeholder: "Say something",
+            guest_info:guest_info,
+            pageSize:'10'
+        });
+    </script>
+  
+    
+
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>【JVM】：垃圾回收 | haifuns的博客</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="JVM," />
+  
+
+  <meta name="description" content="哪些内存需要回收?垃圾收集器在对堆进行回收前，第一件事情就是要确定这些对象之中哪些还“存活”着，哪些已经“死去”（即不可能再被任何途径使用的对象）了。 引用计数算法在对象中添加一个引用计数器，每当有一个地方引用它时，计数器值就加一；当引用失效时，计数器值就减一；任何时刻计数器为零的对象就是不可能再被使用的。  优点：实现简单。效率高 缺点：不能解决对象之间的循环引用的问题">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【JVM】：垃圾回收">
+<meta property="og:url" content="https://haifuns.com/2020/12/26/jvm-4/index.html">
+<meta property="og:site_name" content="haifuns的博客">
+<meta property="og:description" content="哪些内存需要回收?垃圾收集器在对堆进行回收前，第一件事情就是要确定这些对象之中哪些还“存活”着，哪些已经“死去”（即不可能再被任何途径使用的对象）了。 引用计数算法在对象中添加一个引用计数器，每当有一个地方引用它时，计数器值就加一；当引用失效时，计数器值就减一；任何时刻计数器为零的对象就是不可能再被使用的。  优点：实现简单。效率高 缺点：不能解决对象之间的循环引用的问题">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/jvm/ReachabilityAnalysis.png">
+<meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/jvm/mark-sweep.png">
+<meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/jvm/copying.png">
+<meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/jvm/mark-compact.png">
+<meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/jvm/GarbageCollector.png">
+<meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/jvm/Serial.png">
+<meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/jvm/ParNew.png">
+<meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/jvm/ParallelScavenge.png">
+<meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/jvm/CMS.png">
+<meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/jvm/G1-Region.png">
+<meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/jvm/G1.png">
+<meta property="article:published_time" content="2020-12-26T17:20:00.000Z">
+<meta property="article:modified_time" content="2022-03-17T09:37:21.683Z">
+<meta property="article:author" content="haifuns">
+<meta property="article:tag" content="JVM">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/jvm/ReachabilityAnalysis.png">
+
+  
+
+  
+    <link rel="icon" href="/images/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbeddx" rel="stylesheet">
+
+
+  
+    
+<link rel="stylesheet" href="/css/personal-style.css">
+
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?d3c8edb388553a2084296cbfe9a0785a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
+
+<meta name="generator" content="Hexo 5.4.0">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="haifuns的博客" type="application/atom+xml">
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header CENTER">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/categories/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            分类
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/roaming/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            漫游
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/atom.xml"
+            rel="noopener noreferrer"
+            target="_blank"
+            >
+            RSS
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/search/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%93%AA%E4%BA%9B%E5%86%85%E5%AD%98%E9%9C%80%E8%A6%81%E5%9B%9E%E6%94%B6"><span class="toc-text">哪些内存需要回收?</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%95%E7%94%A8%E8%AE%A1%E6%95%B0%E7%AE%97%E6%B3%95"><span class="toc-text">引用计数算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%AF%E8%BE%BE%E6%80%A7%E5%88%86%E6%9E%90%E7%AE%97%E6%B3%95"><span class="toc-text">可达性分析算法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%95%E7%94%A8%E5%88%86%E7%B1%BB"><span class="toc-text">引用分类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HotSpot%E7%AE%97%E6%B3%95%E5%AE%9E%E7%8E%B0"><span class="toc-text">HotSpot算法实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9E%9A%E4%B8%BE%E6%A0%B9%E8%8A%82%E7%82%B9"><span class="toc-text">枚举根节点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E5%85%A8%E7%82%B9"><span class="toc-text">安全点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E5%85%A8%E5%8C%BA%E5%9F%9F"><span class="toc-text">安全区域</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%AE%B0%E5%BF%86%E9%9B%86%E4%B8%8E%E5%8D%A1%E8%A1%A8"><span class="toc-text">记忆集与卡表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%99%E5%B1%8F%E9%9A%9C"><span class="toc-text">写屏障</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GC-%E5%88%86%E7%B1%BB"><span class="toc-text">GC 分类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E7%AE%97%E6%B3%95"><span class="toc-text">垃圾收集算法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%87%E8%AE%B0-%E6%B8%85%E9%99%A4%E7%AE%97%E6%B3%95"><span class="toc-text">标记 - 清除算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%87%E8%AE%B0-%E5%A4%8D%E5%88%B6%E7%AE%97%E6%B3%95"><span class="toc-text">标记 - 复制算法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%87%E8%AE%B0-%E6%95%B4%E7%90%86%E7%AE%97%E6%B3%95"><span class="toc-text">标记 - 整理算法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8"><span class="toc-text">垃圾收集器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Serial-%E6%94%B6%E9%9B%86%E5%99%A8"><span class="toc-text">Serial 收集器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ParNew-%E6%94%B6%E9%9B%86%E5%99%A8"><span class="toc-text">ParNew 收集器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Parallel-Scavenge-%E6%94%B6%E9%9B%86%E5%99%A8"><span class="toc-text">Parallel Scavenge 收集器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CMS-%E6%94%B6%E9%9B%86%E5%99%A8"><span class="toc-text">CMS 收集器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Garbage-First-%E6%94%B6%E9%9B%86%E5%99%A8"><span class="toc-text">Garbage First 收集器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ZGC-%E6%94%B6%E9%9B%86%E5%99%A8"><span class="toc-text">ZGC 收集器</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GC-%E6%80%A7%E8%83%BD%E6%8C%87%E6%A0%87"><span class="toc-text">GC 性能指标</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#JVM%E5%86%85%E5%AD%98%E9%85%8D%E7%BD%AE%E5%8E%9F%E5%88%99"><span class="toc-text">JVM内存配置原则</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post CENTER">
+   <article id="post-jvm-4" class="article article-type-post" itemprop="blogPost">
+  <header class="article-header">
+    <h1 class="post-title">【JVM】：垃圾回收</h1>
+
+    <div class="article-meta">
+      <span>
+        <i class="icon-calendar"></i>
+        <span>2020.12.26</span>
+      </span>
+
+      
+        <span class="article-author">
+          <i class="icon-user"></i>
+          <span>haifuns</span>
+        </span>
+      
+
+      
+  <span class="article-category">
+    <i class="icon-list"></i>
+    <a class="article-category-link" href="/categories/JVM/">JVM</a>
+  </span>
+
+
+
+      
+
+      
+      <i class="fa fa-eye"></i> 
+        <span id="busuanzi_container_page_pv">
+           &nbsp热度 <span id="busuanzi_value_page_pv">
+           <i class="fa fa-spinner fa-spin"></i></span>℃
+        </span>
+      
+      
+    </div>
+  </header>
+
+  <div class="article-content">
+    
+      <h2 id="哪些内存需要回收"><a href="#哪些内存需要回收" class="headerlink" title="哪些内存需要回收?"></a>哪些内存需要回收?</h2><p>垃圾收集器在对堆进行回收前，第一件事情就是要确定这些对象之中哪些还“存活”着，哪些已经“死去”（即不可能再被任何途径使用的对象）了。</p>
+<h3 id="引用计数算法"><a href="#引用计数算法" class="headerlink" title="引用计数算法"></a>引用计数算法</h3><p>在对象中添加一个引用计数器，每当有一个地方引用它时，计数器值就加一；当引用失效时，计数器值就减一；任何时刻计数器为零的对象就是不可能再被使用的。</p>
+<ul>
+<li>优点：实现简单。效率高</li>
+<li>缺点：不能解决对象之间的循环引用的问题</li>
+</ul>
+<span id="more"></span>
+
+<h3 id="可达性分析算法"><a href="#可达性分析算法" class="headerlink" title="可达性分析算法"></a>可达性分析算法</h3><p>通过一系列称为“GC Roots”的根对象作为起始节点集，根据引用关系向下搜索，搜索过程所走过的路径称为“引用链”（Reference Chain），如果某个对象到GC Roots间没有任何引用链相连，或者用图论的话来说就是从GC Roots到这个对象不可达时，则证明此对象是不可能再被使用的。</p>
+<p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/jvm/ReachabilityAnalysis.png" alt="image"></p>
+<p>如图所示，对象object 5、object 6、object 7虽然互有关联，但是它们到GC Roots是不可达的，因此它们将会被判定为可回收的对象。</p>
+<p>固定可作为GC Roots的对象包括以下几种：</p>
+<ul>
+<li>在虚拟机栈（栈帧中的本地变量表）中引用的对象，如各个线程被调用的方法堆栈中使用到的参数、局部变量、临时变量等。</li>
+<li>在方法区中类静态属性引用的对象，如Java类的引用类型静态变量。</li>
+<li>在方法区中常量引用的对象，如字符串常量池（String Table）里的引用。</li>
+<li>在本地方法栈中JNI（即通常所说的Native方法）引用的对象。</li>
+<li>Java虚拟机内部的引用，如基本数据类型对应的Class对象，一些常驻的异常对象（比如NullPointExcepiton、OutOfMemoryError）等，还有系统类加载器。</li>
+<li>所有被同步锁（synchronized关键字）持有的对象。</li>
+<li>反映Java虚拟机内部情况的JMXBean、JVMTI中注册的回调、本地代码缓存等。</li>
+</ul>
+<h2 id="引用分类"><a href="#引用分类" class="headerlink" title="引用分类"></a>引用分类</h2><p>Java引用分为强引用（Strongly Re-ference）、软引用（Soft Reference）、弱引用（Weak Reference）和虚引用（Phantom Reference）4种，这4种引用强度依次逐渐减弱。</p>
+<ul>
+<li><p>强引用，类似“Object obj = new Object()”这种引用关系。只要强引用关系还存在，就不会被回收。</p>
+</li>
+<li><p>软引用，还有用但不必须的对象。用SoftReference类来实现软引用。被软引用关联着的对象，在系统将要发生内存溢出异常前，会把这些对象列进回收范围之中进行第二次回收。</p>
+</li>
+<li><p>弱引用，非必须对象，强度比软引用更弱，被弱引用关联的对象只能生存到下一次垃圾收集发生为止。用WeakReference类来实现弱引用。</p>
+</li>
+<li><p>虚引用，也称为“幽灵引用”或者“幻影引用”，是最弱的引用关系。垃圾回收时被回收，为一个对象设置虚引用关联的唯一目的只是为了能在这个对象被收集器回收时收到一个系统通知。用PhantomReference类来实现虚引用。</p>
+</li>
+</ul>
+<h2 id="HotSpot算法实现"><a href="#HotSpot算法实现" class="headerlink" title="HotSpot算法实现"></a>HotSpot算法实现</h2><h3 id="枚举根节点"><a href="#枚举根节点" class="headerlink" title="枚举根节点"></a>枚举根节点</h3><p>在HotSpot里，使用一组称为OopMap的数据结构来达到准确式GC的目的。在类加载完成时，HotSpot就会把对象内所有类型数据得偏移量计算出来，在即时编译过程中，也会在特定的位置记录下栈里和寄存器里哪些位置是引用。在扫描时就可以直接得知这些信息，并不需要真正从方法区等GC Roots开始查找。</p>
+<h3 id="安全点"><a href="#安全点" class="headerlink" title="安全点"></a>安全点</h3><p>如果为每一条指令都生成对应的OopMap，那将会需要大量的额外存储空间。HotSpot实际上也没有为每条指令生成OopMap，而是在“特定的位置”记录了这些信息，这些位置被称为安全点（Safepoint）。用户程序执行时并非在代码指令流的任意位置都能够停顿下来开始垃圾收集，而是强制要求必须执行到达安全点后才能够暂停进行GC。</p>
+<p>安全点位置的选取基本上是以“是否具有让程序长时间执行的特征”为标准，“长时间执行”的最明显特征就是指令序列的复用，例如方法调用、循环跳转、异常跳转等都属于指令序列复用，所以只有具有这些功能的指令才会产生安全点。</p>
+<p>在垃圾收集发生时让所有线程（不包括执行JNI调用的线程）都到最近的安全点，然后停顿下来，有两种方案：</p>
+<ol>
+<li>抢先式中断（Preemptive Suspension）<ul>
+<li> 不需要线程的执行代码主动去配合，在垃圾收集发生时，系统首先把所有用户线程全部中断，如果发现有用户线程中断的地方不在安全点上，就恢复这条线程执行，让它一会再重新中断，直到跑到安全点上。几乎没有虚拟机实现采用抢先式中断来暂停线程响应GC事件。</li>
+</ul>
+</li>
+<li>主动式中断（Voluntary Suspension）<ul>
+<li>当垃圾收集需要中断线程的时候，不直接对线程操作，仅仅简单地设置一个标志位，各个线程执行过程时会不停地主动去轮询这个标志，一旦发现中断标志为真时就自己在最近的安全点上主动中断挂起。轮询标志的地方和安全点是重合的，另外还要加上所有创建对象和其他需要在Java堆上分配内存的地方，这是为了检查是否即将要发生垃圾收集，避免没有足够内存分配新对象。</li>
+</ul>
+</li>
+</ol>
+<h3 id="安全区域"><a href="#安全区域" class="headerlink" title="安全区域"></a>安全区域</h3><p>如果在一段代码中，对象引用关系不会发生变化，在这个区域任意地方开始GC都是安全的，那么称这个区域为安全区域（Safe Region）。</p>
+<p>当用户线程执行到安全区域里面的代码时：</p>
+<p>首先会标识自己已经进入了安全区域，当这段时间里虚拟机要发起垃圾收集时就不必去管这些已声明自己在安全区域内的线程了。</p>
+<p>当线程要离开安全区域时：</p>
+<p>它要检查虚拟机是否已经完成了根节点枚举（或者垃圾收集过程中其他需要暂停用户线程的阶段）</p>
+<ul>
+<li>如果完成了，那线程就继续执行；</li>
+<li>否则就必须一直等待，直到收到可以离开安全区域的信号为止。</li>
+</ul>
+<h3 id="记忆集与卡表"><a href="#记忆集与卡表" class="headerlink" title="记忆集与卡表"></a>记忆集与卡表</h3><p>为解决对象跨代引用所带来的问题，垃圾收集器在新生代中建立了名为记忆集（Remembered Set）的数据结构，用以避免把整个老年代加进GC Roots扫描范围。</p>
+<p>记忆集是一种用于记录从非收集区域指向收集区域的指针集合的抽象数据结构。</p>
+<p>可供选择（当然也可以选择这个范围以外的）的记录精度：</p>
+<ul>
+<li>字长精度：每个记录精确到一个机器字长（就是处理器的寻址位数，如常见的32位或64位，这个精度决定了机器访问物理内存地址的指针长度），该字包含跨代指针。</li>
+<li>对象精度：每个记录精确到一个对象，该对象里有字段含有跨代指针。</li>
+<li>卡精度：每个记录精确到一块内存区域，该区域内有对象含有跨代指针。</li>
+</ul>
+<p>卡表（Card Table）是记忆集的一种具体实现，定义了记忆集的记录精度和与堆内存的映射关系等。卡表每个元素都对应着其标识的内存区域中一块特定大小的内存块，这个内存块称为卡页（Card Page）。</p>
+<h3 id="写屏障"><a href="#写屏障" class="headerlink" title="写屏障"></a>写屏障</h3><p>在HotSpot虚拟机里是通过写屏障（Write Barrier）技术维护卡表状态。写屏障可以看做成JVM对“引用类型字段赋值”这个动作的AOP。</p>
+<h2 id="GC-分类"><a href="#GC-分类" class="headerlink" title="GC 分类"></a>GC 分类</h2><ul>
+<li>MinorGC / YoungGC ：发生在新生代的收集动作</li>
+<li>MajorGC / OldGC ：发生在老年代的GC，目前只有CMS收集器会有单独收集老年代的行为</li>
+<li>MixedGC ：收集整个新生代以及部分老年代，目前只有G1收集器会有这种行为</li>
+<li>FullGC ：收集整个Java堆和方法区的GC</li>
+</ul>
+<h2 id="垃圾收集算法"><a href="#垃圾收集算法" class="headerlink" title="垃圾收集算法"></a>垃圾收集算法</h2><h3 id="标记-清除算法"><a href="#标记-清除算法" class="headerlink" title="标记 - 清除算法"></a>标记 - 清除算法</h3><p>标记 - 清除（Mark-Sweep）算法，区分为“标记”和“清除”两个阶段：</p>
+<ul>
+<li>标记出所有需要回收的对象</li>
+<li>标记完成后统一回收被标记的对象</li>
+</ul>
+<p>优点：</p>
+<ul>
+<li>简单，是最基础的收集算法，后续算法是基于这种思路并对其不足进行改进而得到的。</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>标记和清除效率都不高</li>
+<li>标记清除后会产生大量不连续的内存碎片，从而导致分配大对象时触发GC</li>
+</ul>
+<p>标记 - 清除算法执行过程如图所示：</p>
+<p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/jvm/mark-sweep.png" alt="image"></p>
+<h3 id="标记-复制算法"><a href="#标记-复制算法" class="headerlink" title="标记 - 复制算法"></a>标记 - 复制算法</h3><p>为了解决标记-清除算法面对大量可回收对象时执行效率低的问题，“半区复制”（Semispace Copying）的垃圾收集算法将可用内存按容量划分为大小相等的两块，每次只使用其中的一块。当这块内存用完时，将还存活的对象复制到另一块上去，然后把已经使用过的内存一次清理掉。</p>
+<p>优点：</p>
+<ul>
+<li>内次都是对整个半区回收，内存分配不需要考虑内存碎片问题，只要移动堆顶指针顺序分配内存即可，实现简单，运行高效。</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>内存缩小一半，代价高。</li>
+</ul>
+<p>标记 - 复制算法执行过程如图所示：</p>
+<p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/jvm/copying.png" alt="image"></p>
+<p>HotSpot虚拟机的Serial、ParNew等新生代收集器中：</p>
+<p>把新生代分为一块较大的Eden空间和两块较小的Survivor空间，每次分配内存只使用Eden和其中一块Survivor。</p>
+<p>发生垃圾搜集时，将Eden和Survivor中仍然存活的对象一次性复制到另外一块Survivor空间上，然后直接清理掉Eden和已用过的那块Survivor空间。<br>HotSpot虚拟机默认Eden和Survivor的大小比例是8∶1，也即每次新生代中可用内存空间为整个新生代容量的90%（Eden的80%加上一个Survivor的10%）。但是当Survivor空间不足以容纳一次Minor GC之后存活的对象时，就需要依赖其他内存区域（实际上大多就是老年代）进行分配担保（Handle Promotion）。</p>
+<p>分配担保：</p>
+<p>当新生代进行垃圾回收后，新生代的存活区存放不下，那么需要把这些对象放置到老年代的策略，也就是老年代为新生代的GC做空间分配担保，步骤如下：</p>
+<ol>
+<li>在发生MinorGC前，JVM会检查老年代的最大可用连续空间是否大于新生代所有对象总空间，如果大于，可以确保MinorGC是安全。</li>
+<li>如果小于，那么JVM会检查是否设置允许担保失败，如果允许，那么继续检查老年代最大可用连续空间是否大于历次晋升到老年代对象的平均大小</li>
+<li>2基础上，如果大于历次平均大小，则尝试进行一次MinorGC</li>
+<li>2基础上，如果小于于历次平均大小，则改做一次FullGC</li>
+</ol>
+<h3 id="标记-整理算法"><a href="#标记-整理算法" class="headerlink" title="标记 - 整理算法"></a>标记 - 整理算法</h3><p>标记-复制算法在对象存活率较高时就要进行较多的复制操作，效率将会降低。更关键的是，如果不想浪费50%的空间，就需要有额外的空间进行分配担保，以应对被使用的内存中所有对象都100%存活的极端情况，所以在老年代一般不直接选用标记-复制算法而使用标记-整理算法。</p>
+<p>标记-清除算法与标记-整理算法标记过程相同，但后续不是直接清除可回收对象，而是让所有存活对象向一端移动，然后直接清除边界以外的内存。</p>
+<p>标记 - 整理算法执行过程如图所示：</p>
+<p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/jvm/mark-compact.png" alt="image"></p>
+<h2 id="垃圾收集器"><a href="#垃圾收集器" class="headerlink" title="垃圾收集器"></a>垃圾收集器</h2><p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/jvm/GarbageCollector.png" alt="image"></p>
+<p>如图所示，七种作用于不同分代的收集器，如果两个收集器之间存在连线，就说明它们可以搭配使用（由于维护和兼容性测试的成本，在JDK 8时将Serial+CMS、ParNew+Serial Old这两个组合声明为废弃，并在JDK 9中完全取消了这些组合的支持），图中收集器所处的区域，则表示它是属于新生代收集器抑或是老年代收集器。</p>
+<h3 id="Serial-收集器"><a href="#Serial-收集器" class="headerlink" title="Serial 收集器"></a>Serial 收集器</h3><p>Serial收集器是最基础、历史最悠久的收集器。在JDK 1.3.1 之前，Serial是HotSpot虚拟机新生代收集器的唯一选择。Serial是一个单线程工作的收集器，“单线程”并不仅仅是说明它只会使用一个处理器或一条收集线程去完成垃圾收集工作，在进行垃圾收集时，还必须暂停其他所有工作线程（Stop The World），直到它收集结束。</p>
+<p>优点：</p>
+<ul>
+<li>简单高效，内存消耗小，对于单核处理器或处理器核心数较少的环境，由于没有多线程交互开销，垃圾回收收集效率更高。是HotSpot虚拟机运行在客户端模式下的默认新生代收集器。</li>
+</ul>
+<p>开启参数：-XX:+UseSerialGC，使用Serial + Serial Old收集器组合</p>
+<p>Serial/Serial Old收集器的运行过程如下图：</p>
+<p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/jvm/Serial.png" alt="image"></p>
+<h3 id="ParNew-收集器"><a href="#ParNew-收集器" class="headerlink" title="ParNew 收集器"></a>ParNew 收集器</h3><p>ParNew收集器实质上是Serial收集器的多线程并行版本，除了同时使用多条线程进行垃圾收集之<br>外，其余的行为包括Serial收集器可用的所有控制参数（例如：-XX：SurvivorRatio、-XX：PretenureSizeThreshold、-XX：HandlePromotionFailure等）、收集算法、Stop The World、对象分配规则、回收策略等都与Serial收集器完全一致，在实现上也共用了相当多的代码。</p>
+<p>并行收集器在并发能力好的处理器环境，停顿的时间要比串行收集器短，但是但对于单核或核心数较少的处理器环境，由于多线程开销，可能比串行收集器差。</p>
+<p>ParNew 收集器是不少运行在服务端模式下的HotSpot虚拟机，尤其是JDK 7之前的遗留系统中首选的新生代收集器，其中有一个与功能、性能无关但其实很重要的原因是：除了Serial收集器外，目前只有它能与CMS收集器配合工作。</p>
+<p>开启参数：-XX:+UseParNewGC，默然开启收集线程数与 CPU 数量相同，可以使用 -XX:+ParallelGCThreads 参数限制垃圾收集线程数</p>
+<p>ParNew 收集器的运行过程如下图：</p>
+<p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/jvm/ParNew.png" alt="image"></p>
+<h3 id="Parallel-Scavenge-收集器"><a href="#Parallel-Scavenge-收集器" class="headerlink" title="Parallel Scavenge 收集器"></a>Parallel Scavenge 收集器</h3><p>Parallel Scavenge收集器也是一款新生代收集器，它同样是基于标记-复制算法实现的收集器，也是能够并行收集的多线程收集器。</p>
+<p>CMS等收集器的关注点是尽可能地缩短垃圾收集时用户线程的停顿时间，而Parallel Scavenge收集器的目标则是达到一个可控制的吞吐量（Throughput）。所谓吞吐量就是处理器用于运行用户代码的时间与处理器总消耗时间的比值，即：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">吞吐量 = \dfrac{运行用户代码时间}{运行用户代码时间 + 运行垃圾收集时间}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>参数设置：</p>
+<ul>
+<li>-XX:MaxGCPauseMillis 设置GC最大停顿时间（毫秒）</li>
+<li>-XX:GCTimeRatio 设置吞吐量大小</li>
+</ul>
+<p>Parallel Scavenge 收集器的运行过程如下图：</p>
+<p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/jvm/ParallelScavenge.png" alt="image"></p>
+<h3 id="CMS-收集器"><a href="#CMS-收集器" class="headerlink" title="CMS 收集器"></a>CMS 收集器</h3><p>CMS（Concurrent Mark Sweep）收集器是一种以获取最短回收停顿时间为目标的收集器。</p>
+<p>CMS收集器是基于标记-清除算法实现的，它的运作过程相对于前面几种收集器来说要更复杂一些，整个过程分为四个步骤，包括：</p>
+<ol>
+<li>初始标记（CMS initial mark）</li>
+<li>并发标记（CMS concurrent mark）</li>
+<li>重新标记（CMS remark）</li>
+<li>并发清除（CMS concurrent sweep）</li>
+</ol>
+<p>其中初始标记、重新标记这两个步骤仍然需要“Stop The World”。</p>
+<p>初始标记仅仅只是标记一下GC Roots能直接关联到的对象，速度很快；</p>
+<p>并发标记阶段就是从GC Roots的直接关联对象开始遍历整个对象图的过程，这个过程耗时较长但是不需要停顿用户线程，可以与垃圾收集线程一起并发运行；</p>
+<p>重新标记阶段则是为了修正并发标记期间，因用户程序继续运作而导致标记产生变动的那一部分对象的标记记录，这个阶段的停顿时间通常会比初始标记阶段稍长一些，但也远比并发标记阶段的时间短；</p>
+<p>最后是并发清除阶段，清理删除掉标记阶段判断的已经死亡的对象，由于不需要移动存活对象，所以这个阶段也是可以与用户线程同时并发的。</p>
+<p>优点： </p>
+<ul>
+<li>低停顿、并发执行</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>并发执行，对CPU资源压力大</li>
+<li>无法处理在处理过程中产生的垃圾，可能导致FullGC</li>
+<li>采用的标记-清除算法会导致大量碎片，在分配大对象时可能触发FullGC</li>
+</ul>
+<p>参数：</p>
+<ul>
+<li>-XX:+UseConcMarkSweepGC 使用ParNew + CMS + Serial Old的收集器组合，Serial Old将作为CMS出错后的后备收集器</li>
+<li>-XX:CMSInitiatingOccupancyFraction 设置CMS收集器在老年代空间被使用多少后触发回收，默认80%</li>
+</ul>
+<p>CMS 收集器的运行过程如下图：</p>
+<p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/jvm/CMS.png" alt="image"></p>
+<h3 id="Garbage-First-收集器"><a href="#Garbage-First-收集器" class="headerlink" title="Garbage First 收集器"></a>Garbage First 收集器</h3><p>G1（Garbage First）是一款主要面向服务端应用的垃圾收集器。与其他收集器相比，具有以下特点：</p>
+<ol>
+<li>G1把内存划分成多个独立的区域（Region），最多2048个Region</li>
+<li>G1仍采用分代思想，保留了新生代和老年代，但是不再是物理隔离，而是一部分Region集合，且不需要Region是连续的，Region中还有一类特殊的Humongous区域，专门用来存储大对象。G1认为只要大小超过了一个Region容量一半的对象即可判定为大对象。</li>
+<li>G1能充分利用多CPU、多核环境硬件优势，尽量缩短STW</li>
+<li>G1整体上采用标记-整理算法，局部使用复制算法，不会产生内存碎片</li>
+<li>G1停顿可预测，能明确指定在一段时间内，消耗在垃圾收集上的最大时间</li>
+<li>G1跟踪各个Region里面的垃圾价值大小，在后台维护优先列表，每次根据允许的时间回收价值最大的区域，从而保证在有限时间内高效收集</li>
+</ol>
+<p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/jvm/G1-Region.png" alt="image"></p>
+<p>G1收集器的运作过程大致可划分为以下四个步骤：</p>
+<ul>
+<li>初始标记（Initial Marking）：</li>
+</ul>
+<p>仅仅只是标记一下GC Roots能直接关联到的对象，并且修改TAMS指针的值，让下一阶段用户线程并发运行时，能正确地在可用的Region中分配新对象。这个阶段需要停顿线程，但耗时很短，而且是借用进行Minor GC的时候同步完成的，所以G1收集器在这个阶段实际并没有额外的停顿。</p>
+<ul>
+<li>并发标记（Concurrent Marking）：</li>
+</ul>
+<p>从GC Root开始对堆中对象进行可达性分析，递归扫描整个堆里的对象图，找出要回收的对象，这阶段耗时较长，但可与用户程序并发执行。当对象图扫描完成以后，还要重新处理SATB记录下的在并发时有引用变动的对象。</p>
+<ul>
+<li>最终标记（Final Marking）：</li>
+</ul>
+<p>对用户线程做另一个短暂的暂停，用于处理并发阶段结束后仍遗留下来的最后那少量的SATB记录。</p>
+<ul>
+<li>筛选回收（Live Data Counting and Evacuation）：</li>
+</ul>
+<p>负责更新Region的统计数据，对各个Region的回收价值和成本进行排序，根据用户所期望的停顿时间来制定回收计划，可以自由选择任意多个Region构成回收集，然后把决定回收的那一部分Region的存活对象复制到空的Region中，再清理掉整个旧Region的全部空间。这里的操作涉及存活对象的移动，是必须暂停用户线程，由多条收集器线程并行完成的。</p>
+<p>G1 收集器的运行过程如下图：</p>
+<p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/jvm/G1.png" alt="image"></p>
+<p>开启参数：-XX:+UseG1GC 开启G1 JDK9开始默认开启</p>
+<h3 id="ZGC-收集器"><a href="#ZGC-收集器" class="headerlink" title="ZGC 收集器"></a>ZGC 收集器</h3><p>ZGC是Java 11引入的低延迟垃圾收集器，经过了多个实验阶段，自Java 15成为正式特性。</p>
+<p>ZGC是一个重新设计的并发的垃圾回收器，可以极大的提升GC的性能。支持任意堆大小而保持稳定的低延迟（10ms以内），性能非常可观。</p>
+<p>打开参数：-XX:+UseZGC</p>
+<h2 id="GC-性能指标"><a href="#GC-性能指标" class="headerlink" title="GC 性能指标"></a>GC 性能指标</h2><ul>
+<li>吞吐量 = 运行用户代码时间 / 运行总时间</li>
+<li>GC复核，与吞吐量相反，是GC时间 / 运行总时间</li>
+<li>GC频率，GC在一段时间发生的次数</li>
+<li>暂停时间，就是Stop The World的总时间</li>
+<li>反应速度，从对象成为垃圾到被回收的时间</li>
+</ul>
+<h2 id="JVM内存配置原则"><a href="#JVM内存配置原则" class="headerlink" title="JVM内存配置原则"></a>JVM内存配置原则</h2><ol>
+<li><p>新生代尽可能设置大，设置太小可能会导致：</p>
+<ul>
+<li>YGC次数频繁</li>
+<li>可能导致YGC后的对象进入老年代，从而触发FGC</li>
+</ul>
+</li>
+<li><p>对于老年代：</p>
+<ul>
+<li>针对响应时间优先的应用，由于老年代通常采用并发收集器，因此其大小设置要综合考虑并发量和并发持续时间等参数<ul>
+<li>如果设置过小，可能造成内存碎片，高回收频率会导致应用暂停</li>
+<li>如果设置过大，会需要较长的回收时间</li>
+</ul>
+</li>
+<li>针对吞吐量优先的应用，通常设置较大的新生代和较小的老年代，尽可能回收大部分短期对象，减少中期对象，而老年代尽可能存放长期存活的对象</li>
+</ul>
+</li>
+<li><p>依据对象的存活周期分类，对象优先在新生代分配，长时间存活的对象进入老年代</p>
+</li>
+<li><p>根据不同代的特点，选取合适的收集算法：少量对象存活，适合复制算法；大量对象存活，适合标记清除或标记整理算法</p>
+</li>
+</ol>
+
+    
+  </div>
+
+</article>
+
+
+   
+
+   
+  <div class="box-prev-next clearfix">
+    <a class="show pull-left" href="/2020/12/26/jvm-3/">
+        <i class="icon icon-angle-left"></i>
+    </a>
+    <a class="show pull-right" href="/2020/12/26/jvm-5/">
+        <i class="icon icon-angle-right"></i>
+    </a>
+  </div>
+
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/categories/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              分类
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/roaming/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              漫游
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/atom.xml"
+              rel="noopener noreferrer"
+              target="_blank"
+              >
+              RSS
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/search/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              搜索
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+    
+    
+
+    
+
+    
+    
+
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script>
+    <div id="comment" class="vcomment" ></div>
+    <script>
+        var notify = 'false' == true ? true : false;
+        var verify = 'false' == true ? true : false;
+        var GUEST_INFO = ['nick','mail','link'];
+        var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+            return GUEST_INFO.indexOf(item) > -1
+        });
+        guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+        window.valine = new Valine({
+            el: '.vcomment',
+            notify: notify,
+            verify: verify,
+            appId: "masttnqEt9G69mj43i9oaA1C-gzGzoHsz",
+            appKey: "hgIx9VKn0GLDhRcLxQuNMl0E",
+            avatar:'mm',
+            placeholder: "Say something",
+            guest_info:guest_info,
+            pageSize:'10'
+        });
+    </script>
+  
+    
+
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>
