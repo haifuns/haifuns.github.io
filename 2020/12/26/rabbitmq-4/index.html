@@ -25,7 +25,7 @@
 <meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/mq/rabbitmq-network-partition1.png">
 <meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/mq/rabbitmq-network-partition2.png">
 <meta property="article:published_time" content="2020-12-26T17:00:00.000Z">
-<meta property="article:modified_time" content="2022-03-17T09:44:02.152Z">
+<meta property="article:modified_time" content="2022-03-17T10:43:03.665Z">
 <meta property="article:author" content="haifuns">
 <meta property="article:tag" content="RabbitMQ">
 <meta name="twitter:card" content="summary">
@@ -83,7 +83,7 @@
     <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
 
-<meta name="generator" content="Hexo 5.4.0">
+<meta name="generator" content="Hexo 5.4.1">
 <style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
 <link rel="alternate" href="/atom.xml" title="haifuns的博客" type="application/atom+xml">
 </head>
@@ -266,9 +266,7 @@
 </ul>
 <ol start="2">
 <li>通过 Web 管理界面的方式查看。如果发生了网络分区页面会出现警告。推荐采用这种方式来检测是否发生了网络分区。</li>
-<li>通过 HTTP API 的方式调取节点信息来检测是否发生网络分区，比如通过 curl 命令来调取节点信息：<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -i -u root:root123 -H "content-type:application/json" -X GET http://localhost:15672/api/nodes</span><br></pre></td></tr></tbody></table></figure>
-
-</li>
+<li>通过 HTTP API 的方式调取节点信息来检测是否发生网络分区，比如通过 curl 命令来调取节点信息：<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -i -u root:root123 -H "content-type:application/json" -X GET http://localhost:15672/api/nodes</span><br></pre></td></tr></tbody></table></figure></li>
 </ol>
 <h2 id="模拟网络分区"><a href="#模拟网络分区" class="headerlink" title="模拟网络分区"></a>模拟网络分区</h2><p>正常情况下，很难观察到 RabbitMQ 网络分区的发生。为了更好地理解网络分区，需要采取某些手段将其模拟出来，以便对其进行相应的分析处理，进而在实际应用环境中遇到类似情形可以处理游刃有余。往长远方面讲，也可以采取一些要的手段去规避网络分区的发生，或者可以监控网络分区以及准备相关的处理预案。</p>
 <p>模拟网络分区的方式有多种，主要分为以下三大类:</p>
@@ -475,17 +473,8 @@
 <td>node2</td>
 <td>[]</td>
 </tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>对于[node2] 分区而言，queue2、queue3的分布比较容易理解，此分区中只有一个节点，所有slave 列为空。但是对于queue1而言，其部署还是和分区前如出一辙。不管是在网络分区前，还是在网络分区之后，再或者是又从网络分区中恢复，对于queue1而言生产和消费消息都不会受到任何的影响，就如未发生过网络分区一样。对于队列queue2、queue3 情形可以参考上面未配置镜像的相关细节，从网络分区中恢复(即恢复成之前的[node1,node2,node3] 组成的完整分区)之后可能会有数据丢失。</td>
-<td></td>
-<td></td>
-</tr>
 </tbody></table>
+<p>对于[node2] 分区而言，queue2、queue3的分布比较容易理解，此分区中只有一个节点，所有slave 列为空。但是对于queue1而言，其部署还是和分区前如出一辙。不管是在网络分区前，还是在网络分区之后，再或者是又从网络分区中恢复，对于queue1而言生产和消费消息都不会受到任何的影响，就如未发生过网络分区一样。对于队列queue2、queue3 情形可以参考上面未配置镜像的相关细节，从网络分区中恢复(即恢复成之前的[node1,node2,node3] 组成的完整分区)之后可能会有数据丢失。</p>
 <p>再考虑另一种情形，分区之前如下所示：</p>
 <p>分区之前：</p>
 <table>

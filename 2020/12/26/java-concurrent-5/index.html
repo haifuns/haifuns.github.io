@@ -24,7 +24,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/threadstatus.png">
 <meta property="article:published_time" content="2020-12-26T17:44:00.000Z">
-<meta property="article:modified_time" content="2022-03-17T09:44:02.148Z">
+<meta property="article:modified_time" content="2022-03-17T10:43:03.661Z">
 <meta property="article:author" content="haifuns">
 <meta property="article:tag" content="并发">
 <meta name="twitter:card" content="summary">
@@ -82,7 +82,7 @@
     <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
 
-<meta name="generator" content="Hexo 5.4.0">
+<meta name="generator" content="Hexo 5.4.1">
 <style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
 <link rel="alternate" href="/atom.xml" title="haifuns的博客" type="application/atom+xml">
 </head>
@@ -271,9 +271,7 @@
 <p>线程通过以下方法获取共享变量的监视器锁：</p>
 <ol>
 <li>执行synchronized 同步代码块时， 使用该共享变量作为参数。<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">synchronized</span>(共享变量) {</span><br><span class="line">    <span class="comment">// do something</span></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure></li>
-<li>调用该共享变量的方法，并且该方法使用了synchronized 修饰。<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">method</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span> </span>{</span><br><span class="line">    <span class="comment">// do something</span></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
-
-</li>
+<li>调用该共享变量的方法，并且该方法使用了synchronized 修饰。<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">method</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b)</span> </span>{</span><br><span class="line">    <span class="comment">// do something</span></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure></li>
 </ol>
 <p>另外需要注意的是，一个线程可以从挂起状态变为可以运行状态（也就是被唤醒），即使该线程没有被其他线程调用notify()、notifyAll() 方法进行通知，或者被中断，或者等待超时，这就是所谓的虚假唤醒。</p>
 <p>（虚假唤醒在应用实践中很少发生），防患做法是不停地去测试该线程被唤醒的条件是否满足，不满足则继续等待，也就是说在一个循环中调用wait() 方法进行防范。退出循环的条件是满足了唤醒该线程的条件。</p>

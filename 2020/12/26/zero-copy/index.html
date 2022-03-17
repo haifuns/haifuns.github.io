@@ -27,7 +27,7 @@
 <meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/io/sendfile.png">
 <meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/io/sendfile-gather.png">
 <meta property="article:published_time" content="2020-12-26T17:33:00.000Z">
-<meta property="article:modified_time" content="2022-03-17T09:44:02.152Z">
+<meta property="article:modified_time" content="2022-03-17T10:43:03.665Z">
 <meta property="article:author" content="haifuns">
 <meta property="article:tag" content="Java IO">
 <meta name="twitter:card" content="summary">
@@ -85,7 +85,7 @@
     <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
 
-<meta name="generator" content="Hexo 5.4.0">
+<meta name="generator" content="Hexo 5.4.1">
 <style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
 <link rel="alternate" href="/atom.xml" title="haifuns的博客" type="application/atom+xml">
 </head>
@@ -193,7 +193,7 @@
 
   <div id="toc" class="toc-article">
     <strong class="toc-title">文章目录</strong>
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%89%8D%E7%BD%AE%E6%A6%82%E5%BF%B5"><span class="toc-text">前置概念</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%A8%E6%88%B7%E7%A9%BA%E9%97%B4%E4%B8%8E%E5%86%85%E6%A0%B8%E7%A9%BA%E9%97%B4"><span class="toc-text">用户空间与内核空间</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DMA%EF%BC%88%E7%9B%B4%E6%8E%A5%E5%AD%98%E5%82%A8%E5%99%A8%E8%AE%BF%E9%97%AE%EF%BC%89"><span class="toc-text">DMA（直接存储器访问）</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BC%A0%E7%BB%9FI-O"><span class="toc-text">传统I&#x2F;O</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%8F%E7%BB%93"><span class="toc-text">小结</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%9B%B6%E6%8B%B7%E8%B4%9D%EF%BC%88zero-copy%EF%BC%89"><span class="toc-text">零拷贝（zero-copy）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#mmap-%E5%AE%9E%E7%8E%B0"><span class="toc-text">mmap 实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%8F%E7%BB%93-1"><span class="toc-text">小结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sendfile-%E5%AE%9E%E7%8E%B0"><span class="toc-text">sendfile 实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%8F%E7%BB%93-2"><span class="toc-text">小结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%A6%E6%9C%89DMA-%E6%94%B6%E9%9B%86%E6%8B%B7%E8%B4%9D%E5%8A%9F%E8%83%BD%E7%9A%84sendfile-%E5%AE%9E%E7%8E%B0"><span class="toc-text">带有DMA 收集拷贝功能的sendfile 实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%8F%E7%BB%93-3"><span class="toc-text">小结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9B%B6%E6%8B%B7%E8%B4%9D%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-text">零拷贝使用场景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E7%A4%BA%E4%BE%8B"><span class="toc-text">代码示例</span></a></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%89%8D%E7%BD%AE%E6%A6%82%E5%BF%B5"><span class="toc-text">前置概念</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%A8%E6%88%B7%E7%A9%BA%E9%97%B4%E4%B8%8E%E5%86%85%E6%A0%B8%E7%A9%BA%E9%97%B4"><span class="toc-text">用户空间与内核空间</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DMA%EF%BC%88%E7%9B%B4%E6%8E%A5%E5%AD%98%E5%82%A8%E5%99%A8%E8%AE%BF%E9%97%AE%EF%BC%89"><span class="toc-text">DMA（直接存储器访问）</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BC%A0%E7%BB%9FI-x2F-O"><span class="toc-text">传统I&#x2F;O</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B0%8F%E7%BB%93"><span class="toc-text">小结</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%9B%B6%E6%8B%B7%E8%B4%9D%EF%BC%88zero-copy%EF%BC%89"><span class="toc-text">零拷贝（zero-copy）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#mmap-%E5%AE%9E%E7%8E%B0"><span class="toc-text">mmap 实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%8F%E7%BB%93-1"><span class="toc-text">小结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sendfile-%E5%AE%9E%E7%8E%B0"><span class="toc-text">sendfile 实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%8F%E7%BB%93-2"><span class="toc-text">小结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%A6%E6%9C%89DMA-%E6%94%B6%E9%9B%86%E6%8B%B7%E8%B4%9D%E5%8A%9F%E8%83%BD%E7%9A%84sendfile-%E5%AE%9E%E7%8E%B0"><span class="toc-text">带有DMA 收集拷贝功能的sendfile 实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%8F%E7%BB%93-3"><span class="toc-text">小结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9B%B6%E6%8B%B7%E8%B4%9D%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-text">零拷贝使用场景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E7%A4%BA%E4%BE%8B"><span class="toc-text">代码示例</span></a></li></ol></li></ol>
   </div>
 
 
@@ -245,7 +245,7 @@
 <span id="more"></span>
 
 <h2 id="DMA（直接存储器访问）"><a href="#DMA（直接存储器访问）" class="headerlink" title="DMA（直接存储器访问）"></a>DMA（直接存储器访问）</h2><p>DMA 即Direct Memory Access ，直接存储器访问。DMA 控制方式是以存储器为中心，在主存和I/O设备之间建立一条直接通路，在DMA 控制器的控制下进行设备和主存之间的数据交换。这种方式只在传输开始和传输结束时才需要CPU的干预。它非常适用于高速设备与主存之间的成批数据传输。</p>
-<h1 id="传统I-O"><a href="#传统I-O" class="headerlink" title="传统I/O"></a>传统I/O</h1><p>下面通过一个Java 非常常见的应用场景：将系统中的文件发送到远端（磁盘文件 -&gt; 内存（字节数组） -&gt; 传输给用户/网络）来详细展开I/O操作。</p>
+<h1 id="传统I-x2F-O"><a href="#传统I-x2F-O" class="headerlink" title="传统I/O"></a>传统I/O</h1><p>下面通过一个Java 非常常见的应用场景：将系统中的文件发送到远端（磁盘文件 -&gt; 内存（字节数组） -&gt; 传输给用户/网络）来详细展开I/O操作。</p>
 <p>如下图所示：</p>
 <p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/io/old-io.png"></p>
 <ol>
@@ -264,16 +264,16 @@
 <p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/io/mmap.png"></p>
 <ol>
 <li>发出mmap 系统调用，上下文从用户态切换到内核态（第一次上下文切换）。通过DMA 将磁盘文件中的内容拷贝到内核空间缓冲区中（第一次拷贝：hard drive -&gt; kernel buffer）。</li>
-<li> mmap 系统调用返回，上下文从内核态切换到用户态（第二次上下文切换）。接着用户空间和内核空间共享这个缓冲区而不需要进行数据拷贝。</li>
-<li> 发出write 系统调用，上下文从用户态切换到内核态（第三次上下文切换）。将数据从内核空间缓冲区拷贝到内核空间socket 相关联的缓冲区（第二次拷贝：kernel buffer -&gt; socket buffer）。</li>
-<li> write 系统调用返回，上下文从内核态切换到用户态（第四次上下文切换）。通过DMA 将内核空间socket  缓冲区中的数据传递到协议引擎（第三次拷贝：socket buffer -&gt; protocol engine）。</li>
+<li>mmap 系统调用返回，上下文从内核态切换到用户态（第二次上下文切换）。接着用户空间和内核空间共享这个缓冲区而不需要进行数据拷贝。</li>
+<li>发出write 系统调用，上下文从用户态切换到内核态（第三次上下文切换）。将数据从内核空间缓冲区拷贝到内核空间socket 相关联的缓冲区（第二次拷贝：kernel buffer -&gt; socket buffer）。</li>
+<li>write 系统调用返回，上下文从内核态切换到用户态（第四次上下文切换）。通过DMA 将内核空间socket  缓冲区中的数据传递到协议引擎（第三次拷贝：socket buffer -&gt; protocol engine）。</li>
 </ol>
 <h3 id="小结-1"><a href="#小结-1" class="headerlink" title="小结"></a>小结</h3><p>通过mmap 实现的零拷贝 I/O 进行了4次用户态与内核态间的上下文切换，以及3次数据拷贝（2次DMA 拷贝和1次CPU 拷贝）。</p>
 <p>通过mmap实现的零拷贝I/O 与传统 I/O 相比仅仅少了1次内核空间缓冲区和用户空间缓冲区之间的CPU拷贝。这样的好处是，可以将整个文件或者整个文件的一部分映射到内存当中，用户直接对内存中对文件进行操作，然后是由操作系统来进行相关的页面请求并将内存的修改写入到文件当中。应用程序只需要处理内存的数据，这样可以实现非常迅速的 I/O 操作。</p>
 <h2 id="sendfile-实现"><a href="#sendfile-实现" class="headerlink" title="sendfile 实现"></a>sendfile 实现</h2><p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/io/sendfile.png"></p>
 <ol>
-<li> 发出sendfile 系统调用，上下文从用户态切换到内核态（第一次上下文切换）。通过DMA 将磁盘文件中的内容拷贝到内核空间缓冲区中（第一次拷贝：hard drive -&gt; kernel buffer）。</li>
-<li> 将数据从内核空间缓冲区拷贝到内核中与socket相关的缓冲区中（第二次拷贝:kernel buffer -&gt; socket buffer）。</li>
+<li>发出sendfile 系统调用，上下文从用户态切换到内核态（第一次上下文切换）。通过DMA 将磁盘文件中的内容拷贝到内核空间缓冲区中（第一次拷贝：hard drive -&gt; kernel buffer）。</li>
+<li>将数据从内核空间缓冲区拷贝到内核中与socket相关的缓冲区中（第二次拷贝:kernel buffer -&gt; socket buffer）。</li>
 <li>sendfile 系统调用返回，上下文从内核态切换到用户态（第二次上下文切换）。通过DMA 将内核空间socket  缓冲区中的数据传递到协议引擎（第三次拷贝：socket buffer -&gt; protocol engine）。</li>
 </ol>
 <h3 id="小结-2"><a href="#小结-2" class="headerlink" title="小结"></a>小结</h3><p>通过sendfile实现的零拷贝I/O 只进行了2次用户态与内核态间的上下文切换，以及3次数据的拷贝（2次DMA 拷贝和1次CPU 拷贝）。</p>
@@ -285,9 +285,9 @@
 <h2 id="带有DMA-收集拷贝功能的sendfile-实现"><a href="#带有DMA-收集拷贝功能的sendfile-实现" class="headerlink" title="带有DMA 收集拷贝功能的sendfile 实现"></a>带有DMA 收集拷贝功能的sendfile 实现</h2><p>从 Linux 2.4 版本开始，操作系统底层提供了带有 scatter/gather 的DMA 来从内核空间缓冲区中将数据读取到协议引擎中。这样一来待传输的数据可以分散在存储的不同位置上，而不需要在连续存储中存放。那么从文件中读出的数据就根本不需要被拷贝到socket 缓冲区中去，只是需要将缓冲区描述符添加到socket 缓冲区中去，DMA 收集操作会根据缓冲区描述符中的信息将内核空间中的数据直接拷贝到协议引擎中。</p>
 <p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/io/sendfile-gather.png"></p>
 <ol>
-<li> 发出sendfile 系统调用，上下文从用户态切换到内核态（第一次上下文切换）。通过DMA 将磁盘文件中的内容拷贝到内核空间缓冲区中（第一次拷贝：hard drive -&gt; kernel buffer）。</li>
+<li>发出sendfile 系统调用，上下文从用户态切换到内核态（第一次上下文切换）。通过DMA 将磁盘文件中的内容拷贝到内核空间缓冲区中（第一次拷贝：hard drive -&gt; kernel buffer）。</li>
 <li>没有数据拷贝到socket缓冲区。取而代之的是只有相应的描述符信息会被拷贝到相应的socket 缓冲区当中。该描述符包含了两方面的信息：kernel buffer 的内存地址和kernel buffer 的偏移量。</li>
-<li> sendfile系统调用返回，上下文从内核态切换到用户态。DMA gather copy根据socket 缓冲区中描述符提供的位置和偏移量信息直接将内核空间缓冲区中的数据拷贝到协议引擎上（第二次拷贝：socket buffer -&gt; protocol engine），这样就避免了最后一次CPU数据拷贝。</li>
+<li>sendfile系统调用返回，上下文从内核态切换到用户态。DMA gather copy根据socket 缓冲区中描述符提供的位置和偏移量信息直接将内核空间缓冲区中的数据拷贝到协议引擎上（第二次拷贝：socket buffer -&gt; protocol engine），这样就避免了最后一次CPU数据拷贝。</li>
 </ol>
 <h3 id="小结-3"><a href="#小结-3" class="headerlink" title="小结"></a>小结</h3><p>带有DMA 收集拷贝功能的sendfile 实现的I/O 只进行了2次用户态与内核态间的上下文切换，以及2次数据的拷贝，而且这2次的数据拷贝都是非CPU 拷贝。这样一来就实现了最理想的零拷贝I/O 传输了，不需要任何一次的CPU 拷贝，以及最少的上下文切换。</p>
 <h2 id="零拷贝使用场景"><a href="#零拷贝使用场景" class="headerlink" title="零拷贝使用场景"></a>零拷贝使用场景</h2><ul>
@@ -299,9 +299,9 @@
 <p>使用零拷贝的技术：</p>
 <ul>
 <li>Java NIO</li>
-<li> Netty</li>
-<li> RocketMQ</li>
-<li> Kafka</li>
+<li>Netty</li>
+<li>RocketMQ</li>
+<li>Kafka</li>
 <li>······</li>
 </ul>
 <h2 id="代码示例"><a href="#代码示例" class="headerlink" title="代码示例"></a>代码示例</h2><ul>
