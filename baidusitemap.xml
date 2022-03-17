@@ -1,6 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://haifuns.com/2021/05/22/kafka-03/</loc>
+    <lastmod>2022-03-17</lastmod>
+  </url>
+  <url>
+    <loc>https://haifuns.com/2021/05/22/kafka-04/</loc>
+    <lastmod>2022-03-17</lastmod>
+  </url>
+  <url>
+    <loc>https://haifuns.com/2021/05/29/kafka-05/</loc>
+    <lastmod>2022-03-17</lastmod>
+  </url>
+  <url>
+    <loc>https://haifuns.com/2021/05/29/kafka-06/</loc>
+    <lastmod>2022-03-17</lastmod>
+  </url>
+  <url>
+    <loc>https://haifuns.com/2021/06/06/kafka-07/</loc>
+    <lastmod>2022-03-17</lastmod>
+  </url>
+  <url>
+    <loc>https://haifuns.com/2021/06/06/kafka-08/</loc>
+    <lastmod>2022-03-17</lastmod>
+  </url>
+  <url>
+    <loc>https://haifuns.com/2021/06/06/kafka-09/</loc>
+    <lastmod>2022-03-17</lastmod>
+  </url>
+  <url>
+    <loc>https://haifuns.com/2021/11/17/multi-paxos/</loc>
+    <lastmod>2022-03-17</lastmod>
+  </url>
+  <url>
+    <loc>https://haifuns.com/2019/11/21/mybatis-sharding/</loc>
+    <lastmod>2022-03-17</lastmod>
+  </url>
+  <url>
     <loc>https://haifuns.com/2021/11/17/paxos/</loc>
     <lastmod>2022-03-17</lastmod>
   </url>
@@ -266,42 +302,6 @@
   </url>
   <url>
     <loc>https://haifuns.com/2021/05/22/kafka-02/</loc>
-    <lastmod>2022-03-17</lastmod>
-  </url>
-  <url>
-    <loc>https://haifuns.com/2021/05/22/kafka-03/</loc>
-    <lastmod>2022-03-17</lastmod>
-  </url>
-  <url>
-    <loc>https://haifuns.com/2021/05/22/kafka-04/</loc>
-    <lastmod>2022-03-17</lastmod>
-  </url>
-  <url>
-    <loc>https://haifuns.com/2021/05/29/kafka-05/</loc>
-    <lastmod>2022-03-17</lastmod>
-  </url>
-  <url>
-    <loc>https://haifuns.com/2021/05/29/kafka-06/</loc>
-    <lastmod>2022-03-17</lastmod>
-  </url>
-  <url>
-    <loc>https://haifuns.com/2021/06/06/kafka-07/</loc>
-    <lastmod>2022-03-17</lastmod>
-  </url>
-  <url>
-    <loc>https://haifuns.com/2021/06/06/kafka-08/</loc>
-    <lastmod>2022-03-17</lastmod>
-  </url>
-  <url>
-    <loc>https://haifuns.com/2021/06/06/kafka-09/</loc>
-    <lastmod>2022-03-17</lastmod>
-  </url>
-  <url>
-    <loc>https://haifuns.com/2021/11/17/multi-paxos/</loc>
-    <lastmod>2022-03-17</lastmod>
-  </url>
-  <url>
-    <loc>https://haifuns.com/2019/11/21/mybatis-sharding/</loc>
     <lastmod>2022-03-17</lastmod>
   </url>
   <url>
