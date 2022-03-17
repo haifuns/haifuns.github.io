@@ -229,7 +229,7 @@ roaming:
     list:
       - type: book
         date: "03-16"
-        text_value: 2010：太空漫游
+        text_value: "2010：太空漫游"
       - type: movie
         date: "02-07"
         text_value:  狙击手 
@@ -273,7 +273,7 @@ roaming:
         text_value: 凤凰架构：构建可靠的大型分布式系统
       - type: book
         date:
-        text_value: 2001: 太空漫游
+        text_value: "2001: 太空漫游"
       - type: book
         date:
         text_value: 深入理解Kafka：核心设计与实践原理
