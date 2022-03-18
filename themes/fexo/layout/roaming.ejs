@@ -23,9 +23,9 @@
             <% } else { %>
               <div class="text">
                 <% if(item.date) {%>
-                  <span stype="font-size: 12px; display: inline-block; color: #888;"><%= item.date || '     '%></span>
+                  <span style="font-size: 12px; display: inline-block; color: #888;"><%= item.date || '     '%></span>
                 <% } else { %>
-                  <span stype="font-size: 12px; display: inline-block; color: #888;">     </span>
+                  <span style="font-size: 12px; display: inline-block; color: #888;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
                 <% }%>
                 <% if(item.text_key) {%>
                   <a rel="noopener noreferrer" target="_blank" class="text-value-url" href="<%= item.text_value_url || ''%>"><%= item.text_value || ''%></a>
