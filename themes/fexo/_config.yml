@@ -403,38 +403,38 @@ roaming:
         date:
         text_value:  局外人 加缪
       - type: movie
-        date:
-        text_value: 了不起的盖茨比 02-13
+        date: 02-13
+        text_value: 了不起的盖茨比
       - type: movie
-        date:
-        text_value: 想见你 02-15
+        date: 02-15
+        text_value: 想见你
       - type: movie
-        date:
-        text_value:  超体 02-24
+        date: 02-24
+        text_value:  超体
       - type: movie
-        date:
-        text_value:  阿丽塔:战斗天使 03-02
+        date: 03-02
+        text_value:  阿丽塔:战斗天使
       - type: movie
-        date:
-        text_value:  2001太空漫游 03-07
+        date: 03-07
+        text_value:  2001太空漫游
       - type: movie
-        date:
-        text_value: 2010太空漫游 03-07
+        date: 03-07
+        text_value: 2010太空漫游
       - type: movie
-        date:
-        text_value: 东京大饭店E11 03-21
+        date: 03-21
+        text_value: 东京大饭店E11
       - type: movie
-        date:
-        text_value: 指环王+霍比特人 6部曲 04-05
+        date: 04-05
+        text_value: 指环王+霍比特人 6部曲
       - type: movie
-        date:
-        text_value: 环形物语 04-13
+        date: 04-13
+        text_value: 环形物语
       - type: movie
-        date:
-        text_value: 利刃出鞘05-02
+        date: 05-02
+        text_value: 利刃出鞘
       - type: movie
-        date:
-        text_value: 环太平洋：雷霆再起 05-03
+        date: 05-03
+        text_value: 环太平洋：雷霆再起
       - type: movie
         date:
         text_value: 纸钞屋S1-2
@@ -442,71 +442,71 @@ roaming:
         date:
         text_value: 请回答1988
       - type: movie
-        date:
-        text_value: 天气之子 05-30
+        date: 05-30
+        text_value: 天气之子
       - type: movie
-        date:
-        text_value: 迷失东京 06-06
+        date: 06-06
+        text_value: 迷失东京
       - type: movie
-        date:
-        text_value: 绝杀慕尼黑06-12
+        date: 06-12
+        text_value: 绝杀慕尼黑
       - type: movie
-        date:
-        text_value: 与君相恋100次 06-24
+        date: 06-24
+        text_value: 与君相恋100次
       - type: movie
-        date:
-        text_value: 明日的我与昨日的你约会 06-26
+        date: 06-26
+        text_value: 明日的我与昨日的你约会
       - type: movie
-        date:
-        text_value: 晚春 07-02
+        date: 07-02
+        text_value: 晚春
       - type: movie
         date:
         text_value: 何以为家
       - type: movie
-        date:
-        text_value: 爆裂鼓手 07-09
+        date: 07-09
+        text_value: 爆裂鼓手
       - type: movie
-        date:
-        text_value: 社交网络 07-10
+        date: 07-10
+        text_value: 社交网络
       - type: movie
-        date:
-        text_value: 流浪猫鲍勃 07-11
+        date: 07-11
+        text_value: 流浪猫鲍勃
       - type: movie
-        date:
-        text_value: 知晓天空之蓝的人啊 08-22
+        date: 08-22
+        text_value: 知晓天空之蓝的人啊
       - type: movie
-        date:
-        text_value: 沉睡魔咒2 10-07
+        date: 10-07
+        text_value: 沉睡魔咒2
       - type: movie
-        date:
-        text_value: 后会无期 10-08
+        date: 10-08
+        text_value: 后会无期
       - type: movie
-        date:
-        text_value: 康斯坦丁 10-11
+        date: 10-11
+        text_value: 康斯坦丁
       - type: movie
         date:
         text_value: 疯狂的麦克斯4：狂暴之路
       - type: movie
-        date:
-        text_value: 半泽直树S1 10-30
+        date: 10-30
+        text_value: 半泽直树S1
       - type: movie
-        date:
-        text_value: 八佰 10-31
+        date: 10-31
+        text_value: 八佰
       - type: movie
         date:
         text_value: "1917"
       - type: movie
-        date:
-        text_value: 小妇人 11-3
+        date: 11-3
+        text_value: 小妇人
       - type: movie
-        date:
-        text_value: 半泽直树2 11-6
+        date: 11-6
+        text_value: 半泽直树2
       - type: movie
-        date:
-        text_value: 国王的演讲 11-13
+        date: 11-13
+        text_value: 国王的演讲
       - type: movie
-        date:
-        text_value: 姜子牙 11-20
+        date: 11-20
+        text_value: 姜子牙
       - type: movie
         date:
         text_value: 机动搜查队404
@@ -514,5 +514,5 @@ roaming:
         date:
         text_value: 信条
       - type: movie
-        date:
-        text_value: 中国女排 12-27
+        date: 12-27
+        text_value: 中国女排
