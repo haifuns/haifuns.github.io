@@ -496,10 +496,10 @@ roaming:
         date:
         text_value: "1917"
       - type: movie
-        date: 11-3
+        date: 11-03
         text_value: 小妇人
       - type: movie
-        date: 11-6
+        date: 11-06
         text_value: 半泽直树2
       - type: movie
         date: 11-13
