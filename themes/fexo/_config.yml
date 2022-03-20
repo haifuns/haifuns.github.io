@@ -227,6 +227,9 @@ project:
 roaming:
   - year: 2022
     list:
+      - type: movie
+        date: "03-19"
+        text_value: "蜘蛛侠3：英雄无归"
       - type: book
         date: "03-16"
         text_value: "2010：太空漫游"
