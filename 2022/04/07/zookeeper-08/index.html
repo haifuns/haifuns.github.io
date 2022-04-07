@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>【ZooKeeper源码】Watcher机制 | haifuns的博客</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="ZooKeeper," />
+  
+
+  <meta name="description" content="本篇将继续上一篇消息处理器链对create消息的处理，分析在最后FinalRequestProcessor中对内存数据库进行数据操作，以及如何实现的watcher回调机制。 注册watcher以客户端执行getData时注册Watcher为例： 客户端注册123456789101112131415161718192021222324252627282930313233343536373839404">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【ZooKeeper源码】Watcher机制">
+<meta property="og:url" content="https://haifuns.com/2022/04/07/zookeeper-08/index.html">
+<meta property="og:site_name" content="haifuns的博客">
+<meta property="og:description" content="本篇将继续上一篇消息处理器链对create消息的处理，分析在最后FinalRequestProcessor中对内存数据库进行数据操作，以及如何实现的watcher回调机制。 注册watcher以客户端执行getData时注册Watcher为例： 客户端注册123456789101112131415161718192021222324252627282930313233343536373839404">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-04-07T19:35:00.000Z">
+<meta property="article:modified_time" content="2022-04-07T11:33:29.808Z">
+<meta property="article:author" content="haifuns">
+<meta property="article:tag" content="ZooKeeper">
+<meta name="twitter:card" content="summary">
+
+  
+
+  
+    <link rel="icon" href="/images/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbeddx" rel="stylesheet">
+
+
+  
+    
+<link rel="stylesheet" href="/css/personal-style.css">
+
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?d3c8edb388553a2084296cbfe9a0785a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
+
+<meta name="generator" content="Hexo 5.4.1">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="haifuns的博客" type="application/atom+xml">
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header CENTER">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/categories/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            分类
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/roaming/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            漫游
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/atom.xml"
+            rel="noopener noreferrer"
+            target="_blank"
+            >
+            RSS
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/search/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%B3%A8%E5%86%8Cwatcher"><span class="toc-text">注册watcher</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%B3%A8%E5%86%8C"><span class="toc-text">客户端注册</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%B3%A8%E5%86%8C"><span class="toc-text">服务端注册</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%9E%E8%B0%83watcher"><span class="toc-text">回调watcher</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E7%AB%AF%E5%9B%9E%E8%B0%83"><span class="toc-text">服务端回调</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%A4%84%E7%90%86"><span class="toc-text">客户端处理</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%B0%8F%E7%BB%93"><span class="toc-text">小结</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post CENTER">
+   <article id="post-zookeeper-08" class="article article-type-post" itemprop="blogPost">
+  <header class="article-header">
+    <h1 class="post-title">【ZooKeeper源码】Watcher机制</h1>
+
+    <div class="article-meta">
+      <span>
+        <i class="icon-calendar"></i>
+        <span>2022.04.07</span>
+      </span>
+
+      
+        <span class="article-author">
+          <i class="icon-user"></i>
+          <span>haifuns</span>
+        </span>
+      
+
+      
+  <span class="article-category">
+    <i class="icon-list"></i>
+    <a class="article-category-link" href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F/">分布式</a>
+  </span>
+
+
+
+      
+
+      
+      <i class="fa fa-eye"></i> 
+        <span id="busuanzi_container_page_pv">
+           &nbsp热度 <span id="busuanzi_value_page_pv">
+           <i class="fa fa-spinner fa-spin"></i></span>℃
+        </span>
+      
+      
+    </div>
+  </header>
+
+  <div class="article-content">
+    
+      <p>本篇将继续上一篇消息处理器链对create消息的处理，分析在最后FinalRequestProcessor中对内存数据库进行数据操作，以及如何实现的watcher回调机制。</p>
+<h1 id="注册watcher"><a href="#注册watcher" class="headerlink" title="注册watcher"></a>注册watcher</h1><p>以客户端执行getData时注册Watcher为例：</p>
+<h2 id="客户端注册"><a href="#客户端注册" class="headerlink" title="客户端注册"></a>客户端注册</h2><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ZooKeeper.java</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">byte</span>[] getData(<span class="keyword">final</span> String path, Watcher watcher, Stat stat)</span><br><span class="line"><span class="keyword">throws</span> KeeperException, InterruptedException {</span><br><span class="line">    <span class="keyword">final</span> String clientPath = path;</span><br><span class="line">    PathUtils.validatePath(clientPath);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// the watch contains the un-chroot path</span></span><br><span class="line">    WatchRegistration wcb = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">if</span> (watcher != <span class="keyword">null</span>) {</span><br><span class="line">        wcb = <span class="keyword">new</span> DataWatchRegistration(watcher, clientPath);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">final</span> String serverPath = prependChroot(clientPath);</span><br><span class="line"></span><br><span class="line">    RequestHeader h = <span class="keyword">new</span> RequestHeader();</span><br><span class="line">    h.setType(ZooDefs.OpCode.getData);</span><br><span class="line">    GetDataRequest request = <span class="keyword">new</span> GetDataRequest();</span><br><span class="line">    request.setPath(serverPath);</span><br><span class="line">    request.setWatch(watcher != <span class="keyword">null</span>);</span><br><span class="line">    GetDataResponse response = <span class="keyword">new</span> GetDataResponse();</span><br><span class="line">    ReplyHeader r = cnxn.submitRequest(h, request, response, wcb);</span><br><span class="line">    <span class="keyword">if</span> (r.getErr() != <span class="number">0</span>) {</span><br><span class="line">        <span class="keyword">throw</span> KeeperException.create(KeeperException.Code.get(r.getErr()),</span><br><span class="line">                                     clientPath);</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">if</span> (stat != <span class="keyword">null</span>) {</span><br><span class="line">        DataTree.copyStat(response.getStat(), stat);</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> response.getData();</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// ClientCnxn.SendThread.java</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">readResponse</span><span class="params">(ByteBuffer incomingBuffer)</span> <span class="keyword">throws</span> IOException </span>{</span><br><span class="line">    ByteBufferInputStream bbis = <span class="keyword">new</span> ByteBufferInputStream(</span><br><span class="line">        incomingBuffer);</span><br><span class="line">    BinaryInputArchive bbia = BinaryInputArchive.getArchive(bbis);</span><br><span class="line">    ReplyHeader replyHdr = <span class="keyword">new</span> ReplyHeader();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line">    Packet packet;</span><br><span class="line">    <span class="keyword">synchronized</span> (pendingQueue) {</span><br><span class="line">        <span class="keyword">if</span> (pendingQueue.size() == <span class="number">0</span>) {</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IOException(<span class="string">"Nothing in the queue, but got "</span></span><br><span class="line">                                  + replyHdr.getXid());</span><br><span class="line">        }</span><br><span class="line">        packet = pendingQueue.remove();</span><br><span class="line">    }</span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">     * Since requests are processed in order, we better get a response</span></span><br><span class="line"><span class="comment">     * to the first request!</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">try</span> {</span><br><span class="line">        <span class="keyword">if</span> (packet.requestHeader.getXid() != replyHdr.getXid()) {</span><br><span class="line">            packet.replyHeader.setErr(</span><br><span class="line">                KeeperException.Code.CONNECTIONLOSS.intValue());</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> IOException(<span class="string">"Xid out of order. Got Xid "</span></span><br><span class="line">                                  + replyHdr.getXid() + <span class="string">" with err "</span> +</span><br><span class="line">                                  + replyHdr.getErr() +</span><br><span class="line">                                  <span class="string">" expected Xid "</span></span><br><span class="line">                                  + packet.requestHeader.getXid()</span><br><span class="line">                                  + <span class="string">" for a packet with details: "</span></span><br><span class="line">                                  + packet );</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        packet.replyHeader.setXid(replyHdr.getXid());</span><br><span class="line">        packet.replyHeader.setErr(replyHdr.getErr());</span><br><span class="line">        packet.replyHeader.setZxid(replyHdr.getZxid());</span><br><span class="line">        <span class="keyword">if</span> (replyHdr.getZxid() &gt; <span class="number">0</span>) {</span><br><span class="line">            lastZxid = replyHdr.getZxid();</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">if</span> (packet.response != <span class="keyword">null</span> &amp;&amp; replyHdr.getErr() == <span class="number">0</span>) {</span><br><span class="line">            packet.response.deserialize(bbia, <span class="string">"response"</span>);</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (LOG.isDebugEnabled()) {</span><br><span class="line">            LOG.debug(<span class="string">"Reading reply sessionid:0x"</span></span><br><span class="line">                      + Long.toHexString(sessionId) + <span class="string">", packet:: "</span> + packet);</span><br><span class="line">        }</span><br><span class="line">    } <span class="keyword">finally</span> {</span><br><span class="line">        finishPacket(packet);</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// ClientCnxn.java</span></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">finishPacket</span><span class="params">(Packet p)</span> </span>{</span><br><span class="line">    <span class="keyword">if</span> (p.watchRegistration != <span class="keyword">null</span>) {</span><br><span class="line">        <span class="comment">// 客户端注册监听器</span></span><br><span class="line">        p.watchRegistration.register(p.replyHeader.getErr());</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (p.cb == <span class="keyword">null</span>) {</span><br><span class="line">        <span class="keyword">synchronized</span> (p) {</span><br><span class="line">            p.finished = <span class="keyword">true</span>;</span><br><span class="line">            p.notifyAll();</span><br><span class="line">        }</span><br><span class="line">    } <span class="keyword">else</span> {</span><br><span class="line">        p.finished = <span class="keyword">true</span>;</span><br><span class="line">        eventThread.queuePacket(p);</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// ZooKeeper.WatchReginstration.java</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">register</span><span class="params">(<span class="keyword">int</span> rc)</span> </span>{</span><br><span class="line">    <span class="keyword">if</span> (shouldAddWatch(rc)) {</span><br><span class="line">        Map&lt;String, Set&lt;Watcher&gt;&gt; watches = getWatches(rc);</span><br><span class="line">        <span class="keyword">synchronized</span> (watches) {</span><br><span class="line">            Set&lt;Watcher&gt; watchers = watches.get(clientPath);</span><br><span class="line">            <span class="keyword">if</span> (watchers == <span class="keyword">null</span>) {</span><br><span class="line">                watchers = <span class="keyword">new</span> HashSet&lt;Watcher&gt;();</span><br><span class="line">                watches.put(clientPath, watchers);</span><br><span class="line">            }</span><br><span class="line">            watchers.add(watcher);</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DataWatchRegistration</span> <span class="keyword">extends</span> <span class="title">WatchRegistration</span> </span>{</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">DataWatchRegistration</span><span class="params">(Watcher watcher, String clientPath)</span> </span>{</span><br><span class="line">        <span class="keyword">super</span>(watcher, clientPath);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">protected</span> Map&lt;String, Set&lt;Watcher&gt;&gt; getWatches(<span class="keyword">int</span> rc) {</span><br><span class="line">        <span class="keyword">return</span> watchManager.dataWatches;</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">ZKWatchManager</span> <span class="keyword">implements</span> <span class="title">ClientWatchManager</span> </span>{</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Map&lt;String, Set&lt;Watcher&gt;&gt; dataWatches =</span><br><span class="line">        <span class="keyword">new</span> HashMap&lt;String, Set&lt;Watcher&gt;&gt;();</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Map&lt;String, Set&lt;Watcher&gt;&gt; existWatches =</span><br><span class="line">        <span class="keyword">new</span> HashMap&lt;String, Set&lt;Watcher&gt;&gt;();</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> Map&lt;String, Set&lt;Watcher&gt;&gt; childWatches =</span><br><span class="line">        <span class="keyword">new</span> HashMap&lt;String, Set&lt;Watcher&gt;&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> Watcher defaultWatcher;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>从以上代码可知，当客户端在getData的同时注册Watcher时，在收到成功的响应后会把Watcher保存在本地内存Map中。</p>
+<h2 id="服务端注册"><a href="#服务端注册" class="headerlink" title="服务端注册"></a>服务端注册</h2><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// FinalRequestProcessor.java</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">processRequest</span><span class="params">(Request request)</span> </span>{</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span> {</span><br><span class="line">        <span class="comment">// ...</span></span><br><span class="line">        <span class="keyword">switch</span> (request.type) {</span><br><span class="line">        <span class="comment">// ...</span></span><br><span class="line">        <span class="keyword">case</span> OpCode.getData: {</span><br><span class="line">            lastOp = <span class="string">"GETD"</span>;</span><br><span class="line">            GetDataRequest getDataRequest = <span class="keyword">new</span> GetDataRequest();</span><br><span class="line">            ByteBufferInputStream.byteBuffer2Record(request.request,</span><br><span class="line">                                                    getDataRequest);</span><br><span class="line">            <span class="comment">// 从内存中查询指定路径node</span></span><br><span class="line">            DataNode n = zks.getZKDatabase().getNode(getDataRequest.getPath());</span><br><span class="line">            <span class="keyword">if</span> (n == <span class="keyword">null</span>) {</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> KeeperException.NoNodeException();</span><br><span class="line">            }</span><br><span class="line">            Long aclL;</span><br><span class="line">            <span class="keyword">synchronized</span> (n) {</span><br><span class="line">                aclL = n.acl;</span><br><span class="line">            }</span><br><span class="line">            PrepRequestProcessor.checkACL(zks, zks.getZKDatabase().convertLong(aclL),</span><br><span class="line">                                          ZooDefs.Perms.READ,</span><br><span class="line">                                          request.authInfo);</span><br><span class="line">            Stat stat = <span class="keyword">new</span> Stat();</span><br><span class="line">            <span class="comment">// 获得数据、处理watcher</span></span><br><span class="line">            <span class="keyword">byte</span> b[] = zks.getZKDatabase().getData(getDataRequest.getPath(), stat,</span><br><span class="line">                                                   getDataRequest.getWatch() ? cnxn : <span class="keyword">null</span>);</span><br><span class="line">            rsp = <span class="keyword">new</span> GetDataResponse(b, stat);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        }</span><br><span class="line">            <span class="comment">// ...</span></span><br><span class="line">        }</span><br><span class="line">    } <span class="keyword">catch</span> (Exception e) {</span><br><span class="line">        <span class="comment">// ...</span></span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// ZKDatabase.java</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">byte</span>[] getData(String path, Stat stat, Watcher watcher)</span><br><span class="line"><span class="keyword">throws</span> KeeperException.NoNodeException {</span><br><span class="line">    <span class="keyword">return</span> dataTree.getData(path, stat, watcher);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// DataTree.java</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">byte</span>[] getData(String path, Stat stat, Watcher watcher)</span><br><span class="line"><span class="keyword">throws</span> KeeperException.NoNodeException {</span><br><span class="line">    DataNode n = nodes.get(path);</span><br><span class="line">    <span class="keyword">if</span> (n == <span class="keyword">null</span>) {</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> KeeperException.NoNodeException();</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">synchronized</span> (n) {</span><br><span class="line">        n.copyStat(stat);</span><br><span class="line">        <span class="keyword">if</span> (watcher != <span class="keyword">null</span>) {</span><br><span class="line">            <span class="comment">// 服务端添加watcher</span></span><br><span class="line">            dataWatches.addWatch(path, watcher);</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">return</span> n.data;</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// WatcherManager.java</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> HashMap&lt;String, HashSet&lt;Watcher&gt;&gt; watchTable = <span class="keyword">new</span> HashMap&lt;String, HashSet&lt;Watcher&gt;&gt;();</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> HashMap&lt;Watcher, HashSet&lt;String&gt;&gt; watch2Paths = <span class="keyword">new</span> HashMap&lt;Watcher, HashSet&lt;String&gt;&gt;();</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">addWatch</span><span class="params">(String path, Watcher watcher)</span> </span>{</span><br><span class="line">    HashSet&lt;Watcher&gt; list = watchTable.get(path);</span><br><span class="line">    <span class="keyword">if</span> (list == <span class="keyword">null</span>) {</span><br><span class="line">        <span class="comment">// don't waste memory if there are few watches on a node</span></span><br><span class="line">        <span class="comment">// rehash when the 4th entry is added, doubling size thereafter</span></span><br><span class="line">        <span class="comment">// seems like a good compromise</span></span><br><span class="line">        list = <span class="keyword">new</span> HashSet&lt;Watcher&gt;(<span class="number">4</span>);</span><br><span class="line">        watchTable.put(path, list);</span><br><span class="line">    }</span><br><span class="line">    list.add(watcher);</span><br><span class="line"></span><br><span class="line">    HashSet&lt;String&gt; paths = watch2Paths.get(watcher);</span><br><span class="line">    <span class="keyword">if</span> (paths == <span class="keyword">null</span>) {</span><br><span class="line">        <span class="comment">// cnxns typically have many watches, so use default cap here</span></span><br><span class="line">        paths = <span class="keyword">new</span> HashSet&lt;String&gt;();</span><br><span class="line">        watch2Paths.put(watcher, paths);</span><br><span class="line">    }</span><br><span class="line">    paths.add(path);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>从以上代码可以看到，当客户端请求创建watcher时，服务端会创建watcher保存在Map结构中，其中key为path。</p>
+<h1 id="回调watcher"><a href="#回调watcher" class="headerlink" title="回调watcher"></a>回调watcher</h1><p>接下来查看Watcher被触发回调的过程，以Create为例，继续分析FinalRequestProcessor对内存数据的处理：</p>
+<h2 id="服务端回调"><a href="#服务端回调" class="headerlink" title="服务端回调"></a>服务端回调</h2><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ZooKeeperServer.java</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> ProcessTxnResult <span class="title">processTxn</span><span class="params">(TxnHeader hdr, Record txn)</span> </span>{</span><br><span class="line">    ProcessTxnResult rc;</span><br><span class="line">    <span class="keyword">int</span> opCode = hdr.getType();</span><br><span class="line">    <span class="keyword">long</span> sessionId = hdr.getClientId();</span><br><span class="line">    rc = getZKDatabase().processTxn(hdr, txn);</span><br><span class="line">    <span class="keyword">if</span> (opCode == OpCode.createSession) {</span><br><span class="line">        <span class="keyword">if</span> (txn <span class="keyword">instanceof</span> CreateSessionTxn) {</span><br><span class="line">            CreateSessionTxn cst = (CreateSessionTxn) txn;</span><br><span class="line">            sessionTracker.addSession(sessionId, cst</span><br><span class="line">                                      .getTimeOut());</span><br><span class="line">        } <span class="keyword">else</span> {</span><br><span class="line">            LOG.warn(<span class="string">"*****&gt;&gt;&gt;&gt;&gt; Got "</span></span><br><span class="line">                     + txn.getClass() + <span class="string">" "</span></span><br><span class="line">                     + txn.toString());</span><br><span class="line">        }</span><br><span class="line">    } <span class="keyword">else</span> <span class="keyword">if</span> (opCode == OpCode.closeSession) {</span><br><span class="line">        sessionTracker.removeSession(sessionId);</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> rc;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// ZKDatabase.java</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> ProcessTxnResult <span class="title">processTxn</span><span class="params">(TxnHeader hdr, Record txn)</span> </span>{</span><br><span class="line">    <span class="keyword">return</span> dataTree.processTxn(hdr, txn);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// DataTree.java</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> ProcessTxnResult <span class="title">processTxn</span><span class="params">(TxnHeader header, Record txn)</span> </span>{</span><br><span class="line">    ProcessTxnResult rc = <span class="keyword">new</span> ProcessTxnResult();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span> {</span><br><span class="line">        rc.clientId = header.getClientId();</span><br><span class="line">        rc.cxid = header.getCxid();</span><br><span class="line">        rc.zxid = header.getZxid();</span><br><span class="line">        rc.type = header.getType();</span><br><span class="line">        rc.err = <span class="number">0</span>;</span><br><span class="line">        rc.multiResult = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">switch</span> (header.getType()) {</span><br><span class="line">        <span class="keyword">case</span> OpCode.create:</span><br><span class="line">            CreateTxn createTxn = (CreateTxn) txn;</span><br><span class="line">            rc.path = createTxn.getPath();</span><br><span class="line">            createNode(</span><br><span class="line">                createTxn.getPath(),</span><br><span class="line">                createTxn.getData(),</span><br><span class="line">                createTxn.getAcl(),</span><br><span class="line">                createTxn.getEphemeral() ? header.getClientId() : <span class="number">0</span>,</span><br><span class="line">                createTxn.getParentCVersion(),</span><br><span class="line">                header.getZxid(), header.getTime());</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">            <span class="comment">// ...</span></span><br><span class="line">        }</span><br><span class="line">    } <span class="keyword">catch</span> (KeeperException e) {</span><br><span class="line">        <span class="keyword">if</span> (LOG.isDebugEnabled()) {</span><br><span class="line">            LOG.debug(<span class="string">"Failed: "</span> + header + <span class="string">":"</span> + txn, e);</span><br><span class="line">        }</span><br><span class="line">        rc.err = e.code().intValue();</span><br><span class="line">    } <span class="keyword">catch</span> (IOException e) {</span><br><span class="line">        <span class="keyword">if</span> (LOG.isDebugEnabled()) {</span><br><span class="line">            LOG.debug(<span class="string">"Failed: "</span> + header + <span class="string">":"</span> + txn, e);</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    <span class="keyword">return</span> rc;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">createNode</span><span class="params">(String path, <span class="keyword">byte</span> data[], List&lt;ACL&gt; acl,</span></span></span><br><span class="line"><span class="params"><span class="function">                         <span class="keyword">long</span> ephemeralOwner, <span class="keyword">int</span> parentCVersion, <span class="keyword">long</span> zxid, <span class="keyword">long</span> time)</span></span></span><br><span class="line"><span class="function"><span class="keyword">throws</span> KeeperException.NoNodeException,</span></span><br><span class="line"><span class="function">    KeeperException.NodeExistsException </span>{</span><br><span class="line">    <span class="keyword">int</span> lastSlash = path.lastIndexOf(<span class="string">'/'</span>);</span><br><span class="line">    String parentName = path.substring(<span class="number">0</span>, lastSlash);</span><br><span class="line">    String childName = path.substring(lastSlash + <span class="number">1</span>);</span><br><span class="line">    StatPersisted stat = <span class="keyword">new</span> StatPersisted();</span><br><span class="line">    stat.setCtime(time);</span><br><span class="line">    stat.setMtime(time);</span><br><span class="line">    stat.setCzxid(zxid);</span><br><span class="line">    stat.setMzxid(zxid);</span><br><span class="line">    stat.setPzxid(zxid);</span><br><span class="line">    stat.setVersion(<span class="number">0</span>);</span><br><span class="line">    stat.setAversion(<span class="number">0</span>);</span><br><span class="line">    stat.setEphemeralOwner(ephemeralOwner);</span><br><span class="line">    DataNode parent = nodes.get(parentName);</span><br><span class="line">    <span class="keyword">if</span> (parent == <span class="keyword">null</span>) {</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> KeeperException.NoNodeException();</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">synchronized</span> (parent) {</span><br><span class="line">        Set&lt;String&gt; children = parent.getChildren();</span><br><span class="line">        <span class="keyword">if</span> (children != <span class="keyword">null</span>) {</span><br><span class="line">            <span class="keyword">if</span> (children.contains(childName)) {</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> KeeperException.NodeExistsException();</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (parentCVersion == -<span class="number">1</span>) {</span><br><span class="line">            parentCVersion = parent.stat.getCversion();</span><br><span class="line">            parentCVersion++;</span><br><span class="line">        }</span><br><span class="line">        parent.stat.setCversion(parentCVersion);</span><br><span class="line">        parent.stat.setPzxid(zxid);</span><br><span class="line">        Long longval = convertAcls(acl);</span><br><span class="line">        DataNode child = <span class="keyword">new</span> DataNode(parent, data, longval, stat);</span><br><span class="line">        <span class="comment">// 添加到父节点下</span></span><br><span class="line">        parent.addChild(childName);</span><br><span class="line">        nodes.put(path, child);</span><br><span class="line">        <span class="keyword">if</span> (ephemeralOwner != <span class="number">0</span>) {</span><br><span class="line">            HashSet&lt;String&gt; list = ephemerals.get(ephemeralOwner);</span><br><span class="line">            <span class="keyword">if</span> (list == <span class="keyword">null</span>) {</span><br><span class="line">                list = <span class="keyword">new</span> HashSet&lt;String&gt;();</span><br><span class="line">                ephemerals.put(ephemeralOwner, list);</span><br><span class="line">            }</span><br><span class="line">            <span class="keyword">synchronized</span> (list) {</span><br><span class="line">                list.add(path);</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    <span class="comment">// now check if its one of the zookeeper node child</span></span><br><span class="line">    <span class="keyword">if</span> (parentName.startsWith(quotaZookeeper)) {</span><br><span class="line">        <span class="comment">// now check if its the limit node</span></span><br><span class="line">        <span class="keyword">if</span> (Quotas.limitNode.equals(childName)) {</span><br><span class="line">            <span class="comment">// this is the limit node</span></span><br><span class="line">            <span class="comment">// get the parent and add it to the trie</span></span><br><span class="line">            pTrie.addPath(parentName.substring(quotaZookeeper.length()));</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">if</span> (Quotas.statNode.equals(childName)) {</span><br><span class="line">            updateQuotaForPath(parentName</span><br><span class="line">                               .substring(quotaZookeeper.length()));</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    <span class="comment">// also check to update the quotas for this node</span></span><br><span class="line">    String lastPrefix;</span><br><span class="line">    <span class="keyword">if</span> ((lastPrefix = getMaxPrefixWithQuota(path)) != <span class="keyword">null</span>) {</span><br><span class="line">        <span class="comment">// ok we have some match and need to update</span></span><br><span class="line">        updateCount(lastPrefix, <span class="number">1</span>);</span><br><span class="line">        updateBytes(lastPrefix, data == <span class="keyword">null</span> ? <span class="number">0</span> : data.length);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// znode发生变化后, 触发当前节点以及父节点上的watcher监听器</span></span><br><span class="line">    dataWatches.triggerWatch(path, Event.EventType.NodeCreated);</span><br><span class="line">    childWatches.triggerWatch(parentName.equals(<span class="string">""</span>) ? <span class="string">"/"</span> : parentName,</span><br><span class="line">                              Event.EventType.NodeChildrenChanged);</span><br><span class="line">    <span class="keyword">return</span> path;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// WatcherManager.java</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Set&lt;Watcher&gt; <span class="title">triggerWatch</span><span class="params">(String path, EventType type)</span> </span>{</span><br><span class="line">    <span class="keyword">return</span> triggerWatch(path, type, <span class="keyword">null</span>);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> Set&lt;Watcher&gt; <span class="title">triggerWatch</span><span class="params">(String path, EventType type, Set&lt;Watcher&gt; supress)</span> </span>{</span><br><span class="line">    WatchedEvent e = <span class="keyword">new</span> WatchedEvent(type,</span><br><span class="line">                                      KeeperState.SyncConnected, path);</span><br><span class="line">    HashSet&lt;Watcher&gt; watchers;</span><br><span class="line">    <span class="keyword">synchronized</span> (<span class="keyword">this</span>) {</span><br><span class="line">        <span class="comment">// 触发watcher后, 服务端直接删除此节点上的所有watcher</span></span><br><span class="line">        watchers = watchTable.remove(path);</span><br><span class="line">        <span class="keyword">if</span> (watchers == <span class="keyword">null</span> || watchers.isEmpty()) {</span><br><span class="line">            <span class="keyword">if</span> (LOG.isTraceEnabled()) {</span><br><span class="line">                ZooTrace.logTraceMessage(LOG,</span><br><span class="line">                                         ZooTrace.EVENT_DELIVERY_TRACE_MASK,</span><br><span class="line">                                         <span class="string">"No watchers for "</span> + path);</span><br><span class="line">            }</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">for</span> (Watcher w : watchers) {</span><br><span class="line">            HashSet&lt;String&gt; paths = watch2Paths.get(w);</span><br><span class="line">            <span class="keyword">if</span> (paths != <span class="keyword">null</span>) {</span><br><span class="line">                paths.remove(path);</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">for</span> (Watcher w : watchers) {</span><br><span class="line">        <span class="keyword">if</span> (supress != <span class="keyword">null</span> &amp;&amp; supress.contains(w)) {</span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">        }</span><br><span class="line">        w.process(e);</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> watchers;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// NIOServerCnxn.java</span></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">synchronized</span> <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">process</span><span class="params">(WatchedEvent event)</span> </span>{</span><br><span class="line">    ReplyHeader h = <span class="keyword">new</span> ReplyHeader(-<span class="number">1</span>, -<span class="number">1L</span>, <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">if</span> (LOG.isTraceEnabled()) {</span><br><span class="line">        ZooTrace.logTraceMessage(LOG, ZooTrace.EVENT_DELIVERY_TRACE_MASK,</span><br><span class="line">                                 <span class="string">"Deliver event "</span> + event + <span class="string">" to 0x"</span></span><br><span class="line">                                 + Long.toHexString(<span class="keyword">this</span>.sessionId)</span><br><span class="line">                                 + <span class="string">" through "</span> + <span class="keyword">this</span>);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Convert WatchedEvent to a type that can be sent over the wire</span></span><br><span class="line">    WatcherEvent e = event.getWrapper();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 发送监听器事件到客户端</span></span><br><span class="line">    sendResponse(h, e, <span class="string">"notification"</span>);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">synchronized</span> <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sendResponse</span><span class="params">(ReplyHeader h, Record r, String tag)</span> </span>{</span><br><span class="line">    <span class="keyword">try</span> {</span><br><span class="line">        ByteArrayOutputStream baos = <span class="keyword">new</span> ByteArrayOutputStream();</span><br><span class="line">        <span class="comment">// Make space for length</span></span><br><span class="line">        BinaryOutputArchive bos = BinaryOutputArchive.getArchive(baos);</span><br><span class="line">        <span class="keyword">try</span> {</span><br><span class="line">            baos.write(fourBytes);</span><br><span class="line">            bos.writeRecord(h, <span class="string">"header"</span>);</span><br><span class="line">            <span class="keyword">if</span> (r != <span class="keyword">null</span>) {</span><br><span class="line">                bos.writeRecord(r, tag);</span><br><span class="line">            }</span><br><span class="line">            baos.close();</span><br><span class="line">        } <span class="keyword">catch</span> (IOException e) {</span><br><span class="line">            LOG.error(<span class="string">"Error serializing response"</span>);</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">byte</span> b[] = baos.toByteArray();</span><br><span class="line">        ByteBuffer bb = ByteBuffer.wrap(b);</span><br><span class="line">        bb.putInt(b.length - <span class="number">4</span>).rewind();</span><br><span class="line">        sendBuffer(bb);</span><br><span class="line">        <span class="keyword">if</span> (h.getXid() &gt; <span class="number">0</span>) {</span><br><span class="line">            <span class="keyword">synchronized</span> (<span class="keyword">this</span>) {</span><br><span class="line">                outstandingRequests--;</span><br><span class="line">            }</span><br><span class="line">            <span class="comment">// check throttling</span></span><br><span class="line">            <span class="keyword">synchronized</span> (<span class="keyword">this</span>.factory) {</span><br><span class="line">                <span class="keyword">if</span> (zkServer.getInProcess() &lt; outstandingLimit</span><br><span class="line">                        || outstandingRequests &lt; <span class="number">1</span>) {</span><br><span class="line">                    sk.selector().wakeup();</span><br><span class="line">                    enableRecv();</span><br><span class="line">                }</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">    } <span class="keyword">catch</span> (Exception e) {</span><br><span class="line">        LOG.warn(<span class="string">"Unexpected exception. Destruction averted."</span>, e);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>可以看到，在create时，构建了一个DataNode节点放到父节点下，然后删除并触发父节点和当前节点的Watcher事件，发送监听器事件到客户端。</p>
+<h2 id="客户端处理"><a href="#客户端处理" class="headerlink" title="客户端处理"></a>客户端处理</h2><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ClientCnxn.SendThread.java</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">readResponse</span><span class="params">(ByteBuffer incomingBuffer)</span> <span class="keyword">throws</span> IOException </span>{</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">    <span class="keyword">if</span> (replyHdr.getXid() == -<span class="number">1</span>) {</span><br><span class="line">        <span class="comment">// -1 means notification</span></span><br><span class="line">        <span class="keyword">if</span> (LOG.isDebugEnabled()) {</span><br><span class="line">            LOG.debug(<span class="string">"Got notification sessionid:0x"</span></span><br><span class="line">                      + Long.toHexString(sessionId));</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 收到事件通知</span></span><br><span class="line">        WatcherEvent event = <span class="keyword">new</span> WatcherEvent();</span><br><span class="line">        event.deserialize(bbia, <span class="string">"response"</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// convert from a server path to a client path</span></span><br><span class="line">        <span class="keyword">if</span> (chrootPath != <span class="keyword">null</span>) {</span><br><span class="line">            String serverPath = event.getPath();</span><br><span class="line">            <span class="keyword">if</span> (serverPath.compareTo(chrootPath) == <span class="number">0</span>)</span><br><span class="line">                event.setPath(<span class="string">"/"</span>);</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">if</span> (serverPath.length() &gt; chrootPath.length())</span><br><span class="line">                event.setPath(serverPath.substring(chrootPath.length()));</span><br><span class="line">            <span class="keyword">else</span> {</span><br><span class="line">                LOG.warn(<span class="string">"Got server path "</span> + event.getPath()</span><br><span class="line">                         + <span class="string">" which is too short for chroot path "</span></span><br><span class="line">                         + chrootPath);</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        WatchedEvent we = <span class="keyword">new</span> WatchedEvent(event);</span><br><span class="line">        <span class="keyword">if</span> (LOG.isDebugEnabled()) {</span><br><span class="line">            LOG.debug(<span class="string">"Got "</span> + we + <span class="string">" for sessionid 0x"</span></span><br><span class="line">                      + Long.toHexString(sessionId));</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        eventThread.queueEvent( we );</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// ClientCnxn.EventThread.java</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> LinkedBlockingQueue&lt;Object&gt; waitingEvents = <span class="keyword">new</span> LinkedBlockingQueue&lt;Object&gt;();</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">queueEvent</span><span class="params">(WatchedEvent event)</span> </span>{</span><br><span class="line">    <span class="keyword">if</span> (event.getType() == EventType.None</span><br><span class="line">            &amp;&amp; sessionState == event.getState()) {</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    }</span><br><span class="line">    sessionState = event.getState();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// materialize the watchers based on the event</span></span><br><span class="line">    WatcherSetEventPair pair = <span class="keyword">new</span> WatcherSetEventPair(</span><br><span class="line">        watcher.materialize(event.getState(), event.getType(),</span><br><span class="line">                            event.getPath()),</span><br><span class="line">        event);</span><br><span class="line">    <span class="comment">// queue the pair (watch set &amp; event) for later processing</span></span><br><span class="line">    waitingEvents.add(pair);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>{</span><br><span class="line">    <span class="keyword">try</span> {</span><br><span class="line">        isRunning = <span class="keyword">true</span>;</span><br><span class="line">        <span class="keyword">while</span> (<span class="keyword">true</span>) {</span><br><span class="line">            Object event = waitingEvents.take();</span><br><span class="line">            <span class="keyword">if</span> (event == eventOfDeath) {</span><br><span class="line">                wasKilled = <span class="keyword">true</span>;</span><br><span class="line">            } <span class="keyword">else</span> {</span><br><span class="line">                <span class="comment">// 处理watcher事件</span></span><br><span class="line">                processEvent(event);</span><br><span class="line">            }</span><br><span class="line">            <span class="keyword">if</span> (wasKilled)</span><br><span class="line">                <span class="keyword">synchronized</span> (waitingEvents) {</span><br><span class="line">                    <span class="keyword">if</span> (waitingEvents.isEmpty()) {</span><br><span class="line">                        isRunning = <span class="keyword">false</span>;</span><br><span class="line">                        <span class="keyword">break</span>;</span><br><span class="line">                    }</span><br><span class="line">                }</span><br><span class="line">        }</span><br><span class="line">    } <span class="keyword">catch</span> (InterruptedException e) {</span><br><span class="line">        LOG.error(<span class="string">"Event thread exiting due to interruption"</span>, e);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    LOG.info(<span class="string">"EventThread shut down"</span>);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">processEvent</span><span class="params">(Object event)</span> </span>{</span><br><span class="line">    <span class="keyword">try</span> {</span><br><span class="line">        <span class="keyword">if</span> (event <span class="keyword">instanceof</span> WatcherSetEventPair) {</span><br><span class="line">            <span class="comment">// each watcher will process the event</span></span><br><span class="line">            WatcherSetEventPair pair = (WatcherSetEventPair) event;</span><br><span class="line">            <span class="keyword">for</span> (Watcher watcher : pair.watchers) {</span><br><span class="line">                <span class="keyword">try</span> {</span><br><span class="line">                    <span class="comment">// 回调客户端注册的监听器</span></span><br><span class="line">                    watcher.process(pair.event);</span><br><span class="line">                } <span class="keyword">catch</span> (Throwable t) {</span><br><span class="line">                    LOG.error(<span class="string">"Error while calling watcher "</span>, t);</span><br><span class="line">                }</span><br><span class="line">            }</span><br><span class="line">        } <span class="keyword">else</span> {</span><br><span class="line">            <span class="comment">// ...</span></span><br><span class="line">        }</span><br><span class="line">    } <span class="keyword">catch</span> (Throwable t) {</span><br><span class="line">        LOG.error(<span class="string">"Caught unexpected throwable"</span>, t);</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// ZooKeeper.ZKWatchManager.java</span></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Set&lt;Watcher&gt; <span class="title">materialize</span><span class="params">(Watcher.Event.KeeperState state,</span></span></span><br><span class="line"><span class="params"><span class="function">                                Watcher.Event.EventType type,</span></span></span><br><span class="line"><span class="params"><span class="function">                                String clientPath)</span> </span>{</span><br><span class="line">    Set&lt;Watcher&gt; result = <span class="keyword">new</span> HashSet&lt;Watcher&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">switch</span> (type) {</span><br><span class="line">    <span class="keyword">case</span> None:</span><br><span class="line">        result.add(defaultWatcher);</span><br><span class="line">        <span class="keyword">boolean</span> clear = ClientCnxn.getDisableAutoResetWatch() &amp;&amp;</span><br><span class="line">                        state != Watcher.Event.KeeperState.SyncConnected;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">synchronized</span> (dataWatches) {</span><br><span class="line">            <span class="keyword">for</span> (Set&lt;Watcher&gt; ws : dataWatches.values()) {</span><br><span class="line">                result.addAll(ws);</span><br><span class="line">            }</span><br><span class="line">            <span class="keyword">if</span> (clear) {</span><br><span class="line">                dataWatches.clear();</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        <span class="keyword">synchronized</span> (existWatches) {</span><br><span class="line">            <span class="keyword">for</span> (Set&lt;Watcher&gt; ws : existWatches.values()) {</span><br><span class="line">                result.addAll(ws);</span><br><span class="line">            }</span><br><span class="line">            <span class="keyword">if</span> (clear) {</span><br><span class="line">                existWatches.clear();</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        <span class="keyword">synchronized</span> (childWatches) {</span><br><span class="line">            <span class="keyword">for</span> (Set&lt;Watcher&gt; ws : childWatches.values()) {</span><br><span class="line">                result.addAll(ws);</span><br><span class="line">            }</span><br><span class="line">            <span class="keyword">if</span> (clear) {</span><br><span class="line">                childWatches.clear();</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    <span class="keyword">case</span> NodeDataChanged:</span><br><span class="line">    <span class="keyword">case</span> NodeCreated:</span><br><span class="line">        <span class="keyword">synchronized</span> (dataWatches) {</span><br><span class="line">            addTo(dataWatches.remove(clientPath), result);</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">synchronized</span> (existWatches) {</span><br><span class="line">            addTo(existWatches.remove(clientPath), result);</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> NodeChildrenChanged:</span><br><span class="line">        <span class="keyword">synchronized</span> (childWatches) {</span><br><span class="line">            addTo(childWatches.remove(clientPath), result);</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> NodeDeleted:</span><br><span class="line">        <span class="keyword">synchronized</span> (dataWatches) {</span><br><span class="line">            addTo(dataWatches.remove(clientPath), result);</span><br><span class="line">        }</span><br><span class="line">        <span class="comment">// XXX This shouldn't be needed, but just in case</span></span><br><span class="line">        <span class="keyword">synchronized</span> (existWatches) {</span><br><span class="line">            Set&lt;Watcher&gt; list = existWatches.remove(clientPath);</span><br><span class="line">            <span class="keyword">if</span> (list != <span class="keyword">null</span>) {</span><br><span class="line">                addTo(existWatches.remove(clientPath), result);</span><br><span class="line">                LOG.warn(<span class="string">"We are triggering an exists watch for delete! Shouldn't happen!"</span>);</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">synchronized</span> (childWatches) {</span><br><span class="line">            addTo(childWatches.remove(clientPath), result);</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">default</span>:</span><br><span class="line">        String msg = <span class="string">"Unhandled watch event type "</span> + type</span><br><span class="line">                     + <span class="string">" with state "</span> + state + <span class="string">" on path "</span> + clientPath;</span><br><span class="line">        LOG.error(msg);</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(msg);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>从以上代码可以看到，当watcher回调消息到达客户端时，首先会从内存中找到对应的watcher，然后把消息写入内存队列中，由单独的线程依次从队列中获取消息，回调watcher处理逻辑。</p>
+<h1 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h1><ul>
+<li>watcher注册过程：当客户端发起请求注册watcher时，服务端会将watcher保存到内存Map中，key为path，value为watcher集合，客户端收到处理成功响应后也会将watcher放到本地内存中等待回调。</li>
+<li>watcher触发回调：当服务端数据变化时，会触发所有path对应的watcher，向客户端发送回调消息。客户端收到回调消息后，首先会找到path对应的watcher，然后执行watcher回调处理。</li>
+</ul>
+
+    
+  </div>
+
+</article>
+
+
+   
+
+   
+  <div class="box-prev-next clearfix">
+    <a class="show pull-left" href="/2022/03/21/zookeeper-07/">
+        <i class="icon icon-angle-left"></i>
+    </a>
+    <a class="hide pull-right" href="/">
+        <i class="icon icon-angle-right"></i>
+    </a>
+  </div>
+
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/categories/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              分类
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/roaming/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              漫游
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/atom.xml"
+              rel="noopener noreferrer"
+              target="_blank"
+              >
+              RSS
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/search/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              搜索
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+    
+    
+
+    
+
+    
+    
+
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script>
+    <div id="comment" class="vcomment" ></div>
+    <script>
+        var notify = 'false' == true ? true : false;
+        var verify = 'false' == true ? true : false;
+        var GUEST_INFO = ['nick','mail','link'];
+        var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+            return GUEST_INFO.indexOf(item) > -1
+        });
+        guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+        window.valine = new Valine({
+            el: '.vcomment',
+            notify: notify,
+            verify: verify,
+            appId: "masttnqEt9G69mj43i9oaA1C-gzGzoHsz",
+            appKey: "hgIx9VKn0GLDhRcLxQuNMl0E",
+            avatar:'mm',
+            placeholder: "Say something",
+            guest_info:guest_info,
+            pageSize:'10'
+        });
+    </script>
+  
+    
+
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>
