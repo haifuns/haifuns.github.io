@@ -228,6 +228,9 @@ roaming:
   - year: 2022
     list:
       - type: movie
+        date: "04-07"
+        text_value: "入殓师"
+      - type: movie
         date: "03-19"
         text_value: "蜘蛛侠3：英雄无归"
       - type: book
