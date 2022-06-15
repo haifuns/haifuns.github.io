@@ -9,10 +9,9 @@ date: 2022-06-15 10:00:00
 ---
 
 算法学习路线：
-- [【算法基础】排序]()
+- [【算法基础】排序](https://haifuns.com/2022/06/15/algorithm-sort/)
 
 常备算法网站：
-- [leetcode](https://leetcode.cn/problemset/all/)
+- [leetcode：算法题库](https://leetcode.cn/problemset/all/)
 - [visualgo：算法可视化](https://visualgo.net/zh)
-- [速查表：常用算法数据结构复杂度](https://www.bigocheatsheet.com/)
-
+- [bigocheatsheet：常用算法数据结构复杂度速查表](https://www.bigocheatsheet.com/)
