@@ -23,7 +23,7 @@
 <meta property="og:description" content="上一篇我们分析了leader选举过程，但是对于期间节点间的连接是何时建立的、消息如何交换并不了解，本篇中我们将对leader选举过程中集群节点间的网络通信细节进行分析。 连接建立节点间的网络连接建立分为主动建立和被动建立两个部分。 主动建立在leader选举过程中，发送给自己投票的通知后，会循环交换通知直到选举出leader，过程中会收取消息，如果拉取不到消息并且还是通知没有发送出去就跟所有其他节">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-02-20T17:15:00.000Z">
-<meta property="article:modified_time" content="2022-06-20T14:33:35.808Z">
+<meta property="article:modified_time" content="2022-06-21T14:11:33.464Z">
 <meta property="article:author" content="haifuns">
 <meta property="article:tag" content="ZooKeeper">
 <meta name="twitter:card" content="summary">
