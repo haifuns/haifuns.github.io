@@ -1,4 +1,4 @@
-title: 【算法基础】基础数据结构
+title: 【算法基础】数据结构
 author: haifun
 tags:
   - 算法
