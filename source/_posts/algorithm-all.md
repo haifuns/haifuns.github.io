@@ -15,7 +15,8 @@ date: 2022-06-15 10:00:00
 - [【算法基础】数据结构](https://haifuns.com/2022/06/24/algorithm-datastructure)
 - [【算法基础】递归](https://haifuns.com/2022/06/26/algorithm-recursion)
 - [【算法基础】归并排序](https://haifuns.com/2022/06/29/algorithm-mergesort)
-- [【算法基础】排序算法](https://haifuns.com/2022/06/21/algorithm-sort/)
+- [【算法基础】快速排序](https://haifuns.com/2022/06/30/algorithm-quicksort)
+- [【算法基础】排序算法（总）](https://haifuns.com/2022/06/21/algorithm-sort/)
 
 常备算法网站：
 - [leetcode：算法题库](https://leetcode.cn/problemset/all/)

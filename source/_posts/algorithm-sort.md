@@ -1,4 +1,4 @@
-title: 【算法基础】排序算法
+title: 【算法基础】排序算法（总）
 author: haifun
 tags:
   - 算法
@@ -243,6 +243,8 @@ public static void merge(int[] arr, int l, int mid, int r) {
 
 时间复杂度：
 
+根据Master公式，T(N) = 2 * T(N/2) + O(N)，a=2，b=2，d=1, log(b,a)==d，所以时间复杂度为O(N * logN)
+
 最好情况、最坏情况，平均情况，时间复杂度都是 O(nlogn)。
 
 空间复杂度：
@@ -269,6 +271,7 @@ public static void merge(int[] arr, int l, int mid, int r) {
 ## 代码示例
 
 ```java
+// 随机快速排序
 public static void quickSort(int[] arr) {
     if (arr == null || arr.length < 2) {
         return;
@@ -280,9 +283,10 @@ public static void process(int[] arr, int l, int r) {
     if (l >= r) {
         return;
     }
-    int[] equalE = partition(arr, l, r);
-    process(arr, l, equalE[0] - 1);
-    process(arr, equalE[1] + 1, r);
+    swap(arr, l + (int) (Math.random() * (r - l + 1)), r);
+    int[] equalArea = partition(arr, l, r);
+    process(arr, l, equalArea[0] - 1);
+    process(arr, equalArea[1] + 1, r);
 }
 
 // 在arr[l...r]范围上, 对arr[r]做划分值
@@ -309,6 +313,12 @@ public static int[] partition(int[] arr, int l, int r) {
 
     // 返回等于位置左右边界
     return new int[] { lessR + 1, moreL };
+}
+
+public static void swap(int[] arr, int i, int j) {
+    int tmp = arr[i];
+    arr[i] = arr[j];
+    arr[j] = tmp;
 }
 ```
 
