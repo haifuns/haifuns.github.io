@@ -227,19 +227,19 @@ project:
 roaming:
   - year: 2022
     list:
-     - type: movie
+      - type: movie
         date: "07-03"
         text_value: "我和我的父辈"
-     - type: movie
+      - type: movie
         date: "07-02"
         text_value: "奇异博士2"
-     - type: movie
+      - type: movie
         date: "05-02"
         text_value: "蓝白红三部曲之红"
-     - type: movie
+      - type: movie
         date: "05-01"
         text_value: "蓝白红三部曲之白"
-     - type: movie
+      - type: movie
         date: "04-30"
         text_value: "蓝白红三部曲之蓝"
       - type: movie
