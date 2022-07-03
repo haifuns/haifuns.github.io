@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>【Redis】附加功能 | haifuns的博客</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="Redis," />
+  
+
+  <meta name="description" content="Redis除了提供5种基本数据结构外，还提供了一些附加功能：  慢查询分析 Redis Shell Pipeline 事务与Lua Bitmaps HyperLogLog 发布订阅 GEO">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Redis】附加功能">
+<meta property="og:url" content="https://haifuns.com/2021/01/17/redis-02/index.html">
+<meta property="og:site_name" content="haifuns的博客">
+<meta property="og:description" content="Redis除了提供5种基本数据结构外，还提供了一些附加功能：  慢查询分析 Redis Shell Pipeline 事务与Lua Bitmaps HyperLogLog 发布订阅 GEO">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-01-17T23:00:00.000Z">
+<meta property="article:modified_time" content="2022-07-03T13:56:33.213Z">
+<meta property="article:author" content="haifuns">
+<meta property="article:tag" content="Redis">
+<meta name="twitter:card" content="summary">
+
+  
+
+  
+    <link rel="icon" href="/images/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbeddx" rel="stylesheet">
+
+
+  
+    
+<link rel="stylesheet" href="/css/personal-style.css">
+
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?d3c8edb388553a2084296cbfe9a0785a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
+
+<meta name="generator" content="Hexo 5.4.1">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="haifuns的博客" type="application/atom+xml">
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header CENTER">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/categories/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            分类
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/roaming/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            漫游
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/atom.xml"
+            rel="noopener noreferrer"
+            target="_blank"
+            >
+            RSS
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/search/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%85%A2%E6%9F%A5%E8%AF%A2%E5%88%86%E6%9E%90"><span class="toc-text">慢查询分析</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E5%8F%82%E6%95%B0"><span class="toc-text">配置参数</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9F%A5%E7%9C%8B%E6%85%A2%E6%9F%A5%E8%AF%A2"><span class="toc-text">查看慢查询</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="toc-text">最佳实践</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Redis-Shell"><span class="toc-text">Redis Shell</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#redis-cli"><span class="toc-text">redis-cli</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#redis-server"><span class="toc-text">redis-server</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#redis-benchmark"><span class="toc-text">redis-benchmark</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Pipline"><span class="toc-text">Pipline</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8E%9F%E7%94%9F%E6%89%B9%E9%87%8F%E5%91%BD%E4%BB%A4%E4%B8%8EPipeline%E5%AF%B9%E6%AF%94"><span class="toc-text">原生批量命令与Pipeline对比</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8B%E5%8A%A1%E4%B8%8ELua"><span class="toc-text">事务与Lua</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8B%E5%8A%A1"><span class="toc-text">事务</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Lua"><span class="toc-text">Lua</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8Lua"><span class="toc-text">使用Lua</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#redis-api"><span class="toc-text">redis api</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AE%A1%E7%90%86Lua%E8%84%9A%E6%9C%AC"><span class="toc-text">管理Lua脚本</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Bitmaps"><span class="toc-text">Bitmaps</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%91%BD%E4%BB%A4"><span class="toc-text">命令</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#HyperLogLog"><span class="toc-text">HyperLogLog</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%91%BD%E4%BB%A4-1"><span class="toc-text">命令</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%91%E5%B8%83%E8%AE%A2%E9%98%85"><span class="toc-text">发布订阅</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%91%BD%E4%BB%A4-2"><span class="toc-text">命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-text">使用场景</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#GEO"><span class="toc-text">GEO</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%91%BD%E4%BB%A4-3"><span class="toc-text">命令</span></a></li></ol></li></ol>
+  </div>
+
+
+
+<div class="content content-post CENTER">
+   <article id="post-redis-02" class="article article-type-post" itemprop="blogPost">
+  <header class="article-header">
+    <h1 class="post-title">【Redis】附加功能</h1>
+
+    <div class="article-meta">
+      <span>
+        <i class="icon-calendar"></i>
+        <span>2021.01.17</span>
+      </span>
+
+      
+        <span class="article-author">
+          <i class="icon-user"></i>
+          <span>haifuns</span>
+        </span>
+      
+
+      
+  <span class="article-category">
+    <i class="icon-list"></i>
+    <a class="article-category-link" href="/categories/NoSQL/">NoSQL</a>
+  </span>
+
+
+
+      
+
+      
+      <i class="fa fa-eye"></i> 
+        <span id="busuanzi_container_page_pv">
+           &nbsp热度 <span id="busuanzi_value_page_pv">
+           <i class="fa fa-spinner fa-spin"></i></span>℃
+        </span>
+      
+      
+    </div>
+  </header>
+
+  <div class="article-content">
+    
+      <p>Redis除了提供5种基本数据结构外，还提供了一些附加功能：</p>
+<ul>
+<li>慢查询分析</li>
+<li>Redis Shell</li>
+<li>Pipeline</li>
+<li>事务与Lua</li>
+<li>Bitmaps</li>
+<li>HyperLogLog</li>
+<li>发布订阅</li>
+<li>GEO</li>
+</ul>
+<span id="more"></span>
+
+<h1 id="慢查询分析"><a href="#慢查询分析" class="headerlink" title="慢查询分析"></a>慢查询分析</h1><p>Redis客户端执行一条命令分为4个部分：</p>
+<ol>
+<li>发送命令</li>
+<li>命令排队</li>
+<li>命令执行</li>
+<li>返回结果</li>
+</ol>
+<p>慢查询只统计步骤3的时间，没有慢查询并不代表没有超时问题。</p>
+<h2 id="配置参数"><a href="#配置参数" class="headerlink" title="配置参数"></a>配置参数</h2><p>Redis提供<code>slowlog-log-slower-than</code>和<code>slowlog-max-len</code>两个配置。其中<code>slowlog-log-slower-than</code>用来设置阈值，单位时间是微秒，默认值是10000，执行时间超过10000微秒的命令会被记录在慢查询日志中。</p>
+<p>Redis使用了一个列表来存储慢查询日志，<code>slowlog-max-len</code>是列表的最大长度。</p>
+<p>Redis中有两种方法修改配置：</p>
+<ul>
+<li>修改配置文件</li>
+<li>使用<code>config set</code>命令动态修改</li>
+</ul>
+<p>例如：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">config set slowlog-log-slower-than 20000 # 将阈值设置为20000微妙</span><br><span class="line">config set slowlog-max-len 1000 # 将列表长度设置为1000</span><br><span class="line">config rewrite # 将配置文件持久化到本地配置文件</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="查看慢查询"><a href="#查看慢查询" class="headerlink" title="查看慢查询"></a>查看慢查询</h2><ul>
+<li>获取慢查询日志</li>
+</ul>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">slowlog get [n] # 可选参数n可以指定条数</span><br></pre></td></tr></tbody></table></figure>
+
+<p>慢查询日志由四个属性组成：</p>
+<ol>
+<li>慢查询标识id</li>
+<li>发生时间戳</li>
+<li>命令耗时</li>
+<li>执行命令和参数</li>
+</ol>
+<ul>
+<li>获取慢查询日志列表当前长度</li>
+</ul>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">slowlog len</span><br></pre></td></tr></tbody></table></figure>
+
+<ul>
+<li>慢查询日志重置</li>
+</ul>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">slowlog reset</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="最佳实践"><a href="#最佳实践" class="headerlink" title="最佳实践"></a>最佳实践</h2><ul>
+<li>slowlog-max-len配置建议：线上设置1000以上。记录慢查询时Redis会对长命令做截断处理，不会占用大量内存。</li>
+<li>slowlog-log-slower-than配置建议：默认超过10ms判定为慢查询，需要根据Redis并发量调整该值。对于高流量的场景，如果命令执行时间在1ms以上，那么Redis最多可支撑OPS不到1000。对于高OPS场景Redis建议设置为1ms。</li>
+</ul>
+<p>由于慢查询日志是一个先进先出的队列，在慢查询较多时会丢失部分日志，所以可以定时执行<code>slow get</code>命令将慢查询日志持久化到其他存储中（MySQL等）。</p>
+<h1 id="Redis-Shell"><a href="#Redis-Shell" class="headerlink" title="Redis Shell"></a>Redis Shell</h1><p>Redis提供了redis-cli、redis-server、redis-benchmarl等shell工具。</p>
+<h2 id="redis-cli"><a href="#redis-cli" class="headerlink" title="redis-cli"></a>redis-cli</h2><p>redis-cli可选参数如下：</p>
+<ul>
+<li>-h：host，主机地址</li>
+<li>-p：port，端口</li>
+<li>-r：repeat，将命令执行多次</li>
+<li>-i：interbval，每隔几秒执行一次命令，与-r配合使用</li>
+<li>-x：从标准输入（stdin）读取数据作为最后一个参数，例如：<code>echo "world" | redis-cli -x set hello</code></li>
+<li>-c：cluster，连接Redis Cluster节点，防止moved和ask异常</li>
+<li>-a：auth，指定密码</li>
+<li>–scan和–pattern：用于扫描指定模式的键</li>
+<li>–slave：把客户端模拟成当前Redis节点的从节点，可以用来获取当前Redis节点的更新操作</li>
+<li>–rdb，请求Redis实例生成并发送RDB持久化文件，保存在本地</li>
+<li>–pipe，将命令封装成Redis通信协议定义的数据格式，批量发送给Redis执行</li>
+<li>–bigkeys，使用scan命令对Redis的键进行采样，从中找到内存占用比较大的键值</li>
+<li>–eval，执行指定Lua脚本</li>
+<li>–latency<ul>
+<li>–latency：测试客户端到目标Redis的网络延迟</li>
+<li>–latency-history：分时段输出网络延迟</li>
+<li>–latency-dist：使用统计图表输出网络延迟统计信息</li>
+</ul>
+</li>
+<li>–stat：实时获取Redis的重要统计信息</li>
+<li>–raw和–no-raw：–no-raw要求返回结果必须是原始格式，–raw返回格式化后的结果</li>
+</ul>
+<h2 id="redis-server"><a href="#redis-server" class="headerlink" title="redis-server"></a>redis-server</h2><p>redis-sever除了用来启动Redis外，还有一个<code>--test-memory</code>选项可以用来检测当前操作系统能否稳定分配指定容量的内存给Redis，通过检测可以有效避免因为内存问题造成Redis崩溃。</p>
+<p>例如，检测当前操作系统是否能提供1G内存给Redis：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">redis-server --test-memery 1024</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="redis-benchmark"><a href="#redis-benchmark" class="headerlink" title="redis-benchmark"></a>redis-benchmark</h2><p>redis-benchmark可以为Redis做基准性能测试，可选参数如下：</p>
+<ul>
+<li>-c：client，客户端的并发数量，默认50</li>
+<li>-n：num，客户端请求总数量，默认100000</li>
+<li>-q：输出requests per second信息</li>
+<li>-r：random，随机插入键</li>
+<li>-P：每个请求的pipeline的数据量，默认1</li>
+<li>-k：keepalive，1使用，0不使用，默认1</li>
+<li>-t：对指定命令进行基准测试</li>
+<li>–csv：结果按照csv格式输出</li>
+</ul>
+<h1 id="Pipline"><a href="#Pipline" class="headerlink" title="Pipline"></a>Pipline</h1><p>Redis客户端执行一次命令需要经过发送、排队、执行、返回四个过程，其中发送和返回过程称为Round Trip Time（RTT，往返时间）。</p>
+<p>Redis中大部分命令不支持批量操作，那么每个命令都要消耗一次RTT。Pipeline（流水线）机制可以改善这类问题，它可以将一组Redis命令进行组装，通过一次RTT传输给Redis，再将这组Redis命令的执行结果按顺序返回给客户端。使用Pipeline执行多条命令只需要一次RTT。</p>
+<p>redis-cli的–pipe选项实际上就是使用了Pipeline机制，例如，下面将set hello world和incr counter两条命令组装：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo -en '*3\r\n$3\r\nSET\r\n$5\r\nhello\r\n$5\r\nworld\r\n*2\r\n$4\r\nincr\r\n$7\r\ncounter\r\n' | redis-cli --pipe</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="原生批量命令与Pipeline对比"><a href="#原生批量命令与Pipeline对比" class="headerlink" title="原生批量命令与Pipeline对比"></a>原生批量命令与Pipeline对比</h2><ul>
+<li>原生批量任务是原子的，Pipeline是非原子的</li>
+<li>原生批量任务是一个命令对应多个key，Pipeline支持多个命令</li>
+<li>原生批量任务是Redis服务端支持实现的，Pipeline需要服务端和客户端共同实现</li>
+</ul>
+<h1 id="事务与Lua"><a href="#事务与Lua" class="headerlink" title="事务与Lua"></a>事务与Lua</h1><p>为了保证多条命令组合的原子性，Redis提供简单的事务功能以及集成Lua脚本来解决这个问题。</p>
+<h2 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h2><p>Redis提供简单的事务功能，将需要一起执行的命令放到<code>multi</code>和<code>exec</code>两个命令之间。multi命令代表事务开始，exec命令代表事务结束，它们之间的命令是原子性执行的。</p>
+<p><code>discard</code>命令用来停止事务执行。</p>
+<p>如果事务中的命令出现错误，不同情况下Redis的处理机制也不相同：</p>
+<ul>
+<li>命令错误：语法错误会造成整个事务无法执行</li>
+<li>运行时错误：Redis并不支持回滚功能，未发生错误的命令会正常执行</li>
+</ul>
+<p>有些应用场景需要在执行事务之前，确保事务中的key没有被其他客户端修改过才执行事务，否则不执行。Redis提供了<code>watch</code>命令来解决这类问题。（在multi命令前执行watch key，在执行exec时，如果key被修改了事务不会执行，结果为nil）</p>
+<h2 id="Lua"><a href="#Lua" class="headerlink" title="Lua"></a>Lua</h2><p>Lua语言于1993年诞生，设计目标是作为嵌入式程序移植到其他应用程序。由C语言实现，作为脚本语言被应用于游戏领域、Web服务器Nginx等地方。</p>
+<p>Redis将Lua作为脚本语言，通过修改源码可实现定制命令。</p>
+<p>在Redis中使用Lua脚本功能有如下优点：</p>
+<ul>
+<li>Lua脚本在Redis中是原子执行的，执行过程中不会插入其它命令</li>
+<li>基于Lua脚本可以创造出定制命令，并且可以将这些命令常驻在内存中，实现复用</li>
+<li>Lua脚本可以将多条命令打包，有效较少网络开销</li>
+</ul>
+<h3 id="使用Lua"><a href="#使用Lua" class="headerlink" title="使用Lua"></a>使用Lua</h3><p>在Redis中执行Lua脚本有两种方法：eval和evalsha。</p>
+<ul>
+<li>eval</li>
+</ul>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">eval 脚本内容 key个数 key列表 参数列表</span><br></pre></td></tr></tbody></table></figure>
+
+<p>如果Lua脚本比较长，可以使用redis-cli –eval直接执行文件。</p>
+<ul>
+<li>evalsha</li>
+</ul>
+<p>Redis还提供evalsha命令来执行Lua脚本。首先将Lua脚本加载到Redis服务端，得到该脚本的SHA1校验和，evalsha命令使用SHA1作为参数可以直接执行对应的Lua脚本，避免每次发送Lua脚本的开销。脚本会常驻在服务端得到复用。</p>
+<p>加载脚本：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">redis-cli script load "$(cat lua_get.lua)" # 将lua_get.lua加载到内存中，返回SHA1</span><br></pre></td></tr></tbody></table></figure>
+
+<p>执行脚本：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">evalsha 脚本SHA1值 key个数 key列表 参数列表</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="redis-api"><a href="#redis-api" class="headerlink" title="redis api"></a>redis api</h3><p>Lua可以使用redis.call函数实现对Redis的访问，例如：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">redis.call("set", "hello", "world")</span><br><span class="line">redis,call("get", "hello")</span><br></pre></td></tr></tbody></table></figure>
+
+<p>在Redis中执行效果如下：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ eval 'return redis.call("get", "KEY[1]")' 1 hello</span><br><span class="line">"world"</span><br></pre></td></tr></tbody></table></figure>
+
+<p>除redis.call外，Lua还可以使用redis.pcall函数实现对Redis的调用。区别在于，redis.call执行失败时，脚本执行结束会直接返回错误，而redis.pcall会忽略错误继续执行脚本。</p>
+<h3 id="管理Lua脚本"><a href="#管理Lua脚本" class="headerlink" title="管理Lua脚本"></a>管理Lua脚本</h3><ul>
+<li><code>script load script</code>：加载脚本到内存中</li>
+<li><code>script exists sha1 [sha1 ...]</code>：判断sha1是否已经加载到内存</li>
+<li><code>script flush</code>：清除内存中的Lua脚本</li>
+<li><code>script kill</code>：杀掉正在执行的Lua脚本。Redis提供lua-time-limit参数，默认5s，当脚本执行时间超过lua-time-limit后，会向其它命令调用发送BASY信号并提示使用script kill或shutdown nosave命令杀到busy脚本，但是不会停止服务端或客户端脚本执行</li>
+</ul>
+<h1 id="Bitmaps"><a href="#Bitmaps" class="headerlink" title="Bitmaps"></a>Bitmaps</h1><p>合理地使用位操作能够有效地提高内存使用率和开发效率。Redis提供了Bitmaps，可以实现对位的操作。Bitmaps不是一种数据结构，其本身就是字符串，但是可以对字符串的位进行操作。</p>
+<p>Bitmaps单独提供了一套命令，可以把Bitmaps看做成以位为单位的数组，数据每个单元只能存放1和0，数组的下标为偏移量。</p>
+<h2 id="命令"><a href="#命令" class="headerlink" title="命令"></a>命令</h2><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">setbit key offset value # 设置值</span><br><span class="line"></span><br><span class="line">gitbit key offset # 获取值</span><br><span class="line"></span><br><span class="line">bitcount [start] [end] # 获取Bitmaps指定范围值为1的个数</span><br><span class="line"></span><br><span class="line">bitop op destkey key [key ...] # 对多个Bitmaps操作，op：and(交集)、or(并集)、not(非)、xor(异或)</span><br><span class="line"></span><br><span class="line">bitpos key targetBit [start] [end] # 计算Bitmaps中第一个值为targetBit的偏移量</span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="HyperLogLog"><a href="#HyperLogLog" class="headerlink" title="HyperLogLog"></a>HyperLogLog</h1><p>HyperLogLog 并不是一种新的数据结构（实际类型为字符串类型），而是一种基数算法，通过HyperLogLog可以利用极小的内存空间完成独立总数的统计，数据集可以是IP、Email、ID等。</p>
+<p>HyperLogLog内存占用量非常小，但是存在错误率，在进行数据结构选型时只需要确认以下两条：</p>
+<ol>
+<li>只为了计算独立总数，不需要获取单条数据</li>
+<li>可以容忍一定误差率</li>
+</ol>
+<h2 id="命令-1"><a href="#命令-1" class="headerlink" title="命令"></a>命令</h2><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">pfadd key element [element ...] # 添加元素</span><br><span class="line"></span><br><span class="line">pfcount key [key ...] # 计算独立用户数</span><br><span class="line"></span><br><span class="line">pfmerge destkey sourcekey [sourcekey] # 求多个HyperLogLog并集，并赋值给destkey</span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="发布订阅"><a href="#发布订阅" class="headerlink" title="发布订阅"></a>发布订阅</h1><p>Redis提供了基于“发布/订阅”模式的消息机制，此模式下，消息发布者与订阅者不需要直接通信，发布者客户端向指定的频道（channel）发布消息，订阅该频道的每个客户端都能收到消息。</p>
+<h2 id="命令-2"><a href="#命令-2" class="headerlink" title="命令"></a>命令</h2><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">publish channel message # 发布消息</span><br><span class="line"></span><br><span class="line">subscribe channel [channel ...] # 订阅消息</span><br><span class="line">    # 客户端在执行订阅命令后进入订阅状态，只能接受subscribe、psubscribe、unsubscribe、punsubscribe的四个命令</span><br><span class="line">    # 新开启的订阅客户端无法收到频道之前的消息，因为Redis不会对发布的消息进行持久化</span><br><span class="line"></span><br><span class="line">unsubscribe [channel [channel ...]] # 取消订阅</span><br><span class="line"></span><br><span class="line">psubscribe pattern [pattern ...] # 按照模式订阅</span><br><span class="line">punsubscribe [pattern [pattern ...]] # 按照模式取消订阅</span><br><span class="line"></span><br><span class="line">pubsub channels [pattern] # 查看活跃的频道</span><br><span class="line">pubsub numsub [channel ...] # 查看频道订阅数</span><br><span class="line">pubsub numpat # 查看模式订阅数</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h2><p>聊天室、公告牌、服务之间都可以使用发布订阅模式实现消息解耦。</p>
+<blockquote>
+<p>和很多专业的消息队列系统（例如Kafka、RocketMQ等）相比，Redis的发布订阅略显粗糙，例如无法实现消息堆积和回溯。但胜在足够简单，如果当前场景可以容忍的这些缺点，也不失为一个不错的选择。</p>
+</blockquote>
+<h1 id="GEO"><a href="#GEO" class="headerlink" title="GEO"></a>GEO</h1><p>Redis3.2版本开始提供了GEO（地理信息定位）功能，支持存储地理位置信息用来实现诸如附近位置、摇一摇这类依赖于地理位置信息的功能。</p>
+<p>GEO的数据类型为zset，Redis将所有地理位置信息的geohash存放在zset中。</p>
+<h2 id="命令-3"><a href="#命令-3" class="headerlink" title="命令"></a>命令</h2><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">geoadd key longitube latitude member [longitude latitude member ...] # 增加地理位置信息</span><br><span class="line">            # longitube：经度</span><br><span class="line">            # latitude：维度</span><br><span class="line">            # member：成员</span><br><span class="line">            </span><br><span class="line">geopos key member [member ...] # 获取地理位置信息</span><br><span class="line"></span><br><span class="line">geodist key member1 member2 [unit] # 获取两个地理位置的距离</span><br><span class="line">            # unit：表示返回结果的单位，包含以下四种</span><br><span class="line">                # m (meters)：米</span><br><span class="line">                # km (kilometers)：公里</span><br><span class="line">                # mi (miles)：英里</span><br><span class="line">                # ft (feet)：尺</span><br><span class="line">                            </span><br><span class="line"># 获取指定位置范围内的地理信息位置集合</span><br><span class="line">georadius key longitude latitude radiusm|km|ft|mi [withcoord] [withdist] [withhash] [COUNT count] [asc|desc] [store key] [storedist key] </span><br><span class="line">georadiusbymember key member radiusm|km|ft|mi [withcoord] [withdist] [withhash] [COUNT count] [asc|desc] [store key] [storedist key]</span><br><span class="line"></span><br><span class="line">            # withcoord：返回结果中包含经纬度</span><br><span class="line">            # withdist：返回结果中包含离中心节点位置的距离</span><br><span class="line">            # withhash：返回结果中包含geohash</span><br><span class="line">            # COUNT count：指定返回结果的数量</span><br><span class="line">            # asc|desc：返回结果按照离中心节点的距离做升序或者降序</span><br><span class="line">            # store key：将返回结果的地理位置信息保存到指定键</span><br><span class="line"></span><br><span class="line">geohash key member [member ...] # 获取geohash。Redis使用geohash将二维经纬度转换为一维字符串</span><br><span class="line"></span><br><span class="line">zrem key member # 删除地理位置信息</span><br></pre></td></tr></tbody></table></figure>
+    
+  </div>
+
+</article>
+
+
+   
+
+   
+  <div class="box-prev-next clearfix">
+    <a class="show pull-left" href="/2021/01/15/redis-01/">
+        <i class="icon icon-angle-left"></i>
+    </a>
+    <a class="show pull-right" href="/2021/01/18/redis-03/">
+        <i class="icon icon-angle-right"></i>
+    </a>
+  </div>
+
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/categories/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              分类
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/roaming/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              漫游
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/atom.xml"
+              rel="noopener noreferrer"
+              target="_blank"
+              >
+              RSS
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/search/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              搜索
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+    
+    
+
+    
+
+    
+    
+
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script>
+    <div id="comment" class="vcomment" ></div>
+    <script>
+        var notify = 'false' == true ? true : false;
+        var verify = 'false' == true ? true : false;
+        var GUEST_INFO = ['nick','mail','link'];
+        var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+            return GUEST_INFO.indexOf(item) > -1
+        });
+        guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+        window.valine = new Valine({
+            el: '.vcomment',
+            notify: notify,
+            verify: verify,
+            appId: "masttnqEt9G69mj43i9oaA1C-gzGzoHsz",
+            appKey: "hgIx9VKn0GLDhRcLxQuNMl0E",
+            avatar:'mm',
+            placeholder: "Say something",
+            guest_info:guest_info,
+            pageSize:'10'
+        });
+    </script>
+  
+    
+
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>

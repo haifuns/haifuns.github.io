@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Databus简介 | haifuns的博客</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="Databus," />
+  
+
+  <meta name="description" content="问题引入在互联网架构中，数据系统通常可以分为真实数据系统以及衍生数据系统。前者作为基础数据库存储用户产生的写操作，后者通常复制自主数据并对数据进行转换或业务处理，提供读取和其他复杂查询操作。  数据同步方案以缓存数据为例，缓存数据来自主数据，当主数据发生变化时，缓存中的数据也需要随之更新。要实现数据同步有两种常用解决方案：应用驱动双写和数据库日志挖掘。 应用双写应用双写指在写数据到DB时，同时写入">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Databus简介">
+<meta property="og:url" content="https://haifuns.com/2021/08/12/databus/index.html">
+<meta property="og:site_name" content="haifuns的博客">
+<meta property="og:description" content="问题引入在互联网架构中，数据系统通常可以分为真实数据系统以及衍生数据系统。前者作为基础数据库存储用户产生的写操作，后者通常复制自主数据并对数据进行转换或业务处理，提供读取和其他复杂查询操作。  数据同步方案以缓存数据为例，缓存数据来自主数据，当主数据发生变化时，缓存中的数据也需要随之更新。要实现数据同步有两种常用解决方案：应用驱动双写和数据库日志挖掘。 应用双写应用双写指在写数据到DB时，同时写入">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/databus/dataflow.png">
+<meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/databus/databus-redis.png">
+<meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/databus/databus-flow.png">
+<meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/databus/databus-usecases.jpg">
+<meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/databus/mysql-replication.png">
+<meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/databus/databus-replication.png">
+<meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/databus/databus-as-a-service.png">
+<meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/databus/databus-relays.png">
+<meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/databus/databus-clients.png">
+<meta property="article:published_time" content="2021-08-12T21:50:00.000Z">
+<meta property="article:modified_time" content="2022-07-03T13:56:33.205Z">
+<meta property="article:author" content="haifuns">
+<meta property="article:tag" content="Databus">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/databus/dataflow.png">
+
+  
+
+  
+    <link rel="icon" href="/images/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbeddx" rel="stylesheet">
+
+
+  
+    
+<link rel="stylesheet" href="/css/personal-style.css">
+
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?d3c8edb388553a2084296cbfe9a0785a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
+
+<meta name="generator" content="Hexo 5.4.1">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="haifuns的博客" type="application/atom+xml">
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header CENTER">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/categories/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            分类
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/roaming/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            漫游
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/atom.xml"
+            rel="noopener noreferrer"
+            target="_blank"
+            >
+            RSS
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/search/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%97%AE%E9%A2%98%E5%BC%95%E5%85%A5"><span class="toc-text">问题引入</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%90%8C%E6%AD%A5%E6%96%B9%E6%A1%88"><span class="toc-text">数据同步方案</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BA%94%E7%94%A8%E5%8F%8C%E5%86%99"><span class="toc-text">应用双写</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%97%A5%E5%BF%97%E6%8C%96%E6%8E%98"><span class="toc-text">日志挖掘</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Databus-%E6%A6%82%E8%BF%B0"><span class="toc-text">Databus 概述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Databus-%E5%8A%9F%E8%83%BD%E7%89%B9%E6%80%A7"><span class="toc-text">Databus 功能特性</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Databus-%E6%97%A5%E5%BF%97%E6%8C%96%E6%8E%98%E5%8E%9F%E7%90%86"><span class="toc-text">Databus 日志挖掘原理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Mysql-%E7%9F%A5%E8%AF%86%E5%9B%9E%E9%A1%BE"><span class="toc-text">Mysql 知识回顾</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#binlog"><span class="toc-text">binlog</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%BB%E4%BB%8E%E5%90%8C%E6%AD%A5"><span class="toc-text">主从同步</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Databus%E6%97%A5%E5%BF%97%E6%8C%96%E6%8E%98%E6%96%B9%E5%BC%8F"><span class="toc-text">Databus日志挖掘方式</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Databus-%E6%95%B4%E4%BD%93%E6%9E%B6%E6%9E%84"><span class="toc-text">Databus 整体架构</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Databus-Relay"><span class="toc-text">Databus Relay</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Event-Producer"><span class="toc-text">Event Producer</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Event-Buffers"><span class="toc-text">Event Buffers</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Databus-Relay-HA"><span class="toc-text">Databus Relay HA</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Databus-Clients"><span class="toc-text">Databus Clients</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Databus-Client-HA"><span class="toc-text">Databus Client HA</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%BC%80%E6%BA%90%E6%97%A5%E5%BF%97%E6%8C%96%E6%8E%98%E6%96%B9%E6%A1%88Databus-amp-Canal%E5%AF%B9%E6%AF%94"><span class="toc-text">开源日志挖掘方案Databus&amp;Canal对比</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE"><span class="toc-text">参考文献</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post CENTER">
+   <article id="post-databus" class="article article-type-post" itemprop="blogPost">
+  <header class="article-header">
+    <h1 class="post-title">Databus简介</h1>
+
+    <div class="article-meta">
+      <span>
+        <i class="icon-calendar"></i>
+        <span>2021.08.12</span>
+      </span>
+
+      
+        <span class="article-author">
+          <i class="icon-user"></i>
+          <span>haifuns</span>
+        </span>
+      
+
+      
+  <span class="article-category">
+    <i class="icon-list"></i>
+    <a class="article-category-link" href="/categories/%E6%97%A5%E5%BF%97%E6%8C%96%E6%8E%98/">日志挖掘</a>
+  </span>
+
+
+
+      
+
+      
+      <i class="fa fa-eye"></i> 
+        <span id="busuanzi_container_page_pv">
+           &nbsp热度 <span id="busuanzi_value_page_pv">
+           <i class="fa fa-spinner fa-spin"></i></span>℃
+        </span>
+      
+      
+    </div>
+  </header>
+
+  <div class="article-content">
+    
+      <h1 id="问题引入"><a href="#问题引入" class="headerlink" title="问题引入"></a>问题引入</h1><p>在互联网架构中，数据系统通常可以分为真实数据系统以及衍生数据系统。前者作为基础数据库存储用户产生的写操作，后者通常复制自主数据并对数据进行转换或业务处理，提供读取和其他复杂查询操作。</p>
+<p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/databus/dataflow.png" alt="dataflow"></p>
+<h1 id="数据同步方案"><a href="#数据同步方案" class="headerlink" title="数据同步方案"></a>数据同步方案</h1><p>以缓存数据为例，缓存数据来自主数据，当主数据发生变化时，缓存中的数据也需要随之更新。要实现数据同步有两种常用解决方案：应用驱动双写和数据库日志挖掘。</p>
+<h2 id="应用双写"><a href="#应用双写" class="headerlink" title="应用双写"></a>应用双写</h2><p>应用双写指在写数据到DB时，同时写入缓存。但是应用双写存在数据不一致的情况，如下图所示：</p>
+<p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/databus/databus-redis.png" alt="image"></p>
+<p>另外，在变更DB后更新缓存时，如果出现操作失败的情况，也有可能造成数据不一致。在需要保证严格数据一致时，使用应用双写策略并不容易实现。</p>
+<h2 id="日志挖掘"><a href="#日志挖掘" class="headerlink" title="日志挖掘"></a>日志挖掘</h2><p>日志挖掘通过提取数据库变更日志实现数据同步，这从根本上解决了数据一致性问题。如下图所示：</p>
+<p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/databus/databus-flow.png" alt="image"></p>
+<span id="more"></span>
+
+<h1 id="Databus-概述"><a href="#Databus-概述" class="headerlink" title="Databus 概述"></a>Databus 概述</h1><p>Databus是LinkedIn于2013年开源的低延迟数据变更抓取系统。Databus支持端到端毫秒级别的延时，每台服务器每秒可处理数千更改事件，同时支持无限回溯并且有丰富的订阅功能。</p>
+<p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/databus/databus-usecases.jpg" alt="image"></p>
+<p>如上图所示，搜索引擎和只读副本等系统充当事件消费者，当主OLTP数据库发生写入时，连接到此数据库的中继服务会将更改事件同步给事件消费者，从而实现索引或副本与源数据保持一致。</p>
+<h1 id="Databus-功能特性"><a href="#Databus-功能特性" class="headerlink" title="Databus 功能特性"></a>Databus 功能特性</h1><ul>
+<li>来源独立：Databus支持Oracle和Mysql两种数据源变更抓取，并且数据变更的抓取独立于数据源，不会对数据源产生影响。</li>
+<li>可扩展、高可用：Databus可扩展支持数千消费者和事务数据来源，同时保持高度可用。</li>
+<li>事务按序提交：Databus能保持来源数据库的事务完整性，并按照事务分组和来源提交顺序交付变更事件。</li>
+<li>低延时、支持多种订阅机制：数据源变更完成后，Databus能在毫秒级别将事务提交给消费者。同时，消费者使用Databus中的服务端过滤功能可以只获取需要的特定数据。</li>
+<li>无限回溯：Databus支持消费者无限回溯功能。</li>
+</ul>
+<h1 id="Databus-日志挖掘原理"><a href="#Databus-日志挖掘原理" class="headerlink" title="Databus 日志挖掘原理"></a>Databus 日志挖掘原理</h1><h2 id="Mysql-知识回顾"><a href="#Mysql-知识回顾" class="headerlink" title="Mysql 知识回顾"></a>Mysql 知识回顾</h2><h3 id="binlog"><a href="#binlog" class="headerlink" title="binlog"></a>binlog</h3><p>Mysql中的二进制日志文件（binary log）记录了对数据库执行更改的所有操作，但是不包含SELECT和SHOW这类操作。</p>
+<p>binlog主要有以下几种作用：</p>
+<ul>
+<li>恢复：通过binlog进行数据恢复。</li>
+<li>复制：通过复制和执行binlog实现主从同步。</li>
+<li>审计：通过binlog判断是否有对数据库进行注入的攻击。</li>
+</ul>
+<p>binlog的日志格式由binlog_format参数控制，可选格式有STATMENT、ROW、MIXED。区别如下：</p>
+<ul>
+<li>STATMENT：记录日志的逻辑SQL语句，此格式在某些情况下可能会导致主从数据不一致。例如使用rand、uuid等函数，或者使用触发器。另外在使用RC事务隔离级别时会出现丢失更新的现象从而导致主从数据不一致。</li>
+<li>ROW：记录表的行更改情况。</li>
+<li>MIXED：以上两种格式混用。</li>
+</ul>
+<blockquote>
+<p>在使用Databus时，binlog_format需要设置为ROW模式。</p>
+</blockquote>
+<h3 id="主从同步"><a href="#主从同步" class="headerlink" title="主从同步"></a>主从同步</h3><p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/databus/mysql-replication.png" alt="image"></p>
+<h2 id="Databus日志挖掘方式"><a href="#Databus日志挖掘方式" class="headerlink" title="Databus日志挖掘方式"></a>Databus日志挖掘方式</h2><p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/databus/databus-replication.png" alt="image"></p>
+<h1 id="Databus-整体架构"><a href="#Databus-整体架构" class="headerlink" title="Databus 整体架构"></a>Databus 整体架构</h1><p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/databus/databus-as-a-service.png" alt="image"></p>
+<p>Databus系统的构成如上图所示，其中包括中继（Relay）、Bootstrap服务和客户端库。Bootstrap服务中包括Bootstrap Producer和Bootstrap Server。消费者从Relay中获取最新事件，如果一个消费者的数据更新大幅落后，就需要到Bootstrap Producer里获取，提交给它的将会是自消费者上次处理变更之后的所有数据变更快照。</p>
+<p>Databus Relay的主要功能包括：</p>
+<ol>
+<li>从数据来源读取变更行，并在内存缓存内将其序列化为Databus变更事件。</li>
+<li>监听来自Databus客户端（包括Bootstrap Producer）的请求，并传输新的Databus数据变更事件。</li>
+</ol>
+<p>Databus Client的功能主要包括：</p>
+<ol>
+<li>获取Relay上新的数据变更事件，并执行特定业务逻辑的回调。</li>
+<li>如果落后Relay太多，向Bootstrap Server发起查询。</li>
+<li>新Databus客户端会向Bootstrap Server发起Bootstrap启动查询，然后切换到向Relay发起查询，以完成最新的数据变更事件。</li>
+<li>单一客户端可以处理整个Databus数据流，或者可以成为消费者集群的一部分，其中每个消费者只处理一部分流数据。</li>
+</ol>
+<p>Databus Bootstrap Producer的功能主要包括：</p>
+<ol>
+<li>检查Relay上的新数据变更事件。</li>
+<li>将变更存储在MySQL数据库中。</li>
+<li>MySQL数据库供Bootstrap和客户端使用。</li>
+</ol>
+<p>Databus Bootstrap Server的功能主要包括：</p>
+<ol>
+<li>监听来自Databus客户端的请求，并返回长期回溯数据变更事件。</li>
+</ol>
+<h1 id="Databus-Relay"><a href="#Databus-Relay" class="headerlink" title="Databus Relay"></a>Databus Relay</h1><p>Databus Relays主要功能如下：</p>
+<ol>
+<li>从源数据库中的读取变化的行并序列化为Databus中的更改事件保存在内存缓冲区中。</li>
+<li>监听Databus客户端的请求，并将Databus中的更改事件传输到客户端。</li>
+</ol>
+<p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/databus/databus-relays.png" alt="image"></p>
+<h2 id="Event-Producer"><a href="#Event-Producer" class="headerlink" title="Event Producer"></a>Event Producer</h2><p>Event Producer会轮询数据库并读取源数据中变更的行然后转换为<a target="_blank" rel="noopener" href="https://avro.apache.org/docs/current/">Apache Avro</a>记录。</p>
+<p>从JDBC RowSets到AvroRecords的转换是根据存储在Schema Registry中的Avro Schemas完成的，然后AvroRecords被序列化成Databus事件。</p>
+<h2 id="Event-Buffers"><a href="#Event-Buffers" class="headerlink" title="Event Buffers"></a>Event Buffers</h2><p>Databus Relays中有一个或多个Circular Buffer 循环事件缓冲区（内存或mmap内存映射文件），用于按系统更改号（SCN）递增的顺序存储数据总线事件。每个缓冲区对应一个SCN稀疏索引，以及一个MaxSCN读写器，MaxSCN读写器会定时保存Relays中的SCN最大值。Relays通过netty channel接收客户端请求，并由Request Processor处理。</p>
+<blockquote>
+<p>SCN（System Change Number）即事件序列号，占64位，其中高32位表示binlog文件编号，低32位表示binlog文件偏移量，这种实现方式在Mysql主节点发生变化（如DBA执行了reset master命令将binlog文件和偏移量重置）会导致逻辑序列被重置，简单的解决方案是只清理日志。在Mysql5.6.5+版本中增加了唯一全局事务id（GTID），使用ServerId + GTID作为SCN是一种更好的选择。</p>
+</blockquote>
+<h2 id="Databus-Relay-HA"><a href="#Databus-Relay-HA" class="headerlink" title="Databus Relay HA"></a>Databus Relay HA</h2><p>Databus Relay除了可以监听主库消费数据外，还可以进行监听其他Databus Relay进行链式消费。直接监听主库的Relay为领导者，监听领导者的Relay为跟随者。</p>
+<p>Databus依靠<a target="_blank" rel="noopener" href="http://helix.apache.org/">Apache Helix</a>进行集群管理。Helix是一种通用的集群管理框架，用于自动管理托管在节点集群上的分区，复制和分布式资源。Helix提供以下功能：</p>
+<ul>
+<li>将资源/分区自动分配给节点</li>
+<li>节点故障检测和恢复</li>
+<li>动态添加资源</li>
+<li>动态添加节点到集群</li>
+<li>可插拔分布式状态机通过状态转换来管理资源的状态</li>
+<li>自动负载均衡和过渡节流</li>
+</ul>
+<h1 id="Databus-Clients"><a href="#Databus-Clients" class="headerlink" title="Databus Clients"></a>Databus Clients</h1><p>Databus Clients负责拉取Relays中的事件，处理后发送给感兴趣的消费者。</p>
+<p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/databus/databus-clients.png" alt="image"></p>
+<ul>
+<li>Relay Puller：负责从Relay拉取数据，具体工作有挑选Relay，请求Source，请求Register，校验Schema，设置Dispatcher等。</li>
+<li>Bootstrap Puller：负责从Bootstrap servers拉取数据，功能类似Relay Puller。</li>
+<li>Dispatcher：从event buffers中读取事件，调用消费逻辑的回调，主要职责有：<ul>
+<li>判断回调是否正确，回调失败后会进行重试，重试次数超限后抛出异常</li>
+<li>监控错误和超时</li>
+<li>持久化checkpoint</li>
+</ul>
+</li>
+<li>Checkpoint persistence Provider：checkpoint是消费者消费变更记录点的位置，负责将checkpoint持久化到本地，保证下次启动后可以从正常的位置pull event。</li>
+<li>Event Callback：调用消费者自定义业务逻辑代码。</li>
+</ul>
+<h2 id="Databus-Client-HA"><a href="#Databus-Client-HA" class="headerlink" title="Databus Client HA"></a>Databus Client HA</h2><p>Databus支持动态客户端负载均衡，当新的客户端加入或脱离集群时，分区动态重新分配给集群中所有客户端实例。集中写入的cheakpoint（通过Helix写到zookeeper）可以保证分区在客户端无缝移动。</p>
+<h1 id="开源日志挖掘方案Databus-amp-Canal对比"><a href="#开源日志挖掘方案Databus-amp-Canal对比" class="headerlink" title="开源日志挖掘方案Databus&amp;Canal对比"></a>开源日志挖掘方案Databus&amp;Canal对比</h1><table>
+<thead>
+<tr>
+<th>对比项</th>
+<th>Databus</th>
+<th>Canal</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>开源公司</td>
+<td>linkedin（13年开源，已停止维护，其内部转用brooklin）</td>
+<td>alibaba（14年开源，最后更新时间4个月前）</td>
+</tr>
+<tr>
+<td>数据源</td>
+<td>MySQL、Oracle</td>
+<td>MySQL（内部支持Oracle）</td>
+</tr>
+<tr>
+<td>日志解析方式</td>
+<td>open-replicator（开源）</td>
+<td>Build-in（自研）</td>
+</tr>
+<tr>
+<td>订阅/同步方式</td>
+<td>（美团支持订阅方式：Mafka、RabbitMQ、Thrift、Http、Zebra）</td>
+<td>官方同步Adapter ：Kafka、RocketMQ、HBase、RDB（MySQL/Oracle/PostgreSQL/SQLServer）、ES</td>
+</tr>
+<tr>
+<td>Server</td>
+<td>relay可以同时服务多个client</td>
+<td>一个server instance只能服务一个clinet（受限于server端保存拉取位点）</td>
+</tr>
+<tr>
+<td>Client</td>
+<td>client可以拉取多个relay变更，访问的relay可以指定获取某些表某些分片的变更</td>
+<td>client只能从一个server拉取变更，而且只能拉取全量变更</td>
+</tr>
+<tr>
+<td>可扩展性</td>
+<td>client支持线性扩展，支持动态分片</td>
+<td>client不支持扩展</td>
+</tr>
+<tr>
+<td>可用性</td>
+<td>relay和client都支持集群模式，relay故障时主备切换，client故障时动态重新分配分区。relay可以订阅mysql主库或者从库不关心其主从角色</td>
+<td>server和client都是主备模式，主挂备用接管。可以自动切换Mysql主从库</td>
+</tr>
+<tr>
+<td>监控</td>
+<td>提供JMX监控</td>
+<td>支持prometheus监控</td>
+</tr>
+</tbody></table>
+<h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://sq.163yun.com/blog/article/173552201158811648">Databus架构分析与初步实践（for mysql）（上篇）</a></li>
+<li><a target="_blank" rel="noopener" href="https://engineering.linkedin.com/data-replication/open-sourcing-databus-linkedins-low-latency-change-data-capture-system">Open sourcing Databus: LinkedIn’s low latency change data capture system</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/linkedin/databus/wiki">github/linkedin/databus/wiki</a></li>
+</ul>
+
+    
+  </div>
+
+</article>
+
+
+   
+
+   
+  <div class="box-prev-next clearfix">
+    <a class="show pull-left" href="/2021/06/06/kafka-09/">
+        <i class="icon icon-angle-left"></i>
+    </a>
+    <a class="show pull-right" href="/2021/11/17/paxos/">
+        <i class="icon icon-angle-right"></i>
+    </a>
+  </div>
+
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/categories/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              分类
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/roaming/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              漫游
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/atom.xml"
+              rel="noopener noreferrer"
+              target="_blank"
+              >
+              RSS
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/search/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              搜索
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+    
+    
+
+    
+
+    
+    
+
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script>
+    <div id="comment" class="vcomment" ></div>
+    <script>
+        var notify = 'false' == true ? true : false;
+        var verify = 'false' == true ? true : false;
+        var GUEST_INFO = ['nick','mail','link'];
+        var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+            return GUEST_INFO.indexOf(item) > -1
+        });
+        guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+        window.valine = new Valine({
+            el: '.vcomment',
+            notify: notify,
+            verify: verify,
+            appId: "masttnqEt9G69mj43i9oaA1C-gzGzoHsz",
+            appKey: "hgIx9VKn0GLDhRcLxQuNMl0E",
+            avatar:'mm',
+            placeholder: "Say something",
+            guest_info:guest_info,
+            pageSize:'10'
+        });
+    </script>
+  
+    
+
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>

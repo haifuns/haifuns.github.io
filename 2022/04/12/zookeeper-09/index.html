@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>【ZooKeeper源码】故障感知与恢复 | haifuns的博客</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="ZooKeeper," />
+  
+
+  <meta name="description" content="本篇着重关注zk中对各种故障的感知与恢复，下面将针对不同的故障情况进行分析。 消息通信故障客户端故障12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576&#x2F;&#x2F; NIOS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【ZooKeeper源码】故障感知与恢复">
+<meta property="og:url" content="https://haifuns.com/2022/04/12/zookeeper-09/index.html">
+<meta property="og:site_name" content="haifuns的博客">
+<meta property="og:description" content="本篇着重关注zk中对各种故障的感知与恢复，下面将针对不同的故障情况进行分析。 消息通信故障客户端故障12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576&#x2F;&#x2F; NIOS">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-04-12T12:30:00.000Z">
+<meta property="article:modified_time" content="2022-07-03T13:56:33.213Z">
+<meta property="article:author" content="haifuns">
+<meta property="article:tag" content="ZooKeeper">
+<meta name="twitter:card" content="summary">
+
+  
+
+  
+    <link rel="icon" href="/images/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbeddx" rel="stylesheet">
+
+
+  
+    
+<link rel="stylesheet" href="/css/personal-style.css">
+
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?d3c8edb388553a2084296cbfe9a0785a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
+
+<meta name="generator" content="Hexo 5.4.1">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="haifuns的博客" type="application/atom+xml">
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header CENTER">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/categories/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            分类
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/roaming/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            漫游
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/atom.xml"
+            rel="noopener noreferrer"
+            target="_blank"
+            >
+            RSS
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/search/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%B6%88%E6%81%AF%E9%80%9A%E4%BF%A1%E6%95%85%E9%9A%9C"><span class="toc-text">消息通信故障</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%95%85%E9%9A%9C"><span class="toc-text">客户端故障</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%95%85%E9%9A%9C"><span class="toc-text">服务端故障</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%9B%86%E7%BE%A4%E9%97%B4%E6%95%85%E9%9A%9C"><span class="toc-text">集群间故障</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#follower%E6%95%85%E9%9A%9C"><span class="toc-text">follower故障</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#leader%E6%95%85%E9%9A%9C"><span class="toc-text">leader故障</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%B0%8F%E7%BB%93"><span class="toc-text">小结</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post CENTER">
+   <article id="post-zookeeper-09" class="article article-type-post" itemprop="blogPost">
+  <header class="article-header">
+    <h1 class="post-title">【ZooKeeper源码】故障感知与恢复</h1>
+
+    <div class="article-meta">
+      <span>
+        <i class="icon-calendar"></i>
+        <span>2022.04.12</span>
+      </span>
+
+      
+        <span class="article-author">
+          <i class="icon-user"></i>
+          <span>haifuns</span>
+        </span>
+      
+
+      
+  <span class="article-category">
+    <i class="icon-list"></i>
+    <a class="article-category-link" href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F/">分布式</a>
+  </span>
+
+
+
+      
+
+      
+      <i class="fa fa-eye"></i> 
+        <span id="busuanzi_container_page_pv">
+           &nbsp热度 <span id="busuanzi_value_page_pv">
+           <i class="fa fa-spinner fa-spin"></i></span>℃
+        </span>
+      
+      
+    </div>
+  </header>
+
+  <div class="article-content">
+    
+      <p>本篇着重关注zk中对各种故障的感知与恢复，下面将针对不同的故障情况进行分析。</p>
+<h1 id="消息通信故障"><a href="#消息通信故障" class="headerlink" title="消息通信故障"></a>消息通信故障</h1><h2 id="客户端故障"><a href="#客户端故障" class="headerlink" title="客户端故障"></a>客户端故障</h2><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// NIOServerCnxn.java</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">doIO</span><span class="params">(SelectionKey k)</span> <span class="keyword">throws</span> InterruptedException </span>{</span><br><span class="line">    <span class="keyword">try</span> {</span><br><span class="line">        <span class="keyword">if</span> (sock == <span class="keyword">null</span>) {</span><br><span class="line">            LOG.warn(<span class="string">"trying to do i/o on a null socket for session:0x"</span></span><br><span class="line">                     + Long.toHexString(sessionId));</span><br><span class="line"></span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">if</span> (k.isReadable()) {</span><br><span class="line">            <span class="comment">// ...</span></span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">if</span> (k.isWritable()) {</span><br><span class="line">            <span class="comment">// ...</span></span><br><span class="line">        }</span><br><span class="line">    } <span class="keyword">catch</span> (CancelledKeyException e) {</span><br><span class="line">        LOG.warn(<span class="string">"Exception causing close of session 0x"</span></span><br><span class="line">                 + Long.toHexString(sessionId)</span><br><span class="line">                 + <span class="string">" due to "</span> + e);</span><br><span class="line">        <span class="keyword">if</span> (LOG.isDebugEnabled()) {</span><br><span class="line">            LOG.debug(<span class="string">"CancelledKeyException stack trace"</span>, e);</span><br><span class="line">        }</span><br><span class="line">        close();</span><br><span class="line">    } <span class="keyword">catch</span> (CloseRequestException e) {</span><br><span class="line">        <span class="comment">// expecting close to log session closure</span></span><br><span class="line">        close();</span><br><span class="line">    } <span class="keyword">catch</span> (EndOfStreamException e) {</span><br><span class="line">        LOG.warn(<span class="string">"caught end of stream exception"</span>, e); <span class="comment">// tell user why</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// expecting close to log session closure</span></span><br><span class="line">        close();</span><br><span class="line">    } <span class="keyword">catch</span> (IOException e) {</span><br><span class="line">        LOG.warn(<span class="string">"Exception causing close of session 0x"</span></span><br><span class="line">                 + Long.toHexString(sessionId)</span><br><span class="line">                 + <span class="string">" due to "</span> + e);</span><br><span class="line">        <span class="keyword">if</span> (LOG.isDebugEnabled()) {</span><br><span class="line">            LOG.debug(<span class="string">"IOException stack trace"</span>, e);</span><br><span class="line">        }</span><br><span class="line">        close();</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">close</span><span class="params">()</span> </span>{</span><br><span class="line">    <span class="keyword">synchronized</span> (factory.cnxns) {</span><br><span class="line">        <span class="comment">// if this is not in cnxns then it's already closed</span></span><br><span class="line">        <span class="keyword">if</span> (!factory.cnxns.remove(<span class="keyword">this</span>)) {</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        <span class="keyword">synchronized</span> (factory.ipMap) {</span><br><span class="line">            Set&lt;NIOServerCnxn&gt; s =</span><br><span class="line">                factory.ipMap.get(sock.socket().getInetAddress());</span><br><span class="line">            s.remove(<span class="keyword">this</span>);</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        factory.unregisterConnection(<span class="keyword">this</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (zkServer != <span class="keyword">null</span>) {</span><br><span class="line">            <span class="comment">// 移除watcher</span></span><br><span class="line">            zkServer.removeCnxn(<span class="keyword">this</span>);</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        closeSock();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (sk != <span class="keyword">null</span>) {</span><br><span class="line">            <span class="keyword">try</span> {</span><br><span class="line">                <span class="comment">// need to cancel this selection key from the selector</span></span><br><span class="line">                sk.cancel();</span><br><span class="line">            } <span class="keyword">catch</span> (Exception e) {</span><br><span class="line">                <span class="keyword">if</span> (LOG.isDebugEnabled()) {</span><br><span class="line">                    LOG.debug(<span class="string">"ignoring exception during selectionkey cancel"</span>, e);</span><br><span class="line">                }</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>当客户端故障时，服务端会捕获相应的异常，接着移除连接实例，移除当前客户端注册的watcher，最后关闭底层连接。</p>
+<h2 id="服务端故障"><a href="#服务端故障" class="headerlink" title="服务端故障"></a>服务端故障</h2><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ClientCnxn.SendThread.java</span></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>{</span><br><span class="line">    clientCnxnSocket.introduce(<span class="keyword">this</span>, sessionId);</span><br><span class="line">    clientCnxnSocket.updateNow();</span><br><span class="line">    clientCnxnSocket.updateLastSendAndHeard();</span><br><span class="line">    <span class="keyword">int</span> to;</span><br><span class="line">    <span class="keyword">long</span> lastPingRwServer = System.currentTimeMillis();</span><br><span class="line">    <span class="keyword">while</span> (state.isAlive()) {</span><br><span class="line">        <span class="keyword">try</span> {</span><br><span class="line">            <span class="keyword">if</span> (!clientCnxnSocket.isConnected()) {</span><br><span class="line">                <span class="comment">// 当前不是第一次连接</span></span><br><span class="line">                <span class="keyword">if</span> (!isFirstConnect) {</span><br><span class="line">                    <span class="keyword">try</span> {</span><br><span class="line">                        Thread.sleep(r.nextInt(<span class="number">1000</span>));</span><br><span class="line">                    } <span class="keyword">catch</span> (InterruptedException e) {</span><br><span class="line">                        LOG.warn(<span class="string">"Unexpected exception"</span>, e);</span><br><span class="line">                    }</span><br><span class="line">                }</span><br><span class="line">                <span class="comment">// don't re-establish connection if we are closing</span></span><br><span class="line">                <span class="keyword">if</span> (closing || !state.isAlive()) {</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                }</span><br><span class="line">                <span class="comment">// 与zk服务端建立长连接</span></span><br><span class="line">                startConnect();</span><br><span class="line">                clientCnxnSocket.updateLastSendAndHeard();</span><br><span class="line">            }</span><br><span class="line"></span><br><span class="line">            <span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line">        } <span class="keyword">catch</span> (Throwable e) {</span><br><span class="line">            <span class="keyword">if</span> (closing) {</span><br><span class="line">                <span class="keyword">if</span> (LOG.isDebugEnabled()) {</span><br><span class="line">                    <span class="comment">// closing so this is expected</span></span><br><span class="line">                    LOG.debug(<span class="string">"An exception was thrown while closing send thread for session 0x"</span></span><br><span class="line">                              + Long.toHexString(getSessionId())</span><br><span class="line">                              + <span class="string">" : "</span> + e.getMessage());</span><br><span class="line">                }</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            } <span class="keyword">else</span> {</span><br><span class="line">                <span class="comment">// this is ugly, you have a better way speak up</span></span><br><span class="line">                <span class="keyword">if</span> (e <span class="keyword">instanceof</span> SessionExpiredException) {</span><br><span class="line">                    LOG.info(e.getMessage() + <span class="string">", closing socket connection"</span>);</span><br><span class="line">                } <span class="keyword">else</span> <span class="keyword">if</span> (e <span class="keyword">instanceof</span> SessionTimeoutException) {</span><br><span class="line">                    LOG.info(e.getMessage() + RETRY_CONN_MSG);</span><br><span class="line">                } <span class="keyword">else</span> <span class="keyword">if</span> (e <span class="keyword">instanceof</span> EndOfStreamException) {</span><br><span class="line">                    LOG.info(e.getMessage() + RETRY_CONN_MSG);</span><br><span class="line">                } <span class="keyword">else</span> <span class="keyword">if</span> (e <span class="keyword">instanceof</span> RWServerFoundException) {</span><br><span class="line">                    LOG.info(e.getMessage());</span><br><span class="line">                } <span class="keyword">else</span> {</span><br><span class="line">                    LOG.warn(</span><br><span class="line">                        <span class="string">"Session 0x"</span></span><br><span class="line">                        + Long.toHexString(getSessionId())</span><br><span class="line">                        + <span class="string">" for server "</span></span><br><span class="line">                        + clientCnxnSocket.getRemoteSocketAddress()</span><br><span class="line">                        + <span class="string">", unexpected error"</span></span><br><span class="line">                        + RETRY_CONN_MSG, e);</span><br><span class="line">                }</span><br><span class="line">                <span class="comment">// 关闭连接、标记所有请求失败</span></span><br><span class="line">                cleanup();</span><br><span class="line">                <span class="keyword">if</span> (state.isAlive()) {</span><br><span class="line">                    <span class="comment">// 发布一个disconnected事件</span></span><br><span class="line">                    <span class="comment">// 创建ZooKeeper时加的默认监听器</span></span><br><span class="line">                    eventThread.queueEvent(<span class="keyword">new</span> WatchedEvent(</span><br><span class="line">                                               Event.EventType.None,</span><br><span class="line">                                               Event.KeeperState.Disconnected,</span><br><span class="line">                                               <span class="keyword">null</span>));</span><br><span class="line">                }</span><br><span class="line">                <span class="comment">// 重新更新底层网络连接初始化时间</span></span><br><span class="line">                clientCnxnSocket.updateNow();</span><br><span class="line">                <span class="comment">// 重新初始化底层网络连接最近一次发送和接收请求响应的时间</span></span><br><span class="line">                clientCnxnSocket.updateLastSendAndHeard();</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    <span class="comment">// 客户端状态异常处理</span></span><br><span class="line">    cleanup();</span><br><span class="line">    clientCnxnSocket.close();</span><br><span class="line">    <span class="keyword">if</span> (state.isAlive()) {</span><br><span class="line">        eventThread.queueEvent(<span class="keyword">new</span> WatchedEvent(Event.EventType.None,</span><br><span class="line">                                                Event.KeeperState.Disconnected, <span class="keyword">null</span>));</span><br><span class="line">    }</span><br><span class="line">    ZooTrace.logTraceMessage(LOG, ZooTrace.getTextTraceLevel(),</span><br><span class="line">                             <span class="string">"SendThread exitedloop."</span>);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>当与客户端已经建立好连接的服务端节点故障，客户端会在消息发送时捕获到异常，接着关闭连接、标记所有请求失败，重新选择一个服务端节点建立连接。</p>
+<h1 id="集群间故障"><a href="#集群间故障" class="headerlink" title="集群间故障"></a>集群间故障</h1><h2 id="follower故障"><a href="#follower故障" class="headerlink" title="follower故障"></a>follower故障</h2><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// LearnerHandler.java</span></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>{</span><br><span class="line">    <span class="keyword">try</span> {</span><br><span class="line">        ia = BinaryInputArchive.getArchive(<span class="keyword">new</span> BufferedInputStream(sock</span><br><span class="line">                                           .getInputStream()));</span><br><span class="line">        bufferedOutput = <span class="keyword">new</span> BufferedOutputStream(sock.getOutputStream());</span><br><span class="line">        oa = BinaryOutputArchive.getArchive(bufferedOutput);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// 接下来循环处理正常消息</span></span><br><span class="line">        <span class="keyword">while</span> (<span class="keyword">true</span>) {</span><br><span class="line">            qp = <span class="keyword">new</span> QuorumPacket();</span><br><span class="line">            ia.readRecord(qp, <span class="string">"packet"</span>);</span><br><span class="line"></span><br><span class="line">            <span class="comment">// ...</span></span><br><span class="line">        }</span><br><span class="line">    } <span class="keyword">catch</span> (IOException e) {</span><br><span class="line">        <span class="keyword">if</span> (sock != <span class="keyword">null</span> &amp;&amp; !sock.isClosed()) {</span><br><span class="line">            LOG.error(<span class="string">"Unexpected exception causing shutdown while sock "</span></span><br><span class="line">                      + <span class="string">"still open"</span>, e);</span><br><span class="line">            <span class="comment">//close the socket to make sure the</span></span><br><span class="line">            <span class="comment">//other side can see it being close</span></span><br><span class="line">            <span class="keyword">try</span> {</span><br><span class="line">                <span class="comment">// io异常关闭socket</span></span><br><span class="line">                sock.close();</span><br><span class="line">            } <span class="keyword">catch</span> (IOException ie) {</span><br><span class="line">                <span class="comment">// do nothing</span></span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">    } <span class="keyword">catch</span> (InterruptedException e) {</span><br><span class="line">        LOG.error(<span class="string">"Unexpected exception causing shutdown"</span>, e);</span><br><span class="line">    } <span class="keyword">finally</span> {</span><br><span class="line">        LOG.warn(<span class="string">"******* GOODBYE "</span></span><br><span class="line">                 + (sock != <span class="keyword">null</span> ? sock.getRemoteSocketAddress() : <span class="string">"&lt;null&gt;"</span>)</span><br><span class="line">                 + <span class="string">" ********"</span>);</span><br><span class="line">        shutdown();</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">shutdown</span><span class="params">()</span> </span>{</span><br><span class="line">    <span class="comment">// Send the packet of death</span></span><br><span class="line">    <span class="keyword">try</span> {</span><br><span class="line">        queuedPackets.put(proposalOfDeath);</span><br><span class="line">    } <span class="keyword">catch</span> (InterruptedException e) {</span><br><span class="line">        LOG.warn(<span class="string">"Ignoring unexpected exception"</span>, e);</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">try</span> {</span><br><span class="line">        <span class="keyword">if</span> (sock != <span class="keyword">null</span> &amp;&amp; !sock.isClosed()) {</span><br><span class="line">            sock.close();</span><br><span class="line">        }</span><br><span class="line">    } <span class="keyword">catch</span> (IOException e) {</span><br><span class="line">        LOG.warn(<span class="string">"Ignoring unexpected exception during socket close"</span>, e);</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">this</span>.interrupt();</span><br><span class="line">    leader.removeLearnerHandler(<span class="keyword">this</span>);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// Leader.java</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">removeLearnerHandler</span><span class="params">(LearnerHandler peer)</span> </span>{</span><br><span class="line">    <span class="keyword">synchronized</span> (forwardingFollowers) {</span><br><span class="line">        forwardingFollowers.remove(peer);</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">synchronized</span> (learners) {</span><br><span class="line">        learners.remove(peer);</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">synchronized</span> (observingLearners) {</span><br><span class="line">        observingLearners.remove(peer);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>当follower故障时，leader LearnerHandler会感知到异常，接着关闭连接、从follower列表中移除。此时，只要集群可以满足过半ACK则仍然可以正常提供服务。</p>
+<h2 id="leader故障"><a href="#leader故障" class="headerlink" title="leader故障"></a>leader故障</h2><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// QourumPeer.java</span></span><br><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>{</span><br><span class="line">    setName(<span class="string">"QuorumPeer"</span> + <span class="string">"[myid="</span> + getId() + <span class="string">"]"</span> +</span><br><span class="line">            cnxnFactory.getLocalAddress());</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span> {</span><br><span class="line">        <span class="comment">/*</span></span><br><span class="line"><span class="comment">         * 主要逻辑</span></span><br><span class="line"><span class="comment">         * Main loop</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line">        <span class="keyword">while</span> (running) {</span><br><span class="line">            <span class="comment">// 根据当前节点的状态执行相应的处理</span></span><br><span class="line">            <span class="keyword">switch</span> (getPeerState()) {</span><br><span class="line">            <span class="keyword">case</span> LOOKING:</span><br><span class="line">                <span class="comment">// 选举中状态</span></span><br><span class="line">                <span class="comment">// ...</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> OBSERVING:</span><br><span class="line">                <span class="comment">// ...</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> FOLLOWING:</span><br><span class="line">                <span class="keyword">try</span> {</span><br><span class="line">                    LOG.info(<span class="string">"FOLLOWING"</span>);</span><br><span class="line">                    setFollower(makeFollower(logFactory));</span><br><span class="line">                    follower.followLeader();</span><br><span class="line">                } <span class="keyword">catch</span> (Exception e) {</span><br><span class="line">                    LOG.warn(<span class="string">"Unexpected exception"</span>, e);</span><br><span class="line">                } <span class="keyword">finally</span> {</span><br><span class="line">                    <span class="comment">// followLeader异常, 关闭follower, 节点重新进入LOOKING状态</span></span><br><span class="line">                    follower.shutdown();</span><br><span class="line">                    setFollower(<span class="keyword">null</span>);</span><br><span class="line">                    setPeerState(ServerState.LOOKING);</span><br><span class="line">                }</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> LEADING:</span><br><span class="line">                <span class="comment">// ...</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">    } <span class="keyword">finally</span> {</span><br><span class="line">        LOG.warn(<span class="string">"QuorumPeer main thread exited"</span>);</span><br><span class="line">        <span class="keyword">try</span> {</span><br><span class="line">            MBeanRegistry.getInstance().unregisterAll();</span><br><span class="line">        } <span class="keyword">catch</span> (Exception e) {</span><br><span class="line">            LOG.warn(<span class="string">"Failed to unregister with JMX"</span>, e);</span><br><span class="line">        }</span><br><span class="line">        jmxQuorumBean = <span class="keyword">null</span>;</span><br><span class="line">        jmxLocalPeerBean = <span class="keyword">null</span>;</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// Follower.java</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">followLeader</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException </span>{</span><br><span class="line">    self.end_fle = System.currentTimeMillis();</span><br><span class="line">    LOG.info(<span class="string">"FOLLOWING - LEADER ELECTION TOOK - "</span> +</span><br><span class="line">             (self.end_fle - self.start_fle));</span><br><span class="line">    self.start_fle = <span class="number">0</span>;</span><br><span class="line">    self.end_fle = <span class="number">0</span>;</span><br><span class="line">    fzk.registerJMX(<span class="keyword">new</span> FollowerBean(<span class="keyword">this</span>, zk), self.jmxLocalPeerBean);</span><br><span class="line">    <span class="keyword">try</span> {</span><br><span class="line">        <span class="comment">// 寻找leader地址</span></span><br><span class="line">        InetSocketAddress addr = findLeader();</span><br><span class="line">        <span class="keyword">try</span> {</span><br><span class="line">            <span class="comment">// 向leader发起连接</span></span><br><span class="line">            connectToLeader(addr);</span><br><span class="line">            <span class="comment">// 注册到leader</span></span><br><span class="line">            <span class="keyword">long</span> newEpochZxid = registerWithLeader(Leader.FOLLOWERINFO);</span><br><span class="line"></span><br><span class="line">            <span class="comment">//check to see if the leader zxid is lower than ours</span></span><br><span class="line">            <span class="comment">//this should never happen but is just a safety check</span></span><br><span class="line">            <span class="keyword">long</span> newEpoch = ZxidUtils.getEpochFromZxid(newEpochZxid);</span><br><span class="line">            <span class="keyword">if</span> (newEpoch &lt; self.getAcceptedEpoch()) {</span><br><span class="line">                LOG.error(<span class="string">"Proposed leader epoch "</span> + ZxidUtils.zxidToString(newEpochZxid)</span><br><span class="line">                          + <span class="string">" is less than our accepted epoch "</span> + ZxidUtils.zxidToString(self.getAcceptedEpoch()));</span><br><span class="line">                <span class="keyword">throw</span> <span class="keyword">new</span> IOException(<span class="string">"Error: Epoch of leader is lower"</span>);</span><br><span class="line">            }</span><br><span class="line">            <span class="comment">// 从leader同步数据</span></span><br><span class="line">            syncWithLeader(newEpochZxid);</span><br><span class="line">            QuorumPacket qp = <span class="keyword">new</span> QuorumPacket();</span><br><span class="line">            <span class="keyword">while</span> (self.isRunning()) {</span><br><span class="line">                <span class="comment">// 读取从leader同步过来的数据</span></span><br><span class="line">                readPacket(qp);</span><br><span class="line">                <span class="comment">// 数据处理</span></span><br><span class="line">                processPacket(qp);</span><br><span class="line">            }</span><br><span class="line">        } <span class="keyword">catch</span> (IOException e) {</span><br><span class="line">            LOG.warn(<span class="string">"Exception when following the leader"</span>, e);</span><br><span class="line">            <span class="keyword">try</span> {</span><br><span class="line">                sock.close();</span><br><span class="line">            } <span class="keyword">catch</span> (IOException e1) {</span><br><span class="line">                e1.printStackTrace();</span><br><span class="line">            }</span><br><span class="line"></span><br><span class="line">            <span class="comment">// clear pending revalidations</span></span><br><span class="line">            pendingRevalidations.clear();</span><br><span class="line">        }</span><br><span class="line">    } <span class="keyword">finally</span> {</span><br><span class="line">        zk.unregisterJMX((Learner)<span class="keyword">this</span>);</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>当leader故障时，follower followLeader会发生异常被捕获，接着关闭follower，设置节点状态为LOOKING状态，集群会进行一轮新的选举。</p>
+<h1 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h1><ul>
+<li>客户端故障服务端处理：关闭session，删除watcher，关闭底层连接</li>
+<li>服务端故障客户端处理：切换服务端节点，重新建立长连接，建立会话，重新把内存中注册的监听器在新的服务端节点上注册。</li>
+<li>follower故障leader处理：关闭连接，从follower列表中移除，当可以满足过半节点ACK时集群可以正常对外提供服务。</li>
+<li>leader故障follower处理：关闭连接，关闭follwer，进入LOOKING状态开始新一轮选举。</li>
+</ul>
+
+    
+  </div>
+
+</article>
+
+
+   
+
+   
+  <div class="box-prev-next clearfix">
+    <a class="show pull-left" href="/2022/04/07/zookeeper-08/">
+        <i class="icon icon-angle-left"></i>
+    </a>
+    <a class="show pull-right" href="/2022/06/15/algorithm-all/">
+        <i class="icon icon-angle-right"></i>
+    </a>
+  </div>
+
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/categories/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              分类
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/roaming/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              漫游
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/atom.xml"
+              rel="noopener noreferrer"
+              target="_blank"
+              >
+              RSS
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/search/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              搜索
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+    
+    
+
+    
+
+    
+    
+
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script>
+    <div id="comment" class="vcomment" ></div>
+    <script>
+        var notify = 'false' == true ? true : false;
+        var verify = 'false' == true ? true : false;
+        var GUEST_INFO = ['nick','mail','link'];
+        var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+            return GUEST_INFO.indexOf(item) > -1
+        });
+        guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+        window.valine = new Valine({
+            el: '.vcomment',
+            notify: notify,
+            verify: verify,
+            appId: "masttnqEt9G69mj43i9oaA1C-gzGzoHsz",
+            appKey: "hgIx9VKn0GLDhRcLxQuNMl0E",
+            avatar:'mm',
+            placeholder: "Say something",
+            guest_info:guest_info,
+            pageSize:'10'
+        });
+    </script>
+  
+    
+
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>

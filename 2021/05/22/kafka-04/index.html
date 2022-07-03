@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>【Kafka】：再均衡原理剖析 | haifuns的博客</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="Kafka," />
+  
+
+  <meta name="description" content="概述Kafka中多个消费者间的分区分配由消费者协调器（ConsumerCoordinator）和组协调器（GroupCoordinator）共同完成。全部消费组被分为多个子集，每个子集在服务端对应者一个GroupCoordinator进行管理，而消费者客户端中的ConsumerCoordinator组件负责与GroupCoordinator进行交互。 GroupCoordinator与Consum">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Kafka】：再均衡原理剖析">
+<meta property="og:url" content="https://haifuns.com/2021/05/22/kafka-04/index.html">
+<meta property="og:site_name" content="haifuns的博客">
+<meta property="og:description" content="概述Kafka中多个消费者间的分区分配由消费者协调器（ConsumerCoordinator）和组协调器（GroupCoordinator）共同完成。全部消费组被分为多个子集，每个子集在服务端对应者一个GroupCoordinator进行管理，而消费者客户端中的ConsumerCoordinator组件负责与GroupCoordinator进行交互。 GroupCoordinator与Consum">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2021-05-22T20:30:00.000Z">
+<meta property="article:modified_time" content="2022-07-03T13:56:33.209Z">
+<meta property="article:author" content="haifuns">
+<meta property="article:tag" content="Kafka">
+<meta name="twitter:card" content="summary">
+
+  
+
+  
+    <link rel="icon" href="/images/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbeddx" rel="stylesheet">
+
+
+  
+    
+<link rel="stylesheet" href="/css/personal-style.css">
+
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?d3c8edb388553a2084296cbfe9a0785a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
+
+<meta name="generator" content="Hexo 5.4.1">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="haifuns的博客" type="application/atom+xml">
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header CENTER">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/categories/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            分类
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/roaming/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            漫游
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/atom.xml"
+            rel="noopener noreferrer"
+            target="_blank"
+            >
+            RSS
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/search/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A6%82%E8%BF%B0"><span class="toc-text">概述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%A7%A6%E5%8F%91%E6%97%B6%E6%9C%BA"><span class="toc-text">触发时机</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%86%8D%E5%9D%87%E8%A1%A1%E6%B5%81%E7%A8%8B"><span class="toc-text">再均衡流程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E9%98%B6%E6%AE%B5%EF%BC%88FIND-COORDINATOR%EF%BC%89"><span class="toc-text">第一阶段（FIND_COORDINATOR）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E9%98%B6%E6%AE%B5%EF%BC%88JOIN-GROUP%EF%BC%89"><span class="toc-text">第二阶段（JOIN_GROUP）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%89%E4%B8%BE%E6%B6%88%E8%B4%B9%E8%80%85%E7%BB%84leader"><span class="toc-text">选举消费者组leader</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%89%E4%B8%BE%E5%88%86%E5%8C%BA%E5%88%86%E9%85%8D%E7%AD%96%E7%95%A5"><span class="toc-text">选举分区分配策略</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E9%98%B6%E6%AE%B5%EF%BC%88SYNC-GROUP%EF%BC%89"><span class="toc-text">第三阶段（SYNC_GROUP）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%9B%9B%E9%98%B6%E6%AE%B5%EF%BC%88HEARTAEAT%EF%BC%89"><span class="toc-text">第四阶段（HEARTAEAT）</span></a></li></ol></li></ol>
+  </div>
+
+
+
+<div class="content content-post CENTER">
+   <article id="post-kafka-04" class="article article-type-post" itemprop="blogPost">
+  <header class="article-header">
+    <h1 class="post-title">【Kafka】：再均衡原理剖析</h1>
+
+    <div class="article-meta">
+      <span>
+        <i class="icon-calendar"></i>
+        <span>2021.05.22</span>
+      </span>
+
+      
+        <span class="article-author">
+          <i class="icon-user"></i>
+          <span>haifuns</span>
+        </span>
+      
+
+      
+  <span class="article-category">
+    <i class="icon-list"></i>
+    <a class="article-category-link" href="/categories/%E6%B6%88%E6%81%AF%E4%B8%AD%E9%97%B4%E4%BB%B6/">消息中间件</a>
+  </span>
+
+
+
+      
+
+      
+      <i class="fa fa-eye"></i> 
+        <span id="busuanzi_container_page_pv">
+           &nbsp热度 <span id="busuanzi_value_page_pv">
+           <i class="fa fa-spinner fa-spin"></i></span>℃
+        </span>
+      
+      
+    </div>
+  </header>
+
+  <div class="article-content">
+    
+      <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>Kafka中多个消费者间的分区分配由消费者协调器（ConsumerCoordinator）和组协调器（GroupCoordinator）共同完成。全部消费组被分为多个子集，每个子集在服务端对应者一个GroupCoordinator进行管理，而消费者客户端中的ConsumerCoordinator组件负责与GroupCoordinator进行交互。</p>
+<p>GroupCoordinator与ConsumerCoordinaor之间最重要的工作就是负责执行消费者再均衡。分区分配工作也是在再均衡期间完成的。</p>
+<span id="more"></span>
+
+<h1 id="触发时机"><a href="#触发时机" class="headerlink" title="触发时机"></a>触发时机</h1><p>触发再均衡的场景如下：</p>
+<ul>
+<li>新的消费者加入消费组。</li>
+<li>消费者宕机。</li>
+<li>消费者主动退出消费组。</li>
+<li>消费组对应的GroupCoordinaor节点发生变更。</li>
+<li>消费组内订阅的任一主题或主题分区数量发生变化。</li>
+</ul>
+<h1 id="再均衡流程"><a href="#再均衡流程" class="headerlink" title="再均衡流程"></a>再均衡流程</h1><h2 id="第一阶段（FIND-COORDINATOR）"><a href="#第一阶段（FIND-COORDINATOR）" class="headerlink" title="第一阶段（FIND_COORDINATOR）"></a>第一阶段（FIND_COORDINATOR）</h2><p>此阶段消费者需要与所属消费组对应的GroupCoordinator所在的broker建立连接。如果消费者已经保存与消费组对应的GroupCoordinator节点的信息，并且与之建立的网络连接正常，那么就直接进入第二阶段。否则，需要向负载最小的节点（leastLoadedNode）发送FindCoordinatorRequest（coordinator_key + coordinator_type）请求来查找对应的GroupCoordinator。</p>
+<p>Kafka收到FindCoordinatorRequest消息后，会根据coordinator_key（即groupId）查找对应的GroupCoordinator节点，返回对应的node_id、ip、port信息。</p>
+<p>查找GroupCoordinator的方式为先根据groupId的hash值对__consumers_offsets的分区数取余，得到分区号，然后寻找此分区leader副本所在的broker节点，即这个groupId所对应的GroupCoordinator节点。</p>
+<p>消费者groupId最终的分区分配方案及组内消费者提交的消费位移都会提交到查到的broker节点上。</p>
+<h2 id="第二阶段（JOIN-GROUP）"><a href="#第二阶段（JOIN-GROUP）" class="headerlink" title="第二阶段（JOIN_GROUP）"></a>第二阶段（JOIN_GROUP）</h2><p>此阶段消费者会向GroupCoordinator发送JoinGroupRequest请求，请求体包含如下信息：</p>
+<ul>
+<li>group_id：消费组id。</li>
+<li>session_timeout：对应消费者session.timeout.ms，默认10s。当GroupCoordinator超过session_timeout指定的时间没有收到心跳则认为消费者已下线。</li>
+<li>reblance_timeout：对应消费者max.poll.interval.ms，默认5min。表示消费组再平衡时GroupCoordinator等待消费者重新加入的最长时间。</li>
+<li>member_id：GroupCoordinator分配给消费者的id。消费者第一次发送JoinGroupRequest请求时此字段为null。</li>
+<li>protocol_type：消费者实现协议，此处传consumer。</li>
+<li>group_protocols：多个分区分配策略，配置多种策略时包含多个protocol_name和protocol_metadata信息。</li>
+</ul>
+<h3 id="选举消费者组leader"><a href="#选举消费者组leader" class="headerlink" title="选举消费者组leader"></a>选举消费者组leader</h3><p>GroupCoordinator需要为消费组内的消费者选举一个消费组leader，当消费者组还没有leader时，第一个加入的消费者即为消费者组leader，如果leader退出了消费者组就随机选一个消费者作为leader。</p>
+<h3 id="选举分区分配策略"><a href="#选举分区分配策略" class="headerlink" title="选举分区分配策略"></a>选举分区分配策略</h3><p>消费组需要从各个消费者呈报的分配策略中选举出一个策略，由消费者投票选出。具体选举过程如下：</p>
+<ol>
+<li>收集各个消费者支持的所有分配策略（partition.assignment.strategy）组成候选集。</li>
+<li>每个消费者从候选集中找出第一个支持的的策略并投票。</li>
+<li>计算候选集中的策略投票数，选票最多的策略即为当前消费组的分配策略。</li>
+</ol>
+<p>分配策略选举完成后Kafka会发送给消费者JoinGroupResponse回执，回执中包含GroupCoordinator中投票选举出的分配策略信息，并且只有leader消费者的回执中包含各个消费者的订阅信息。</p>
+<h2 id="第三阶段（SYNC-GROUP）"><a href="#第三阶段（SYNC-GROUP）" class="headerlink" title="第三阶段（SYNC_GROUP）"></a>第三阶段（SYNC_GROUP）</h2><p>此阶段leader消费者会根据上一个阶段选举出来的分区分配策略进行具体的分区分配，之后通过GroupCorrdinator转发同步分配方案。</p>
+<p>所有消费者会向GroupCoordinator发送SyncGroupRequest请求，并且只有leader消费者的请求中携带分区分配方案。</p>
+<p>GroupCoordinator会将leader消费者请求中的分区分配策略连同这个消费组的元数据信息存入Kafka的__consumer_offsets主题中。最后发送分区分配方案给各个消费者。</p>
+<h2 id="第四阶段（HEARTAEAT）"><a href="#第四阶段（HEARTAEAT）" class="headerlink" title="第四阶段（HEARTAEAT）"></a>第四阶段（HEARTAEAT）</h2><p>进入此阶段后消费组中的所有消费者就会处于正常工作状态。在开始消费前，消费者需要拉取消息的起始位置，如果之前提交过消费位移则通过OffsetFetchRequest向GroupCoordinator获取上次提交的位移并从此处继续消费。</p>
+<p>消费者通过一个独立的心跳线程向GroupCoordinator发送心跳，心跳间隔由heartbeat.interval.ms指定，默认3s。如果一个消费者发生崩溃并停止消费消息，那么GroupCoordinator会等待session.timeout.ms时间确认消费者死亡后触发再均衡。</p>
+
+    
+  </div>
+
+</article>
+
+
+   
+
+   
+  <div class="box-prev-next clearfix">
+    <a class="show pull-left" href="/2021/05/22/kafka-03/">
+        <i class="icon icon-angle-left"></i>
+    </a>
+    <a class="show pull-right" href="/2021/05/29/kafka-05/">
+        <i class="icon icon-angle-right"></i>
+    </a>
+  </div>
+
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/categories/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              分类
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/roaming/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              漫游
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/atom.xml"
+              rel="noopener noreferrer"
+              target="_blank"
+              >
+              RSS
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/search/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              搜索
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+    
+    
+
+    
+
+    
+    
+
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script>
+    <div id="comment" class="vcomment" ></div>
+    <script>
+        var notify = 'false' == true ? true : false;
+        var verify = 'false' == true ? true : false;
+        var GUEST_INFO = ['nick','mail','link'];
+        var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+            return GUEST_INFO.indexOf(item) > -1
+        });
+        guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+        window.valine = new Valine({
+            el: '.vcomment',
+            notify: notify,
+            verify: verify,
+            appId: "masttnqEt9G69mj43i9oaA1C-gzGzoHsz",
+            appKey: "hgIx9VKn0GLDhRcLxQuNMl0E",
+            avatar:'mm',
+            placeholder: "Say something",
+            guest_info:guest_info,
+            pageSize:'10'
+        });
+    </script>
+  
+    
+
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>
