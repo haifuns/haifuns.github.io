@@ -227,6 +227,21 @@ project:
 roaming:
   - year: 2022
     list:
+     - type: movie
+        date: "07-03"
+        text_value: "我和我的父辈"
+     - type: movie
+        date: "07-02"
+        text_value: "奇异博士2"
+     - type: movie
+        date: "05-02"
+        text_value: "蓝白红三部曲之红"
+     - type: movie
+        date: "05-01"
+        text_value: "蓝白红三部曲之白"
+     - type: movie
+        date: "04-30"
+        text_value: "蓝白红三部曲之蓝"
       - type: movie
         date: "04-07"
         text_value: "入殓师"
@@ -241,25 +256,25 @@ roaming:
         text_value:  狙击手 
       - type: movie
         date: "02-06"
-        text_value:  这个杀手不太冷静
+        text_value: 这个杀手不太冷静
       - type: movie
         date: 
-        text_value:  波西米亚狂想曲
+        text_value: 波西米亚狂想曲
       - type: movie
         date: 
-        text_value:  扬名立万
+        text_value: 扬名立万
       - type: movie
         date: 
-        text_value:  猎杀T34
+        text_value: 猎杀T34
       - type: movie
         date: 
         text_value: 横道世之介
       - type: movie
         date: 
-        text_value:  开端
+        text_value: 开端
       - type: movie
         date: 
-        text_value:  夏日大作战
+        text_value: 夏日大作战
   - year: 2021
     list:
       - type: book
@@ -285,106 +300,106 @@ roaming:
         text_value: 深入理解Kafka：核心设计与实践原理
       - type: movie
         date:
-        text_value:  狙击手 
+        text_value: 狙击手 
       - type: movie
         date:
         text_value: 新世界
       - type: movie
         date:
-        text_value:  芬奇 Finch
+        text_value: 芬奇 Finch
       - type: movie
         date:
-        text_value:  尚气与十环传奇
+        text_value: 尚气与十环传奇
       - type: movie
         date:
-        text_value:  头号玩家
+        text_value: 头号玩家
       - type: movie
         date:
-        text_value:  X特遣队：全员集结 The Suicide Squad (2021)
+        text_value: X特遣队：全员集结 The Suicide Squad (2021)
       - type: movie
         date:
-        text_value:  摩加迪沙 모가디슈 (2021)
+        text_value: 摩加迪沙 모가디슈 (2021)
       - type: movie
         date: 10-24
-        text_value:  沙丘 
+        text_value: 沙丘 
       - type: movie
         date:
-        text_value:  穆赫兰道
+        text_value: 穆赫兰道
       - type: movie
         date:
-        text_value:  贫民窟的百万富翁
+        text_value: 贫民窟的百万富翁
       - type: movie
         date: 10-02
-        text_value:  长津湖 
+        text_value: 长津湖 
       - type: movie
         date:
-        text_value:  四月物语
+        text_value: 四月物语
       - type: movie
         date:
-        text_value:  情书
+        text_value: 情书
       - type: movie
         date:
-        text_value:  基地
+        text_value: 基地
       - type: movie
         date:
-        text_value:  一代宗师
+        text_value: 一代宗师
       - type: movie
         date:
-        text_value:  鬼灭之刃 剧场版 无限列车篇
+        text_value: 鬼灭之刃 剧场版 无限列车篇
       - type: movie
         date:
-        text_value:  鱿鱼游戏
+        text_value: 鱿鱼游戏
       - type: movie
         date:
-        text_value:  白蛇2：青蛇劫起
+        text_value: 白蛇2：青蛇劫起
       - type: movie
         date:
-        text_value:  EVA 新世纪福音战士新剧场版3.33：Q
+        text_value: EVA 新世纪福音战士新剧场版3.33：Q
       - type: movie
         date:
-        text_value:  EVA 新世纪福音战士新剧场版2.22：破
+        text_value: EVA 新世纪福音战士新剧场版2.22：破
       - type: movie
         date:
-        text_value:  EVA 新世纪福音战士新剧场版1.11：序
+        text_value: EVA 新世纪福音战士新剧场版1.11：序
       - type: movie
         date:
-        text_value:  新·福音战士剧场版：终 シン・エヴァンゲリオン劇場版:│▌ (2021)
+        text_value: 新·福音战士剧场版：终 シン・エヴァンゲリオン劇場版:│▌ (2021)
       - type: movie
         date:
-        text_value:  花束般的恋爱 
+        text_value: 花束般的恋爱 
       - type: movie
         date:
-        text_value:  浪客剑心 最终章 追忆篇 るろうに剣心 最終章 The Beginning 
+        text_value: 浪客剑心 最终章 追忆篇 るろうに剣心 最終章 The Beginning 
       - type: movie
         date:
-        text_value:  头领
+        text_value: 头领
       - type: movie
         date:
-        text_value:  与我跳舞
+        text_value: 与我跳舞
       - type: movie
         date:
-        text_value:  唇上之歌
+        text_value: 唇上之歌
       - type: movie
         date:
-        text_value:  时光尽头的恋人
+        text_value: 时光尽头的恋人
       - type: movie
         date:
-        text_value:  橘色奇迹
+        text_value: 橘色奇迹
       - type: movie
         date:
-        text_value:  四重奏
+        text_value: 四重奏
       - type: movie
         date:
-        text_value:  阳光姐妹淘
+        text_value: 阳光姐妹淘
       - type: movie
         date: 05-08
-        text_value:  悬崖之上 
+        text_value: 悬崖之上 
       - type: movie
         date:
-        text_value:  无罪之罪
+        text_value: 无罪之罪
       - type: movie
         date: 04-28
-        text_value:  指环王：双塔奇兵 
+        text_value: 指环王：双塔奇兵 
   - year: 2020
     list:
       - type: book
@@ -395,19 +410,19 @@ roaming:
         text_value: 球状闪电刘慈欣      
       - type: book
         date: 03-13
-        text_value:  超新星纪元 刘慈欣
+        text_value: 超新星纪元 刘慈欣
       - type: book
         date:
-        text_value:  时间移民刘慈欣 
+        text_value: 时间移民刘慈欣 
       - type: book
         date:
-        text_value:  带上她的眼睛刘慈欣 
+        text_value: 带上她的眼睛刘慈欣 
       - type: book
         date:
-        text_value:  梦之海刘慈欣 
+        text_value: 梦之海刘慈欣 
       - type: book
         date:
-        text_value:  局外人 加缪
+        text_value: 局外人 加缪
       - type: movie
         date: 02-13
         text_value: 了不起的盖茨比
@@ -416,13 +431,13 @@ roaming:
         text_value: 想见你
       - type: movie
         date: 02-24
-        text_value:  超体
+        text_value: 超体
       - type: movie
         date: 03-02
-        text_value:  阿丽塔:战斗天使
+        text_value: 阿丽塔:战斗天使
       - type: movie
         date: 03-07
-        text_value:  2001太空漫游
+        text_value: 2001太空漫游
       - type: movie
         date: 03-07
         text_value: 2010太空漫游
