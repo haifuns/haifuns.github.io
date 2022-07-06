@@ -2,6 +2,7 @@ title: 【算法基础】堆和堆排序
 author: haifun
 tags:
   - 算法
+  - 堆
   - 排序
 categories:
   - 算法
