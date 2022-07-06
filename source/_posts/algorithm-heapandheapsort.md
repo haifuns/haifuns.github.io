@@ -201,3 +201,54 @@ public static void sortedArrDistanceLessK(int[] arr, int k) {
     }
 }
 ```
+
+# 2. 最大线段重合问题
+
+给定很多线段，线段用[start,end]表示线段开始和结束位置，左右都是闭区间。
+
+规定：
+1. 线段的开始和结束位置一定是整数值
+2. 线段重合区域的长度一定>=1
+
+要求返回最多重合区域中，包含了几段线段。
+
+```java
+// 暴力方法 O((max - min) * N)
+public static int maxCover1(int[][] lines) {
+    int min = Integer.MAX_VALUE; // 所有线段最小值
+    int max = Integer.MIN_VALUE; // 所有线段最大值
+    for (int i = 0; i < lines.length; i++) {
+        min = Math.min(min, lines[i][0]);
+        max = Math.max(max, lines[i][1]);
+    }
+    int cover = 0;
+    for (double p = min + 0.5; p < max; p += 1) { // 每0.5统计在范围内的线段数
+        int cur = 0; // 包含当前0.5的线段数
+        for (int i = 0; i < lines.length; i++) {
+            if (lines[i][0] < p && lines[i][1] > p) {
+                cur++;
+            }
+        }
+        cover = Math.max(cover, cur); // 重合最多的0.5对应的线段数量
+    }
+    return cover;
+}
+
+// 堆实现 O(N*logN)
+public static int maxCover2(int[][] m) {
+    // 先按照线段左位置start排序
+    Arrays.sort(m, (a, b) -> (a[0] - b[0]));
+    // 准备好小根堆
+    PriorityQueue<Integer> heap = new PriorityQueue<>();
+    int max = 0;
+    for (int[] line : m) {
+        while (!heap.isEmpty() && heap.peek() <= line[0]) {
+            heap.poll(); // 弹出所有小于start的数
+        }
+        heap.add(line[1]); // end加入小根堆
+        max = Math.max(max, heap.size()); // 小根堆里剩下的是跟当前线段重合的线段数量
+    }
+    return max;
+}
+```
+
