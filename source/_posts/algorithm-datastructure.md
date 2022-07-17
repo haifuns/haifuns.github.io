@@ -1,4 +1,4 @@
-title: 【算法基础】数据结构
+title: 【算法基础】链表、栈、队列
 author: haifun
 tags:
   - 算法

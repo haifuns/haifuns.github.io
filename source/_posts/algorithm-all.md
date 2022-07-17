@@ -13,12 +13,13 @@ date: 2022-06-15 10:00:00
 - [【算法基础】复杂度分析](https://haifuns.com/2022/06/20/algorithm-complexity/)
 - [【算法基础】二分法](https://haifuns.com/2022/06/21/algorithm-dichotomy/)
 - [【算法基础】异或运算](https://haifuns.com/2022/06/22/algorithm-xor/)
-- [【算法基础】数据结构](https://haifuns.com/2022/06/24/algorithm-datastructure)
+- [【算法基础】链表、栈、队列](https://haifuns.com/2022/06/24/algorithm-datastructure)
 - [【算法基础】递归](https://haifuns.com/2022/06/26/algorithm-recursion)
 - [【算法基础】归并排序](https://haifuns.com/2022/06/29/algorithm-mergesort)
 - [【算法基础】快速排序](https://haifuns.com/2022/06/30/algorithm-quicksort)
 - [【算法基础】堆和堆排序](https://haifuns.com/2022/07/04/algorithm-heapandheapsort)
 - [【算法基础】加强堆](https://haifuns.com/2022/07/06/algorithm-heapgreater)
+- [【算法基础】前缀树](https://haifuns.com/2022/07/17/algorithm-trietree)
 - [【算法基础】排序算法（总）](https://haifuns.com/2022/06/21/algorithm-sort/)
 
 # 常备算法网站
