@@ -410,7 +410,7 @@ public static Node copyRandomList2(Node head) {
 }
 ```
 
-# 4.链表相交（LeetCode 160. 141. 142. easy，相似）
+# 4.链表相交（LeetCode 160. 141. 142. ，相似）
 
 给定两个可能有环也可能无环的单链表的头结点head1和head2，请找出两个链表相交的第一个节点，如果不存在返回null。
 
