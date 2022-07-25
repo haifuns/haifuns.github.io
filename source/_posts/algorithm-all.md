@@ -22,6 +22,7 @@ date: 2022-06-15 10:00:00
 - [【算法基础】前缀树](https://haifuns.com/2022/07/17/algorithm-trietree)
 - [【算法基础】不基于比较的排序（计数、基数）](https://haifuns.com/2022/07/17/algorithm-uncomparesort)
 - [【算法基础】排序算法（总）](https://haifuns.com/2022/07/18/algorithm-sort/)
+- [【算法基础】链表专练](https://haifuns.com/2022/07/25/algorithm-linkedlist/)
 
 # 常备算法网站
 
