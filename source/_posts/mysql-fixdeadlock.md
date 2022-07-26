@@ -10,6 +10,8 @@ date: 2022-07-26 18:00:00
 
 ---
 
+> 注：本文中涉及公司业务信息已脱敏。
+
 在项目监控中观察到偶现数据库死锁异常，报错如下：
 
 ```
@@ -31,8 +33,6 @@ com.mysql.jdbc.exceptions.jdbc4.MySQLTransactionRollbackException: Deadlock foun
     at com.mysql.jdbc.PreparedStatement.executeUpdate(PreparedStatement.java:2049)
     at com.mysql.jdbc.PreparedStatement.executeUpdate(PreparedStatement.java:2034)
 ```
-
-> 注：本文中涉及公司业务信息已脱敏。
 
 涉及表信息如下（演示表）：
 
