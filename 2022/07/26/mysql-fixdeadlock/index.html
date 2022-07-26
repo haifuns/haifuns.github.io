@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>记一次mysql index_merge引发的死锁分析 | haifuns的博客</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="MySQL,死锁," />
+  
+
+  <meta name="description" content="在项目监控中观察到偶现数据库死锁异常，报错如下： 1234567891011121314151617com.mysql.jdbc.exceptions.jdbc4.MySQLTransactionRollbackException: Deadlock found when trying to get lock; try restarting transaction    at sun.reflec">
+<meta property="og:type" content="article">
+<meta property="og:title" content="记一次mysql index_merge引发的死锁分析">
+<meta property="og:url" content="https://haifuns.com/2022/07/26/mysql-fixdeadlock/index.html">
+<meta property="og:site_name" content="haifuns的博客">
+<meta property="og:description" content="在项目监控中观察到偶现数据库死锁异常，报错如下： 1234567891011121314151617com.mysql.jdbc.exceptions.jdbc4.MySQLTransactionRollbackException: Deadlock found when trying to get lock; try restarting transaction    at sun.reflec">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-07-26T18:00:00.000Z">
+<meta property="article:modified_time" content="2022-07-26T09:33:17.484Z">
+<meta property="article:author" content="haifuns">
+<meta property="article:tag" content="MySQL">
+<meta property="article:tag" content="死锁">
+<meta name="twitter:card" content="summary">
+
+  
+
+  
+    <link rel="icon" href="/images/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbeddx" rel="stylesheet">
+
+
+  
+    
+<link rel="stylesheet" href="/css/personal-style.css">
+
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?d3c8edb388553a2084296cbfe9a0785a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
+
+<meta name="generator" content="Hexo 5.4.1">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="haifuns的博客" type="application/atom+xml">
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header CENTER">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/categories/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            分类
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/roaming/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            漫游
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/atom.xml"
+            rel="noopener noreferrer"
+            target="_blank"
+            >
+            RSS
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/search/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%AD%BB%E9%94%81%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90"><span class="toc-text">死锁日志分析</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%AD%BB%E9%94%81%E5%8E%9F%E5%9B%A0%E5%88%86%E6%9E%90"><span class="toc-text">死锁原因分析</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="toc-text">解决方案</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-text">参考资料</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post CENTER">
+   <article id="post-mysql-fixdeadlock" class="article article-type-post" itemprop="blogPost">
+  <header class="article-header">
+    <h1 class="post-title">记一次mysql index_merge引发的死锁分析</h1>
+
+    <div class="article-meta">
+      <span>
+        <i class="icon-calendar"></i>
+        <span>2022.07.26</span>
+      </span>
+
+      
+        <span class="article-author">
+          <i class="icon-user"></i>
+          <span>haifuns</span>
+        </span>
+      
+
+      
+  <span class="article-category">
+    <i class="icon-list"></i>
+    <a class="article-category-link" href="/categories/MySQL/">MySQL</a> / <a class="article-category-link" href="/categories/MySQL/%E6%8E%92%E6%9F%A5%E7%BB%8F%E9%AA%8C/">排查经验</a>
+  </span>
+
+
+
+      
+
+      
+      <i class="fa fa-eye"></i> 
+        <span id="busuanzi_container_page_pv">
+           &nbsp热度 <span id="busuanzi_value_page_pv">
+           <i class="fa fa-spinner fa-spin"></i></span>℃
+        </span>
+      
+      
+    </div>
+  </header>
+
+  <div class="article-content">
+    
+      <p>在项目监控中观察到偶现数据库死锁异常，报错如下：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">com.mysql.jdbc.exceptions.jdbc4.MySQLTransactionRollbackException: Deadlock found when trying to get lock; try restarting transaction</span><br><span class="line">    at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)</span><br><span class="line">    at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)</span><br><span class="line">    at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)</span><br><span class="line">    at java.lang.reflect.Constructor.newInstance(Constructor.java:422)</span><br><span class="line">    at com.mysql.jdbc.Util.handleNewInstance(Util.java:400)</span><br><span class="line">    at com.mysql.jdbc.Util.getInstance(Util.java:383)</span><br><span class="line">    at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:987)</span><br><span class="line">    at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3847)</span><br><span class="line">    at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:3783)</span><br><span class="line">    at com.mysql.jdbc.MysqlIO.sendCommand(MysqlIO.java:2447)</span><br><span class="line">    at com.mysql.jdbc.MysqlIO.sqlQueryDirect(MysqlIO.java:2594)</span><br><span class="line">    at com.mysql.jdbc.ConnectionImpl.execSQL(ConnectionImpl.java:2545)</span><br><span class="line">    at com.mysql.jdbc.PreparedStatement.executeInternal(PreparedStatement.java:1901)</span><br><span class="line">    at com.mysql.jdbc.PreparedStatement.executeUpdate(PreparedStatement.java:2113)</span><br><span class="line">    at com.mysql.jdbc.PreparedStatement.executeUpdate(PreparedStatement.java:2049)</span><br><span class="line">    at com.mysql.jdbc.PreparedStatement.executeUpdate(PreparedStatement.java:2034)</span><br></pre></td></tr></tbody></table></figure>
+
+<blockquote>
+<p>注：本文中涉及公司业务信息已脱敏。</p>
+</blockquote>
+<p>涉及表信息如下（演示表）：</p>
+<figure class="highlight sql"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> `test_table` (</span><br><span class="line">  `id` <span class="type">bigint</span>(<span class="number">20</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span> AUTO_INCREMENT COMMENT <span class="string">'自增id'</span>,</span><br><span class="line">  `user_id` <span class="type">bigint</span>(<span class="number">20</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span> <span class="keyword">DEFAULT</span> <span class="string">'0'</span> COMMENT <span class="string">'用户id'</span>,</span><br><span class="line">  `class_id` <span class="type">int</span>(<span class="number">14</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span> <span class="keyword">DEFAULT</span> <span class="string">'0'</span> COMMENT <span class="string">'课程id'</span>,</span><br><span class="line">  `is_deleted` tinyint(<span class="number">4</span>) <span class="keyword">NOT</span> <span class="keyword">NULL</span> <span class="keyword">DEFAULT</span> <span class="string">'0'</span> COMMENT <span class="string">'是否删除'</span>,</span><br><span class="line">  `add_time` datetime <span class="keyword">NOT</span> <span class="keyword">NULL</span> <span class="keyword">DEFAULT</span> <span class="built_in">CURRENT_TIMESTAMP</span> COMMENT <span class="string">'创建时间'</span>,</span><br><span class="line">  `mod_time` datetime <span class="keyword">NOT</span> <span class="keyword">NULL</span> <span class="keyword">DEFAULT</span> <span class="built_in">CURRENT_TIMESTAMP</span> <span class="keyword">ON</span> UPDATE <span class="built_in">CURRENT_TIMESTAMP</span> COMMENT <span class="string">'修改时间'</span>,</span><br><span class="line">  <span class="keyword">PRIMARY</span> KEY (`id`),</span><br><span class="line">  KEY `idx_user_id` (`user_id`),</span><br><span class="line">  KEY `idx_class_id` (`class_id`)</span><br><span class="line">) ENGINE<span class="operator">=</span>InnoDB <span class="keyword">DEFAULT</span> CHARSET<span class="operator">=</span>utf8mb4 <span class="keyword">COLLATE</span><span class="operator">=</span>utf8mb4_unicode_ci;</span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="死锁日志分析"><a href="#死锁日志分析" class="headerlink" title="死锁日志分析"></a>死锁日志分析</h1><p>从RDS中拿到了死锁日志如下：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">LATEST DETECTED DEADLOCK</span><br><span class="line">------------------------</span><br><span class="line">2022-07-19 10:10:22 0x7f269177f700</span><br><span class="line">*** (1) TRANSACTION:</span><br><span class="line">TRANSACTION 1017957458, ACTIVE 0 sec starting index read</span><br><span class="line">mysql tables in use 3, locked 3</span><br><span class="line">LOCK WAIT 4 lock struct(s), heap size 1136, 3 row lock(s)</span><br><span class="line">MySQL thread id 13133017, OS thread handle 139806311954176, query id 2776903298 10.**.**.179 k**_base_oniv updating</span><br><span class="line">/*id:182a***d*//*ip=10.**.**.179*/update test_table</span><br><span class="line">     SET is_deleted = 1,</span><br><span class="line">        mod_time = '2022-07-19 10:10:22.861' </span><br><span class="line">     WHERE (  user_id = 1548612299617681421</span><br><span class="line">                  and class_id = 1470379</span><br><span class="line">                  and is_deleted = 0 )</span><br><span class="line">*** (1) WAITING FOR THIS LOCK TO BE GRANTED:</span><br><span class="line">RECORD LOCKS space id 883 page no 6297 n bits 1000 index idx_class_id of table `test_db`.`test_table` trx id 1017957458 lock_mode X waiting</span><br><span class="line">*** (2) TRANSACTION:</span><br><span class="line">TRANSACTION 1017957457, ACTIVE 0 sec fetching rows</span><br><span class="line">mysql tables in use 3, locked 3</span><br><span class="line">83 lock struct(s), heap size 8400, 669 row lock(s)</span><br><span class="line">MySQL thread id 13116419, OS thread handle 139803626043136, query id 2776903296 10.**.**.178 k**_base_oniv updating</span><br><span class="line">/*id:182a***d*//*ip=10.**.**.178*/update test_table</span><br><span class="line">     SET is_deleted = 1,</span><br><span class="line">        mod_time = '2022-07-19 10:10:22.861' </span><br><span class="line">     WHERE (  user_id = 1548831949420961886</span><br><span class="line">                  and class_id = 1470379</span><br><span class="line">                  and is_deleted = 0 )</span><br><span class="line">*** (2) HOLDS THE LOCK(S):</span><br><span class="line">RECORD LOCKS space id 883 page no 6297 n bits 1000 index idx_class_id of table `test_db`.`test_table` trx id 1017957457 lock_mode X</span><br><span class="line">*** (2) WAITING FOR THIS LOCK TO BE GRANTED:</span><br><span class="line">RECORD LOCKS space id 883 page no 8596 n bits 152 index PRIMARY of table `test_db`.`test_table` trx id 1017957457 lock_mode X locks rec but not gap waiting</span><br><span class="line">*** WE ROLL BACK TRANSACTION (1)</span><br></pre></td></tr></tbody></table></figure>
+
+<p>从日志中可以看到死锁发生时间，导致死锁的事务信息，每个事务正在执行的sql，等待锁、持有锁等信息。</p>
+<p>下面逐段对日志进行详细分析：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">*** (1) TRANSACTION:</span><br><span class="line">TRANSACTION 1017957458, ACTIVE 0 sec starting index read</span><br></pre></td></tr></tbody></table></figure>
+
+<ul>
+<li>1017957458 是第一个事务的 id。</li>
+<li>ACTIVE 0 sec 表示事务活动时间。</li>
+<li>starting index read 表示事务当前状态，这里表示正在读索引；其他可能的事务状态有：fetching rows，updating，deleting，inserting 等。</li>
+</ul>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mysql tables in use 3, locked 3</span><br><span class="line">LOCK WAIT 4 lock struct(s), heap size 1136, 3 row lock(s)</span><br></pre></td></tr></tbody></table></figure>
+
+<ul>
+<li>tables in use 3, locked 3 表示有3张表被使用，有3个表锁。</li>
+<li>LOCK WAIT 表示事务正在等待锁。4 lock struct(s) 表示事务的锁链表长度为4，每个链表节点代表该事务持有的一个锁结构，包括表锁，记录锁以及自增锁等。</li>
+<li>heap size 1136 表示为事务分配的锁堆内存大小，这里不需要关心。</li>
+<li>3 row lock(s)  表示当前事务持有的行锁个数。</li>
+</ul>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MySQL thread id 13133017, OS thread handle 139806311954176, query id 2776903298 10.**.**.179 k**_base_oniv updating</span><br></pre></td></tr></tbody></table></figure>
+
+<p>事务的线程id，数据库ip、库名信息，这里不需要关心。</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">update ..</span><br><span class="line">SET ..</span><br><span class="line">WHERE ..</span><br></pre></td></tr></tbody></table></figure>
+
+<p>事务正在执行的sql，需要注意的是死锁日志里只会显示一条sql，分析时还需要结合代码看事务之前还执行了哪些sql。我们这里没有其他sql，只有这一个update操作。</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">*** (1) WAITING FOR THIS LOCK TO BE GRANTED:</span><br><span class="line">RECORD LOCKS space id 883 page no 6297 n bits 1000 index idx_class_id of table `test_db`.`test_table` trx id 1017957458 lock_mode X waiting</span><br></pre></td></tr></tbody></table></figure>
+<ul>
+<li>WAITING FOR THIS LOCK TO BE GRANTED 表示正在等待锁。</li>
+<li>RECORD LOCKS 表示等待的锁类型，这里是记录锁。</li>
+<li>space id 883 page no 6297 n bits 1000 表示文件位置，这里不关心。</li>
+<li>index idx_class_id of table <code>test_db</code>.<code>test_table</code> 表示锁的索引，以及索引详情。</li>
+<li>trx id 1017957458 是事务id。</li>
+<li>lock_mode X waiting 表示Next-key 锁，当前处于锁等待状态。</li>
+</ul>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">*** (2) TRANSACTION:</span><br><span class="line">TRANSACTION 1017957457, ACTIVE 0 sec fetching rows</span><br><span class="line">mysql tables in use 3, locked 3</span><br><span class="line">83 lock struct(s), heap size 8400, 669 row lock(s)</span><br><span class="line">MySQL thread id 13116419, OS thread handle 139803626043136, query id 2776903296 10.198.196.178 k**_base_oniv updating</span><br><span class="line">/*id:182a1bfd*//*ip=10.198.196.178*/update test_table</span><br><span class="line">     SET is_deleted = 1,</span><br><span class="line">        mod_time = '2022-07-19 10:10:22.861' </span><br><span class="line">     WHERE (  user_id = 1548831949420961886</span><br><span class="line">                  and class_id = 1470379</span><br><span class="line">                  and is_deleted = 0 )</span><br></pre></td></tr></tbody></table></figure>
+
+<p>事务2这段信息跟事务1类似，不再赘述。</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">*** (2) HOLDS THE LOCK(S):</span><br><span class="line">RECORD LOCKS space id 883 page no 6297 n bits 1000 index idx_class_id of table `test_db`.`test_table` trx id 1017957457 lock_mode X</span><br><span class="line">*** (2) WAITING FOR THIS LOCK TO BE GRANTED:</span><br><span class="line">RECORD LOCKS space id 883 page no 8596 n bits 152 index PRIMARY of table `test_db`.`test_table` trx id 1017957457 lock_mode X locks rec but not gap waiting</span><br><span class="line">*** WE ROLL BACK TRANSACTION (1)</span><br></pre></td></tr></tbody></table></figure>
+
+<p>锁信息比较关键，第一段表示事务2持有一个idx_class_id索引上的Next-key 锁，第二段表示事务2等待获取表主键上的记录锁。此时形成了死锁，事务1被回滚。</p>
+<h1 id="死锁原因分析"><a href="#死锁原因分析" class="headerlink" title="死锁原因分析"></a>死锁原因分析</h1><p>死锁日志我们已经分析完毕了，从日志中可以看到事务1在等待获取索引idx_class_id上的Next-key lock，而事务2占有索引idx_class_id上的Next-key lock、等待获取主键上的记录锁，然后形成了死锁。</p>
+<p>但是，仅靠日志还是没有弄明白死锁形成的原因，事务1占有的锁信息不知道。从结论反推原因我们可以想到事务1一定是占有了主键上的记录锁，从而相互等待形成了死锁，但是为什么？</p>
+<p>让我们来看下sql执行计划：</p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>select_type</th>
+<th>table</th>
+<th>partitions</th>
+<th>type</th>
+<th>possible_keys</th>
+<th>key</th>
+<th>key_len</th>
+<th>ref</th>
+<th>rows</th>
+<th>filtered</th>
+<th>Extra</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>UPDATE</td>
+<td>test_table</td>
+<td></td>
+<td>index_merge</td>
+<td>idx_user_id,idx_class_id</td>
+<td>idx_user_id,idx_class_id</td>
+<td>8,4</td>
+<td></td>
+<td>1</td>
+<td>100</td>
+<td>Using intersect(idx_user_id,idx_class_id); Using where</td>
+</tr>
+</tbody></table>
+<p>从执行计划可以看到索引类型是index_merge，mysql使用了索引合并优化。Extra中可以看到Using intersect，表示具体使用的是index merge intersection算法，对所有使用的索引同时扫描，然后将扫描结果取交集。</p>
+<p>此时问题就比较明确了，两个事务加锁过程如下：</p>
+<ol>
+<li>事务1对idx_user_id加了next-key lock，然后对primary id加了record lock；</li>
+<li>事务2对idx_class_id加了next-key lock，然后要对primary id加record lock陷入等待；</li>
+<li>事务1要对idx_class_id加next-key lock陷入等待；</li>
+</ol>
+<p>在上面三步完毕后死锁就形成了。</p>
+<p><strong>查资料过程中发现MySQL官方已经确认了此bug：<a target="_blank" rel="noopener" href="https://bugs.mysql.com/bug.php?id=77209%E3%80%82">https://bugs.mysql.com/bug.php?id=77209。</a></strong></p>
+<h1 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h1><ol>
+<li>建立联合索引，避免index merge。</li>
+<li>优化代码，避免数据库并发操作。</li>
+<li>将优化器的index merge优化关闭。</li>
+</ol>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://www.aneasystone.com/archives/2017/12/solving-dead-locks-three.html">解决死锁之路 - 常见 SQL 语句的加锁分析</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.aneasystone.com/archives/2018/04/solving-dead-locks-four.html">解决死锁之路（终结篇） - 再见死锁</a></li>
+<li><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/5.7/en/index-merge-optimization.html">8.2.1.3 Index Merge Optimization</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_37692493/article/details/106970386">index_merge导致死锁案例分析</a></li>
+</ul>
+
+    
+  </div>
+
+</article>
+
+
+   
+
+   
+  <div class="box-prev-next clearfix">
+    <a class="show pull-left" href="/2022/07/25/algorithm-linkedlist/">
+        <i class="icon icon-angle-left"></i>
+    </a>
+    <a class="hide pull-right" href="/">
+        <i class="icon icon-angle-right"></i>
+    </a>
+  </div>
+
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/categories/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              分类
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/roaming/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              漫游
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/atom.xml"
+              rel="noopener noreferrer"
+              target="_blank"
+              >
+              RSS
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/search/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              搜索
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+    
+    
+
+    
+
+    
+    
+
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script>
+    <div id="comment" class="vcomment" ></div>
+    <script>
+        var notify = 'false' == true ? true : false;
+        var verify = 'false' == true ? true : false;
+        var GUEST_INFO = ['nick','mail','link'];
+        var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+            return GUEST_INFO.indexOf(item) > -1
+        });
+        guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+        window.valine = new Valine({
+            el: '.vcomment',
+            notify: notify,
+            verify: verify,
+            appId: "masttnqEt9G69mj43i9oaA1C-gzGzoHsz",
+            appKey: "hgIx9VKn0GLDhRcLxQuNMl0E",
+            avatar:'mm',
+            placeholder: "Say something",
+            guest_info:guest_info,
+            pageSize:'10'
+        });
+    </script>
+  
+    
+
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>
