@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>【算法基础】二叉树 | haifuns的博客</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="算法,二叉树," />
+  
+
+  <meta name="description" content="二叉树（binary tree）是指树中节点的度不大于2的有序树，它是一种最简单且最重要的树。二叉树的递归定义为：二叉树是一棵空树，或者是一棵由一个根节点和两棵互不相交的，分别称作根的左子树和右子树组成的非空树；左子树和右子树又同样都是二叉树。 二叉树节点结构： 123456789public static class Node {    public int value;    public N">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【算法基础】二叉树">
+<meta property="og:url" content="https://haifuns.com/2022/07/30/algorithm-binarytree/index.html">
+<meta property="og:site_name" content="haifuns的博客">
+<meta property="og:description" content="二叉树（binary tree）是指树中节点的度不大于2的有序树，它是一种最简单且最重要的树。二叉树的递归定义为：二叉树是一棵空树，或者是一棵由一个根节点和两棵互不相交的，分别称作根的左子树和右子树组成的非空树；左子树和右子树又同样都是二叉树。 二叉树节点结构： 123456789public static class Node {    public int value;    public N">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-07-30T23:00:00.000Z">
+<meta property="article:modified_time" content="2022-07-30T15:24:29.100Z">
+<meta property="article:author" content="haifuns">
+<meta property="article:tag" content="算法">
+<meta property="article:tag" content="二叉树">
+<meta name="twitter:card" content="summary">
+
+  
+
+  
+    <link rel="icon" href="/images/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbeddx" rel="stylesheet">
+
+
+  
+    
+<link rel="stylesheet" href="/css/personal-style.css">
+
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?d3c8edb388553a2084296cbfe9a0785a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
+
+<meta name="generator" content="Hexo 5.4.1">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="haifuns的博客" type="application/atom+xml">
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header CENTER">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/categories/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            分类
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/roaming/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            漫游
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/atom.xml"
+            rel="noopener noreferrer"
+            target="_blank"
+            >
+            RSS
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/search/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E9%81%8D%E5%8E%86"><span class="toc-text">二叉树的遍历</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%80%92%E5%BD%92%E5%AE%9E%E7%8E%B0"><span class="toc-text">递归实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9D%9E%E9%80%92%E5%BD%92%E5%AE%9E%E7%8E%B0"><span class="toc-text">非递归实现</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E6%8C%89%E5%B1%82%E9%81%8D%E5%8E%86"><span class="toc-text">二叉树的按层遍历</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AE%9E%E7%8E%B0%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E5%BA%8F%E5%88%97%E5%8C%96%E5%92%8C%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96"><span class="toc-text">实现二叉树的序列化和反序列化</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%B7%A5%E5%85%B7%E5%87%BD%E6%95%B0%EF%BC%9A%E6%89%93%E5%8D%B0%E4%BA%8C%E5%8F%89%E6%A0%91"><span class="toc-text">工具函数：打印二叉树</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post CENTER">
+   <article id="post-algorithm-binarytree" class="article article-type-post" itemprop="blogPost">
+  <header class="article-header">
+    <h1 class="post-title">【算法基础】二叉树</h1>
+
+    <div class="article-meta">
+      <span>
+        <i class="icon-calendar"></i>
+        <span>2022.07.30</span>
+      </span>
+
+      
+        <span class="article-author">
+          <i class="icon-user"></i>
+          <span>haifuns</span>
+        </span>
+      
+
+      
+  <span class="article-category">
+    <i class="icon-list"></i>
+    <a class="article-category-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a>
+  </span>
+
+
+
+      
+
+      
+      <i class="fa fa-eye"></i> 
+        <span id="busuanzi_container_page_pv">
+           &nbsp热度 <span id="busuanzi_value_page_pv">
+           <i class="fa fa-spinner fa-spin"></i></span>℃
+        </span>
+      
+      
+    </div>
+  </header>
+
+  <div class="article-content">
+    
+      <p>二叉树（binary tree）是指树中节点的度不大于2的有序树，它是一种最简单且最重要的树。二叉树的递归定义为：二叉树是一棵空树，或者是一棵由一个根节点和两棵互不相交的，分别称作根的左子树和右子树组成的非空树；左子树和右子树又同样都是二叉树。</p>
+<p>二叉树节点结构：</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span> </span>{</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span> value;</span><br><span class="line">    <span class="keyword">public</span> Node left;</span><br><span class="line">    <span class="keyword">public</span> Node right;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">(<span class="keyword">int</span> v)</span> </span>{</span><br><span class="line">        value = v;</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+
+<h1 id="二叉树的遍历"><a href="#二叉树的遍历" class="headerlink" title="二叉树的遍历"></a>二叉树的遍历</h1><h2 id="递归实现"><a href="#递归实现" class="headerlink" title="递归实现"></a>递归实现</h2><ul>
+<li>先序遍历：任何子树的处理顺序都是先头结点、再左子树、然后右子树</li>
+<li>中序遍历：任何子树的处理顺序都是先左子树、再头结点、然后右子树</li>
+<li>后序遍历：任何子树的处理顺序都是先左子树、再右子树、然后头结点</li>
+</ul>
+<p>三种遍历方式本质上都是递归序，先序、中序、后序都是在递归序的基础上加工而来。<br>递归序中每个节点总能到达三次，第一次到达一个节点就打印就是先序、第二次打印是中序、第三次打印是后序。</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 先序打印所有节点</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">pre</span><span class="params">(Node head)</span> </span>{</span><br><span class="line">    <span class="keyword">if</span> (head == <span class="keyword">null</span>) {</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    }</span><br><span class="line">    System.out.println(head.value);</span><br><span class="line">    pre(head.left);</span><br><span class="line">    pre(head.right);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// 中序打印所有节点</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">in</span><span class="params">(Node head)</span> </span>{</span><br><span class="line">    <span class="keyword">if</span> (head == <span class="keyword">null</span>) {</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    }</span><br><span class="line">    in(head.left);</span><br><span class="line">    System.out.println(head.value);</span><br><span class="line">    in(head.right);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// 后序打印所有节点</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">pos</span><span class="params">(Node head)</span> </span>{</span><br><span class="line">    <span class="keyword">if</span> (head == <span class="keyword">null</span>) {</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    }</span><br><span class="line">    pos(head.left);</span><br><span class="line">    pos(head.right);</span><br><span class="line">    System.out.println(head.value);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="非递归实现"><a href="#非递归实现" class="headerlink" title="非递归实现"></a>非递归实现</h2><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span> </span>{</span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">int</span> value;</span><br><span class="line">  <span class="keyword">public</span> Node left;</span><br><span class="line">  <span class="keyword">public</span> Node right;</span><br><span class="line"></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">(<span class="keyword">int</span> v)</span> </span>{</span><br><span class="line">    value = v;</span><br><span class="line">  }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// 栈实现先序</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">pre</span><span class="params">(Node head)</span> </span>{</span><br><span class="line">  System.out.print(<span class="string">"pre-order: "</span>);</span><br><span class="line">  <span class="keyword">if</span> (head != <span class="keyword">null</span>) {</span><br><span class="line">    Stack&lt;Node&gt; stack = <span class="keyword">new</span> Stack&lt;Node&gt;();</span><br><span class="line">    stack.add(head);</span><br><span class="line">    <span class="keyword">while</span> (!stack.isEmpty()) {</span><br><span class="line">      head = stack.pop(); <span class="comment">// 弹出最左</span></span><br><span class="line">      System.out.print(head.value + <span class="string">" "</span>);</span><br><span class="line">      <span class="keyword">if</span> (head.right != <span class="keyword">null</span>) { <span class="comment">// 先压入右子节点，后压入左子节点</span></span><br><span class="line">        stack.push(head.right);</span><br><span class="line">      }</span><br><span class="line">      <span class="keyword">if</span> (head.left != <span class="keyword">null</span>) {</span><br><span class="line">        stack.push(head.left);</span><br><span class="line">      }</span><br><span class="line">    }</span><br><span class="line">  }</span><br><span class="line">  System.out.println();</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// 栈实现中序</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">in</span><span class="params">(Node cur)</span> </span>{</span><br><span class="line">  System.out.print(<span class="string">"in-order: "</span>);</span><br><span class="line">  <span class="keyword">if</span> (cur != <span class="keyword">null</span>) {</span><br><span class="line">    Stack&lt;Node&gt; stack = <span class="keyword">new</span> Stack&lt;Node&gt;();</span><br><span class="line">    <span class="keyword">while</span> (!stack.isEmpty() || cur != <span class="keyword">null</span>) {</span><br><span class="line">      <span class="keyword">if</span> (cur != <span class="keyword">null</span>) {</span><br><span class="line">        stack.push(cur); <span class="comment">// 以cur为头的数整条左边界入栈，直到遇到空</span></span><br><span class="line">        cur = cur.left;</span><br><span class="line">      } <span class="keyword">else</span> {</span><br><span class="line">        cur = stack.pop(); <span class="comment">// 弹出节点打印，弹出节点右孩子设置为cur</span></span><br><span class="line">        System.out.print(cur.value + <span class="string">" "</span>);</span><br><span class="line">        cur = cur.right;</span><br><span class="line">      }</span><br><span class="line">    }</span><br><span class="line">  }</span><br><span class="line">  System.out.println();</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// 两个栈实现后序</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">pos1</span><span class="params">(Node head)</span> </span>{</span><br><span class="line">  System.out.print(<span class="string">"pos-order: "</span>);</span><br><span class="line">  <span class="keyword">if</span> (head != <span class="keyword">null</span>) {</span><br><span class="line">    Stack&lt;Node&gt; s1 = <span class="keyword">new</span> Stack&lt;Node&gt;(); <span class="comment">// 先类似先序实现头右左</span></span><br><span class="line">    Stack&lt;Node&gt; s2 = <span class="keyword">new</span> Stack&lt;Node&gt;(); <span class="comment">// 不打印，栈1压入栈2，得到左右头</span></span><br><span class="line">    s1.push(head);</span><br><span class="line">    <span class="keyword">while</span> (!s1.isEmpty()) {</span><br><span class="line">      head = s1.pop(); <span class="comment">// 头 右 左</span></span><br><span class="line">      s2.push(head);</span><br><span class="line">      <span class="keyword">if</span> (head.left != <span class="keyword">null</span>) {</span><br><span class="line">        s1.push(head.left);</span><br><span class="line">      }</span><br><span class="line">      <span class="keyword">if</span> (head.right != <span class="keyword">null</span>) {</span><br><span class="line">        s1.push(head.right);</span><br><span class="line">      }</span><br><span class="line">    }</span><br><span class="line">    <span class="comment">// 左 右 头</span></span><br><span class="line">    <span class="keyword">while</span> (!s2.isEmpty()) {</span><br><span class="line">      System.out.print(s2.pop().value + <span class="string">" "</span>);</span><br><span class="line">    }</span><br><span class="line">  }</span><br><span class="line">  System.out.println();</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// 一个栈实现后序，hard，了解即可</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">pos2</span><span class="params">(Node h)</span> </span>{</span><br><span class="line">  System.out.print(<span class="string">"pos-order: "</span>);</span><br><span class="line">  <span class="keyword">if</span> (h != <span class="keyword">null</span>) {</span><br><span class="line">    Stack&lt;Node&gt; stack = <span class="keyword">new</span> Stack&lt;Node&gt;();</span><br><span class="line">    stack.push(h);</span><br><span class="line">    Node c = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">while</span> (!stack.isEmpty()) {</span><br><span class="line">      c = stack.peek();</span><br><span class="line">      <span class="keyword">if</span> (c.left != <span class="keyword">null</span> &amp;&amp; h != c.left &amp;&amp; h != c.right) {</span><br><span class="line">        stack.push(c.left);</span><br><span class="line">      } <span class="keyword">else</span> <span class="keyword">if</span> (c.right != <span class="keyword">null</span> &amp;&amp; h != c.right) {</span><br><span class="line">        stack.push(c.right);</span><br><span class="line">      } <span class="keyword">else</span> {</span><br><span class="line">        System.out.print(stack.pop().value + <span class="string">" "</span>);</span><br><span class="line">        h = c;</span><br><span class="line">      }</span><br><span class="line">    }</span><br><span class="line">  }</span><br><span class="line">  System.out.println();</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="二叉树的按层遍历"><a href="#二叉树的按层遍历" class="headerlink" title="二叉树的按层遍历"></a>二叉树的按层遍历</h1><ol>
+<li>实际上就是宽度优先遍历，使用队列实现</li>
+<li>可以通过设置flag变量的方式来发现某一层的结束<a href="#%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E9%81%8D%E5%8E%86">二叉树的按层遍历</a></li>
+</ol>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">level</span><span class="params">(Node head)</span> </span>{</span><br><span class="line">  <span class="keyword">if</span> (head == <span class="keyword">null</span>) {</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">  }</span><br><span class="line">  Queue&lt;Node&gt; queue = <span class="keyword">new</span> LinkedList&lt;&gt;();</span><br><span class="line">  queue.add(head); <span class="comment">// 压入头节点</span></span><br><span class="line">  <span class="keyword">while</span> (!queue.isEmpty()) {</span><br><span class="line">    Node cur = queue.poll(); <span class="comment">// 弹出一个节点</span></span><br><span class="line">    System.out.println(cur.value);</span><br><span class="line">    <span class="keyword">if</span> (cur.left != <span class="keyword">null</span>) {</span><br><span class="line">      queue.add(cur.left); <span class="comment">// 有左节点压入</span></span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">if</span> (cur.right != <span class="keyword">null</span>) {</span><br><span class="line">      queue.add(cur.right); <span class="comment">// 有右节点压入</span></span><br><span class="line">    }</span><br><span class="line">  }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="实现二叉树的序列化和反序列化"><a href="#实现二叉树的序列化和反序列化" class="headerlink" title="实现二叉树的序列化和反序列化"></a>实现二叉树的序列化和反序列化</h1><ol>
+<li>先序/后序方式序列化和反序列化</li>
+<li>按层方式序列化和反序列化</li>
+</ol>
+<p>二叉树无法通过中序遍历的方式实现序列化和反序列化，因为不同的两棵树，可能得到同样的中序序列，即便补了空位置也可能一样。<br>比如如下两棵树：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">  __2</span><br><span class="line"> /</span><br><span class="line">1</span><br><span class="line">和</span><br><span class="line">1__</span><br><span class="line">   \</span><br><span class="line">    2</span><br></pre></td></tr></tbody></table></figure>
+
+<p>补足空位置的中序遍历结果都是{null, 1, null, 2, null}。</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 先序序列化</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Queue&lt;String&gt; <span class="title">preSerial</span><span class="params">(Node head)</span> </span>{</span><br><span class="line">  Queue&lt;String&gt; ans = <span class="keyword">new</span> LinkedList&lt;&gt;();</span><br><span class="line">  pres(head, ans);</span><br><span class="line">  <span class="keyword">return</span> ans;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">pres</span><span class="params">(Node head, Queue&lt;String&gt; ans)</span> </span>{</span><br><span class="line">  <span class="keyword">if</span> (head == <span class="keyword">null</span>) {</span><br><span class="line">    ans.add(<span class="keyword">null</span>);</span><br><span class="line">  } <span class="keyword">else</span> {</span><br><span class="line">    ans.add(String.valueOf(head.value));</span><br><span class="line">    pres(head.left, ans);</span><br><span class="line">    pres(head.right, ans);</span><br><span class="line">  }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// 先序反序列化</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Node <span class="title">buildByPreQueue</span><span class="params">(Queue&lt;String&gt; prelist)</span> </span>{</span><br><span class="line">  <span class="keyword">if</span> (prelist == <span class="keyword">null</span> || prelist.size() == <span class="number">0</span>) {</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">  }</span><br><span class="line">  <span class="keyword">return</span> preb(prelist);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Node <span class="title">preb</span><span class="params">(Queue&lt;String&gt; prelist)</span> </span>{</span><br><span class="line">  String value = prelist.poll();</span><br><span class="line">  <span class="keyword">if</span> (value == <span class="keyword">null</span>) {</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">  }</span><br><span class="line">  Node head = <span class="keyword">new</span> Node(Integer.valueOf(value));</span><br><span class="line">  head.left = preb(prelist);</span><br><span class="line">  head.right = preb(prelist);</span><br><span class="line">  <span class="keyword">return</span> head;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// 后序序列化</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Queue&lt;String&gt; <span class="title">posSerial</span><span class="params">(Node head)</span> </span>{</span><br><span class="line">  Queue&lt;String&gt; ans = <span class="keyword">new</span> LinkedList&lt;&gt;();</span><br><span class="line">  poss(head, ans);</span><br><span class="line">  <span class="keyword">return</span> ans;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">poss</span><span class="params">(Node head, Queue&lt;String&gt; ans)</span> </span>{</span><br><span class="line">  <span class="keyword">if</span> (head == <span class="keyword">null</span>) {</span><br><span class="line">    ans.add(<span class="keyword">null</span>);</span><br><span class="line">  } <span class="keyword">else</span> {</span><br><span class="line">    poss(head.left, ans);</span><br><span class="line">    poss(head.right, ans);</span><br><span class="line">    ans.add(String.valueOf(head.value));</span><br><span class="line">  }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// 后序反序列化</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Node <span class="title">buildByPosQueue</span><span class="params">(Queue&lt;String&gt; poslist)</span> </span>{</span><br><span class="line">  <span class="keyword">if</span> (poslist == <span class="keyword">null</span> || poslist.size() == <span class="number">0</span>) {</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">  }</span><br><span class="line">  <span class="comment">// 左右中 -&gt; stack(中右左)</span></span><br><span class="line">  Stack&lt;String&gt; stack = <span class="keyword">new</span> Stack&lt;&gt;();</span><br><span class="line">  <span class="keyword">while</span> (!poslist.isEmpty()) {</span><br><span class="line">    stack.push(poslist.poll());</span><br><span class="line">  }</span><br><span class="line">  <span class="keyword">return</span> posb(stack);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Node <span class="title">posb</span><span class="params">(Stack&lt;String&gt; posstack)</span> </span>{</span><br><span class="line">  String value = posstack.pop();</span><br><span class="line">  <span class="keyword">if</span> (value == <span class="keyword">null</span>) {</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">  }</span><br><span class="line">  Node head = <span class="keyword">new</span> Node(Integer.valueOf(value));</span><br><span class="line">  head.right = posb(posstack);</span><br><span class="line">  head.left = posb(posstack);</span><br><span class="line">  <span class="keyword">return</span> head;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// 按层序列化</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Queue&lt;String&gt; <span class="title">levelSerial</span><span class="params">(Node head)</span> </span>{</span><br><span class="line">  Queue&lt;String&gt; ans = <span class="keyword">new</span> LinkedList&lt;&gt;();</span><br><span class="line">  <span class="keyword">if</span> (head == <span class="keyword">null</span>) {</span><br><span class="line">    ans.add(<span class="keyword">null</span>);</span><br><span class="line">  } <span class="keyword">else</span> {</span><br><span class="line">    ans.add(String.valueOf(head.value));</span><br><span class="line">    Queue&lt;Node&gt; queue = <span class="keyword">new</span> LinkedList&lt;Node&gt;();</span><br><span class="line">    queue.add(head);</span><br><span class="line">    <span class="keyword">while</span> (!queue.isEmpty()) {</span><br><span class="line">      head = queue.poll();</span><br><span class="line">      <span class="keyword">if</span> (head.left != <span class="keyword">null</span>) { <span class="comment">// 左子节点，不管是不是空都序列化，不为空放到队列</span></span><br><span class="line">        ans.add(String.valueOf(head.left.value));</span><br><span class="line">        queue.add(head.left);</span><br><span class="line">      } <span class="keyword">else</span> {</span><br><span class="line">        ans.add(<span class="keyword">null</span>);</span><br><span class="line">      }</span><br><span class="line">      <span class="keyword">if</span> (head.right != <span class="keyword">null</span>) { <span class="comment">// 右节点一样序列化， 不为空放到队列</span></span><br><span class="line">        ans.add(String.valueOf(head.right.value));</span><br><span class="line">        queue.add(head.right);</span><br><span class="line">      } <span class="keyword">else</span> {</span><br><span class="line">        ans.add(<span class="keyword">null</span>);</span><br><span class="line">      }</span><br><span class="line">    }</span><br><span class="line">  }</span><br><span class="line">  <span class="keyword">return</span> ans;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// 按层反序列化</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Node <span class="title">buildByLevelQueue</span><span class="params">(Queue&lt;String&gt; levelList)</span> </span>{</span><br><span class="line">  <span class="keyword">if</span> (levelList == <span class="keyword">null</span> || levelList.size() == <span class="number">0</span>) {</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">  }</span><br><span class="line">  Node head = generateNode(levelList.poll());</span><br><span class="line">  Queue&lt;Node&gt; queue = <span class="keyword">new</span> LinkedList&lt;Node&gt;(); <span class="comment">// 类似序列化步骤，用队列遍历</span></span><br><span class="line">  <span class="keyword">if</span> (head != <span class="keyword">null</span>) {</span><br><span class="line">    queue.add(head);</span><br><span class="line">  }</span><br><span class="line">  Node node = <span class="keyword">null</span>;</span><br><span class="line">  <span class="keyword">while</span> (!queue.isEmpty()) {</span><br><span class="line">    node = queue.poll();</span><br><span class="line">    node.left = generateNode(levelList.poll());</span><br><span class="line">    node.right = generateNode(levelList.poll());</span><br><span class="line">    <span class="keyword">if</span> (node.left != <span class="keyword">null</span>) { <span class="comment">// 不为空放到队列</span></span><br><span class="line">      queue.add(node.left);</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">if</span> (node.right != <span class="keyword">null</span>) {</span><br><span class="line">      queue.add(node.right);</span><br><span class="line">    }</span><br><span class="line">  }</span><br><span class="line">  <span class="keyword">return</span> head;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Node <span class="title">generateNode</span><span class="params">(String val)</span> </span>{</span><br><span class="line">  <span class="keyword">if</span> (val == <span class="keyword">null</span>) {</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">  }</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> Node(Integer.valueOf(val));</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="工具函数：打印二叉树"><a href="#工具函数：打印二叉树" class="headerlink" title="工具函数：打印二叉树"></a>工具函数：打印二叉树</h1><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 旋转90度打印</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">printTree</span><span class="params">(Node head)</span> </span>{</span><br><span class="line">    System.out.println(<span class="string">"Binary Tree:"</span>);</span><br><span class="line">    printInOrder(head, <span class="number">0</span>, <span class="string">"H"</span>, <span class="number">17</span>);</span><br><span class="line">    System.out.println();</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">printInOrder</span><span class="params">(Node head, <span class="keyword">int</span> height, String to, <span class="keyword">int</span> len)</span> </span>{</span><br><span class="line">    <span class="keyword">if</span> (head == <span class="keyword">null</span>) {</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    }</span><br><span class="line">    printInOrder(head.right, height + <span class="number">1</span>, <span class="string">"v"</span>, len);</span><br><span class="line">    String val = to + head.value + to;</span><br><span class="line">    <span class="keyword">int</span> lenM = val.length();</span><br><span class="line">    <span class="keyword">int</span> lenL = (len - lenM) / <span class="number">2</span>;</span><br><span class="line">    <span class="keyword">int</span> lenR = len - lenM - lenL;</span><br><span class="line">    val = getSpace(lenL) + val + getSpace(lenR);</span><br><span class="line">    System.out.println(getSpace(height * len) + val);</span><br><span class="line">    printInOrder(head.left, height + <span class="number">1</span>, <span class="string">"^"</span>, len);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">getSpace</span><span class="params">(<span class="keyword">int</span> num)</span> </span>{</span><br><span class="line">    String space = <span class="string">" "</span>;</span><br><span class="line">    StringBuffer buf = <span class="keyword">new</span> StringBuffer(<span class="string">""</span>);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; num; i++) {</span><br><span class="line">        buf.append(space);</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> buf.toString();</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+    
+  </div>
+
+</article>
+
+
+   
+
+   
+  <div class="box-prev-next clearfix">
+    <a class="show pull-left" href="/2022/07/26/mysql-fixdeadlock/">
+        <i class="icon icon-angle-left"></i>
+    </a>
+    <a class="show pull-right" href="/2022/07/30/algorithm-binarytree-problem1/">
+        <i class="icon icon-angle-right"></i>
+    </a>
+  </div>
+
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/categories/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              分类
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/roaming/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              漫游
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/atom.xml"
+              rel="noopener noreferrer"
+              target="_blank"
+              >
+              RSS
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/search/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              搜索
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+    
+    
+
+    
+
+    
+    
+
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script>
+    <div id="comment" class="vcomment" ></div>
+    <script>
+        var notify = 'false' == true ? true : false;
+        var verify = 'false' == true ? true : false;
+        var GUEST_INFO = ['nick','mail','link'];
+        var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+            return GUEST_INFO.indexOf(item) > -1
+        });
+        guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+        window.valine = new Valine({
+            el: '.vcomment',
+            notify: notify,
+            verify: verify,
+            appId: "masttnqEt9G69mj43i9oaA1C-gzGzoHsz",
+            appKey: "hgIx9VKn0GLDhRcLxQuNMl0E",
+            avatar:'mm',
+            placeholder: "Say something",
+            guest_info:guest_info,
+            pageSize:'10'
+        });
+    </script>
+  
+    
+
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>
