@@ -25,6 +25,7 @@ date: 2022-06-15 10:00:00
 - [【算法基础】链表专练](https://haifuns.com/2022/07/25/algorithm-linkedlist/)
 - [【算法基础】二叉树](https://haifuns.com/2022/07/30/algorithm-binarytree/)
 - [【算法基础】二叉树专练（一）](https://haifuns.com/2022/07/30/algorithm-binarytree-problem1/)
+- [【算法基础】二叉树专练（二）](https://haifuns.com/2022/08/16/algorithm-binarytree-problem2/)
 
 # 常备算法网站
 
