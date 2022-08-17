@@ -369,7 +369,7 @@ public static Info2 process2(Node h) {
 }
 ```
 
-# 6.最大搜索二叉子树（LeetCode 333.）
+# 6.最大搜索二叉子树大小（LeetCode 333.）
 
 要求找到给定二叉树中所有BST子树节点数最大的子树。
 
@@ -456,5 +456,207 @@ public static Info process(Node x) {
         }
     }
     return new Info(Math.max(p1, Math.max(p2, p3)), allSize, max, min);
+}
+```
+
+# 7.最大搜索二叉子树头结点
+
+此题是上一题的变种，要求找到给定二叉树中所有BST子树节点数最大的子树的头结点。
+
+对于任意节点x，要得到maxBSTHead，解题思路：
+
+如果x不做头，需要比较maxBSTSize得到maxBSTHead：
+1. x左树maxBSTSize，maxBSTHead
+2. x右树maxBSTSize，maxBSTHead
+
+如果x做头，需要判断：
+1. 左树是否是BST
+2. 右树是否是BST
+3. 左树最大值 < x
+4. 右树最小值 > x
+5. 左树size + 右树size + 1
+
+合并，递归实现对于每个节点需要：
+1. maxBSTSize，当前子树最大搜索二叉子树大小
+2. max，当前子树中最大值
+3. min，当前子树中最小值
+4. maxSubBSTHead，最大搜索子树头节点（maxSubBSTHead == x.left/right，子树本身是BST）
+
+```java
+public static Node maxSubBSTHead(Node head) {
+	if (head == null) {
+		return null;
+	}
+	return process(head).maxSubBSTHead;
+}
+
+public static class Info {
+	public Node maxSubBSTHead;
+	public int maxSubBSTSize;
+	public int min;
+	public int max;
+
+	public Info(Node h, int size, int mi, int ma) {
+		maxSubBSTHead = h;
+		maxSubBSTSize = size;
+		min = mi;
+		max = ma;
+	}
+}
+
+public static Info process(Node X) {
+	if (X == null) {
+		return null;
+	}
+	Info leftInfo = process(X.left);
+	Info rightInfo = process(X.right);
+	int min = X.value;
+	int max = X.value;
+	Node maxSubBSTHead = null;
+	int maxSubBSTSize = 0;
+	if (leftInfo != null) {
+		min = Math.min(min, leftInfo.min);
+		max = Math.max(max, leftInfo.max);
+		maxSubBSTHead = leftInfo.maxSubBSTHead;
+		maxSubBSTSize = leftInfo.maxSubBSTSize;
+	}
+	if (rightInfo != null) {
+		min = Math.min(min, rightInfo.min);
+		max = Math.max(max, rightInfo.max);
+		if (rightInfo.maxSubBSTSize > maxSubBSTSize) {
+			maxSubBSTHead = rightInfo.maxSubBSTHead;
+			maxSubBSTSize = rightInfo.maxSubBSTSize;
+		}
+	}
+	if ((leftInfo == null ? true : (leftInfo.maxSubBSTHead == X.left && leftInfo.max < X.value))
+	        && (rightInfo == null ? true : (rightInfo.maxSubBSTHead == X.right && rightInfo.min > X.value))) {
+		maxSubBSTHead = X;
+		maxSubBSTSize = (leftInfo == null ? 0 : leftInfo.maxSubBSTSize)
+		                + (rightInfo == null ? 0 : rightInfo.maxSubBSTSize) + 1;
+	}
+	return new Info(maxSubBSTHead, maxSubBSTSize, min, max);
+}
+```
+
+# 8.二叉树任意两节点最低公共祖先
+
+给定一棵二叉树的头结点head，以及另外两个节点a和b，要求返回a和b的最低公共祖先。
+
+解题思路：
+
+递归套路情况分析：
+
+与x无关，x不是最低汇聚点：
+1. 左树上汇聚
+2. 右树上汇聚
+3. a，b不全
+
+与x有关，x是汇聚点：
+1. a，b分别在左右树
+2. x本身就是a，b在左树或右树
+3. x本身就是b，a在左树或右树
+
+合并，递归实现对于每个节点需要：
+1. 是否发现a
+2. 是否发现b
+3. 是否是汇聚点
+
+```java
+public static Node lowestAncestor(Node head, Node a, Node b) {
+	return process(head, a, b).ans;
+}
+
+public static class Info {
+	public boolean findA;
+	public boolean findB;
+	public Node ans;
+
+	public Info(boolean fA, boolean fB, Node an) {
+		findA = fA;
+		findB = fB;
+		ans = an;
+	}
+}
+
+public static Info process(Node x, Node a, Node b) {
+	if (x == null) {
+		return new Info(false, false, null);
+	}
+	Info leftInfo = process(x.left, a, b);
+	Info rightInfo = process(x.right, a, b);
+	boolean findA = (x == a) || leftInfo.findA || rightInfo.findA;
+	boolean findB = (x == b) || leftInfo.findB || rightInfo.findB;
+	Node ans = null;
+	if (leftInfo.ans != null) {
+		ans = leftInfo.ans;
+	} else if (rightInfo.ans != null) {
+		ans = rightInfo.ans;
+	} else {
+		if (findA && findB) {
+			ans = x;
+		}
+	}
+	return new Info(findA, findB, ans);
+}
+```
+
+# 9.派对的最大快乐值
+
+在全公司中邀请员工参加派对，每个员工能带来的快乐值不一，在不能同时邀请上下级的情况下，返回整个派对能获得的最大快乐值。
+
+员工定义如下：
+
+```java
+class Employee {
+    public int happy; // 当前员工可以带来的快乐值
+    public List<Employee> nexts; // 当前员工直属下级
+}
+```
+
+题目分析：
+1. 公司员工本身是一棵多叉树
+2. 从多叉树中挑选节点
+3. 不能同时选择父子节点
+4. 要求挑选节点累加值最大
+
+递归套路，解题思路：
+
+对于任意节点x：
+- 如果选择x，x 最大累加值 = x.happy + sum(x 每一个子节点不被选择的最大累加值)
+- 如果不选择x，x 最大累计值 = 0 + sum(max(x 每一个子节点被选择的最大累加值, x 每一个子节点不被选择的最大累加值))
+
+合并，对于每个节点需要以下信息：
+1. 选择当前节点的最大累加值
+2. 不选择当前节点的最大累加值
+
+```java
+public static int maxHappy(Employee head) {
+    Info allInfo = process(head);
+    return Math.max(allInfo.no, allInfo.yes);
+}
+
+public static class Info {
+    public int no;
+    public int yes;
+
+    public Info(int n, int y) {
+        no = n;
+        yes = y;
+    }
+}
+
+public static Info process(Employee x) {
+    if (x == null) {
+        return new Info(0, 0);
+    }
+    int no = 0;
+    int yes = x.happy;
+    for (Employee next : x.nexts) {
+        Info nextInfo = process(next);
+        no += Math.max(nextInfo.no, nextInfo.yes);
+        yes += nextInfo.no;
+
+    }
+    return new Info(no, yes);
 }
 ```
