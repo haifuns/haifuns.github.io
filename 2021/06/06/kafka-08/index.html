@@ -23,7 +23,7 @@
 <meta property="og:description" content="概述Kafka为分区引入了副本机制，通过增加副本数量提升数据容灾能力以及故障自动转移。 相关概念回顾：  副本是相对分区而言的，即副本是特定分区的副本。 一个分区包含一个或多个副本，其中一个为leader副本，其余为follower副本，各个副本位于不同的broker节点中。只有leader副本对外提供服务，follower副本只负责数据同步。 分区中所有副本统称为AR，而ISR指与leader副">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-06-06T13:40:00.000Z">
-<meta property="article:modified_time" content="2022-08-17T15:07:32.572Z">
+<meta property="article:modified_time" content="2022-08-22T09:06:43.481Z">
 <meta property="article:author" content="haifuns">
 <meta property="article:tag" content="Kafka">
 <meta name="twitter:card" content="summary">
@@ -80,7 +80,7 @@
     <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
 
-<meta name="generator" content="Hexo 5.4.1">
+<meta name="generator" content="Hexo 5.4.2">
 <style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
 <link rel="alternate" href="/atom.xml" title="haifuns的博客" type="application/atom+xml">
 </head>
