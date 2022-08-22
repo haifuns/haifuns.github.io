@@ -228,6 +228,15 @@ roaming:
   - year: 2022
     list:
       - type: movie
+        date: "08-21"
+        text_value: "壮志凌云2：独行侠"
+      - type: movie
+        date: "08-21"
+        text_value: "壮志凌云"
+      - type: movie
+        date: "08-19"
+        text_value: "上帝之城"
+      - type: movie
         date: "07-24"
         text_value: "精灵旅社4:变身大冒险"
       - type: movie
