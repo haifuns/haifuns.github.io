@@ -15,15 +15,15 @@
     <meta name="keywords" content="算法,贪心算法," />
   
 
-  <meta name="description" content="贪心算法的特点：  最自然智慧的算法 用一种局部最功利的标准，总是做出在当前看来是最好的选择。 难点在于证明局部最功利的标准可以得到全局最优解，实际解题过程中不要纠结贪心策略的证明，用对数器去验证贪心策略的正确性 对于贪心算法的学习主要以增加阅历和经验为主  堆和排序时贪心算法最常用的两个技巧。 最小字典序给定一个由字符串组成的数组strs，把所有的字符串拼接起来，返回所有可能的拼接结果中，字典序">
+  <meta name="description" content="贪心算法的特点：  最自然智慧的算法 用一种局部最功利的标准，总是做出在当前看来是最好的选择。 难点在于证明局部最功利的标准可以得到全局最优解，实际解题过程中不要纠结贪心策略的证明，用对数器去验证贪心策略的正确性 对于贪心算法的学习主要以增加阅历和经验为主  堆和排序是贪心算法最常用的两个技巧。 最小字典序给定一个由字符串组成的数组strs，把所有的字符串拼接起来，返回所有可能的拼接结果中，字典序">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【算法基础】贪心算法">
 <meta property="og:url" content="https://haifuns.com/2022/08/28/algorithm-greddy/index.html">
 <meta property="og:site_name" content="haifuns的博客">
-<meta property="og:description" content="贪心算法的特点：  最自然智慧的算法 用一种局部最功利的标准，总是做出在当前看来是最好的选择。 难点在于证明局部最功利的标准可以得到全局最优解，实际解题过程中不要纠结贪心策略的证明，用对数器去验证贪心策略的正确性 对于贪心算法的学习主要以增加阅历和经验为主  堆和排序时贪心算法最常用的两个技巧。 最小字典序给定一个由字符串组成的数组strs，把所有的字符串拼接起来，返回所有可能的拼接结果中，字典序">
+<meta property="og:description" content="贪心算法的特点：  最自然智慧的算法 用一种局部最功利的标准，总是做出在当前看来是最好的选择。 难点在于证明局部最功利的标准可以得到全局最优解，实际解题过程中不要纠结贪心策略的证明，用对数器去验证贪心策略的正确性 对于贪心算法的学习主要以增加阅历和经验为主  堆和排序是贪心算法最常用的两个技巧。 最小字典序给定一个由字符串组成的数组strs，把所有的字符串拼接起来，返回所有可能的拼接结果中，字典序">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-08-28T20:30:00.000Z">
-<meta property="article:modified_time" content="2022-08-28T14:33:43.288Z">
+<meta property="article:modified_time" content="2022-08-28T14:40:08.275Z">
 <meta property="article:author" content="haifuns">
 <meta property="article:tag" content="算法">
 <meta property="article:tag" content="贪心算法">
@@ -242,7 +242,7 @@
 <li>难点在于证明局部最功利的标准可以得到全局最优解，实际解题过程中不要纠结贪心策略的证明，用对数器去验证贪心策略的正确性</li>
 <li>对于贪心算法的学习主要以增加阅历和经验为主</li>
 </ol>
-<p>堆和排序时贪心算法最常用的两个技巧。</p>
+<p>堆和排序是贪心算法最常用的两个技巧。</p>
 <h1 id="最小字典序"><a href="#最小字典序" class="headerlink" title="最小字典序"></a>最小字典序</h1><p>给定一个由字符串组成的数组strs，把所有的字符串拼接起来，返回所有可能的拼接结果中，字典序最小的结果。</p>
 <figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">MyComparator</span> <span class="keyword">implements</span> <span class="title">Comparator</span>&lt;<span class="title">String</span>&gt; </span>{</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compare</span><span class="params">(String a, String b)</span> </span>{</span><br><span class="line">        <span class="keyword">return</span> (a + b).compareTo(b + a); <span class="comment">// 不能直接a.comareTo(b)，e.g. a=b，b=ba，得到bba，正确结果bab</span></span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">lowestString</span><span class="params">(String[] strs)</span> </span>{</span><br><span class="line">    <span class="keyword">if</span> (strs == <span class="keyword">null</span> || strs.length == <span class="number">0</span>) {</span><br><span class="line">        <span class="keyword">return</span> <span class="string">""</span>;</span><br><span class="line">    }</span><br><span class="line">    Arrays.sort(strs, <span class="keyword">new</span> MyComparator());</span><br><span class="line">    String res = <span class="string">""</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; strs.length; i++) {</span><br><span class="line">        res += strs[i];</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
 
