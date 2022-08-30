@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>【算法基础】并查集 | haifuns的博客</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="算法,并查集," />
+  
+
+  <meta name="description" content="并查集是一种树型的数据结构，用于处理一些不相交集合的合并及查询问题。 并查集主要操作：  初始化：把每个点所在集合初始化为其自身。 查找：查找元素所在的集合，即根节点。 合并：将两个元素所在的集合合并为一个集合。  代码实现hash表实现并查集，便于理解。 12345678910111213141516171819202122232425262728293031323334353637383940">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【算法基础】并查集">
+<meta property="og:url" content="https://haifuns.com/2022/08/30/algorithm-unionfind/index.html">
+<meta property="og:site_name" content="haifuns的博客">
+<meta property="og:description" content="并查集是一种树型的数据结构，用于处理一些不相交集合的合并及查询问题。 并查集主要操作：  初始化：把每个点所在集合初始化为其自身。 查找：查找元素所在的集合，即根节点。 合并：将两个元素所在的集合合并为一个集合。  代码实现hash表实现并查集，便于理解。 12345678910111213141516171819202122232425262728293031323334353637383940">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-08-30T20:00:00.000Z">
+<meta property="article:modified_time" content="2022-08-30T11:46:45.124Z">
+<meta property="article:author" content="haifuns">
+<meta property="article:tag" content="算法">
+<meta property="article:tag" content="并查集">
+<meta name="twitter:card" content="summary">
+
+  
+
+  
+    <link rel="icon" href="/images/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbeddx" rel="stylesheet">
+
+
+  
+    
+<link rel="stylesheet" href="/css/personal-style.css">
+
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?d3c8edb388553a2084296cbfe9a0785a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
+
+<meta name="generator" content="Hexo 5.4.2">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="haifuns的博客" type="application/atom+xml">
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header CENTER">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/categories/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            分类
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/roaming/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            漫游
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/atom.xml"
+            rel="noopener noreferrer"
+            target="_blank"
+            >
+            RSS
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/search/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="toc-text">代码实现</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#1-%E7%9C%81%E4%BB%BD%E6%95%B0%E9%87%8F%EF%BC%88LeetCode-547-%EF%BC%89"><span class="toc-text">1.省份数量（LeetCode 547.）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-%E5%B2%9B%E5%B1%BF%E6%95%B0%E9%87%8F%EF%BC%88LeetCode-200-%EF%BC%89"><span class="toc-text">2.岛屿数量（LeetCode 200.）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-%E5%B2%9B%E5%B1%BF%E6%95%B0%E9%87%8FII%EF%BC%88LeetCode-305-%EF%BC%89"><span class="toc-text">3.岛屿数量II（LeetCode 305.）</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post CENTER">
+   <article id="post-algorithm-unionfind" class="article article-type-post" itemprop="blogPost">
+  <header class="article-header">
+    <h1 class="post-title">【算法基础】并查集</h1>
+
+    <div class="article-meta">
+      <span>
+        <i class="icon-calendar"></i>
+        <span>2022.08.30</span>
+      </span>
+
+      
+        <span class="article-author">
+          <i class="icon-user"></i>
+          <span>haifuns</span>
+        </span>
+      
+
+      
+  <span class="article-category">
+    <i class="icon-list"></i>
+    <a class="article-category-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a>
+  </span>
+
+
+
+      
+
+      
+      <i class="fa fa-eye"></i> 
+        <span id="busuanzi_container_page_pv">
+           &nbsp热度 <span id="busuanzi_value_page_pv">
+           <i class="fa fa-spinner fa-spin"></i></span>℃
+        </span>
+      
+      
+    </div>
+  </header>
+
+  <div class="article-content">
+    
+      <p>并查集是一种树型的数据结构，用于处理一些不相交集合的合并及查询问题。</p>
+<p>并查集主要操作：</p>
+<ul>
+<li>初始化：把每个点所在集合初始化为其自身。</li>
+<li>查找：查找元素所在的集合，即根节点。</li>
+<li>合并：将两个元素所在的集合合并为一个集合。</li>
+</ul>
+<h1 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h1><p>hash表实现并查集，便于理解。</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span>&lt;<span class="title">V</span>&gt; </span>{</span><br><span class="line">    V value;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">(V v)</span> </span>{</span><br><span class="line">        value = v;</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">UnionFind</span>&lt;<span class="title">V</span>&gt; </span>{</span><br><span class="line">    <span class="comment">// 样本 -&gt; 封装对象</span></span><br><span class="line">    <span class="keyword">public</span> HashMap&lt;V, Node&lt;V&gt;&gt; nodes;</span><br><span class="line">    <span class="comment">// 封装对象 -&gt; 封装对象，表实现父指针</span></span><br><span class="line">    <span class="keyword">public</span> HashMap&lt;Node&lt;V&gt;, Node&lt;V&gt;&gt; parents;</span><br><span class="line">    <span class="comment">// 集合代表节点 -&gt; 集合大小</span></span><br><span class="line">    <span class="keyword">public</span> HashMap&lt;Node&lt;V&gt;, Integer&gt; sizeMap;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">UnionFind</span><span class="params">(List&lt;V&gt; values)</span> </span>{</span><br><span class="line">        nodes = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">        parents = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">        sizeMap = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">        <span class="keyword">for</span> (V cur : values) {</span><br><span class="line">            Node&lt;V&gt; node = <span class="keyword">new</span> Node&lt;&gt;(cur);</span><br><span class="line">            nodes.put(cur, node);</span><br><span class="line">            parents.put(node, node); <span class="comment">// 初始化时每一个节点指向自己</span></span><br><span class="line">            sizeMap.put(node, <span class="number">1</span>); <span class="comment">// 初始化时每一个节点都是自己所在集合的代表节点</span></span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 找到给定节点的代表节点</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Node&lt;V&gt; <span class="title">findFather</span><span class="params">(Node&lt;V&gt; cur)</span> </span>{</span><br><span class="line">        Stack&lt;Node&lt;V&gt;&gt; path = <span class="keyword">new</span> Stack&lt;&gt;();</span><br><span class="line">        <span class="keyword">while</span> (cur != parents.get(cur)) {</span><br><span class="line">            path.push(cur);</span><br><span class="line">            cur = parents.get(cur);</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 此时cur为代表节点</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> (!path.isEmpty()) {</span><br><span class="line">            <span class="comment">// 优化点，减少链长度</span></span><br><span class="line">            <span class="comment">// 经过的所有节点都直接指向代表节点</span></span><br><span class="line">            parents.put(path.pop(), cur);</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">return</span> cur;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// a b样本是否在一个集合</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isSameSet</span><span class="params">(V a, V b)</span> </span>{</span><br><span class="line">        <span class="comment">// 找a b的代表节点，比较是否是一个</span></span><br><span class="line">        <span class="keyword">return</span> findFather(nodes.get(a)) == findFather(nodes.get(b));</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">union</span><span class="params">(V a, V b)</span> </span>{</span><br><span class="line">        <span class="comment">// a代表节点</span></span><br><span class="line">        Node&lt;V&gt; aHead = findFather(nodes.get(a));</span><br><span class="line">        <span class="comment">// b代表节点</span></span><br><span class="line">        Node&lt;V&gt; bHead = findFather(nodes.get(b));</span><br><span class="line">        <span class="keyword">if</span> (aHead != bHead) {</span><br><span class="line">            <span class="comment">// a所在集合大小</span></span><br><span class="line">            <span class="keyword">int</span> aSetSize = sizeMap.get(aHead);</span><br><span class="line">            <span class="comment">// b所在集合大小</span></span><br><span class="line">            <span class="keyword">int</span> bSetSize = sizeMap.get(bHead);</span><br><span class="line">            <span class="comment">// 大集合代表节点</span></span><br><span class="line">            Node&lt;V&gt; big = aSetSize &gt;= bSetSize ? aHead : bHead;</span><br><span class="line">            <span class="comment">// 小集合代表节点</span></span><br><span class="line">            Node&lt;V&gt; small = big == aHead ? bHead : aHead;</span><br><span class="line">            <span class="comment">// 优化点，小挂到大上，减少链长度</span></span><br><span class="line">            <span class="comment">// 小集合代表节点指向大集合代表节点</span></span><br><span class="line">            parents.put(small, big);</span><br><span class="line">            <span class="comment">// 更新大集合代表节点对应的集合大小</span></span><br><span class="line">            sizeMap.put(big, aSetSize + bSetSize);</span><br><span class="line">            <span class="comment">// 删除小集合</span></span><br><span class="line">            sizeMap.remove(small);</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">sets</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="keyword">return</span> sizeMap.size();</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>hash表常数时间慢，数组实现方式：</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">UnionFind</span> </span>{</span><br><span class="line">    <span class="comment">// parent[i]=k -&gt; i的父亲是k</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span>[] parent;</span><br><span class="line">    <span class="comment">// size[i]=k -&gt; i所在的集合大小是k，如果i是代表节点，size[i]才有意义，否则无意义</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span>[] size;</span><br><span class="line">    <span class="comment">// 辅助结构</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span>[] help;</span><br><span class="line">    <span class="comment">// 一共有多少个集合</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> sets;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">UnionFind</span><span class="params">(<span class="keyword">int</span> N)</span> </span>{</span><br><span class="line">        parent = <span class="keyword">new</span> <span class="keyword">int</span>[N];</span><br><span class="line">        size = <span class="keyword">new</span> <span class="keyword">int</span>[N];</span><br><span class="line">        help = <span class="keyword">new</span> <span class="keyword">int</span>[N];</span><br><span class="line">        sets = N;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; N; i++) {</span><br><span class="line">            parent[i] = i; <span class="comment">// 初始代表节点都是自己</span></span><br><span class="line">            size[i] = <span class="number">1</span>; <span class="comment">// 每个集合大小是1</span></span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 从i开始一直往上，往上到不能再往上，代表节点，返回</span></span><br><span class="line">    <span class="comment">// 过程中做路径压缩优化</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">find</span><span class="params">(<span class="keyword">int</span> i)</span> </span>{</span><br><span class="line">        <span class="keyword">int</span> hi = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span> (i != parent[i]) { <span class="comment">// parent是自己为代表节点</span></span><br><span class="line">            help[hi++] = i; <span class="comment">// help中存放的是链上经过的节点</span></span><br><span class="line">            i = parent[i];</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">for</span> (hi--; hi &gt;= <span class="number">0</span>; hi--) {</span><br><span class="line">            parent[help[hi]] = i; <span class="comment">// 路径压缩，链上经过的所有节点都指向代表节点</span></span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">return</span> i;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">union</span><span class="params">(<span class="keyword">int</span> i, <span class="keyword">int</span> j)</span> </span>{</span><br><span class="line">        <span class="keyword">int</span> f1 = find(i); <span class="comment">// i所在集合代表节点</span></span><br><span class="line">        <span class="keyword">int</span> f2 = find(j); <span class="comment">// j所在集合代表节点</span></span><br><span class="line">        <span class="keyword">if</span> (f1 != f2) { <span class="comment">// 不在同一个集合</span></span><br><span class="line">            <span class="keyword">if</span> (size[f1] &gt;= size[f2]) { <span class="comment">// 小集合挂到大集合上</span></span><br><span class="line">                size[f1] += size[f2];</span><br><span class="line">                parent[f2] = f1;</span><br><span class="line">            } <span class="keyword">else</span> {</span><br><span class="line">                size[f2] += size[f1];</span><br><span class="line">                parent[f1] = f2;</span><br><span class="line">            }</span><br><span class="line">            sets--; <span class="comment">// 集合总数量-1</span></span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">sets</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="keyword">return</span> sets;</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="1-省份数量（LeetCode-547-）"><a href="#1-省份数量（LeetCode-547-）" class="headerlink" title="1.省份数量（LeetCode 547.）"></a>1.省份数量（LeetCode 547.）</h1><p>有 n 个城市，其中一些彼此相连，另一些没有相连。如果城市 a 与城市 b 直接相连，且城市 b 与城市 c 直接相连，那么城市 a 与城市 c 间接相连。</p>
+<p>省份是一组直接或间接相连的城市，组内不含其他没有相连的城市。</p>
+<p>给你一个 n x n 的矩阵 isConnected ，其中 isConnected[i][j] = 1 表示第 i 个城市和第 j 个城市直接相连，而 isConnected[i][j] = 0 表示二者不直接相连。</p>
+<p>返回矩阵中省份的数量。</p>
+<p>提示：</p>
+<ul>
+<li>isConnected[i][j] 为 1 或 0</li>
+<li>isConnected[i][i] == 1</li>
+<li>isConnected[i][j] == isConnected[j][i]</li>
+</ul>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">findCircleNum</span><span class="params">(<span class="keyword">int</span>[][] M)</span> </span>{</span><br><span class="line">    <span class="keyword">int</span> N = M.length;</span><br><span class="line">    <span class="comment">// 0..N-1，初始集合数=城市数</span></span><br><span class="line">    UnionFind unionFind = <span class="keyword">new</span> UnionFind(N);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; N; i++) {</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = i + <span class="number">1</span>; j &lt; N; j++) { <span class="comment">// 只遍历矩阵右上部分</span></span><br><span class="line">            <span class="keyword">if</span> (M[i][j] == <span class="number">1</span>) { <span class="comment">// i和j互相认识</span></span><br><span class="line">                unionFind.union(i, j); <span class="comment">// 合并集合</span></span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> unionFind.sets();</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="2-岛屿数量（LeetCode-200-）"><a href="#2-岛屿数量（LeetCode-200-）" class="headerlink" title="2.岛屿数量（LeetCode 200.）"></a>2.岛屿数量（LeetCode 200.）</h1><p>给你一个由’1’（陆地）和 ‘0’（水）组成的的二维网格，请你计算网格中岛屿的数量。</p>
+<p>岛屿总是被水包围，并且每座岛屿只能由水平方向和/或竖直方向上相邻的陆地连接形成。</p>
+<p>此外，你可以假设该网格的四条边均被水包围。</p>
+<p>示例 1：<br>输入：grid = [<br>  [“1”,”1”,”1”,”1”,”0”],<br>  [“1”,”1”,”0”,”1”,”0”],<br>  [“1”,”1”,”0”,”0”,”0”],<br>  [“0”,”0”,”0”,”0”,”0”]<br>]<br>输出：1</p>
+<p>示例 2：<br>输入：grid = [<br>  [“1”,”1”,”0”,”0”,”0”],<br>  [“1”,”1”,”0”,”0”,”0”],<br>  [“0”,”0”,”1”,”0”,”0”],<br>  [“0”,”0”,”0”,”1”,”1”]<br>]<br>输出：3</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 递归实现，感染算法，复杂度O(m*n)，最优解</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">numIslands1</span><span class="params">(<span class="keyword">char</span>[][] board)</span> </span>{</span><br><span class="line">    <span class="keyword">int</span> islands = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; board.length; i++) {</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; board[<span class="number">0</span>].length; j++) {</span><br><span class="line">            <span class="keyword">if</span> (board[i][j] == <span class="string">'1'</span>) { <span class="comment">// 每遇到一个'1'都是新岛屿</span></span><br><span class="line">                islands++;</span><br><span class="line">                infect(board, i, j); <span class="comment">// 感染所有相邻'1'，变为0</span></span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> islands;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// 从(i,j)这个位置出发，把所有练成一片的'1'字符，变成0</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">infect</span><span class="params">(<span class="keyword">char</span>[][] board, <span class="keyword">int</span> i, <span class="keyword">int</span> j)</span> </span>{</span><br><span class="line">    <span class="keyword">if</span> (i &lt; <span class="number">0</span> || i == board.length || j &lt; <span class="number">0</span> || j == board[<span class="number">0</span>].length || board[i][j] != <span class="string">'1'</span>) {</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    }</span><br><span class="line">    board[i][j] = <span class="number">0</span>;</span><br><span class="line">    <span class="comment">// 感染上下左右相邻'1'</span></span><br><span class="line">    infect(board, i - <span class="number">1</span>, j);</span><br><span class="line">    infect(board, i + <span class="number">1</span>, j);</span><br><span class="line">    infect(board, i, j - <span class="number">1</span>);</span><br><span class="line">    infect(board, i, j + <span class="number">1</span>);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// 并查集实现</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">numIslands2</span><span class="params">(<span class="keyword">char</span>[][] board)</span> </span>{</span><br><span class="line">    <span class="keyword">int</span> row = board.length;</span><br><span class="line">    <span class="keyword">int</span> col = board[<span class="number">0</span>].length;</span><br><span class="line">    UnionFind uf = <span class="keyword">new</span> UnionFind(board);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 第0行</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt; col; j++) {</span><br><span class="line">        <span class="keyword">if</span> (board[<span class="number">0</span>][j - <span class="number">1</span>] == <span class="string">'1'</span> &amp;&amp; board[<span class="number">0</span>][j] == <span class="string">'1'</span>) { <span class="comment">// 左和自己都是'1'</span></span><br><span class="line">            uf.union(<span class="number">0</span>, j - <span class="number">1</span>, <span class="number">0</span>, j); <span class="comment">// 合并</span></span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 第0列</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; row; i++) {</span><br><span class="line">        <span class="keyword">if</span> (board[i - <span class="number">1</span>][<span class="number">0</span>] == <span class="string">'1'</span> &amp;&amp; board[i][<span class="number">0</span>] == <span class="string">'1'</span>) { <span class="comment">// 上和自己都是'1'</span></span><br><span class="line">            uf.union(i - <span class="number">1</span>, <span class="number">0</span>, i, <span class="number">0</span>); <span class="comment">// 合并</span></span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; row; i++) {</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt; col; j++) {</span><br><span class="line">            <span class="keyword">if</span> (board[i][j] == <span class="string">'1'</span>) { <span class="comment">// 自己是'1'</span></span><br><span class="line">                <span class="keyword">if</span> (board[i][j - <span class="number">1</span>] == <span class="string">'1'</span>) { <span class="comment">// 左是'1'</span></span><br><span class="line">                    uf.union(i, j - <span class="number">1</span>, i, j); <span class="comment">// 合并</span></span><br><span class="line">                }</span><br><span class="line">                <span class="keyword">if</span> (board[i - <span class="number">1</span>][j] == <span class="string">'1'</span>) { <span class="comment">// 上是'1'</span></span><br><span class="line">                    uf.union(i - <span class="number">1</span>, j, i, j); <span class="comment">// 合并</span></span><br><span class="line">                }</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> uf.sets();</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">UnionFind</span> </span>{</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span>[] parent;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span>[] size;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span>[] help;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> col;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> sets;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 二维转一维</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">UnionFind</span><span class="params">(<span class="keyword">char</span>[][] board)</span> </span>{</span><br><span class="line">        col = board[<span class="number">0</span>].length; <span class="comment">// 列</span></span><br><span class="line">        sets = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> row = board.length; <span class="comment">// 行</span></span><br><span class="line">        <span class="keyword">int</span> len = row * col; <span class="comment">// 总个数，行*列</span></span><br><span class="line">        parent = <span class="keyword">new</span> <span class="keyword">int</span>[len];</span><br><span class="line">        size = <span class="keyword">new</span> <span class="keyword">int</span>[len];</span><br><span class="line">        help = <span class="keyword">new</span> <span class="keyword">int</span>[len];</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> r = <span class="number">0</span>; r &lt; row; r++) {</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> c = <span class="number">0</span>; c &lt; col; c++) {</span><br><span class="line">                <span class="keyword">if</span> (board[r][c] == <span class="string">'1'</span>) {</span><br><span class="line">                    <span class="keyword">int</span> i = index(r, c);</span><br><span class="line">                    parent[i] = i;</span><br><span class="line">                    size[i] = <span class="number">1</span>;</span><br><span class="line">                    sets++;</span><br><span class="line">                }</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// (r,c) -&gt; i</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">index</span><span class="params">(<span class="keyword">int</span> r, <span class="keyword">int</span> c)</span> </span>{</span><br><span class="line">        <span class="keyword">return</span> r * col + c; <span class="comment">// 下标，所在行*总列数+所在列数</span></span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 原始位置 -&gt; 下标</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">find</span><span class="params">(<span class="keyword">int</span> i)</span> </span>{</span><br><span class="line">        <span class="keyword">int</span> hi = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span> (i != parent[i]) {</span><br><span class="line">            help[hi++] = i;</span><br><span class="line">            i = parent[i];</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">for</span> (hi--; hi &gt;= <span class="number">0</span>; hi--) {</span><br><span class="line">            parent[help[hi]] = i;</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">return</span> i;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">union</span><span class="params">(<span class="keyword">int</span> r1, <span class="keyword">int</span> c1, <span class="keyword">int</span> r2, <span class="keyword">int</span> c2)</span> </span>{</span><br><span class="line">        <span class="keyword">int</span> i1 = index(r1, c1);</span><br><span class="line">        <span class="keyword">int</span> i2 = index(r2, c2);</span><br><span class="line">        <span class="keyword">int</span> f1 = find(i1);</span><br><span class="line">        <span class="keyword">int</span> f2 = find(i2);</span><br><span class="line">        <span class="keyword">if</span> (f1 != f2) {</span><br><span class="line">            <span class="keyword">if</span> (size[f1] &gt;= size[f2]) {</span><br><span class="line">                size[f1] += size[f2];</span><br><span class="line">                parent[f2] = f1;</span><br><span class="line">            } <span class="keyword">else</span> {</span><br><span class="line">                size[f2] += size[f1];</span><br><span class="line">                parent[f1] = f2;</span><br><span class="line">            }</span><br><span class="line">            sets--;</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">sets</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="keyword">return</span> sets;</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="3-岛屿数量II（LeetCode-305-）"><a href="#3-岛屿数量II（LeetCode-305-）" class="headerlink" title="3.岛屿数量II（LeetCode 305.）"></a>3.岛屿数量II（LeetCode 305.）</h1><p>假设你要设计一个游戏，用一个 m 行 n 列的 2d 网格来存储游戏地图。</p>
+<p>起始的时候，每个格子的地形都被默认标记为「水」。我们可以通过使用 addLand 进行操作，将位置 (row, col) 的「水」变成「陆地」。</p>
+<p>你将会被给定一个列表，来记录所有需要被操作的位置，然后你需要返回计算出来 每次 addLand 操作后岛屿的数量。</p>
+<p>注意：一个岛的定义是被「水」包围的「陆地」，通过水平方向或者垂直方向上相邻的陆地连接而成。你可以假设地图网格的四边均被无边无际的「水」所包围。</p>
+<p>示例:</p>
+<p>输入: m = 3, n = 3, positions = [[0,0], [0,1], [1,2], [2,1]]<br>输出: [1,1,2,3]<br>解析:</p>
+<p>起初，二维网格 grid 被全部注入「水」。（0 代表「水」，1 代表「陆地」）</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">0 0 0</span><br><span class="line">0 0 0</span><br><span class="line">0 0 0</span><br></pre></td></tr></tbody></table></figure>
+<p>操作 #1：addLand(0, 0) 将 grid[0][0] 的水变为陆地。</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1 0 0</span><br><span class="line">0 0 0 岛屿的数量为 1</span><br><span class="line">0 0 0</span><br></pre></td></tr></tbody></table></figure>
+<p>操作 #2：addLand(0, 1) 将 grid[0][1] 的水变为陆地。</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1 1 0</span><br><span class="line">0 0 0 岛屿的数量为 1</span><br><span class="line">0 0 0</span><br></pre></td></tr></tbody></table></figure>
+<p>操作 #3：addLand(1, 2) 将 grid[1][2] 的水变为陆地。</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1 1 0</span><br><span class="line">0 0 1 岛屿的数量为 2</span><br><span class="line">0 0 0</span><br></pre></td></tr></tbody></table></figure>
+<p>操作 #4：addLand(2, 1) 将 grid[2][1] 的水变为陆地。</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1 1 0</span><br><span class="line">0 0 1 岛屿的数量为 3</span><br><span class="line">0 1 0</span><br></pre></td></tr></tbody></table></figure>
+
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 第一种实现，O(m*n) + O(k)，网格很大时初始化过重</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> List&lt;Integer&gt; <span class="title">numIslands2v1</span><span class="params">(<span class="keyword">int</span> m, <span class="keyword">int</span> n, <span class="keyword">int</span>[][] positions)</span> </span>{</span><br><span class="line">    UnionFind1 uf = <span class="keyword">new</span> UnionFind1(m, n);</span><br><span class="line">    List&lt;Integer&gt; ans = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span>[] position : positions) {</span><br><span class="line">        ans.add(uf.connect(position[<span class="number">0</span>], position[<span class="number">1</span>]));</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">UnionFind1</span> </span>{</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span>[] parent;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span>[] size;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span>[] help;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> row;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">int</span> col;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> sets;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">UnionFind1</span><span class="params">(<span class="keyword">int</span> m, <span class="keyword">int</span> n)</span> </span>{</span><br><span class="line">        row = m;</span><br><span class="line">        col = n;</span><br><span class="line">        sets = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> len = row * col;</span><br><span class="line">        parent = <span class="keyword">new</span> <span class="keyword">int</span>[len];</span><br><span class="line">        size = <span class="keyword">new</span> <span class="keyword">int</span>[len];</span><br><span class="line">        help = <span class="keyword">new</span> <span class="keyword">int</span>[len];</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">index</span><span class="params">(<span class="keyword">int</span> r, <span class="keyword">int</span> c)</span> </span>{</span><br><span class="line">        <span class="keyword">return</span> r * col + c;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">find</span><span class="params">(<span class="keyword">int</span> i)</span> </span>{</span><br><span class="line">        <span class="keyword">int</span> hi = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span> (i != parent[i]) {</span><br><span class="line">            help[hi++] = i;</span><br><span class="line">            i = parent[i];</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">for</span> (hi--; hi &gt;= <span class="number">0</span>; hi--) {</span><br><span class="line">            parent[help[hi]] = i;</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">return</span> i;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">union</span><span class="params">(<span class="keyword">int</span> r1, <span class="keyword">int</span> c1, <span class="keyword">int</span> r2, <span class="keyword">int</span> c2)</span> </span>{</span><br><span class="line">        <span class="keyword">if</span> (r1 &lt; <span class="number">0</span> || r1 == row || r2 &lt; <span class="number">0</span> || r2 == row || c1 &lt; <span class="number">0</span> || c1 == col || c2 &lt; <span class="number">0</span> || c2 == col) {</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">int</span> i1 = index(r1, c1);</span><br><span class="line">        <span class="keyword">int</span> i2 = index(r2, c2);</span><br><span class="line">        <span class="keyword">if</span> (size[i1] == <span class="number">0</span> || size[i2] == <span class="number">0</span>) { <span class="comment">// 如果有任何一个没有初始化</span></span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">int</span> f1 = find(i1);</span><br><span class="line">        <span class="keyword">int</span> f2 = find(i2);</span><br><span class="line">        <span class="keyword">if</span> (f1 != f2) { <span class="comment">// 合并集合</span></span><br><span class="line">            <span class="keyword">if</span> (size[f1] &gt;= size[f2]) {</span><br><span class="line">                size[f1] += size[f2];</span><br><span class="line">                parent[f2] = f1;</span><br><span class="line">            } <span class="keyword">else</span> {</span><br><span class="line">                size[f2] += size[f1];</span><br><span class="line">                parent[f1] = f2;</span><br><span class="line">            }</span><br><span class="line">            sets--;</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">connect</span><span class="params">(<span class="keyword">int</span> r, <span class="keyword">int</span> c)</span> </span>{</span><br><span class="line">        <span class="keyword">int</span> index = index(r, c); <span class="comment">// r行c列下标</span></span><br><span class="line">        <span class="keyword">if</span> (size[index] == <span class="number">0</span>) { <span class="comment">// 如果没有初始化，动态初始化</span></span><br><span class="line">            parent[index] = index; <span class="comment">// 初始化集合，代表节点是自己</span></span><br><span class="line">            size[index] = <span class="number">1</span>; <span class="comment">// 初始化集合</span></span><br><span class="line">            sets++; <span class="comment">// 集合数量+1</span></span><br><span class="line">            <span class="comment">// 跟上下左右集合合并</span></span><br><span class="line">            union(r - <span class="number">1</span>, c, r, c);</span><br><span class="line">            union(r + <span class="number">1</span>, c, r, c);</span><br><span class="line">            union(r, c - <span class="number">1</span>, r, c);</span><br><span class="line">            union(r, c + <span class="number">1</span>, r, c);</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">return</span> sets;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// 第二种实现，如果m*n比较大，会经历很重的初始化，而k比较小，优化方法</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> List&lt;Integer&gt; <span class="title">numIslands2v2</span><span class="params">(<span class="keyword">int</span> m, <span class="keyword">int</span> n, <span class="keyword">int</span>[][] positions)</span> </span>{</span><br><span class="line">    UnionFind2 uf = <span class="keyword">new</span> UnionFind2();</span><br><span class="line">    List&lt;Integer&gt; ans = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span>[] position : positions) {</span><br><span class="line">        ans.add(uf.connect(position[<span class="number">0</span>], position[<span class="number">1</span>]));</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">UnionFind2</span> </span>{</span><br><span class="line">    <span class="keyword">private</span> HashMap&lt;String, String&gt; parent;</span><br><span class="line">    <span class="keyword">private</span> HashMap&lt;String, Integer&gt; size;</span><br><span class="line">    <span class="keyword">private</span> ArrayList&lt;String&gt; help;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> sets;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">UnionFind2</span><span class="params">()</span> </span>{</span><br><span class="line">        parent = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">        size = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">        help = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        sets = <span class="number">0</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> String <span class="title">find</span><span class="params">(String cur)</span> </span>{</span><br><span class="line">        <span class="keyword">while</span> (!cur.equals(parent.get(cur))) {</span><br><span class="line">            help.add(cur);</span><br><span class="line">            cur = parent.get(cur);</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">for</span> (String str : help) {</span><br><span class="line">            parent.put(str, cur);</span><br><span class="line">        }</span><br><span class="line">        help.clear();</span><br><span class="line">        <span class="keyword">return</span> cur;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">union</span><span class="params">(String s1, String s2)</span> </span>{</span><br><span class="line">        <span class="keyword">if</span> (parent.containsKey(s1) &amp;&amp; parent.containsKey(s2)) { <span class="comment">// 两个集合都初始化过了</span></span><br><span class="line">            String f1 = find(s1);</span><br><span class="line">            String f2 = find(s2);</span><br><span class="line">            <span class="keyword">if</span> (!f1.equals(f2)) { <span class="comment">// 集合合并</span></span><br><span class="line">                <span class="keyword">int</span> size1 = size.get(f1);</span><br><span class="line">                <span class="keyword">int</span> size2 = size.get(f2);</span><br><span class="line">                String big = size1 &gt;= size2 ? f1 : f2;</span><br><span class="line">                String small = big == f1 ? f2 : f1;</span><br><span class="line">                parent.put(small, big);</span><br><span class="line">                size.put(big, size1 + size2);</span><br><span class="line">                sets--;</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">connect</span><span class="params">(<span class="keyword">int</span> r, <span class="keyword">int</span> c)</span> </span>{</span><br><span class="line">        String key = String.valueOf(r) + <span class="string">"_"</span> + String.valueOf(c);</span><br><span class="line">        <span class="keyword">if</span> (!parent.containsKey(key)) { <span class="comment">// 已经初始化了</span></span><br><span class="line">            parent.put(key, key); <span class="comment">// 初始化集合，代表节点是自己</span></span><br><span class="line">            size.put(key, <span class="number">1</span>); <span class="comment">// 初始化集合</span></span><br><span class="line">            sets++; <span class="comment">// 集合数量+1</span></span><br><span class="line">            <span class="comment">// 上下左右key</span></span><br><span class="line">            String up = String.valueOf(r - <span class="number">1</span>) + <span class="string">"_"</span> + String.valueOf(c);</span><br><span class="line">            String down = String.valueOf(r + <span class="number">1</span>) + <span class="string">"_"</span> + String.valueOf(c);</span><br><span class="line">            String left = String.valueOf(r) + <span class="string">"_"</span> + String.valueOf(c - <span class="number">1</span>);</span><br><span class="line">            String right = String.valueOf(r) + <span class="string">"_"</span> + String.valueOf(c + <span class="number">1</span>);</span><br><span class="line">            <span class="comment">// 和上下左右集合合并</span></span><br><span class="line">            union(up, key);</span><br><span class="line">            union(down, key);</span><br><span class="line">            union(left, key);</span><br><span class="line">            union(right, key);</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">return</span> sets;</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+    
+  </div>
+
+</article>
+
+
+   
+
+   
+  <div class="box-prev-next clearfix">
+    <a class="show pull-left" href="/2022/08/29/go-structure/">
+        <i class="icon icon-angle-left"></i>
+    </a>
+    <a class="hide pull-right" href="/">
+        <i class="icon icon-angle-right"></i>
+    </a>
+  </div>
+
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/categories/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              分类
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/roaming/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              漫游
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/atom.xml"
+              rel="noopener noreferrer"
+              target="_blank"
+              >
+              RSS
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/search/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              搜索
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+    
+    
+
+    
+
+    
+    
+
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script>
+    <div id="comment" class="vcomment" ></div>
+    <script>
+        var notify = 'false' == true ? true : false;
+        var verify = 'false' == true ? true : false;
+        var GUEST_INFO = ['nick','mail','link'];
+        var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+            return GUEST_INFO.indexOf(item) > -1
+        });
+        guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+        window.valine = new Valine({
+            el: '.vcomment',
+            notify: notify,
+            verify: verify,
+            appId: "masttnqEt9G69mj43i9oaA1C-gzGzoHsz",
+            appKey: "hgIx9VKn0GLDhRcLxQuNMl0E",
+            avatar:'mm',
+            placeholder: "Say something",
+            guest_info:guest_info,
+            pageSize:'10'
+        });
+    </script>
+  
+    
+
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>
