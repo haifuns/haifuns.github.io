@@ -28,6 +28,7 @@ date: 2022-06-15 10:00:00
 - [【算法基础】二叉树专练（二）](https://haifuns.com/2022/08/16/algorithm-binarytree-problem2/)
 - [【算法基础】贪心算法](https://haifuns.com/2022/08/28/algorithm-greddy)
 - [【算法基础】并查集](https://haifuns.com/2022/08/30/algorithm-unionfind)
+- [【算法基础】图](https://haifuns.com/2022/08/31/algorithm-graph)
 
 # 常备算法网站
 
