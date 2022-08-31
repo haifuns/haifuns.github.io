@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>【算法基础】图 | haifuns的博客</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="算法,图," />
+  
+
+  <meta name="description" content="图结构（Graph）中节点可以具有零个或多个相邻元素，两个节点之间的连接称为边（Edge）。节点也可以称为顶点（Vertex）。 图的类型：  无向图，边没有方向 有向图，边有方向 带权图，边带权值  图的表示方式：  邻接矩阵：图形中顶点之间相邻关系的矩阵。 邻接表：只关心存在的边，不关心不存在的边，没有空间浪费。 除以上两种方式外还有其他众多的方式。  在有向图中，箭头是具有方向的，从一个顶点">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【算法基础】图">
+<meta property="og:url" content="https://haifuns.com/2022/08/31/algorithm-graph/index.html">
+<meta property="og:site_name" content="haifuns的博客">
+<meta property="og:description" content="图结构（Graph）中节点可以具有零个或多个相邻元素，两个节点之间的连接称为边（Edge）。节点也可以称为顶点（Vertex）。 图的类型：  无向图，边没有方向 有向图，边有方向 带权图，边带权值  图的表示方式：  邻接矩阵：图形中顶点之间相邻关系的矩阵。 邻接表：只关心存在的边，不关心不存在的边，没有空间浪费。 除以上两种方式外还有其他众多的方式。  在有向图中，箭头是具有方向的，从一个顶点">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-08-31T23:55:00.000Z">
+<meta property="article:modified_time" content="2022-08-31T15:57:34.980Z">
+<meta property="article:author" content="haifuns">
+<meta property="article:tag" content="算法">
+<meta property="article:tag" content="图">
+<meta name="twitter:card" content="summary">
+
+  
+
+  
+    <link rel="icon" href="/images/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbeddx" rel="stylesheet">
+
+
+  
+    
+<link rel="stylesheet" href="/css/personal-style.css">
+
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?d3c8edb388553a2084296cbfe9a0785a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
+
+<meta name="generator" content="Hexo 5.4.2">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="haifuns的博客" type="application/atom+xml">
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header CENTER">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/categories/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            分类
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/roaming/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            漫游
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/atom.xml"
+            rel="noopener noreferrer"
+            target="_blank"
+            >
+            RSS
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/search/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%BE%E7%BB%93%E6%9E%84%E5%AE%9E%E7%8E%B0"><span class="toc-text">图结构实现</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%BE%E7%9A%84%E5%AE%BD%E5%BA%A6%E4%BC%98%E5%85%88%E9%81%8D%E5%8E%86%EF%BC%88BFS%EF%BC%89"><span class="toc-text">图的宽度优先遍历（BFS）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%BE%E7%9A%84%E6%B7%B1%E5%BA%A6%E4%BC%98%E5%85%88%E9%81%8D%E5%8E%86%EF%BC%88DFS%EF%BC%89"><span class="toc-text">图的深度优先遍历（DFS）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9B%BE%E7%9A%84%E6%8B%93%E6%89%91%E6%8E%92%E5%BA%8F"><span class="toc-text">图的拓扑排序</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#1-%E6%8B%93%E6%89%91%E6%8E%92%E5%BA%8F%EF%BC%88LintCode-127-%EF%BC%89"><span class="toc-text">1.拓扑排序（LintCode 127.）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%A3%E6%B3%951%EF%BC%9Abfs%E7%BB%9F%E8%AE%A1%E5%85%A5%E5%BA%A6"><span class="toc-text">解法1：bfs统计入度</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%A3%E6%B3%952%EF%BC%9Adfs%E7%BB%9F%E8%AE%A1%E7%82%B9%E6%AC%A1"><span class="toc-text">解法2：dfs统计点次</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%A7%A3%E6%B3%953%EF%BC%9Adfs%E7%BB%9F%E8%AE%A1%E6%B7%B1%E5%BA%A6"><span class="toc-text">解法3：dfs统计深度</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9C%80%E5%B0%8F%E7%94%9F%E6%88%90%E6%A0%91%E4%B9%8BKruskal%E7%AE%97%E6%B3%95"><span class="toc-text">最小生成树之Kruskal算法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9C%80%E5%B0%8F%E7%94%9F%E6%88%90%E6%A0%91%E4%B9%8BPrim%E7%AE%97%E6%B3%95"><span class="toc-text">最小生成树之Prim算法</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%A1%B6%E7%82%B9%E5%88%B0%E5%85%B6%E4%BD%99%E5%90%84%E9%A1%B6%E7%82%B9%E7%9A%84%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%EF%BC%88Dijkstra%E7%AE%97%E6%B3%95%EF%BC%89"><span class="toc-text">顶点到其余各顶点的最短路径（Dijkstra算法）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E8%A7%84%E5%AE%9E%E7%8E%B0"><span class="toc-text">常规实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8A%A0%E5%BC%BA%E5%A0%86%E4%BC%98%E5%8C%96"><span class="toc-text">加强堆优化</span></a></li></ol></li></ol>
+  </div>
+
+
+
+<div class="content content-post CENTER">
+   <article id="post-algorithm-graph" class="article article-type-post" itemprop="blogPost">
+  <header class="article-header">
+    <h1 class="post-title">【算法基础】图</h1>
+
+    <div class="article-meta">
+      <span>
+        <i class="icon-calendar"></i>
+        <span>2022.08.31</span>
+      </span>
+
+      
+        <span class="article-author">
+          <i class="icon-user"></i>
+          <span>haifuns</span>
+        </span>
+      
+
+      
+  <span class="article-category">
+    <i class="icon-list"></i>
+    <a class="article-category-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a>
+  </span>
+
+
+
+      
+
+      
+      <i class="fa fa-eye"></i> 
+        <span id="busuanzi_container_page_pv">
+           &nbsp热度 <span id="busuanzi_value_page_pv">
+           <i class="fa fa-spinner fa-spin"></i></span>℃
+        </span>
+      
+      
+    </div>
+  </header>
+
+  <div class="article-content">
+    
+      <p>图结构（Graph）中节点可以具有零个或多个相邻元素，两个节点之间的连接称为边（Edge）。节点也可以称为顶点（Vertex）。</p>
+<p>图的类型：</p>
+<ul>
+<li>无向图，边没有方向</li>
+<li>有向图，边有方向</li>
+<li>带权图，边带权值</li>
+</ul>
+<p>图的表示方式：</p>
+<ul>
+<li>邻接矩阵：图形中顶点之间相邻关系的矩阵。</li>
+<li>邻接表：只关心存在的边，不关心不存在的边，没有空间浪费。</li>
+<li>除以上两种方式外还有其他众多的方式。</li>
+</ul>
+<p>在有向图中，箭头是具有方向的，从一个顶点指向另一个顶点，每个顶点被指向的箭头个数，就是它的入度。从这个顶点指出去的箭头个数，就是它的出度。</p>
+<p>图的算法都不算难，只是coding的代价比较高。图学习方法：</p>
+<ol>
+<li>先用自己最熟练的方式，实现图结构的表达。</li>
+<li>在自己熟悉的结构上，实现所有常用的图算法作为模板。</li>
+<li>把面试题提供的图结构转换为自己熟悉的图结构，再调用模板或改写即可。</li>
+</ol>
+<h1 id="图结构实现"><a href="#图结构实现" class="headerlink" title="图结构实现"></a>图结构实现</h1><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 边结构</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Edge</span> </span>{</span><br><span class="line">    <span class="comment">// 权重</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span> weight;</span><br><span class="line">    <span class="comment">// 出发点</span></span><br><span class="line">    <span class="keyword">public</span> Node from;</span><br><span class="line">    <span class="comment">// 到达点</span></span><br><span class="line">    <span class="keyword">public</span> Node to;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Edge</span><span class="params">(<span class="keyword">int</span> weight, Node from, Node to)</span> </span>{</span><br><span class="line">        <span class="keyword">this</span>.weight = weight;</span><br><span class="line">        <span class="keyword">this</span>.from = from;</span><br><span class="line">        <span class="keyword">this</span>.to = to;</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 点结构</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span> </span>{</span><br><span class="line">    <span class="comment">// 点值</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span> value;</span><br><span class="line">    <span class="comment">// 入度，顶点被指向的箭头个数</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span> in;</span><br><span class="line">    <span class="comment">// 出度，顶点指出去的箭头个数</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span> out;</span><br><span class="line">    <span class="comment">// 后继点</span></span><br><span class="line">    <span class="keyword">public</span> ArrayList&lt;Node&gt; nexts;</span><br><span class="line">    <span class="comment">// 指出去的边</span></span><br><span class="line">    <span class="keyword">public</span> ArrayList&lt;Edge&gt; edges;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">(<span class="keyword">int</span> value)</span> </span>{</span><br><span class="line">        <span class="keyword">this</span>.value = value;</span><br><span class="line">        in = <span class="number">0</span>;</span><br><span class="line">        out = <span class="number">0</span>;</span><br><span class="line">        nexts = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        edges = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 图结构</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Graph</span> </span>{</span><br><span class="line">    <span class="comment">// 包含的点，值 -&gt; 点</span></span><br><span class="line">    <span class="keyword">public</span> HashMap&lt;Integer, Node&gt; nodes;</span><br><span class="line">    <span class="comment">// 包含的边</span></span><br><span class="line">    <span class="keyword">public</span> HashSet&lt;Edge&gt; edges;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Graph</span><span class="params">()</span> </span>{</span><br><span class="line">        nodes = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">        edges = <span class="keyword">new</span> HashSet&lt;&gt;();</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="图的宽度优先遍历（BFS）"><a href="#图的宽度优先遍历（BFS）" class="headerlink" title="图的宽度优先遍历（BFS）"></a>图的宽度优先遍历（BFS）</h1><p>宽度优先遍历（Breadth First Search）：</p>
+<ol>
+<li>利用队列实现</li>
+<li>从源节点开始依次按照宽度进队列，然后弹出</li>
+<li>每弹出一个点，把该节点所有没有进过队列的邻接点放入队列</li>
+<li>直到队列变为空结束</li>
+</ol>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">bfs</span><span class="params">(Node start)</span> </span>{</span><br><span class="line">    <span class="keyword">if</span> (start == <span class="keyword">null</span>) {</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    }</span><br><span class="line">    Queue&lt;Node&gt; queue = <span class="keyword">new</span> LinkedList&lt;&gt;();</span><br><span class="line">    <span class="comment">// 记录已经进入过队列的节点，防止出现回路重复遍历</span></span><br><span class="line">    HashSet&lt;Node&gt; set = <span class="keyword">new</span> HashSet&lt;&gt;();</span><br><span class="line">    queue.add(start);</span><br><span class="line">    set.add(start);</span><br><span class="line">    <span class="keyword">while</span> (!queue.isEmpty()) {</span><br><span class="line">        Node cur = queue.poll();</span><br><span class="line">        System.out.println(cur.value);</span><br><span class="line">        <span class="keyword">for</span> (Node next : cur.nexts) {</span><br><span class="line">            <span class="keyword">if</span> (!set.contains(next)) {</span><br><span class="line">                set.add(next);</span><br><span class="line">                queue.add(next);</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="图的深度优先遍历（DFS）"><a href="#图的深度优先遍历（DFS）" class="headerlink" title="图的深度优先遍历（DFS）"></a>图的深度优先遍历（DFS）</h1><p>深度优先遍历（Depth First Search）：</p>
+<ol>
+<li>利用栈实现</li>
+<li>从源节点开始把节点按照深度放入栈，然后弹出</li>
+<li>每弹出一个点，把该节点下一个没有进过栈的邻接点放入栈</li>
+<li>直到栈变为空结束</li>
+</ol>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">dfs</span><span class="params">(Node node)</span> </span>{</span><br><span class="line">    <span class="keyword">if</span> (node == <span class="keyword">null</span>) {</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    }</span><br><span class="line">    Stack&lt;Node&gt; stack = <span class="keyword">new</span> Stack&lt;&gt;();</span><br><span class="line">    HashSet&lt;Node&gt; set = <span class="keyword">new</span> HashSet&lt;&gt;();</span><br><span class="line">    stack.add(node);</span><br><span class="line">    set.add(node);</span><br><span class="line">    System.out.println(node.value);</span><br><span class="line">    <span class="keyword">while</span> (!stack.isEmpty()) {</span><br><span class="line">        Node cur = stack.pop();</span><br><span class="line">        <span class="keyword">for</span> (Node next : cur.nexts) {</span><br><span class="line">            <span class="keyword">if</span> (!set.contains(next)) {</span><br><span class="line">                stack.push(cur);</span><br><span class="line">                stack.push(next);</span><br><span class="line">                set.add(next);</span><br><span class="line">                System.out.println(next.value);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="图的拓扑排序"><a href="#图的拓扑排序" class="headerlink" title="图的拓扑排序"></a>图的拓扑排序</h1><p>拓扑排序：</p>
+<ol>
+<li>在图中找到所有入度为0的点输出</li>
+<li>把所有入度为0的点在图中删除，继续找到入度为0的点输出，周而复始</li>
+<li>图的所有点都被删除后，依次输出的顺序就是拓扑排序</li>
+</ol>
+<p>要求：有向图且其中没有环<br>应用：事件安排、编译顺序</p>
+<p>拓扑排序可以有多种顺序，并不是只有唯一的顺序。</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 有向图且无环</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> List&lt;Node&gt; <span class="title">sortedTopology</span><span class="params">(Graph graph)</span> </span>{</span><br><span class="line">    <span class="comment">// 节点 -&gt; 剩余的入度</span></span><br><span class="line">    HashMap&lt;Node, Integer&gt; inMap = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">    <span class="comment">// 剩余入度为0的点</span></span><br><span class="line">    Queue&lt;Node&gt; zeroInQueue = <span class="keyword">new</span> LinkedList&lt;&gt;();</span><br><span class="line">    <span class="keyword">for</span> (Node node : graph.nodes.values()) {</span><br><span class="line">        inMap.put(node, node.in);</span><br><span class="line">        <span class="keyword">if</span> (node.in == <span class="number">0</span>) {</span><br><span class="line">            zeroInQueue.add(node);</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    List&lt;Node&gt; result = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    <span class="keyword">while</span> (!zeroInQueue.isEmpty()) {</span><br><span class="line">        Node cur = zeroInQueue.poll();</span><br><span class="line">        result.add(cur);</span><br><span class="line">        <span class="keyword">for</span> (Node next : cur.nexts) {</span><br><span class="line">            inMap.put(next, inMap.get(next) - <span class="number">1</span>); <span class="comment">// 所有的邻接点入度-1</span></span><br><span class="line">            <span class="keyword">if</span> (inMap.get(next) == <span class="number">0</span>) {</span><br><span class="line">                zeroInQueue.add(next); <span class="comment">// 如果邻接点入度为0，记录</span></span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="1-拓扑排序（LintCode-127-）"><a href="#1-拓扑排序（LintCode-127-）" class="headerlink" title="1.拓扑排序（LintCode 127.）"></a>1.拓扑排序（LintCode 127.）</h1><p>给定一个有向图，图节点的拓扑排序定义如下:</p>
+<ul>
+<li>对于图中的每一条有向边 A -&gt; B , 在拓扑排序中A一定在B之前。</li>
+<li>拓扑排序中的第一个节点可以是图中的任何一个没有其他节点指向它的节点。</li>
+</ul>
+<p>针对给定的有向图找到任意一种拓扑排序的顺序。</p>
+<p>点结构：</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">DirectedGraphNode</span> </span>{</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span> label;</span><br><span class="line">    <span class="keyword">public</span> ArrayList&lt;DirectedGraphNode&gt; neighbors; <span class="comment">// 邻接点</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">DirectedGraphNode</span><span class="params">(<span class="keyword">int</span> x)</span> </span>{</span><br><span class="line">        label = x;</span><br><span class="line">        neighbors = <span class="keyword">new</span> ArrayList&lt;DirectedGraphNode&gt;();</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="解法1：bfs统计入度"><a href="#解法1：bfs统计入度" class="headerlink" title="解法1：bfs统计入度"></a>解法1：bfs统计入度</h2><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 此题特殊之处在于只给定了图中所有的点</span></span><br><span class="line"><span class="comment">// bfs实现，统计入度数</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ArrayList&lt;DirectedGraphNode&gt; <span class="title">topSort</span><span class="params">(ArrayList&lt;DirectedGraphNode&gt; graph)</span> </span>{</span><br><span class="line">    HashMap&lt;DirectedGraphNode, Integer&gt; indegreeMap = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">    <span class="comment">// 初始化每个点入度数为0</span></span><br><span class="line">    <span class="keyword">for</span> (DirectedGraphNode cur : graph) {</span><br><span class="line">        indegreeMap.put(cur, <span class="number">0</span>);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 遍历统计每个点入度数</span></span><br><span class="line">    <span class="keyword">for</span> (DirectedGraphNode cur : graph) {</span><br><span class="line">        <span class="keyword">for</span> (DirectedGraphNode next : cur.neighbors) {</span><br><span class="line">            indegreeMap.put(next, indegreeMap.get(next) + <span class="number">1</span>);</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 拓扑队列</span></span><br><span class="line">    Queue&lt;DirectedGraphNode&gt; zeroQueue = <span class="keyword">new</span> LinkedList&lt;&gt;();</span><br><span class="line">    <span class="comment">// 取出第一层依次压入队列</span></span><br><span class="line">    <span class="keyword">for</span> (DirectedGraphNode cur : indegreeMap.keySet()) {</span><br><span class="line">        <span class="keyword">if</span> (indegreeMap.get(cur) == <span class="number">0</span>) {</span><br><span class="line">            zeroQueue.add(cur);</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 拓扑序结果</span></span><br><span class="line">    ArrayList&lt;DirectedGraphNode&gt; ans = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    <span class="keyword">while</span> (!zeroQueue.isEmpty()) {</span><br><span class="line">        DirectedGraphNode cur = zeroQueue.poll(); <span class="comment">// 弹出一个入度为0的点</span></span><br><span class="line">        ans.add(cur); <span class="comment">// 记到结果里</span></span><br><span class="line">        <span class="keyword">for</span> (DirectedGraphNode next : cur.neighbors) { <span class="comment">// 当前点所有临接点入度-1</span></span><br><span class="line">            indegreeMap.put(next, indegreeMap.get(next) - <span class="number">1</span>);</span><br><span class="line">            <span class="keyword">if</span> (indegreeMap.get(next) == <span class="number">0</span>) {</span><br><span class="line">                zeroQueue.offer(next); <span class="comment">// 如果邻接点入度为0压入队列</span></span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="解法2：dfs统计点次"><a href="#解法2：dfs统计点次" class="headerlink" title="解法2：dfs统计点次"></a>解法2：dfs统计点次</h2><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Record</span> </span>{</span><br><span class="line">    <span class="keyword">public</span> DirectedGraphNode node; <span class="comment">// 点</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">long</span> nodes; <span class="comment">// 点次，当前点子图所有的节点数</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Record</span><span class="params">(DirectedGraphNode n, <span class="keyword">long</span> o)</span> </span>{</span><br><span class="line">        node = n;</span><br><span class="line">        nodes = o;</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">MyComparator</span> <span class="keyword">implements</span> <span class="title">Comparator</span>&lt;<span class="title">Record</span>&gt; </span>{</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compare</span><span class="params">(Record o1, Record o2)</span> </span>{</span><br><span class="line">        <span class="keyword">return</span> o1.nodes == o2.nodes ? <span class="number">0</span> : (o1.nodes &gt; o2.nodes ? -<span class="number">1</span> : <span class="number">1</span>);</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// dfs思路：统计每个点的点次，点次排序高到低对应拓扑排序。点次：当前点子图所有的节点数。</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ArrayList&lt;DirectedGraphNode&gt; <span class="title">topSort</span><span class="params">(ArrayList&lt;DirectedGraphNode&gt; graph)</span> </span>{</span><br><span class="line">    HashMap&lt;DirectedGraphNode, Record&gt; order = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">    <span class="keyword">for</span> (DirectedGraphNode cur : graph) {</span><br><span class="line">        f(cur, order); <span class="comment">// 计算每个点的点次</span></span><br><span class="line">    }</span><br><span class="line">    ArrayList&lt;Record&gt; recordArr = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    <span class="keyword">for</span> (Record r : order.values()) {</span><br><span class="line">        recordArr.add(r);</span><br><span class="line">    }</span><br><span class="line">    recordArr.sort(<span class="keyword">new</span> MyComparator()); <span class="comment">// 排序，点次高在前</span></span><br><span class="line">    ArrayList&lt;DirectedGraphNode&gt; ans = <span class="keyword">new</span> ArrayList&lt;DirectedGraphNode&gt;();</span><br><span class="line">    <span class="keyword">for</span> (Record r : recordArr) {</span><br><span class="line">        ans.add(r.node); <span class="comment">// 点次排序对应拓扑排序</span></span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 当前来到cur点，返回cur点所到之处，所有的点次</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> cur   当前点</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> order 缓存，点 -&gt; 点次</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> （cur，点次）</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Record <span class="title">f</span><span class="params">(DirectedGraphNode cur, HashMap&lt;DirectedGraphNode, Record&gt; order)</span> </span>{</span><br><span class="line">    <span class="keyword">if</span> (order.containsKey(cur)) {</span><br><span class="line">        <span class="keyword">return</span> order.get(cur);</span><br><span class="line">    }</span><br><span class="line">    <span class="comment">// cur的点次之前没算过！</span></span><br><span class="line">    <span class="keyword">long</span> nodes = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (DirectedGraphNode next : cur.neighbors) {</span><br><span class="line">        nodes += f(next, order).nodes;</span><br><span class="line">    }</span><br><span class="line">    Record ans = <span class="keyword">new</span> Record(cur, nodes + <span class="number">1</span>);</span><br><span class="line">    order.put(cur, ans);</span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="解法3：dfs统计深度"><a href="#解法3：dfs统计深度" class="headerlink" title="解法3：dfs统计深度"></a>解法3：dfs统计深度</h2><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Record</span> </span>{</span><br><span class="line">    <span class="keyword">public</span> DirectedGraphNode node;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span> deep;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Record</span><span class="params">(DirectedGraphNode n, <span class="keyword">int</span> o)</span> </span>{</span><br><span class="line">        node = n;</span><br><span class="line">        deep = o;</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">MyComparator</span> <span class="keyword">implements</span> <span class="title">Comparator</span>&lt;<span class="title">Record</span>&gt; </span>{</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compare</span><span class="params">(Record o1, Record o2)</span> </span>{</span><br><span class="line">        <span class="keyword">return</span> o2.deep - o1.deep;</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ArrayList&lt;DirectedGraphNode&gt; <span class="title">topSort</span><span class="params">(ArrayList&lt;DirectedGraphNode&gt; graph)</span> </span>{</span><br><span class="line">    HashMap&lt;DirectedGraphNode, Record&gt; order = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">    <span class="keyword">for</span> (DirectedGraphNode cur : graph) {</span><br><span class="line">        f(cur, order);</span><br><span class="line">    }</span><br><span class="line">    ArrayList&lt;Record&gt; recordArr = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    <span class="keyword">for</span> (Record r : order.values()) {</span><br><span class="line">        recordArr.add(r);</span><br><span class="line">    }</span><br><span class="line">    recordArr.sort(<span class="keyword">new</span> MyComparator());</span><br><span class="line">    ArrayList&lt;DirectedGraphNode&gt; ans = <span class="keyword">new</span> ArrayList&lt;DirectedGraphNode&gt;();</span><br><span class="line">    <span class="keyword">for</span> (Record r : recordArr) {</span><br><span class="line">        ans.add(r.node);</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Record <span class="title">f</span><span class="params">(DirectedGraphNode cur, HashMap&lt;DirectedGraphNode, Record&gt; order)</span> </span>{</span><br><span class="line">    <span class="keyword">if</span> (order.containsKey(cur)) {</span><br><span class="line">        <span class="keyword">return</span> order.get(cur);</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">int</span> follow = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (DirectedGraphNode next : cur.neighbors) {</span><br><span class="line">        follow = Math.max(follow, f(next, order).deep);</span><br><span class="line">    }</span><br><span class="line">    Record ans = <span class="keyword">new</span> Record(cur, follow + <span class="number">1</span>);</span><br><span class="line">    order.put(cur, ans);</span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="最小生成树之Kruskal算法"><a href="#最小生成树之Kruskal算法" class="headerlink" title="最小生成树之Kruskal算法"></a>最小生成树之Kruskal算法</h1><p>最小生成树定义：对于无向带权图，在不影响所有点连通的情况下，保持图连通的最少的边。</p>
+<p>Kruskal算法（克鲁斯卡尔算法，利用并查集实现）：</p>
+<ol>
+<li>总是从权值最小的边开始考虑，依次考察权值依次变大的边</li>
+<li>当前的边要么进入最小生成树的集合，要么丢弃</li>
+<li>如果当前的边进入最小生成树的集合中不会形成环，就要当前边</li>
+<li>如果当前的边进入最小生成树的集合会形成环，就不要当前边</li>
+<li>考察完所有的边之后，得到最小生成树集合</li>
+</ol>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 并查集</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">UnionFind</span> </span>{</span><br><span class="line">    <span class="comment">// 某一个节点 -&gt; 节点往上的节点</span></span><br><span class="line">    <span class="keyword">private</span> HashMap&lt;Node, Node&gt; fatherMap;</span><br><span class="line">    <span class="comment">// 某一个集合的代表节点 -&gt; 代表节点所在集合的节点个数</span></span><br><span class="line">    <span class="keyword">private</span> HashMap&lt;Node, Integer&gt; sizeMap;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">UnionFind</span><span class="params">()</span> </span>{</span><br><span class="line">        fatherMap = <span class="keyword">new</span> HashMap&lt;Node, Node&gt;();</span><br><span class="line">        sizeMap = <span class="keyword">new</span> HashMap&lt;Node, Integer&gt;();</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">makeSets</span><span class="params">(Collection&lt;Node&gt; nodes)</span> </span>{</span><br><span class="line">        fatherMap.clear();</span><br><span class="line">        sizeMap.clear();</span><br><span class="line">        <span class="keyword">for</span> (Node node : nodes) {</span><br><span class="line">            fatherMap.put(node, node); <span class="comment">// 初始化集合，每个点都是集合</span></span><br><span class="line">            sizeMap.put(node, <span class="number">1</span>); <span class="comment">// 初始化集合代表节点，是自己</span></span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> Node <span class="title">findFather</span><span class="params">(Node n)</span> </span>{</span><br><span class="line">        Stack&lt;Node&gt; path = <span class="keyword">new</span> Stack&lt;&gt;();</span><br><span class="line">        <span class="keyword">while</span> (n != fatherMap.get(n)) {</span><br><span class="line">            path.add(n);</span><br><span class="line">            n = fatherMap.get(n);</span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">while</span> (!path.isEmpty()) {</span><br><span class="line">            fatherMap.put(path.pop(), n); <span class="comment">// 路径压缩优化</span></span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">return</span> n;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isSameSet</span><span class="params">(Node a, Node b)</span> </span>{</span><br><span class="line">        <span class="keyword">return</span> findFather(a) == findFather(b);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">union</span><span class="params">(Node a, Node b)</span> </span>{</span><br><span class="line">        <span class="keyword">if</span> (a == <span class="keyword">null</span> || b == <span class="keyword">null</span>) {</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        }</span><br><span class="line">        Node aDai = findFather(a); <span class="comment">// 找到代表节点</span></span><br><span class="line">        Node bDai = findFather(b);</span><br><span class="line">        <span class="keyword">if</span> (aDai != bDai) { <span class="comment">// 不是同一个集合</span></span><br><span class="line">            <span class="keyword">int</span> aSetSize = sizeMap.get(aDai); <span class="comment">// 集合大小</span></span><br><span class="line">            <span class="keyword">int</span> bSetSize = sizeMap.get(bDai);</span><br><span class="line">            <span class="keyword">if</span> (aSetSize &lt;= bSetSize) { <span class="comment">// 小集合挂到大集合上</span></span><br><span class="line">                fatherMap.put(aDai, bDai);</span><br><span class="line">                sizeMap.put(bDai, aSetSize + bSetSize);</span><br><span class="line">                sizeMap.remove(aDai);</span><br><span class="line">            } <span class="keyword">else</span> {</span><br><span class="line">                fatherMap.put(bDai, aDai);</span><br><span class="line">                sizeMap.put(aDai, aSetSize + bSetSize);</span><br><span class="line">                sizeMap.remove(bDai);</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">EdgeComparator</span> <span class="keyword">implements</span> <span class="title">Comparator</span>&lt;<span class="title">Edge</span>&gt; </span>{</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compare</span><span class="params">(Edge o1, Edge o2)</span> </span>{</span><br><span class="line">        <span class="keyword">return</span> o1.weight - o2.weight;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Set&lt;Edge&gt; <span class="title">kruskalMST</span><span class="params">(Graph graph)</span> </span>{</span><br><span class="line">    UnionFind unionFind = <span class="keyword">new</span> UnionFind();</span><br><span class="line">    unionFind.makeSets(graph.nodes.values());</span><br><span class="line">    <span class="comment">// 从小的边到大的边，依次弹出，小根堆！</span></span><br><span class="line">    PriorityQueue&lt;Edge&gt; priorityQueue = <span class="keyword">new</span> PriorityQueue&lt;&gt;(<span class="keyword">new</span> EdgeComparator());</span><br><span class="line">    <span class="keyword">for</span> (Edge edge : graph.edges) { <span class="comment">// M 条边</span></span><br><span class="line">        priorityQueue.add(edge); <span class="comment">// O(logM)</span></span><br><span class="line">    }</span><br><span class="line">    Set&lt;Edge&gt; result = <span class="keyword">new</span> HashSet&lt;&gt;();</span><br><span class="line">    <span class="keyword">while</span> (!priorityQueue.isEmpty()) { <span class="comment">// M 条边</span></span><br><span class="line">        Edge edge = priorityQueue.poll(); <span class="comment">// O(logM)</span></span><br><span class="line">        <span class="keyword">if</span> (!unionFind.isSameSet(edge.from, edge.to)) { <span class="comment">// 边的两边节点不在一个集合 O(1)</span></span><br><span class="line">            result.add(edge); <span class="comment">// 保留边</span></span><br><span class="line">            unionFind.union(edge.from, edge.to); <span class="comment">// 合并集合</span></span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="最小生成树之Prim算法"><a href="#最小生成树之Prim算法" class="headerlink" title="最小生成树之Prim算法"></a>最小生成树之Prim算法</h1><p>Prim算法（普里姆算法）：</p>
+<ol>
+<li>可以从任意节点触发来寻找最小生成树</li>
+<li>某个点加入到被选取的点中后，解锁这个点出发的所有新的边</li>
+<li>在所有解锁的边（所有被选取点累计解锁的边）中选择最小的边，然后看这个边会不会形成环</li>
+<li>如果会，不要当前边，继续考察剩下解锁的边中最小的边，重复3</li>
+<li>如果不会，要当前边，将该边的指向点加入到被选取的点中，重复2</li>
+<li>当所有点都被选取之后，得到最小生成树集合</li>
+</ol>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">EdgeComparator</span> <span class="keyword">implements</span> <span class="title">Comparator</span>&lt;<span class="title">Edge</span>&gt; </span>{</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compare</span><span class="params">(Edge o1, Edge o2)</span> </span>{</span><br><span class="line">        <span class="keyword">return</span> o1.weight - o2.weight;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Set&lt;Edge&gt; <span class="title">primMST</span><span class="params">(Graph graph)</span> </span>{</span><br><span class="line">    <span class="comment">// 解锁的边进入小根堆</span></span><br><span class="line">    PriorityQueue&lt;Edge&gt; priorityQueue = <span class="keyword">new</span> PriorityQueue&lt;&gt;(<span class="keyword">new</span> EdgeComparator());</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 哪些点被解锁出来了</span></span><br><span class="line">    HashSet&lt;Node&gt; nodeSet = <span class="keyword">new</span> HashSet&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    Set&lt;Edge&gt; result = <span class="keyword">new</span> HashSet&lt;&gt;(); <span class="comment">// 依次挑选的的边在result里</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (Node node : graph.nodes.values()) { <span class="comment">// 随便挑一个点，循环的目的是防止森林</span></span><br><span class="line">        <span class="comment">// node 是开始点</span></span><br><span class="line">        <span class="keyword">if</span> (!nodeSet.contains(node)) {</span><br><span class="line">            nodeSet.add(node); <span class="comment">// 接入到解锁点集合</span></span><br><span class="line">            <span class="keyword">for</span> (Edge edge : node.edges) { <span class="comment">// 由一个点，解锁所有相连的边</span></span><br><span class="line">                priorityQueue.add(edge);</span><br><span class="line">            }</span><br><span class="line">            <span class="keyword">while</span> (!priorityQueue.isEmpty()) {</span><br><span class="line">                Edge edge = priorityQueue.poll(); <span class="comment">// 弹出解锁的边中，最小的边</span></span><br><span class="line">                Node toNode = edge.to; <span class="comment">// 可能的一个新的点</span></span><br><span class="line">                <span class="keyword">if</span> (!nodeSet.contains(toNode)) { <span class="comment">// 不含有的时候，就是新的点</span></span><br><span class="line">                    nodeSet.add(toNode); <span class="comment">// 解锁点</span></span><br><span class="line">                    result.add(edge); <span class="comment">// 记录有效边</span></span><br><span class="line">                    <span class="keyword">for</span> (Edge nextEdge : toNode.edges) { <span class="comment">// 解锁&lt;解锁点&gt;的所有边</span></span><br><span class="line">                        priorityQueue.add(nextEdge);</span><br><span class="line">                    }</span><br><span class="line">                }</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">        <span class="comment">// break; // 确定图只有一条线时可以直接跳过</span></span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="顶点到其余各顶点的最短路径（Dijkstra算法）"><a href="#顶点到其余各顶点的最短路径（Dijkstra算法）" class="headerlink" title="顶点到其余各顶点的最短路径（Dijkstra算法）"></a>顶点到其余各顶点的最短路径（Dijkstra算法）</h1><p>Dijkstra算法（迪杰斯特拉算法）是从一个顶点到其余各顶点的最短路径算法，解决的是有权图中最短路径问题。</p>
+<p>图要求：有向无负权值，可以有环。</p>
+<p>算法主要特点是从起始点开始，采用贪心算法的策略，每次遍历到始点距离最近且未访问过的顶点的邻接节点，直到扩展到终点为止。</p>
+<p>Dijkstra算法，找指定节点x到其他点的最短距离：</p>
+<ol>
+<li>记录x到每个邻接点的权值到表里，k -&gt; v：点 -&gt; 权值，自己到自己距离为0</li>
+<li>从表中找到与x距离最小且没有被锁定的点m</li>
+<li>遍历m所有邻接点，重新计算每个点经过m与x的距离，如果表里不存在就新增，距离更小就更新</li>
+<li>结束后锁定m，重复2</li>
+<li>当表里所有元素都被锁定结束</li>
+</ol>
+<h2 id="常规实现"><a href="#常规实现" class="headerlink" title="常规实现"></a>常规实现</h2><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> HashMap&lt;Node, Integer&gt; <span class="title">dijkstra1</span><span class="params">(Node from)</span> </span>{</span><br><span class="line">    <span class="comment">// 距离表，记录点与原始点距离，点 -&gt; 距离</span></span><br><span class="line">    HashMap&lt;Node, Integer&gt; distanceMap = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">    distanceMap.put(from, <span class="number">0</span>);</span><br><span class="line">    <span class="comment">// 锁定的点</span></span><br><span class="line">    HashSet&lt;Node&gt; selectedNodes = <span class="keyword">new</span> HashSet&lt;&gt;();</span><br><span class="line">    <span class="comment">// 没有被锁定，与原始点距离最小的点</span></span><br><span class="line">    Node minNode = getMinDistanceAndUnselectedNode(distanceMap, selectedNodes);</span><br><span class="line">    <span class="keyword">while</span> (minNode != <span class="keyword">null</span>) {</span><br><span class="line">        <span class="comment">// 原始点 -&gt; minNode（跳转点），最小距离distance</span></span><br><span class="line">        <span class="keyword">int</span> distance = distanceMap.get(minNode);</span><br><span class="line">        <span class="keyword">for</span> (Edge edge : minNode.edges) {</span><br><span class="line">            Node toNode = edge.to;</span><br><span class="line">            <span class="keyword">if</span> (!distanceMap.containsKey(toNode)) {</span><br><span class="line">                distanceMap.put(toNode, distance + edge.weight); <span class="comment">// 表里不存在新增</span></span><br><span class="line">            } <span class="keyword">else</span> {</span><br><span class="line">                distanceMap.put(edge.to, Math.min(distanceMap.get(toNode), distance + edge.weight)); <span class="comment">// 取原始距离和经过跳转点的最小距离</span></span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">        selectedNodes.add(minNode); <span class="comment">// 锁定跳转点</span></span><br><span class="line">        minNode = getMinDistanceAndUnselectedNode(distanceMap, selectedNodes); <span class="comment">// 更换跳转点</span></span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> distanceMap;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 从距离表中找到没有被锁定、最小距离的点</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> distanceMap 距离表</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> touchedNodes 被锁定的点</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Node <span class="title">getMinDistanceAndUnselectedNode</span><span class="params">(HashMap&lt;Node, Integer&gt; distanceMap, HashSet&lt;Node&gt; touchedNodes)</span> </span>{</span><br><span class="line">    Node minNode = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">int</span> minDistance = Integer.MAX_VALUE;</span><br><span class="line">    <span class="keyword">for</span> (Map.Entry&lt;Node, Integer&gt; entry : distanceMap.entrySet()) {</span><br><span class="line">        Node node = entry.getKey();</span><br><span class="line">        <span class="keyword">int</span> distance = entry.getValue();</span><br><span class="line">        <span class="keyword">if</span> (!touchedNodes.contains(node) &amp;&amp; distance &lt; minDistance) {</span><br><span class="line">            minNode = node;</span><br><span class="line">            minDistance = distance;</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> minNode;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="加强堆优化"><a href="#加强堆优化" class="headerlink" title="加强堆优化"></a>加强堆优化</h2><p>Dijkstra算法过程中的2、3步骤需要不断的循环遍历查找、更新，效率较低，可以使用加强堆优化。</p>
+<p>把距离表替换为加强堆（小根堆），需要最小距离时直接从小根堆弹出一个值，新增或更新时利用加强堆更新节点。</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">NodeRecord</span> </span>{</span><br><span class="line">    <span class="keyword">public</span> Node node; <span class="comment">// 点</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">int</span> distance; <span class="comment">// 距离</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">NodeRecord</span><span class="params">(Node node, <span class="keyword">int</span> distance)</span> </span>{</span><br><span class="line">        <span class="keyword">this</span>.node = node;</span><br><span class="line">        <span class="keyword">this</span>.distance = distance;</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">NodeHeap</span> </span>{</span><br><span class="line">    <span class="comment">// 实际的堆结构</span></span><br><span class="line">    <span class="keyword">private</span> Node[] nodes;</span><br><span class="line">    <span class="comment">// 节点 -&gt; 堆中的位置</span></span><br><span class="line">    <span class="keyword">private</span> HashMap&lt;Node, Integer&gt; heapIndexMap;</span><br><span class="line">    <span class="comment">// 节点 -&gt; 从源节点出发到该节点的目前最小距离</span></span><br><span class="line">    <span class="keyword">private</span> HashMap&lt;Node, Integer&gt; distanceMap;</span><br><span class="line">    <span class="comment">// 堆上有多少个点</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> size;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">NodeHeap</span><span class="params">(<span class="keyword">int</span> size)</span> </span>{</span><br><span class="line">        nodes = <span class="keyword">new</span> Node[size];</span><br><span class="line">        heapIndexMap = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">        distanceMap = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">        size = <span class="number">0</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">isEmpty</span><span class="params">()</span> </span>{</span><br><span class="line">        <span class="keyword">return</span> size == <span class="number">0</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 从源节点出发到达node的距离为distance</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addOrUpdateOrIgnore</span><span class="params">(Node node, <span class="keyword">int</span> distance)</span> </span>{</span><br><span class="line">        <span class="keyword">if</span> (inHeap(node)) { <span class="comment">// 在堆上，update</span></span><br><span class="line">            distanceMap.put(node, Math.min(distanceMap.get(node), distance)); <span class="comment">// 更新最小距离</span></span><br><span class="line">            insertHeapify(heapIndexMap.get(node)); <span class="comment">// 值变小了，上移</span></span><br><span class="line">        }</span><br><span class="line">        <span class="keyword">if</span> (!isEntered(node)) { <span class="comment">// 没进过堆，add</span></span><br><span class="line">            nodes[size] = node;</span><br><span class="line">            heapIndexMap.put(node, size);</span><br><span class="line">            distanceMap.put(node, distance);</span><br><span class="line">            insertHeapify(size++); <span class="comment">// 新增上移</span></span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 弹出最小记录</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> NodeRecord <span class="title">pop</span><span class="params">()</span> </span>{</span><br><span class="line">        NodeRecord nodeRecord = <span class="keyword">new</span> NodeRecord(nodes[<span class="number">0</span>], distanceMap.get(nodes[<span class="number">0</span>]));</span><br><span class="line">        swap(<span class="number">0</span>, size - <span class="number">1</span>); <span class="comment">// 把最后一个节点换到0位置</span></span><br><span class="line">        heapIndexMap.put(nodes[size - <span class="number">1</span>], -<span class="number">1</span>); <span class="comment">// index改成-1</span></span><br><span class="line">        distanceMap.remove(nodes[size - <span class="number">1</span>]); <span class="comment">// 删除距离</span></span><br><span class="line">        nodes[size - <span class="number">1</span>] = <span class="keyword">null</span>; <span class="comment">// 从堆中删除</span></span><br><span class="line">        heapify(<span class="number">0</span>, --size); <span class="comment">// 下移0位置</span></span><br><span class="line">        <span class="keyword">return</span> nodeRecord;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 上移</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">insertHeapify</span><span class="params">(<span class="keyword">int</span> index)</span> </span>{</span><br><span class="line">        <span class="keyword">while</span> (distanceMap.get(nodes[index]) &lt; distanceMap.get(nodes[(index - <span class="number">1</span>) / <span class="number">2</span>])) { <span class="comment">// 小于父节点</span></span><br><span class="line">            swap(index, (index - <span class="number">1</span>) / <span class="number">2</span>); <span class="comment">// 交换，上移</span></span><br><span class="line">            index = (index - <span class="number">1</span>) / <span class="number">2</span>;</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 下移</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">heapify</span><span class="params">(<span class="keyword">int</span> index, <span class="keyword">int</span> size)</span> </span>{</span><br><span class="line">        <span class="keyword">int</span> left = index * <span class="number">2</span> + <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">while</span> (left &lt; size) {</span><br><span class="line">            <span class="keyword">int</span> smallest = left + <span class="number">1</span> &lt; size &amp;&amp; distanceMap.get(nodes[left + <span class="number">1</span>]) &lt; distanceMap.get(nodes[left])</span><br><span class="line">                           ? left + <span class="number">1</span></span><br><span class="line">                           : left; <span class="comment">// index最小子节点</span></span><br><span class="line">            smallest = distanceMap.get(nodes[smallest]) &lt; distanceMap.get(nodes[index]) ? smallest : index;</span><br><span class="line">            <span class="keyword">if</span> (smallest == index) {</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            }</span><br><span class="line">            swap(smallest, index); <span class="comment">// 子节点小于index，交换位置</span></span><br><span class="line">            index = smallest;</span><br><span class="line">            left = index * <span class="number">2</span> + <span class="number">1</span>;</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 进没进过堆</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">isEntered</span><span class="params">(Node node)</span> </span>{</span><br><span class="line">        <span class="keyword">return</span> heapIndexMap.containsKey(node);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 在不在堆上</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">boolean</span> <span class="title">inHeap</span><span class="params">(Node node)</span> </span>{</span><br><span class="line">        <span class="keyword">return</span> isEntered(node) &amp;&amp; heapIndexMap.get(node) != -<span class="number">1</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 交换位置</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">swap</span><span class="params">(<span class="keyword">int</span> index1, <span class="keyword">int</span> index2)</span> </span>{</span><br><span class="line">        heapIndexMap.put(nodes[index1], index2);</span><br><span class="line">        heapIndexMap.put(nodes[index2], index1);</span><br><span class="line">        Node tmp = nodes[index1];</span><br><span class="line">        nodes[index1] = nodes[index2];</span><br><span class="line">        nodes[index2] = tmp;</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// 加强堆改进后的dijkstra算法</span></span><br><span class="line"><span class="comment">// 从head出发，所有head能到达的节点，生成到达每个节点的最小路径记录并返回</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> HashMap&lt;Node, Integer&gt; <span class="title">dijkstra2</span><span class="params">(Node head, <span class="keyword">int</span> size)</span> </span>{</span><br><span class="line">    NodeHeap nodeHeap = <span class="keyword">new</span> NodeHeap(size);</span><br><span class="line">    nodeHeap.addOrUpdateOrIgnore(head, <span class="number">0</span>);</span><br><span class="line">    HashMap&lt;Node, Integer&gt; result = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">    <span class="keyword">while</span> (!nodeHeap.isEmpty()) {</span><br><span class="line">        NodeRecord record = nodeHeap.pop();</span><br><span class="line">        Node cur = record.node;</span><br><span class="line">        <span class="keyword">int</span> distance = record.distance;</span><br><span class="line">        <span class="keyword">for</span> (Edge edge : cur.edges) {</span><br><span class="line">            nodeHeap.addOrUpdateOrIgnore(edge.to, edge.weight + distance);</span><br><span class="line">        }</span><br><span class="line">        result.put(cur, distance);</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+    
+  </div>
+
+</article>
+
+
+   
+
+   
+  <div class="box-prev-next clearfix">
+    <a class="show pull-left" href="/2022/08/30/algorithm-unionfind/">
+        <i class="icon icon-angle-left"></i>
+    </a>
+    <a class="hide pull-right" href="/">
+        <i class="icon icon-angle-right"></i>
+    </a>
+  </div>
+
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/categories/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              分类
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/roaming/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              漫游
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/atom.xml"
+              rel="noopener noreferrer"
+              target="_blank"
+              >
+              RSS
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/search/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              搜索
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+    
+    
+
+    
+
+    
+    
+
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script>
+    <div id="comment" class="vcomment" ></div>
+    <script>
+        var notify = 'false' == true ? true : false;
+        var verify = 'false' == true ? true : false;
+        var GUEST_INFO = ['nick','mail','link'];
+        var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+            return GUEST_INFO.indexOf(item) > -1
+        });
+        guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+        window.valine = new Valine({
+            el: '.vcomment',
+            notify: notify,
+            verify: verify,
+            appId: "masttnqEt9G69mj43i9oaA1C-gzGzoHsz",
+            appKey: "hgIx9VKn0GLDhRcLxQuNMl0E",
+            avatar:'mm',
+            placeholder: "Say something",
+            guest_info:guest_info,
+            pageSize:'10'
+        });
+    </script>
+  
+    
+
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>
