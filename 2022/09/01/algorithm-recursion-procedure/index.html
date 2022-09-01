@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>【算法基础】经典递归过程 | haifuns的博客</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="算法,递归," />
+  
+
+  <meta name="description" content="暴力递归，暴力递归就是尝试：  把问题转换为规模缩小了的同类问题的子问题 有明确的不需要继续进行递归的条件（base case） 有当得到了子问题的结果之后的决策过程 不记录每一个子问题的解  1.汉诺（Hanoi）塔问题假设有三个命名为 A B C 的塔座，在塔座A上插有n个直径大小不相同，由小到大编号为1，2，3，···，n的圆盘，要求将A座上的圆盘移至塔座C并按同样的顺序叠排。 圆盘移动必须">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【算法基础】经典递归过程">
+<meta property="og:url" content="https://haifuns.com/2022/09/01/algorithm-recursion-procedure/index.html">
+<meta property="og:site_name" content="haifuns的博客">
+<meta property="og:description" content="暴力递归，暴力递归就是尝试：  把问题转换为规模缩小了的同类问题的子问题 有明确的不需要继续进行递归的条件（base case） 有当得到了子问题的结果之后的决策过程 不记录每一个子问题的解  1.汉诺（Hanoi）塔问题假设有三个命名为 A B C 的塔座，在塔座A上插有n个直径大小不相同，由小到大编号为1，2，3，···，n的圆盘，要求将A座上的圆盘移至塔座C并按同样的顺序叠排。 圆盘移动必须">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-09-01T23:35:00.000Z">
+<meta property="article:modified_time" content="2022-09-01T15:36:09.281Z">
+<meta property="article:author" content="haifuns">
+<meta property="article:tag" content="算法">
+<meta property="article:tag" content="递归">
+<meta name="twitter:card" content="summary">
+
+  
+
+  
+    <link rel="icon" href="/images/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbeddx" rel="stylesheet">
+
+
+  
+    
+<link rel="stylesheet" href="/css/personal-style.css">
+
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?d3c8edb388553a2084296cbfe9a0785a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
+
+<meta name="generator" content="Hexo 5.4.2">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="haifuns的博客" type="application/atom+xml">
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header CENTER">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/categories/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            分类
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/roaming/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            漫游
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/atom.xml"
+            rel="noopener noreferrer"
+            target="_blank"
+            >
+            RSS
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/search/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-%E6%B1%89%E8%AF%BA%EF%BC%88Hanoi%EF%BC%89%E5%A1%94%E9%97%AE%E9%A2%98"><span class="toc-text">1.汉诺（Hanoi）塔问题</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-%E6%89%93%E5%8D%B0%E4%B8%80%E4%B8%AA%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E5%85%A8%E9%83%A8%E5%AD%90%E5%BA%8F%E5%88%97"><span class="toc-text">2.打印一个字符串的全部子序列</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-%E6%89%93%E5%8D%B0%E4%B8%80%E4%B8%AA%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E5%85%A8%E9%83%A8%E5%AD%90%E5%BA%8F%E5%88%97%EF%BC%8C%E8%A6%81%E6%B1%82%E4%B8%8D%E8%A6%81%E5%87%BA%E7%8E%B0%E9%87%8D%E5%A4%8D%E5%AD%97%E9%9D%A2%E5%80%BC%E7%9A%84%E5%AD%90%E5%BA%8F%E5%88%97"><span class="toc-text">3.打印一个字符串的全部子序列，要求不要出现重复字面值的子序列</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-%E6%89%93%E5%8D%B0%E4%B8%80%E4%B8%AA%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E5%85%A8%E9%83%A8%E6%8E%92%E5%88%97"><span class="toc-text">4.打印一个字符串的全部排列</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#5-%E6%89%93%E5%8D%B0%E4%B8%80%E4%B8%AA%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E5%85%A8%E9%83%A8%E6%8E%92%E5%88%97%EF%BC%8C%E8%A6%81%E6%B1%82%E4%B8%8D%E8%A6%81%E5%87%BA%E7%8E%B0%E9%87%8D%E5%A4%8D%E7%9A%84%E6%8E%92%E5%88%97"><span class="toc-text">5.打印一个字符串的全部排列，要求不要出现重复的排列</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#6-%E5%AE%9E%E7%8E%B0%E6%A0%88%E9%80%86%E5%BA%8F"><span class="toc-text">6.实现栈逆序</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post CENTER">
+   <article id="post-algorithm-recursion-procedure" class="article article-type-post" itemprop="blogPost">
+  <header class="article-header">
+    <h1 class="post-title">【算法基础】经典递归过程</h1>
+
+    <div class="article-meta">
+      <span>
+        <i class="icon-calendar"></i>
+        <span>2022.09.01</span>
+      </span>
+
+      
+        <span class="article-author">
+          <i class="icon-user"></i>
+          <span>haifuns</span>
+        </span>
+      
+
+      
+  <span class="article-category">
+    <i class="icon-list"></i>
+    <a class="article-category-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a>
+  </span>
+
+
+
+      
+
+      
+      <i class="fa fa-eye"></i> 
+        <span id="busuanzi_container_page_pv">
+           &nbsp热度 <span id="busuanzi_value_page_pv">
+           <i class="fa fa-spinner fa-spin"></i></span>℃
+        </span>
+      
+      
+    </div>
+  </header>
+
+  <div class="article-content">
+    
+      <p>暴力递归，暴力递归就是尝试：</p>
+<ol>
+<li>把问题转换为规模缩小了的同类问题的子问题</li>
+<li>有明确的不需要继续进行递归的条件（base case）</li>
+<li>有当得到了子问题的结果之后的决策过程</li>
+<li>不记录每一个子问题的解</li>
+</ol>
+<h1 id="1-汉诺（Hanoi）塔问题"><a href="#1-汉诺（Hanoi）塔问题" class="headerlink" title="1.汉诺（Hanoi）塔问题"></a>1.汉诺（Hanoi）塔问题</h1><p>假设有三个命名为 A B C 的塔座，在塔座A上插有n个直径大小不相同，由小到大编号为1，2，3，···，n的圆盘，要求将A座上的圆盘移至塔座C并按同样的顺序叠排。</p>
+<p>圆盘移动必须遵守下列规则：</p>
+<ol>
+<li>每次只能移动一个圆盘 。</li>
+<li>圆盘可以插在任意一个塔座上 。</li>
+<li>任何时刻都不能将一个较大的圆盘放在一个较小的圆盘上。</li>
+</ol>
+<p>问把所有的圆盘从 A 柱移动到 C 柱总计最少需要多少次移动？</p>
+<p>思路：</p>
+<p>想要把1..n圆盘从左移动到右分为三步：</p>
+<ol>
+<li>将1..n-1从左移动到中</li>
+<li>将n从左移动到右</li>
+<li>将1..n-1从中移动到右（进入递归，操作略有不同）</li>
+</ol>
+<p>最优解步数：O(2<sup>n</sup> - 1)</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 递归实现，需要左到右、左到中、中到左、中到右、右到左、右到中6种操作</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">hanoi1</span><span class="params">(<span class="keyword">int</span> n)</span> </span>{</span><br><span class="line">	leftToRight(n); <span class="comment">// 1..n从左到右</span></span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// 1~N层圆盘 从左 -&gt; 右</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">leftToRight</span><span class="params">(<span class="keyword">int</span> n)</span> </span>{</span><br><span class="line">	<span class="keyword">if</span> (n == <span class="number">1</span>) { <span class="comment">// base case，只有一个盘，直接移</span></span><br><span class="line">		System.out.println(<span class="string">"Move 1 from left to right"</span>);</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	}</span><br><span class="line">	leftToMid(n - <span class="number">1</span>); <span class="comment">// 1..n-1从左到中</span></span><br><span class="line">	System.out.println(<span class="string">"Move "</span> + n + <span class="string">" from left to right"</span>); <span class="comment">// n从左到右</span></span><br><span class="line">	midToRight(n - <span class="number">1</span>); <span class="comment">// 1..n-1从中到右</span></span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// 1~N层圆盘 从左 -&gt; 中</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">leftToMid</span><span class="params">(<span class="keyword">int</span> n)</span> </span>{</span><br><span class="line">	<span class="keyword">if</span> (n == <span class="number">1</span>) { <span class="comment">// base case，只有一个盘，直接移</span></span><br><span class="line">		System.out.println(<span class="string">"Move 1 from left to mid"</span>);</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	}</span><br><span class="line">	leftToRight(n - <span class="number">1</span>); <span class="comment">// 1..n-1从左到右</span></span><br><span class="line">	System.out.println(<span class="string">"Move "</span> + n + <span class="string">" from left to mid"</span>); <span class="comment">// n从左到中</span></span><br><span class="line">	rightToMid(n - <span class="number">1</span>); <span class="comment">// 1..n-1从右到中</span></span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// 1~N层圆盘 从右 -&gt; 中</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">rightToMid</span><span class="params">(<span class="keyword">int</span> n)</span> </span>{</span><br><span class="line">	<span class="keyword">if</span> (n == <span class="number">1</span>) { <span class="comment">// base case，只有一个盘，直接移</span></span><br><span class="line">		System.out.println(<span class="string">"Move 1 from right to mid"</span>);</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	}</span><br><span class="line">	rightToLeft(n - <span class="number">1</span>); <span class="comment">// 1..n-1从右到左</span></span><br><span class="line">	System.out.println(<span class="string">"Move "</span> + n + <span class="string">" from right to mid"</span>); <span class="comment">// n从右到中</span></span><br><span class="line">	leftToMid(n - <span class="number">1</span>); <span class="comment">// 1..n-1从中到右</span></span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// 1~N层圆盘 从中 -&gt; 右</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">midToRight</span><span class="params">(<span class="keyword">int</span> n)</span> </span>{</span><br><span class="line">	<span class="keyword">if</span> (n == <span class="number">1</span>) { <span class="comment">// base case，只有一个盘，直接移</span></span><br><span class="line">		System.out.println(<span class="string">"Move 1 from mid to right"</span>);</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	}</span><br><span class="line">	midToLeft(n - <span class="number">1</span>); <span class="comment">// 1..n-1从中到左</span></span><br><span class="line">	System.out.println(<span class="string">"Move "</span> + n + <span class="string">" from mid to right"</span>); <span class="comment">// n从中到右</span></span><br><span class="line">	leftToRight(n - <span class="number">1</span>); <span class="comment">// 1..n-1从左到右</span></span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// 1~N层圆盘 从中 -&gt; 左</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">midToLeft</span><span class="params">(<span class="keyword">int</span> n)</span> </span>{</span><br><span class="line">	<span class="keyword">if</span> (n == <span class="number">1</span>) { <span class="comment">// base case，只有一个盘，直接移</span></span><br><span class="line">		System.out.println(<span class="string">"Move 1 from mid to left"</span>);</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	}</span><br><span class="line">	midToRight(n - <span class="number">1</span>); <span class="comment">// 1..n-1从中到右</span></span><br><span class="line">	System.out.println(<span class="string">"Move "</span> + n + <span class="string">" from mid to left"</span>); <span class="comment">// n从中到左</span></span><br><span class="line">	rightToLeft(n - <span class="number">1</span>); <span class="comment">// 1..n-1从右到左</span></span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// 1~N层圆盘 从右 -&gt; 左</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">rightToLeft</span><span class="params">(<span class="keyword">int</span> n)</span> </span>{</span><br><span class="line">	<span class="keyword">if</span> (n == <span class="number">1</span>) { <span class="comment">// base case，只有一个盘，直接移</span></span><br><span class="line">		System.out.println(<span class="string">"Move 1 from right to left"</span>);</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	}</span><br><span class="line">	rightToMid(n - <span class="number">1</span>); <span class="comment">// 1..n-1从右到中</span></span><br><span class="line">	System.out.println(<span class="string">"Move "</span> + n + <span class="string">" from right to left"</span>); <span class="comment">// n从右到左</span></span><br><span class="line">	midToLeft(n - <span class="number">1</span>); <span class="comment">// 1..n-1从中到左</span></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<p>进一步观察，简化操作，1..n从from移动到to，第三根柱子为other，可以得到通用的移动步骤：</p>
+<ol>
+<li>将1..n-1从from移动到other</li>
+<li>将n从from移动到to</li>
+<li>将1..n-1从other移动到to（进入递归，操作完全相同）</li>
+</ol>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 递归简化实现，6种移动动作合一</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">hanoi2</span><span class="params">(<span class="keyword">int</span> n)</span> </span>{</span><br><span class="line">	<span class="keyword">if</span> (n &gt; <span class="number">0</span>) {</span><br><span class="line">		func(n, <span class="string">"left"</span>, <span class="string">"right"</span>, <span class="string">"mid"</span>); <span class="comment">// 1..n 从左到右，剩余中间的柱子</span></span><br><span class="line">	}</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// 1..n从from移动到to，other为剩余的柱子</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">func</span><span class="params">(<span class="keyword">int</span> N, String from, String to, String other)</span> </span>{</span><br><span class="line">	<span class="keyword">if</span> (N == <span class="number">1</span>) { <span class="comment">// base case，只有一个盘，直接移</span></span><br><span class="line">		System.out.println(<span class="string">"Move 1 from "</span> + from + <span class="string">" to "</span> + to);</span><br><span class="line">	} <span class="keyword">else</span> {</span><br><span class="line">		func(N - <span class="number">1</span>, from, other, to); <span class="comment">// 1..n-1从from移动到other，剩余to</span></span><br><span class="line">		System.out.println(<span class="string">"Move "</span> + N + <span class="string">" from "</span> + from + <span class="string">" to "</span> + to); <span class="comment">// n从from移动到to</span></span><br><span class="line">		func(N - <span class="number">1</span>, other, to, from); <span class="comment">// 1..n-1从other移动到to，剩余from</span></span><br><span class="line">	}</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="2-打印一个字符串的全部子序列"><a href="#2-打印一个字符串的全部子序列" class="headerlink" title="2.打印一个字符串的全部子序列"></a>2.打印一个字符串的全部子序列</h1><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> List&lt;String&gt; <span class="title">subs</span><span class="params">(String s)</span> </span>{</span><br><span class="line">    <span class="keyword">char</span>[] str = s.toCharArray();</span><br><span class="line">    String path = <span class="string">""</span>;</span><br><span class="line">    List&lt;String&gt; ans = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    process(str, <span class="number">0</span>, ans, path);</span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// str[0..index-1]已经决定过了，决定结果是path，str[index..]需要决定</span></span><br><span class="line"><span class="comment">// 把所有生成的子序列，放入到ans里</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">process</span><span class="params">(<span class="keyword">char</span>[] str, <span class="keyword">int</span> index, List&lt;String&gt; ans, String path)</span> </span>{</span><br><span class="line">    <span class="keyword">if</span> (index == str.length) { <span class="comment">// 所有字符都决定过了</span></span><br><span class="line">        ans.add(path); <span class="comment">// 结束返回</span></span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    }</span><br><span class="line">    <span class="comment">// 没有选择index位置的字符</span></span><br><span class="line">    process(str, index + <span class="number">1</span>, ans, path);</span><br><span class="line">    <span class="comment">// 选择index位置的字符</span></span><br><span class="line">    process(str, index + <span class="number">1</span>, ans, path + String.valueOf(str[index]));</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="3-打印一个字符串的全部子序列，要求不要出现重复字面值的子序列"><a href="#3-打印一个字符串的全部子序列，要求不要出现重复字面值的子序列" class="headerlink" title="3.打印一个字符串的全部子序列，要求不要出现重复字面值的子序列"></a>3.打印一个字符串的全部子序列，要求不要出现重复字面值的子序列</h1><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> List&lt;String&gt; <span class="title">subsNoRepeat</span><span class="params">(String s)</span> </span>{</span><br><span class="line">    <span class="keyword">char</span>[] str = s.toCharArray();</span><br><span class="line">    String path = <span class="string">""</span>;</span><br><span class="line">    HashSet&lt;String&gt; set = <span class="keyword">new</span> HashSet&lt;&gt;();</span><br><span class="line">    process(str, <span class="number">0</span>, set, path);</span><br><span class="line">    List&lt;String&gt; ans = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    <span class="keyword">for</span> (String cur : set) {</span><br><span class="line">        ans.add(cur);</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">process</span><span class="params">(<span class="keyword">char</span>[] str, <span class="keyword">int</span> index, HashSet&lt;String&gt; set, String path)</span> </span>{</span><br><span class="line">    <span class="keyword">if</span> (index == str.length) {</span><br><span class="line">        set.add(path);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    }</span><br><span class="line">    process2(str, index + <span class="number">1</span>, set, path);</span><br><span class="line">    process2(str, index + <span class="number">1</span>, set, path + String.valueOf(str[index]));</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="4-打印一个字符串的全部排列"><a href="#4-打印一个字符串的全部排列" class="headerlink" title="4.打印一个字符串的全部排列"></a>4.打印一个字符串的全部排列</h1><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 第一版递归实现</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> List&lt;String&gt; <span class="title">permutation1</span><span class="params">(String s)</span> </span>{</span><br><span class="line">    List&lt;String&gt; ans = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    <span class="keyword">if</span> (s == <span class="keyword">null</span> || s.length() == <span class="number">0</span>) {</span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">char</span>[] str = s.toCharArray();</span><br><span class="line">    ArrayList&lt;Character&gt; rest = <span class="keyword">new</span> ArrayList&lt;Character&gt;();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">char</span> cha : str) {</span><br><span class="line">        rest.add(cha);</span><br><span class="line">    }</span><br><span class="line">    String path = <span class="string">""</span>;</span><br><span class="line">    f(rest, path, ans);</span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">f</span><span class="params">(ArrayList&lt;Character&gt; rest, String path, List&lt;String&gt; ans)</span> </span>{</span><br><span class="line">    <span class="keyword">if</span> (rest.isEmpty()) {</span><br><span class="line">        ans.add(path);</span><br><span class="line">    } <span class="keyword">else</span> {</span><br><span class="line">        <span class="keyword">int</span> N = rest.size();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; N; i++) {</span><br><span class="line">            <span class="keyword">char</span> cur = rest.get(i); <span class="comment">// 顺序选择rest中剩余的字符</span></span><br><span class="line">            rest.remove(i); <span class="comment">// 使用完移除</span></span><br><span class="line">            f(rest, path + cur, ans); <span class="comment">// 选择当前字符后，继续从剩余的字符中选择下一个字符</span></span><br><span class="line">            rest.add(i, cur); <span class="comment">// 恢复现场</span></span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// 第二版递归实现（优）</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> List&lt;String&gt; <span class="title">permutation2</span><span class="params">(String s)</span> </span>{</span><br><span class="line">    List&lt;String&gt; ans = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    <span class="keyword">if</span> (s == <span class="keyword">null</span> || s.length() == <span class="number">0</span>) {</span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">char</span>[] str = s.toCharArray();</span><br><span class="line">    g(str, <span class="number">0</span>, ans);</span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// str[0..index-1]为已决定位置固定，str[index..]需要决定</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">g</span><span class="params">(<span class="keyword">char</span>[] str, <span class="keyword">int</span> index, List&lt;String&gt; ans)</span> </span>{</span><br><span class="line">    <span class="keyword">if</span> (index == str.length) {</span><br><span class="line">        ans.add(String.valueOf(str));</span><br><span class="line">    } <span class="keyword">else</span> {</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = index; i &lt; str.length; i++) {</span><br><span class="line">            swap(str, index, i); <span class="comment">// 选择i，放到index位置</span></span><br><span class="line">            g(str, index + <span class="number">1</span>, ans); <span class="comment">// 继续决定index+1位置</span></span><br><span class="line">            swap(str, index, i); <span class="comment">// 恢复现场</span></span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">swap</span><span class="params">(<span class="keyword">char</span>[] chs, <span class="keyword">int</span> i, <span class="keyword">int</span> j)</span> </span>{</span><br><span class="line">    <span class="keyword">char</span> tmp = chs[i];</span><br><span class="line">    chs[i] = chs[j];</span><br><span class="line">    chs[j] = tmp;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="5-打印一个字符串的全部排列，要求不要出现重复的排列"><a href="#5-打印一个字符串的全部排列，要求不要出现重复的排列" class="headerlink" title="5.打印一个字符串的全部排列，要求不要出现重复的排列"></a>5.打印一个字符串的全部排列，要求不要出现重复的排列</h1><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> List&lt;String&gt; <span class="title">permutation</span><span class="params">(String s)</span> </span>{</span><br><span class="line">    List&lt;String&gt; ans = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    <span class="keyword">if</span> (s == <span class="keyword">null</span> || s.length() == <span class="number">0</span>) {</span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">char</span>[] str = s.toCharArray();</span><br><span class="line">    g(str, <span class="number">0</span>, ans);</span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">g</span><span class="params">(<span class="keyword">char</span>[] str, <span class="keyword">int</span> index, List&lt;String&gt; ans)</span> </span>{</span><br><span class="line">    <span class="keyword">if</span> (index == str.length) {</span><br><span class="line">        ans.add(String.valueOf(str));</span><br><span class="line">    } <span class="keyword">else</span> {</span><br><span class="line">        <span class="keyword">boolean</span>[] visited = <span class="keyword">new</span> <span class="keyword">boolean</span>[<span class="number">256</span>]; <span class="comment">// 记录字符是否已经被使用</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = index; i &lt; str.length; i++) {</span><br><span class="line">            <span class="keyword">if</span> (!visited[str[i]]) {</span><br><span class="line">                visited[str[i]] = <span class="keyword">true</span>;</span><br><span class="line">                swap(str, index, i);</span><br><span class="line">                g(str, index + <span class="number">1</span>, ans);</span><br><span class="line">                swap(str, index, i);</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">swap</span><span class="params">(<span class="keyword">char</span>[] chs, <span class="keyword">int</span> i, <span class="keyword">int</span> j)</span> </span>{</span><br><span class="line">    <span class="keyword">char</span> tmp = chs[i];</span><br><span class="line">    chs[i] = chs[j];</span><br><span class="line">    chs[j] = tmp;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="6-实现栈逆序"><a href="#6-实现栈逆序" class="headerlink" title="6.实现栈逆序"></a>6.实现栈逆序</h1><p>逆序给定栈，要求不能申请额外数据结构，只能用递归函数实现。</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 逆序栈</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">reverse</span><span class="params">(Stack&lt;Integer&gt; stack)</span> </span>{</span><br><span class="line">    <span class="keyword">if</span> (stack.isEmpty()) { <span class="comment">// base case，栈空返回</span></span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">int</span> i = f(stack); <span class="comment">// 移除并返回栈底元素</span></span><br><span class="line">    reverse(stack); <span class="comment">// 逆序栈中剩下的元素</span></span><br><span class="line">    stack.push(i); <span class="comment">// 重新压入到栈顶</span></span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// 移除并返回栈底元素</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">f</span><span class="params">(Stack&lt;Integer&gt; stack)</span> </span>{</span><br><span class="line">    <span class="keyword">int</span> result = stack.pop();</span><br><span class="line">    <span class="keyword">if</span> (stack.isEmpty()) { <span class="comment">// base case，栈中只剩最后一个元素返回</span></span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    } <span class="keyword">else</span> {</span><br><span class="line">        <span class="keyword">int</span> last = f(stack);</span><br><span class="line">        stack.push(result);</span><br><span class="line">        <span class="keyword">return</span> last;</span><br><span class="line">    }</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+    
+  </div>
+
+</article>
+
+
+   
+
+   
+  <div class="box-prev-next clearfix">
+    <a class="show pull-left" href="/2022/08/31/algorithm-graph/">
+        <i class="icon icon-angle-left"></i>
+    </a>
+    <a class="hide pull-right" href="/">
+        <i class="icon icon-angle-right"></i>
+    </a>
+  </div>
+
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/categories/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              分类
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/roaming/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              漫游
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/atom.xml"
+              rel="noopener noreferrer"
+              target="_blank"
+              >
+              RSS
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/search/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              搜索
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+    
+    
+
+    
+
+    
+    
+
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script>
+    <div id="comment" class="vcomment" ></div>
+    <script>
+        var notify = 'false' == true ? true : false;
+        var verify = 'false' == true ? true : false;
+        var GUEST_INFO = ['nick','mail','link'];
+        var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+            return GUEST_INFO.indexOf(item) > -1
+        });
+        guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+        window.valine = new Valine({
+            el: '.vcomment',
+            notify: notify,
+            verify: verify,
+            appId: "masttnqEt9G69mj43i9oaA1C-gzGzoHsz",
+            appKey: "hgIx9VKn0GLDhRcLxQuNMl0E",
+            avatar:'mm',
+            placeholder: "Say something",
+            guest_info:guest_info,
+            pageSize:'10'
+        });
+    </script>
+  
+    
+
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>
