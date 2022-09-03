@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>【算法基础】暴力递归到动态规划（一） | haifuns的博客</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="算法,动态规划," />
+  
+
+  <meta name="description" content="1.固定步数移动到终点假设有排成一行的 N 个位置，记为 1~N，N 一定大于等于 2。开始时机器人在其中的 M 位置上，当机器人走到边界时必须往回走（1-&gt;2,N-&gt;N-1）,当走到中间位置时可以往左走或者往右走。规定机器人必须走 K 步，最终停在P位置，问有多少种走法？ 暴力递归实现12345678910111213141516171819202122232425262728293">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【算法基础】暴力递归到动态规划（一）">
+<meta property="og:url" content="https://haifuns.com/2022/09/03/algorithm-dp1/index.html">
+<meta property="og:site_name" content="haifuns的博客">
+<meta property="og:description" content="1.固定步数移动到终点假设有排成一行的 N 个位置，记为 1~N，N 一定大于等于 2。开始时机器人在其中的 M 位置上，当机器人走到边界时必须往回走（1-&gt;2,N-&gt;N-1）,当走到中间位置时可以往左走或者往右走。规定机器人必须走 K 步，最终停在P位置，问有多少种走法？ 暴力递归实现12345678910111213141516171819202122232425262728293">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-09-03T23:30:00.000Z">
+<meta property="article:modified_time" content="2022-09-03T15:29:14.036Z">
+<meta property="article:author" content="haifuns">
+<meta property="article:tag" content="算法">
+<meta property="article:tag" content="动态规划">
+<meta name="twitter:card" content="summary">
+
+  
+
+  
+    <link rel="icon" href="/images/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbeddx" rel="stylesheet">
+
+
+  
+    
+<link rel="stylesheet" href="/css/personal-style.css">
+
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?d3c8edb388553a2084296cbfe9a0785a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
+
+<meta name="generator" content="Hexo 5.4.2">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="haifuns的博客" type="application/atom+xml">
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header CENTER">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/categories/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            分类
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/roaming/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            漫游
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/atom.xml"
+            rel="noopener noreferrer"
+            target="_blank"
+            >
+            RSS
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/search/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-%E5%9B%BA%E5%AE%9A%E6%AD%A5%E6%95%B0%E7%A7%BB%E5%8A%A8%E5%88%B0%E7%BB%88%E7%82%B9"><span class="toc-text">1.固定步数移动到终点</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9A%B4%E5%8A%9B%E9%80%92%E5%BD%92%E5%AE%9E%E7%8E%B0"><span class="toc-text">暴力递归实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9A%B4%E5%8A%9B%E9%80%92%E5%BD%92%E7%BC%93%E5%AD%98%E4%BC%98%E5%8C%96"><span class="toc-text">暴力递归缓存优化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E5%AE%9E%E7%8E%B0"><span class="toc-text">动态规划实现</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-%E9%A2%84%E6%B5%8B%E8%B5%A2%E5%AE%B6"><span class="toc-text">2.预测赢家</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9A%B4%E5%8A%9B%E9%80%92%E5%BD%92%E5%AE%9E%E7%8E%B0-1"><span class="toc-text">暴力递归实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9A%B4%E5%8A%9B%E9%80%92%E5%BD%92%E7%BC%93%E5%AD%98%E4%BC%98%E5%8C%96-1"><span class="toc-text">暴力递归缓存优化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E5%AE%9E%E7%8E%B0-1"><span class="toc-text">动态规划实现</span></a></li></ol></li></ol>
+  </div>
+
+
+
+<div class="content content-post CENTER">
+   <article id="post-algorithm-dp1" class="article article-type-post" itemprop="blogPost">
+  <header class="article-header">
+    <h1 class="post-title">【算法基础】暴力递归到动态规划（一）</h1>
+
+    <div class="article-meta">
+      <span>
+        <i class="icon-calendar"></i>
+        <span>2022.09.03</span>
+      </span>
+
+      
+        <span class="article-author">
+          <i class="icon-user"></i>
+          <span>haifuns</span>
+        </span>
+      
+
+      
+  <span class="article-category">
+    <i class="icon-list"></i>
+    <a class="article-category-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a>
+  </span>
+
+
+
+      
+
+      
+      <i class="fa fa-eye"></i> 
+        <span id="busuanzi_container_page_pv">
+           &nbsp热度 <span id="busuanzi_value_page_pv">
+           <i class="fa fa-spinner fa-spin"></i></span>℃
+        </span>
+      
+      
+    </div>
+  </header>
+
+  <div class="article-content">
+    
+      <h1 id="1-固定步数移动到终点"><a href="#1-固定步数移动到终点" class="headerlink" title="1.固定步数移动到终点"></a>1.固定步数移动到终点</h1><p>假设有排成一行的 N 个位置，记为 1~N，N 一定大于等于 2。开始时机器人在其中的 M 位置上，当机器人走到边界时必须往回走（1-&gt;2,N-&gt;N-1）,当走到中间位置时可以往左走或者往右走。规定机器人必须走 K 步，最终停在P位置，问有多少种走法？</p>
+<h2 id="暴力递归实现"><a href="#暴力递归实现" class="headerlink" title="暴力递归实现"></a>暴力递归实现</h2><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 固定步数移动到终点</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * 实现方式1，暴力递归</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> N     路线长度</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> start 开始位置</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> aim   目标位置</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> K     移动次数</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> 最多移动方案数</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">ways1</span><span class="params">(<span class="keyword">int</span> N, <span class="keyword">int</span> start, <span class="keyword">int</span> aim, <span class="keyword">int</span> K)</span> </span>{</span><br><span class="line">    <span class="keyword">if</span> (N &lt; <span class="number">2</span> || start &lt; <span class="number">1</span> || start &gt; N || aim &lt; <span class="number">1</span> || aim &gt; N || K &lt; <span class="number">1</span>) {</span><br><span class="line">        <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> process1(start, K, aim, N);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 从cur出发，走过rest步之后，最终停在aim的方案数</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> cur  当前位置</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> rest 剩余步数</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> aim  目标位置</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> N    路线长度，位置1..n</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> 方案数</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">process1</span><span class="params">(<span class="keyword">int</span> cur, <span class="keyword">int</span> rest, <span class="keyword">int</span> aim, <span class="keyword">int</span> N)</span> </span>{</span><br><span class="line">    <span class="keyword">if</span> (rest == <span class="number">0</span>) { <span class="comment">// 没有剩余步数，走完了！</span></span><br><span class="line">        <span class="keyword">return</span> cur == aim ? <span class="number">1</span> : <span class="number">0</span>; <span class="comment">// 当前位置是不是目标位置</span></span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (cur == <span class="number">1</span>) { <span class="comment">// 走到左边界只能往右走，1 -&gt; 2，步数-1</span></span><br><span class="line">        <span class="keyword">return</span> process1(<span class="number">2</span>, rest - <span class="number">1</span>, aim, N);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (cur == N) { <span class="comment">// 走到右边界只能往左走，N-1 &lt;- N，步数-1</span></span><br><span class="line">        <span class="keyword">return</span> process1(N - <span class="number">1</span>, rest - <span class="number">1</span>, aim, N);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 在中间位置可以往左走也可以往右走，步数-1</span></span><br><span class="line">    <span class="keyword">return</span> process1(cur - <span class="number">1</span>, rest - <span class="number">1</span>, aim, N) + process1(cur + <span class="number">1</span>, rest - <span class="number">1</span>, aim, N);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="暴力递归缓存优化"><a href="#暴力递归缓存优化" class="headerlink" title="暴力递归缓存优化"></a>暴力递归缓存优化</h2><p>此实现也可以称为是从顶向下的动态规划/记忆化搜索。</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 实现方式1优化，利用缓存优化暴力递归</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">ways2</span><span class="params">(<span class="keyword">int</span> N, <span class="keyword">int</span> start, <span class="keyword">int</span> aim, <span class="keyword">int</span> K)</span> </span>{</span><br><span class="line">        <span class="keyword">if</span> (N &lt; <span class="number">2</span> || start &lt; <span class="number">1</span> || start &gt; N || aim &lt; <span class="number">1</span> || aim &gt; N || K &lt; <span class="number">1</span>) {</span><br><span class="line">            <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        <span class="comment">// dp就是缓存表，大小 N+1 * K+1</span></span><br><span class="line">        <span class="keyword">int</span>[][] dp = <span class="keyword">new</span> <span class="keyword">int</span>[N + <span class="number">1</span>][K + <span class="number">1</span>];</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= N; i++) {</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt;= K; j++) {</span><br><span class="line">                dp[i][j] = -<span class="number">1</span>; <span class="comment">// 初始化值为-1</span></span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        <span class="comment">// dp[cur][rest] == -1 -&gt; process2(cur, rest)之前没算过！</span></span><br><span class="line">        <span class="comment">// dp[cur][rest] != -1 -&gt; process2(cur, rest)之前算过！返回值，dp[cur][rest]</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> process2(start, K, aim, N, dp);</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 当前位置cur范围： 1 ~ N</span></span><br><span class="line">    <span class="comment">// 剩余步数rest范围：0 ~ K</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">process2</span><span class="params">(<span class="keyword">int</span> cur, <span class="keyword">int</span> rest, <span class="keyword">int</span> aim, <span class="keyword">int</span> N, <span class="keyword">int</span>[][] dp)</span> </span>{</span><br><span class="line">        <span class="keyword">if</span> (dp[cur][rest] != -<span class="number">1</span>) {</span><br><span class="line">            <span class="keyword">return</span> dp[cur][rest]; <span class="comment">// 之前算过返回缓存值</span></span><br><span class="line">        }</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 之前没算过</span></span><br><span class="line">        <span class="keyword">int</span> ans = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">if</span> (rest == <span class="number">0</span>) { <span class="comment">// 没有剩余步数</span></span><br><span class="line">            ans = cur == aim ? <span class="number">1</span> : <span class="number">0</span>; <span class="comment">// 当前位置是不是目标位置</span></span><br><span class="line">        } <span class="keyword">else</span> <span class="keyword">if</span> (cur == <span class="number">1</span>) { <span class="comment">// 走到左边界</span></span><br><span class="line">            ans = process2(<span class="number">2</span>, rest - <span class="number">1</span>, aim, N, dp); <span class="comment">// 往右走，步数-1</span></span><br><span class="line">        } <span class="keyword">else</span> <span class="keyword">if</span> (cur == N) { <span class="comment">// 走到右边界</span></span><br><span class="line">            ans = process2(N - <span class="number">1</span>, rest - <span class="number">1</span>, aim, N, dp); <span class="comment">// 往左走，步数-1</span></span><br><span class="line">        } <span class="keyword">else</span> {</span><br><span class="line">            <span class="comment">// 可以往左右也可以往右走，方案求和，步数-1</span></span><br><span class="line">            ans = process2(cur - <span class="number">1</span>, rest - <span class="number">1</span>, aim, N, dp) + process2(cur + <span class="number">1</span>, rest - <span class="number">1</span>, aim, N, dp);</span><br><span class="line">        }</span><br><span class="line">        dp[cur][rest] = ans; <span class="comment">// 记录缓存</span></span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line"></span><br><span class="line">    }</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="动态规划实现"><a href="#动态规划实现" class="headerlink" title="动态规划实现"></a>动态规划实现</h2><p>动态规划实现思路：直接算出1..n每个点走K步到达目标位置的方案数。</p>
+<p>实现方式：</p>
+<ol>
+<li>先初始化第一列，即剩余步数为0时，只有目标位置方案数为1</li>
+<li>依次初始化每一列，<ul>
+<li>当前位置在第一行时，只能往右走，也即方案数=数组左下</li>
+<li>当前位置在最后一行时，只能往左走，也即方案数=数组左上</li>
+<li>当前位置在中间，可以往左或右走，也即方案数=数组左上+左下</li>
+</ul>
+</li>
+</ol>
+<p>e.g. N=5，目标是4</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">// 0 1 2 3 4 5 6 剩余步数</span><br><span class="line">--------------------</span><br><span class="line">0| x x x x x x x</span><br><span class="line">1| 0 0 0 1 0 4 0</span><br><span class="line">2| 0 0 1 0 4 0 13</span><br><span class="line">3| 0 1 0 3 0 9 0</span><br><span class="line">4| 1 0 2 0 5 0 14</span><br><span class="line">5| 0 1 0 2 0 5 0</span><br><span class="line">当前位置</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">ways3</span><span class="params">(<span class="keyword">int</span> N, <span class="keyword">int</span> start, <span class="keyword">int</span> aim, <span class="keyword">int</span> K)</span> </span>{</span><br><span class="line">    <span class="keyword">if</span> (N &lt; <span class="number">2</span> || start &lt; <span class="number">1</span> || start &gt; N || aim &lt; <span class="number">1</span> || aim &gt; N || K &lt; <span class="number">1</span>) {</span><br><span class="line">        <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span>[][] dp = <span class="keyword">new</span> <span class="keyword">int</span>[N + <span class="number">1</span>][K + <span class="number">1</span>];</span><br><span class="line">    dp[aim][<span class="number">0</span>] = <span class="number">1</span>; <span class="comment">// 设置目标位置为1</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> rest = <span class="number">1</span>; rest &lt;= K; rest++) {</span><br><span class="line">        dp[<span class="number">1</span>][rest] = dp[<span class="number">2</span>][rest - <span class="number">1</span>]; <span class="comment">// 第一行，左边界</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> cur = <span class="number">2</span>; cur &lt; N; cur++) {</span><br><span class="line">            dp[cur][rest] = dp[cur - <span class="number">1</span>][rest - <span class="number">1</span>] + dp[cur + <span class="number">1</span>][rest - <span class="number">1</span>];</span><br><span class="line">        }</span><br><span class="line">        dp[N][rest] = dp[N - <span class="number">1</span>][rest - <span class="number">1</span>]; <span class="comment">// 第n行，右边界</span></span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> dp[start][K];</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="2-预测赢家"><a href="#2-预测赢家" class="headerlink" title="2.预测赢家"></a>2.预测赢家</h1><p>给定一个整形数组arr，代表数值不同的纸牌排成一条线（明牌）。玩家A和玩家B依次拿走每张牌，规定玩家A先手，每次取牌时只能拿走最左或最右的牌。玩家A和玩家B都决定聪明，每次取牌都会使自己的分数最大化，请返回最后获胜者的分数。</p>
+<h2 id="暴力递归实现-1"><a href="#暴力递归实现-1" class="headerlink" title="暴力递归实现"></a>暴力递归实现</h2><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 根据规则，返回获胜者的分数</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">win1</span><span class="params">(<span class="keyword">int</span>[] arr)</span> </span>{</span><br><span class="line">    <span class="keyword">if</span> (arr == <span class="keyword">null</span> || arr.length == <span class="number">0</span>) {</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">int</span> first = f1(arr, <span class="number">0</span>, arr.length - <span class="number">1</span>); <span class="comment">// 先手最大分数</span></span><br><span class="line">    <span class="keyword">int</span> second = g1(arr, <span class="number">0</span>, arr.length - <span class="number">1</span>); <span class="comment">// 后手最大分数</span></span><br><span class="line">    <span class="keyword">return</span> Math.max(first, second);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// arr[L..R]，先手获得的最好分数返回</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">f1</span><span class="params">(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> L, <span class="keyword">int</span> R)</span> </span>{</span><br><span class="line">    <span class="keyword">if</span> (L == R) { <span class="comment">// 只剩一张牌时先手获得</span></span><br><span class="line">        <span class="keyword">return</span> arr[L];</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">int</span> p1 = arr[L] + g1(arr, L + <span class="number">1</span>, R); <span class="comment">// 拿L，下一手后手</span></span><br><span class="line">    <span class="keyword">int</span> p2 = arr[R] + g1(arr, L, R - <span class="number">1</span>); <span class="comment">// 拿R，下一手后手</span></span><br><span class="line">    <span class="keyword">return</span> Math.max(p1, p2); <span class="comment">// 先手拿大</span></span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// arr[L..R]，后手获得的最好分数返回</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">g1</span><span class="params">(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> L, <span class="keyword">int</span> R)</span> </span>{</span><br><span class="line">    <span class="keyword">if</span> (L == R) {</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">int</span> p1 = f1(arr, L + <span class="number">1</span>, R); <span class="comment">// 对手拿走了L位置的数，后手变 L+1..R 先手</span></span><br><span class="line">    <span class="keyword">int</span> p2 = f1(arr, L, R - <span class="number">1</span>); <span class="comment">// 对手拿走了R位置的数，后手变 L..R-1 先手</span></span><br><span class="line">    <span class="keyword">return</span> Math.min(p1, p2); <span class="comment">// 对手先拿，后手一定拿的小的</span></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="暴力递归缓存优化-1"><a href="#暴力递归缓存优化-1" class="headerlink" title="暴力递归缓存优化"></a>暴力递归缓存优化</h2><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">win2</span><span class="params">(<span class="keyword">int</span>[] arr)</span> </span>{</span><br><span class="line">    <span class="keyword">if</span> (arr == <span class="keyword">null</span> || arr.length == <span class="number">0</span>) {</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">int</span> N = arr.length;</span><br><span class="line">    <span class="keyword">int</span>[][] fmap = <span class="keyword">new</span> <span class="keyword">int</span>[N][N]; <span class="comment">// 先手缓存</span></span><br><span class="line">    <span class="keyword">int</span>[][] gmap = <span class="keyword">new</span> <span class="keyword">int</span>[N][N]; <span class="comment">// 后手缓存</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; N; i++) {</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; N; j++) {</span><br><span class="line">            fmap[i][j] = -<span class="number">1</span>;</span><br><span class="line">            gmap[i][j] = -<span class="number">1</span>;</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">int</span> first = f2(arr, <span class="number">0</span>, arr.length - <span class="number">1</span>, fmap, gmap);</span><br><span class="line">    <span class="keyword">int</span> second = g2(arr, <span class="number">0</span>, arr.length - <span class="number">1</span>, fmap, gmap);</span><br><span class="line">    <span class="keyword">return</span> Math.max(first, second);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// arr[L..R]，先手获得的最好分数返回</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">f2</span><span class="params">(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> L, <span class="keyword">int</span> R, <span class="keyword">int</span>[][] fmap, <span class="keyword">int</span>[][] gmap)</span> </span>{</span><br><span class="line">    <span class="keyword">if</span> (fmap[L][R] != -<span class="number">1</span>) {</span><br><span class="line">        <span class="keyword">return</span> fmap[L][R];</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">int</span> ans = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span> (L == R) {</span><br><span class="line">        ans = arr[L];</span><br><span class="line">    } <span class="keyword">else</span> {</span><br><span class="line">        <span class="keyword">int</span> p1 = arr[L] + g2(arr, L + <span class="number">1</span>, R, fmap, gmap);</span><br><span class="line">        <span class="keyword">int</span> p2 = arr[R] + g2(arr, L, R - <span class="number">1</span>, fmap, gmap);</span><br><span class="line">        ans = Math.max(p1, p2);</span><br><span class="line">    }</span><br><span class="line">    fmap[L][R] = ans;</span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// arr[L..R]，后手获得的最好分数返回</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">g2</span><span class="params">(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> L, <span class="keyword">int</span> R, <span class="keyword">int</span>[][] fmap, <span class="keyword">int</span>[][] gmap)</span> </span>{</span><br><span class="line">    <span class="keyword">if</span> (gmap[L][R] != -<span class="number">1</span>) {</span><br><span class="line">        <span class="keyword">return</span> gmap[L][R];</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">int</span> ans = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span> (L != R) {</span><br><span class="line">        <span class="keyword">int</span> p1 = f2(arr, L + <span class="number">1</span>, R, fmap, gmap); <span class="comment">// 对手拿走了L位置的数</span></span><br><span class="line">        <span class="keyword">int</span> p2 = f2(arr, L, R - <span class="number">1</span>, fmap, gmap); <span class="comment">// 对手拿走了R位置的数</span></span><br><span class="line">        ans = Math.min(p1, p2);</span><br><span class="line">    }</span><br><span class="line">    gmap[L][R] = ans;</span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="动态规划实现-1"><a href="#动态规划实现-1" class="headerlink" title="动态规划实现"></a>动态规划实现</h2><p>直接推算出数组：</p>
+<ul>
+<li>fmap：每一步先手可以获得最大值</li>
+<li>gmap：每一步后手可以获得最大值</li>
+</ul>
+<p>观察暴力递归过程，fmap[L][R]需要借助gmap[L+1][R]和gmap[L][R-1]，而gmap[L][R]需要借助<br>fmap[L+1][R]和fmap[L][R-1]。也就是需要借助对方数组对应位置的左一格和下一格计算。</p>
+<p>数组中左下部分是无效的（L&gt;R），L=R对角线已知fmap等于arr[L]、gmap等于0。</p>
+<p>接下来只需要对剩下逐级对角线进行计算，即可完成两个数组的推算。</p>
+<figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">win3</span><span class="params">(<span class="keyword">int</span>[] arr)</span> </span>{</span><br><span class="line">    <span class="keyword">if</span> (arr == <span class="keyword">null</span> || arr.length == <span class="number">0</span>) {</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">int</span> N = arr.length;</span><br><span class="line">    <span class="keyword">int</span>[][] fmap = <span class="keyword">new</span> <span class="keyword">int</span>[N][N];</span><br><span class="line">    <span class="keyword">int</span>[][] gmap = <span class="keyword">new</span> <span class="keyword">int</span>[N][N];</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; N; i++) {</span><br><span class="line">        fmap[i][i] = arr[i]; <span class="comment">// 初始化L=R 位置，先手arr[i]，后手0</span></span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> startCol = <span class="number">1</span>; startCol &lt; N; startCol++) { <span class="comment">// 列，1..n</span></span><br><span class="line">        <span class="keyword">int</span> L = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> R = startCol;</span><br><span class="line">        <span class="keyword">while</span> (R &lt; N) { <span class="comment">// 沿着对角线推算，每次处理前一个位置右下位置，表格左下部分L&gt;R无用</span></span><br><span class="line">            fmap[L][R] = Math.max(arr[L] + gmap[L + <span class="number">1</span>][R], arr[R] + gmap[L][R - <span class="number">1</span>]); <span class="comment">// gmap 对应 fmap 位置，左一格、下一格</span></span><br><span class="line">            gmap[L][R] = Math.min(fmap[L + <span class="number">1</span>][R], fmap[L][R - <span class="number">1</span>]); <span class="comment">// fmap 对应 gmap 位置，左一格、下一格</span></span><br><span class="line">            L++;</span><br><span class="line">            R++;</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> Math.max(fmap[<span class="number">0</span>][N - <span class="number">1</span>], gmap[<span class="number">0</span>][N - <span class="number">1</span>]);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+    
+  </div>
+
+</article>
+
+
+   
+
+   
+  <div class="box-prev-next clearfix">
+    <a class="show pull-left" href="/2022/09/01/algorithm-recursion-procedure/">
+        <i class="icon icon-angle-left"></i>
+    </a>
+    <a class="hide pull-right" href="/">
+        <i class="icon icon-angle-right"></i>
+    </a>
+  </div>
+
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/categories/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              分类
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/roaming/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              漫游
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/atom.xml"
+              rel="noopener noreferrer"
+              target="_blank"
+              >
+              RSS
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/search/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              搜索
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+    
+    
+
+    
+
+    
+    
+
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script>
+    <div id="comment" class="vcomment" ></div>
+    <script>
+        var notify = 'false' == true ? true : false;
+        var verify = 'false' == true ? true : false;
+        var GUEST_INFO = ['nick','mail','link'];
+        var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+            return GUEST_INFO.indexOf(item) > -1
+        });
+        guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+        window.valine = new Valine({
+            el: '.vcomment',
+            notify: notify,
+            verify: verify,
+            appId: "masttnqEt9G69mj43i9oaA1C-gzGzoHsz",
+            appKey: "hgIx9VKn0GLDhRcLxQuNMl0E",
+            avatar:'mm',
+            placeholder: "Say something",
+            guest_info:guest_info,
+            pageSize:'10'
+        });
+    </script>
+  
+    
+
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>
