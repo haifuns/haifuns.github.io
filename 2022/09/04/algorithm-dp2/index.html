@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>【算法基础】暴力递归到动态规划（二） | haifuns的博客</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="算法,动态规划," />
+  
+
+  <meta name="description" content="1.背包的最大价值有一批货物，每个货物的质量和价值已知，用一个称重确定的背包能装入的货物最大价值是多少？ 暴力递归123456789101112131415161718192021222324252627282930313233343536373839404142&#x2F;** * 返回不超重情况下，背包货物的最大价值 * * 暴力递归实现 * * @param w   所有货物质量 * @param v">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【算法基础】暴力递归到动态规划（二）">
+<meta property="og:url" content="https://haifuns.com/2022/09/04/algorithm-dp2/index.html">
+<meta property="og:site_name" content="haifuns的博客">
+<meta property="og:description" content="1.背包的最大价值有一批货物，每个货物的质量和价值已知，用一个称重确定的背包能装入的货物最大价值是多少？ 暴力递归123456789101112131415161718192021222324252627282930313233343536373839404142&#x2F;** * 返回不超重情况下，背包货物的最大价值 * * 暴力递归实现 * * @param w   所有货物质量 * @param v">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-09-04T22:00:00.000Z">
+<meta property="article:modified_time" content="2022-09-04T13:59:12.896Z">
+<meta property="article:author" content="haifuns">
+<meta property="article:tag" content="算法">
+<meta property="article:tag" content="动态规划">
+<meta name="twitter:card" content="summary">
+
+  
+
+  
+    <link rel="icon" href="/images/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbeddx" rel="stylesheet">
+
+
+  
+    
+<link rel="stylesheet" href="/css/personal-style.css">
+
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?d3c8edb388553a2084296cbfe9a0785a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
+
+<meta name="generator" content="Hexo 5.4.2">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="haifuns的博客" type="application/atom+xml">
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header CENTER">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/categories/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            分类
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/roaming/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            漫游
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/atom.xml"
+            rel="noopener noreferrer"
+            target="_blank"
+            >
+            RSS
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/search/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-%E8%83%8C%E5%8C%85%E7%9A%84%E6%9C%80%E5%A4%A7%E4%BB%B7%E5%80%BC"><span class="toc-text">1.背包的最大价值</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9A%B4%E5%8A%9B%E9%80%92%E5%BD%92"><span class="toc-text">暴力递归</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92"><span class="toc-text">动态规划</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-%E6%95%B0%E5%AD%97%E8%BD%AC%E5%8C%96%E5%AD%97%E6%AF%8D"><span class="toc-text">2.数字转化字母</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9A%B4%E5%8A%9B%E9%80%92%E5%BD%92-1"><span class="toc-text">暴力递归</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92-1"><span class="toc-text">动态规划</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-%E8%B4%B4%E7%BA%B8%E6%8B%BC%E8%AF%8D%EF%BC%88LeetCode-691-%EF%BC%89"><span class="toc-text">3.贴纸拼词（LeetCode 691.）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9A%B4%E5%8A%9B%E9%80%92%E5%BD%92-2"><span class="toc-text">暴力递归</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9A%B4%E5%8A%9B%E4%BD%8E%E4%BC%B0%E8%AF%8D%E9%A2%91%E5%92%8C%E5%89%AA%E6%9E%9D%E4%BC%98%E5%8C%96"><span class="toc-text">暴力低估词频和剪枝优化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9A%B4%E5%8A%9B%E9%80%92%E5%BD%92%E7%BC%93%E5%AD%98%E4%BC%98%E5%8C%96"><span class="toc-text">暴力递归缓存优化</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%AD%90%E5%BA%8F%E5%88%97%EF%BC%88LeetCode-1143-%EF%BC%89"><span class="toc-text">4.最长公共子序列（LeetCode 1143.）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9A%B4%E5%8A%9B%E9%80%92%E5%BD%92-3"><span class="toc-text">暴力递归</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92-2"><span class="toc-text">动态规划</span></a></li></ol></li></ol>
+  </div>
+
+
+
+<div class="content content-post CENTER">
+   <article id="post-algorithm-dp2" class="article article-type-post" itemprop="blogPost">
+  <header class="article-header">
+    <h1 class="post-title">【算法基础】暴力递归到动态规划（二）</h1>
+
+    <div class="article-meta">
+      <span>
+        <i class="icon-calendar"></i>
+        <span>2022.09.04</span>
+      </span>
+
+      
+        <span class="article-author">
+          <i class="icon-user"></i>
+          <span>haifuns</span>
+        </span>
+      
+
+      
+  <span class="article-category">
+    <i class="icon-list"></i>
+    <a class="article-category-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a>
+  </span>
+
+
+
+      
+
+      
+      <i class="fa fa-eye"></i> 
+        <span id="busuanzi_container_page_pv">
+           &nbsp热度 <span id="busuanzi_value_page_pv">
+           <i class="fa fa-spinner fa-spin"></i></span>℃
+        </span>
+      
+      
+    </div>
+  </header>
+
+  <div class="article-content">
+    
+      <h1 id="1-背包的最大价值"><a href="#1-背包的最大价值" class="headerlink" title="1.背包的最大价值"></a>1.背包的最大价值</h1><p>有一批货物，每个货物的质量和价值已知，用一个称重确定的背包能装入的货物最大价值是多少？</p>
+<h2 id="暴力递归"><a href="#暴力递归" class="headerlink" title="暴力递归"></a>暴力递归</h2><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 返回不超重情况下，背包货物的最大价值</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * 暴力递归实现</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> w   所有货物质量</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> v   所有货物价值</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> bag 背包容量</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">maxValue</span><span class="params">(<span class="keyword">int</span>[] w, <span class="keyword">int</span>[] v, <span class="keyword">int</span> bag)</span> </span>{</span><br><span class="line">    <span class="keyword">if</span> (w == <span class="keyword">null</span> || v == <span class="keyword">null</span> || w.length != v.length || w.length == <span class="number">0</span>) {</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> process(w, v, <span class="number">0</span>, bag);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 从index开始选择包里还能装的最大价值</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> w     所有货物质量</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> v     所有货物价值</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> index 当前货物位置</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> rest  剩余容量</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">process</span><span class="params">(<span class="keyword">int</span>[] w, <span class="keyword">int</span>[] v, <span class="keyword">int</span> index, <span class="keyword">int</span> rest)</span> </span>{</span><br><span class="line">    <span class="keyword">if</span> (rest &lt; <span class="number">0</span>) {</span><br><span class="line">        <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">if</span> (index == w.length) {</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">int</span> p1 = process(w, v, index + <span class="number">1</span>, rest); <span class="comment">// 不要当前货</span></span><br><span class="line">    <span class="keyword">int</span> p2 = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">int</span> next = process(w, v, index + <span class="number">1</span>, rest - w[index]); <span class="comment">// 要当前货</span></span><br><span class="line">    <span class="keyword">if</span> (next != -<span class="number">1</span>) {</span><br><span class="line">        p2 = v[index] + next; <span class="comment">// 不要index了，减掉index价值</span></span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> Math.max(p1, p2);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="动态规划"><a href="#动态规划" class="headerlink" title="动态规划"></a>动态规划</h2><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">dp</span><span class="params">(<span class="keyword">int</span>[] w, <span class="keyword">int</span>[] v, <span class="keyword">int</span> bag)</span> </span>{</span><br><span class="line">    <span class="keyword">if</span> (w == <span class="keyword">null</span> || v == <span class="keyword">null</span> || w.length != v.length || w.length == <span class="number">0</span>) {</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">int</span> N = w.length;</span><br><span class="line">    <span class="comment">// index 0 ~ N</span></span><br><span class="line">    <span class="comment">// rest 0 ~ bag</span></span><br><span class="line">    <span class="keyword">int</span>[][] dp = <span class="keyword">new</span> <span class="keyword">int</span>[N + <span class="number">1</span>][bag + <span class="number">1</span>];</span><br><span class="line"></span><br><span class="line">    <span class="comment">// dp[N][..] = 0，从倒数第二行往上填</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> index = N - <span class="number">1</span>; index &gt;= <span class="number">0</span>; index--) {</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> rest = <span class="number">0</span>; rest &lt;= bag; rest++) {</span><br><span class="line">            <span class="keyword">int</span> p1 = dp[index + <span class="number">1</span>][rest]; <span class="comment">// 不要货物，下一行、容量不变位置</span></span><br><span class="line">            <span class="keyword">int</span> p2 = <span class="number">0</span>;</span><br><span class="line">            <span class="comment">// 要货物，如果容量够，下一行、容量减当前货质量位置</span></span><br><span class="line">            <span class="keyword">int</span> next = rest - w[index] &lt; <span class="number">0</span> ? -<span class="number">1</span> : dp[index + <span class="number">1</span>][rest - w[index]];</span><br><span class="line">            <span class="keyword">if</span> (next != -<span class="number">1</span>) {</span><br><span class="line">                p2 = v[index] + next;</span><br><span class="line">            }</span><br><span class="line">            dp[index][rest] = Math.max(p1, p2);</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> dp[<span class="number">0</span>][bag];</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="2-数字转化字母"><a href="#2-数字转化字母" class="headerlink" title="2.数字转化字母"></a>2.数字转化字母</h1><p>规定1和A对应、2和B对应、3和C对应、…、26和Z对应。<br>那么一个数字字符串比如“111”就可以转化为“AAA”、“KA”、“AK”。<br>给定一个只有数字字符组成的字符串str，返回最多有多少种转化结果。</p>
+<h2 id="暴力递归-1"><a href="#暴力递归-1" class="headerlink" title="暴力递归"></a>暴力递归</h2><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">number</span><span class="params">(String str)</span> </span>{</span><br><span class="line">    <span class="keyword">if</span> (str == <span class="keyword">null</span> || str.length() == <span class="number">0</span>) {</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> process(str.toCharArray(), <span class="number">0</span>);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// 转化str[i..]，返回有多少种转化方法</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">process</span><span class="params">(<span class="keyword">char</span>[] str, <span class="keyword">int</span> i)</span> </span>{</span><br><span class="line">    <span class="keyword">if</span> (i == str.length) {</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// i没到最后，说明有字符</span></span><br><span class="line">    <span class="keyword">if</span> (str[i] == <span class="string">'0'</span>) { <span class="comment">// 之前的决定有问题，不会单独出现0开头的</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="comment">// str[i] != '0'</span></span><br><span class="line">    <span class="comment">// i单转</span></span><br><span class="line">    <span class="keyword">int</span> ways = process(str, i + <span class="number">1</span>);</span><br><span class="line">    <span class="comment">// i和后面数字合并转，合并不能超过27</span></span><br><span class="line">    <span class="keyword">if</span> (i + <span class="number">1</span> &lt; str.length &amp;&amp; (str[i] - <span class="string">'0'</span>) * <span class="number">10</span> + str[i + <span class="number">1</span>] - <span class="string">'0'</span> &lt; <span class="number">27</span>) {</span><br><span class="line">        ways += process(str, i + <span class="number">2</span>);</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> ways;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="动态规划-1"><a href="#动态规划-1" class="headerlink" title="动态规划"></a>动态规划</h2><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 从右往左的动态规划，dp[i]表示str[i.]有多少种转化方式</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">dp</span><span class="params">(String s)</span> </span>{</span><br><span class="line">    <span class="keyword">if</span> (s == <span class="keyword">null</span> || s.length() == <span class="number">0</span>) {</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">char</span>[] str = s.toCharArray();</span><br><span class="line">    <span class="keyword">int</span> N = str.length;</span><br><span class="line">    <span class="keyword">int</span>[] dp = <span class="keyword">new</span> <span class="keyword">int</span>[N + <span class="number">1</span>];</span><br><span class="line">    dp[N] = <span class="number">1</span>; <span class="comment">// 最右只有一种</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = N - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--) {</span><br><span class="line">        <span class="keyword">if</span> (str[i] != <span class="string">'0'</span>) {</span><br><span class="line">            <span class="keyword">int</span> ways = dp[i + <span class="number">1</span>]; <span class="comment">// 当前字符</span></span><br><span class="line">            <span class="keyword">if</span> (i + <span class="number">1</span> &lt; str.length &amp;&amp; (str[i] - <span class="string">'0'</span>) * <span class="number">10</span> + str[i + <span class="number">1</span>] - <span class="string">'0'</span> &lt; <span class="number">27</span>) {</span><br><span class="line">                ways += dp[i + <span class="number">2</span>]; <span class="comment">// 当前字符 + 下一个字符</span></span><br><span class="line">            }</span><br><span class="line">            dp[i] = ways;</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> dp[<span class="number">0</span>];</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="3-贴纸拼词（LeetCode-691-）"><a href="#3-贴纸拼词（LeetCode-691-）" class="headerlink" title="3.贴纸拼词（LeetCode 691.）"></a>3.贴纸拼词（LeetCode 691.）</h1><p>给定一个字符串 str 和一个字符串类型的数组 arr，其中都是小写英文字母。<br>arr 中每一个字符串代表一张贴纸，你可以把单个字符剪开使用，目的是拼出 str。<br>每个贴纸的数量是无限的，返回至少需要多少张贴纸可以完成这个任务。</p>
+<p>例如：str = “babac”，arr = [“ba”, “c”, “abcd”]，至少需要两张贴纸 “ba” 和 “abcd” 或 “abcd” 和 “abcd”。</p>
+<h2 id="暴力递归-2"><a href="#暴力递归-2" class="headerlink" title="暴力递归"></a>暴力递归</h2><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">minStickers1</span><span class="params">(String[] stickers, String target)</span> </span>{</span><br><span class="line">    <span class="keyword">int</span> ans = process1(stickers, target);</span><br><span class="line">    <span class="keyword">return</span> ans == Integer.MAX_VALUE ? -<span class="number">1</span> : ans;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// 所有贴纸stickers，每一种贴纸都有无穷张</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">process1</span><span class="params">(String[] stickers, String target)</span> </span>{</span><br><span class="line">    <span class="keyword">if</span> (target.length() == <span class="number">0</span>) {</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">int</span> min = Integer.MAX_VALUE;</span><br><span class="line">    <span class="keyword">for</span> (String first : stickers) { <span class="comment">// 每张贴纸做为第一张</span></span><br><span class="line">        String rest = minus(target, first); <span class="comment">// 使用贴纸后剩余的字符</span></span><br><span class="line">        <span class="keyword">if</span> (rest.length() != target.length()) {</span><br><span class="line">            min = Math.min(min, process1(stickers, rest));</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> min + (min == Integer.MAX_VALUE ? <span class="number">0</span> : <span class="number">1</span>);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// s1是目标字符，s2是贴纸，返回目标-贴纸后的字符</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">minus</span><span class="params">(String s1, String s2)</span> </span>{</span><br><span class="line">    <span class="keyword">char</span>[] str1 = s1.toCharArray();</span><br><span class="line">    <span class="keyword">char</span>[] str2 = s2.toCharArray();</span><br><span class="line">    <span class="keyword">int</span>[] count = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">26</span>];</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">char</span> cha : str1) {</span><br><span class="line">        count[cha - <span class="string">'a'</span>]++; <span class="comment">// 累计目标每个字母个数</span></span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">char</span> cha : str2) {</span><br><span class="line">        count[cha - <span class="string">'a'</span>]--; <span class="comment">// 减去贴纸中每个字母数</span></span><br><span class="line">    }</span><br><span class="line">    StringBuilder builder = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">26</span>; i++) {</span><br><span class="line">        <span class="keyword">if</span> (count[i] &gt; <span class="number">0</span>) {</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; count[i]; j++) {</span><br><span class="line">                builder.append((<span class="keyword">char</span>) (i + <span class="string">'a'</span>));</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> builder.toString(); <span class="comment">// 剩余的字母合并</span></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="暴力低估词频和剪枝优化"><a href="#暴力低估词频和剪枝优化" class="headerlink" title="暴力低估词频和剪枝优化"></a>暴力低估词频和剪枝优化</h2><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 暴力递归词频和剪枝优化</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">minStickers2</span><span class="params">(String[] stickers, String target)</span> </span>{</span><br><span class="line">    <span class="keyword">int</span> N = stickers.length;</span><br><span class="line">    <span class="comment">// 关键优化(用词频表替代贴纸数组)</span></span><br><span class="line">    <span class="keyword">int</span>[][] counts = <span class="keyword">new</span> <span class="keyword">int</span>[N][<span class="number">26</span>];</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; N; i++) {</span><br><span class="line">        <span class="keyword">char</span>[] str = stickers[i].toCharArray();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">char</span> cha : str) {</span><br><span class="line">            counts[i][cha - <span class="string">'a'</span>]++;</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">int</span> ans = process2(counts, target);</span><br><span class="line">    <span class="keyword">return</span> ans == Integer.MAX_VALUE ? -<span class="number">1</span> : ans;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// stickers[i] 为i号贴纸的字符统计</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">process2</span><span class="params">(<span class="keyword">int</span>[][] stickers, String t)</span> </span>{</span><br><span class="line">    <span class="keyword">if</span> (t.length() == <span class="number">0</span>) {</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">char</span>[] target = t.toCharArray();</span><br><span class="line">    <span class="comment">// 目标词频统计</span></span><br><span class="line">    <span class="keyword">int</span>[] tcounts = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">26</span>];</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">char</span> cha : target) {</span><br><span class="line">        tcounts[cha - <span class="string">'a'</span>]++;</span><br><span class="line">    }</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> N = stickers.length;</span><br><span class="line">    <span class="keyword">int</span> min = Integer.MAX_VALUE;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; N; i++) {</span><br><span class="line">        <span class="comment">// 第一张贴纸</span></span><br><span class="line">        <span class="keyword">int</span>[] sticker = stickers[i];</span><br><span class="line">        <span class="comment">// 最关键的优化(重要的剪枝!这一步也是贪心!)</span></span><br><span class="line">        <span class="keyword">if</span> (sticker[target[<span class="number">0</span>] - <span class="string">'a'</span>] &gt; <span class="number">0</span>) {</span><br><span class="line">            StringBuilder builder = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; <span class="number">26</span>; j++) {</span><br><span class="line">                <span class="keyword">if</span> (tcounts[j] &gt; <span class="number">0</span>) {</span><br><span class="line">                    <span class="keyword">int</span> nums = tcounts[j] - sticker[j];</span><br><span class="line">                    <span class="keyword">for</span> (<span class="keyword">int</span> k = <span class="number">0</span>; k &lt; nums; k++) {</span><br><span class="line">                        builder.append((<span class="keyword">char</span>) (j + <span class="string">'a'</span>));</span><br><span class="line">                    }</span><br><span class="line">                }</span><br><span class="line">            }</span><br><span class="line">            String rest = builder.toString();</span><br><span class="line">            min = Math.min(min, process2(stickers, rest));</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> min + (min == Integer.MAX_VALUE ? <span class="number">0</span> : <span class="number">1</span>);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="暴力递归缓存优化"><a href="#暴力递归缓存优化" class="headerlink" title="暴力递归缓存优化"></a>暴力递归缓存优化</h2><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 记忆化搜索，暴力递归缓存优化</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">minStickers3</span><span class="params">(String[] stickers, String target)</span> </span>{</span><br><span class="line">    <span class="keyword">int</span> N = stickers.length;</span><br><span class="line">    <span class="keyword">int</span>[][] counts = <span class="keyword">new</span> <span class="keyword">int</span>[N][<span class="number">26</span>];</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; N; i++) {</span><br><span class="line">        <span class="keyword">char</span>[] str = stickers[i].toCharArray();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">char</span> cha : str) {</span><br><span class="line">            counts[i][cha - <span class="string">'a'</span>]++;</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    HashMap&lt;String, Integer&gt; dp = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">    dp.put(<span class="string">""</span>, <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">int</span> ans = process3(counts, target, dp);</span><br><span class="line">    <span class="keyword">return</span> ans == Integer.MAX_VALUE ? -<span class="number">1</span> : ans;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">process3</span><span class="params">(<span class="keyword">int</span>[][] stickers, String t, HashMap&lt;String, Integer&gt; dp)</span> </span>{</span><br><span class="line">    <span class="keyword">if</span> (dp.containsKey(t)) {</span><br><span class="line">        <span class="keyword">return</span> dp.get(t);</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">char</span>[] target = t.toCharArray();</span><br><span class="line">    <span class="keyword">int</span>[] tcounts = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">26</span>];</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">char</span> cha : target) {</span><br><span class="line">        tcounts[cha - <span class="string">'a'</span>]++;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">int</span> N = stickers.length;</span><br><span class="line">    <span class="keyword">int</span> min = Integer.MAX_VALUE;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; N; i++) {</span><br><span class="line">        <span class="keyword">int</span>[] sticker = stickers[i];</span><br><span class="line">        <span class="keyword">if</span> (sticker[target[<span class="number">0</span>] - <span class="string">'a'</span>] &gt; <span class="number">0</span>) {</span><br><span class="line">            StringBuilder builder = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; <span class="number">26</span>; j++) {</span><br><span class="line">                <span class="keyword">if</span> (tcounts[j] &gt; <span class="number">0</span>) {</span><br><span class="line">                    <span class="keyword">int</span> nums = tcounts[j] - sticker[j];</span><br><span class="line">                    <span class="keyword">for</span> (<span class="keyword">int</span> k = <span class="number">0</span>; k &lt; nums; k++) {</span><br><span class="line">                        builder.append((<span class="keyword">char</span>) (j + <span class="string">'a'</span>));</span><br><span class="line">                    }</span><br><span class="line">                }</span><br><span class="line">            }</span><br><span class="line">            String rest = builder.toString();</span><br><span class="line">            min = Math.min(min, process3(stickers, rest, dp));</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">int</span> ans = min + (min == Integer.MAX_VALUE ? <span class="number">0</span> : <span class="number">1</span>);</span><br><span class="line">    dp.put(t, ans);</span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="4-最长公共子序列（LeetCode-1143-）"><a href="#4-最长公共子序列（LeetCode-1143-）" class="headerlink" title="4.最长公共子序列（LeetCode 1143.）"></a>4.最长公共子序列（LeetCode 1143.）</h1><p>给定两个字符串 str1 和 str2，返回这两个字符串的最长公共子序列的长度。如果不存在公共子序列，返回 0。</p>
+<p>一个字符串的子序列是指这样一个新的字符串：它是由原字符串在不改变字符的相对顺序的情况下删除某些字符（也可以不删除任何字符）后组成的新字符串。</p>
+<p>例如，”ace” 是 “abcde” 的子序列，但 “aec” 不是 “abcde” 的子序列。<br>两个字符串的公共子序列是这两个字符串所共同拥有的子序列。</p>
+<p>题目本质就是问str1[0..i]和str2[0..j]，这个范围上最长公共子序列长度是多少？</p>
+<p>可能性分类以及递归过程:</p>
+<ol>
+<li>最长公共子序列，一定不以str1[i]字符结尾、也一定不以str2[j]字符结尾<ul>
+<li>最长公共子序列 = str1[0..i-1] 与 str2[0..j-1] 的最长公共子序列长度(后续递归)</li>
+</ul>
+</li>
+<li>最长公共子序列，可能以str1[i]字符结尾、但是一定不以str2[j]字符结尾<ul>
+<li>最长公共子序列 = str1[0..i] 与 str2[0..j-1] 的最长公共子序列长度(后续递归)</li>
+</ul>
+</li>
+<li>最长公共子序列，一定不以str1[i]字符结尾、但是可能以str2[j]字符结尾<ul>
+<li>最长公共子序列 = str1[0..i-1] 与 str2[0..j] 的最长公共子序列长度(后续递归)</li>
+</ul>
+</li>
+<li>最长公共子序列，必须以str1[i]字符结尾、也必须以str2[j]字符结尾<ul>
+<li>最长公共子序列总长度 = str1[0..i-1] 与 str2[0..j-1] 的最长公共子序列长度(后续递归) + 1(共同的结尾)</li>
+</ul>
+</li>
+</ol>
+<p>注意：1、2、3、4并不是完全互斥的，可能会有重叠的情况。</p>
+<p>以上四种情况已经穷尽了所有可能性。四种情况中取最大即可：</p>
+<p>其中2、3一定参与最大值的比较：</p>
+<ul>
+<li>当str1[i] == str2[j]时，1 一定比 4 小，所以 4 参与</li>
+<li>当str1[i] != str2[j]时，4 压根不存在，所以 1 参与</li>
+</ul>
+<p>因为 1 中时钟有一个样本的范围比 2 和 3 小，所以：</p>
+<ul>
+<li>当 str1[i] == str2[j] 时，需要从 2、3、4 中选出最大值。</li>
+<li>当 str1[i] != str2[j] 时，需要从 2、3 中选出最大值。</li>
+</ul>
+<h2 id="暴力递归-3"><a href="#暴力递归-3" class="headerlink" title="暴力递归"></a>暴力递归</h2><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">longestCommonSubsequence1</span><span class="params">(String s1, String s2)</span> </span>{</span><br><span class="line">	<span class="keyword">if</span> (s1 == <span class="keyword">null</span> || s2 == <span class="keyword">null</span> || s1.length() == <span class="number">0</span> || s2.length() == <span class="number">0</span>) {</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	}</span><br><span class="line">	<span class="keyword">char</span>[] str1 = s1.toCharArray();</span><br><span class="line">	<span class="keyword">char</span>[] str2 = s2.toCharArray();</span><br><span class="line">	<span class="comment">// 尝试</span></span><br><span class="line">	<span class="keyword">return</span> process1(str1, str2, str1.length - <span class="number">1</span>, str2.length - <span class="number">1</span>);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// str1[0..i]和str2[0..j] 范围上最长公共子序列长度是多少？</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">process1</span><span class="params">(<span class="keyword">char</span>[] str1, <span class="keyword">char</span>[] str2, <span class="keyword">int</span> i, <span class="keyword">int</span> j)</span> </span>{</span><br><span class="line">	<span class="keyword">if</span> (i == <span class="number">0</span> &amp;&amp; j == <span class="number">0</span>) {</span><br><span class="line">		<span class="comment">// str1[0..0]和str2[0..0]，都只剩一个字符了</span></span><br><span class="line">		<span class="comment">// 那如果字符相等，公共子序列长度就是1，不相等就是0</span></span><br><span class="line">		<span class="keyword">return</span> str1[i] == str2[j] ? <span class="number">1</span> : <span class="number">0</span>;</span><br><span class="line">	} <span class="keyword">else</span> <span class="keyword">if</span> (i == <span class="number">0</span>) {</span><br><span class="line">		<span class="comment">// str1[0..0]和str2[0..j]，str1只剩1个字符，但是str2不只一个字符</span></span><br><span class="line">		<span class="comment">// 因为str1只剩一个字符了，所以str1[0..0]和str2[0..j]公共子序列最多长度为1</span></span><br><span class="line">		<span class="comment">// 如果str1[0] == str2[j]，那么此时相等已经找到了！公共子序列长度就是1，也不可能更大了</span></span><br><span class="line">		<span class="comment">// 如果str1[0] != str2[j]，只是此时不相等而已，</span></span><br><span class="line">		<span class="comment">// 那么str2[0..j-1]上有没有字符等于str1[0]呢？不知道，所以递归继续找</span></span><br><span class="line">		<span class="keyword">if</span> (str1[i] == str2[j]) {</span><br><span class="line">			<span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">		} <span class="keyword">else</span> {</span><br><span class="line">			<span class="keyword">return</span> process1(str1, str2, i, j - <span class="number">1</span>);</span><br><span class="line">		}</span><br><span class="line">	} <span class="keyword">else</span> <span class="keyword">if</span> (j == <span class="number">0</span>) {</span><br><span class="line">		<span class="comment">// 和上面的else if同理</span></span><br><span class="line">		<span class="comment">// str1[0..i]和str2[0..0]，str2只剩1个字符了，但是str1不只一个字符</span></span><br><span class="line">		<span class="comment">// 因为str2只剩一个字符了，所以str1[0..i]和str2[0..0]公共子序列最多长度为1</span></span><br><span class="line">		<span class="comment">// 如果str1[i] == str2[0]，那么此时相等已经找到了！公共子序列长度就是1，也不可能更大了</span></span><br><span class="line">		<span class="comment">// 如果str1[i] != str2[0]，只是此时不相等而已，</span></span><br><span class="line">		<span class="comment">// 那么str1[0..i-1]上有没有字符等于str2[0]呢？不知道，所以递归继续找</span></span><br><span class="line">		<span class="keyword">if</span> (str1[i] == str2[j]) {</span><br><span class="line">			<span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">		} <span class="keyword">else</span> {</span><br><span class="line">			<span class="keyword">return</span> process1(str1, str2, i - <span class="number">1</span>, j);</span><br><span class="line">		}</span><br><span class="line">	} <span class="keyword">else</span> { <span class="comment">// i != 0 &amp;&amp; j != 0</span></span><br><span class="line">		<span class="comment">// 这里的情况为：</span></span><br><span class="line">		<span class="comment">// str1[0..i]和str2[0..i]，str1和str2都不只一个字符</span></span><br><span class="line">		<span class="comment">// p1对应分析可能性3</span></span><br><span class="line">		<span class="keyword">int</span> p1 = process1(str1, str2, i - <span class="number">1</span>, j);</span><br><span class="line">		<span class="comment">// p2对应分析可能性2</span></span><br><span class="line">		<span class="keyword">int</span> p2 = process1(str1, str2, i, j - <span class="number">1</span>);</span><br><span class="line">		<span class="comment">// p3对应分析可能性4，如果可能性4存在，即str1[i] == str2[j]，那么p3就求出来，参与pk</span></span><br><span class="line">		<span class="comment">// 如果可能性4不存在，即str1[i] != str2[j]，那么让p3等于0，然后去参与pk，反正不影响</span></span><br><span class="line">		<span class="keyword">int</span> p3 = str1[i] == str2[j] ? (<span class="number">1</span> + process1(str1, str2, i - <span class="number">1</span>, j - <span class="number">1</span>)) : <span class="number">0</span>;</span><br><span class="line">		<span class="keyword">return</span> Math.max(p1, Math.max(p2, p3));</span><br><span class="line">	}</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="动态规划-2"><a href="#动态规划-2" class="headerlink" title="动态规划"></a>动态规划</h2><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">longestCommonSubsequence2</span><span class="params">(String s1, String s2)</span> </span>{</span><br><span class="line">	<span class="keyword">if</span> (s1 == <span class="keyword">null</span> || s2 == <span class="keyword">null</span> || s1.length() == <span class="number">0</span> || s2.length() == <span class="number">0</span>) {</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	}</span><br><span class="line">	<span class="keyword">char</span>[] str1 = s1.toCharArray();</span><br><span class="line">	<span class="keyword">char</span>[] str2 = s2.toCharArray();</span><br><span class="line">	<span class="keyword">int</span> N = str1.length;</span><br><span class="line">	<span class="keyword">int</span> M = str2.length;</span><br><span class="line">	<span class="keyword">int</span>[][] dp = <span class="keyword">new</span> <span class="keyword">int</span>[N][M];</span><br><span class="line">	dp[<span class="number">0</span>][<span class="number">0</span>] = str1[<span class="number">0</span>] == str2[<span class="number">0</span>] ? <span class="number">1</span> : <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt; M; j++) {</span><br><span class="line">		dp[<span class="number">0</span>][j] = str1[<span class="number">0</span>] == str2[j] ? <span class="number">1</span> : dp[<span class="number">0</span>][j - <span class="number">1</span>];</span><br><span class="line">	}</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; N; i++) {</span><br><span class="line">		dp[i][<span class="number">0</span>] = str1[i] == str2[<span class="number">0</span>] ? <span class="number">1</span> : dp[i - <span class="number">1</span>][<span class="number">0</span>];</span><br><span class="line">	}</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; N; i++) {</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">1</span>; j &lt; M; j++) {</span><br><span class="line">			<span class="keyword">int</span> p1 = dp[i - <span class="number">1</span>][j];</span><br><span class="line">			<span class="keyword">int</span> p2 = dp[i][j - <span class="number">1</span>];</span><br><span class="line">			<span class="keyword">int</span> p3 = str1[i] == str2[j] ? (<span class="number">1</span> + dp[i - <span class="number">1</span>][j - <span class="number">1</span>]) : <span class="number">0</span>;</span><br><span class="line">			dp[i][j] = Math.max(p1, Math.max(p2, p3));</span><br><span class="line">		}</span><br><span class="line">	}</span><br><span class="line">	<span class="keyword">return</span> dp[N - <span class="number">1</span>][M - <span class="number">1</span>];</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+
+    
+  </div>
+
+</article>
+
+
+   
+
+   
+  <div class="box-prev-next clearfix">
+    <a class="show pull-left" href="/2022/09/03/algorithm-dp1/">
+        <i class="icon icon-angle-left"></i>
+    </a>
+    <a class="hide pull-right" href="/">
+        <i class="icon icon-angle-right"></i>
+    </a>
+  </div>
+
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/categories/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              分类
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/roaming/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              漫游
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/atom.xml"
+              rel="noopener noreferrer"
+              target="_blank"
+              >
+              RSS
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/search/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              搜索
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+    
+    
+
+    
+
+    
+    
+
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script>
+    <div id="comment" class="vcomment" ></div>
+    <script>
+        var notify = 'false' == true ? true : false;
+        var verify = 'false' == true ? true : false;
+        var GUEST_INFO = ['nick','mail','link'];
+        var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+            return GUEST_INFO.indexOf(item) > -1
+        });
+        guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+        window.valine = new Valine({
+            el: '.vcomment',
+            notify: notify,
+            verify: verify,
+            appId: "masttnqEt9G69mj43i9oaA1C-gzGzoHsz",
+            appKey: "hgIx9VKn0GLDhRcLxQuNMl0E",
+            avatar:'mm',
+            placeholder: "Say something",
+            guest_info:guest_info,
+            pageSize:'10'
+        });
+    </script>
+  
+    
+
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>
