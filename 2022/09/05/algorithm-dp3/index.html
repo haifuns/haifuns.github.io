@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>【算法基础】暴力递归到动态规划（三） | haifuns的博客</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="算法,动态规划," />
+  
+
+  <meta name="description" content="1.最长回文子序列（LeetCode 516.）给定一个字符串 str，返回这个字符串的最长回文子序列长度。 例如：str &#x3D; “a12b3c43defghi1kpm”，最长回文子序列是 “1234321” 或 “123c321”，返回长度7。  一般来说，字符串的子序列不需要字符连续，子串需要字符连续。  此题可以利用上一篇的最长公共子序列，str 和 str 逆序的最长公共子序列就是 str">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【算法基础】暴力递归到动态规划（三）">
+<meta property="og:url" content="https://haifuns.com/2022/09/05/algorithm-dp3/index.html">
+<meta property="og:site_name" content="haifuns的博客">
+<meta property="og:description" content="1.最长回文子序列（LeetCode 516.）给定一个字符串 str，返回这个字符串的最长回文子序列长度。 例如：str &#x3D; “a12b3c43defghi1kpm”，最长回文子序列是 “1234321” 或 “123c321”，返回长度7。  一般来说，字符串的子序列不需要字符连续，子串需要字符连续。  此题可以利用上一篇的最长公共子序列，str 和 str 逆序的最长公共子序列就是 str">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2022-09-05T23:30:00.000Z">
+<meta property="article:modified_time" content="2022-09-05T15:29:00.680Z">
+<meta property="article:author" content="haifuns">
+<meta property="article:tag" content="算法">
+<meta property="article:tag" content="动态规划">
+<meta name="twitter:card" content="summary">
+
+  
+
+  
+    <link rel="icon" href="/images/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbeddx" rel="stylesheet">
+
+
+  
+    
+<link rel="stylesheet" href="/css/personal-style.css">
+
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?d3c8edb388553a2084296cbfe9a0785a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
+
+<meta name="generator" content="Hexo 5.4.2">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="haifuns的博客" type="application/atom+xml">
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header CENTER">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/categories/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            分类
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/roaming/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            漫游
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/atom.xml"
+            rel="noopener noreferrer"
+            target="_blank"
+            >
+            RSS
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/search/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-%E6%9C%80%E9%95%BF%E5%9B%9E%E6%96%87%E5%AD%90%E5%BA%8F%E5%88%97%EF%BC%88LeetCode-516-%EF%BC%89"><span class="toc-text">1.最长回文子序列（LeetCode 516.）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9A%B4%E5%8A%9B%E9%80%92%E5%BD%92"><span class="toc-text">暴力递归</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92"><span class="toc-text">动态规划</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-%E8%B1%A1%E6%A3%8B%E5%9B%BA%E5%AE%9A%E6%AD%A5%E6%95%B0%E7%A7%BB%E5%8A%A8%E5%88%B0%E7%BB%88%E7%82%B9"><span class="toc-text">2.象棋固定步数移动到终点</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9A%B4%E5%8A%9B%E9%80%92%E5%BD%92-1"><span class="toc-text">暴力递归</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92-1"><span class="toc-text">动态规划</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-%E6%B4%97%E5%92%96%E5%95%A1%E6%9D%AF%E9%97%AE%E9%A2%98%EF%BC%88%E4%BA%AC%E4%B8%9C%EF%BC%89"><span class="toc-text">3.洗咖啡杯问题（京东）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9A%B4%E5%8A%9B%E9%80%92%E5%BD%92-2"><span class="toc-text">暴力递归</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B4%AA%E5%BF%83-%E4%BC%98%E8%89%AF%E5%B0%9D%E8%AF%95%E4%BC%98%E5%8C%96"><span class="toc-text">贪心+优良尝试优化</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92-2"><span class="toc-text">动态规划</span></a></li></ol></li></ol>
+  </div>
+
+
+
+<div class="content content-post CENTER">
+   <article id="post-algorithm-dp3" class="article article-type-post" itemprop="blogPost">
+  <header class="article-header">
+    <h1 class="post-title">【算法基础】暴力递归到动态规划（三）</h1>
+
+    <div class="article-meta">
+      <span>
+        <i class="icon-calendar"></i>
+        <span>2022.09.05</span>
+      </span>
+
+      
+        <span class="article-author">
+          <i class="icon-user"></i>
+          <span>haifuns</span>
+        </span>
+      
+
+      
+  <span class="article-category">
+    <i class="icon-list"></i>
+    <a class="article-category-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a>
+  </span>
+
+
+
+      
+
+      
+      <i class="fa fa-eye"></i> 
+        <span id="busuanzi_container_page_pv">
+           &nbsp热度 <span id="busuanzi_value_page_pv">
+           <i class="fa fa-spinner fa-spin"></i></span>℃
+        </span>
+      
+      
+    </div>
+  </header>
+
+  <div class="article-content">
+    
+      <h1 id="1-最长回文子序列（LeetCode-516-）"><a href="#1-最长回文子序列（LeetCode-516-）" class="headerlink" title="1.最长回文子序列（LeetCode 516.）"></a>1.最长回文子序列（LeetCode 516.）</h1><p>给定一个字符串 str，返回这个字符串的最长回文子序列长度。</p>
+<p>例如：str = “a12b3c43defghi1kpm”，最长回文子序列是 “1234321” 或 “123c321”，返回长度7。</p>
+<blockquote>
+<p>一般来说，字符串的子序列不需要字符连续，子串需要字符连续。</p>
+</blockquote>
+<p>此题可以利用上一篇的最长公共子序列，str 和 str 逆序的最长公共子序列就是 str 的最长回文子序列。可看上一篇回忆，这里不做实现了。</p>
+<h2 id="暴力递归"><a href="#暴力递归" class="headerlink" title="暴力递归"></a>暴力递归</h2><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">lpsl</span><span class="params">(String s)</span> </span>{</span><br><span class="line">	<span class="keyword">if</span> (s == <span class="keyword">null</span> || s.length() == <span class="number">0</span>) {</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	}</span><br><span class="line">	<span class="keyword">char</span>[] str = s.toCharArray();</span><br><span class="line">	<span class="keyword">return</span> f(str, <span class="number">0</span>, str.length - <span class="number">1</span>);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// str[L..R]最长回文子序列长度返回</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">f</span><span class="params">(<span class="keyword">char</span>[] str, <span class="keyword">int</span> L, <span class="keyword">int</span> R)</span> </span>{</span><br><span class="line">	<span class="keyword">if</span> (L == R) { <span class="comment">// 剩一个字符</span></span><br><span class="line">		<span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">	}</span><br><span class="line">	<span class="keyword">if</span> (L == R - <span class="number">1</span>) { <span class="comment">// 剩两个字符</span></span><br><span class="line">		<span class="keyword">return</span> str[L] == str[R] ? <span class="number">2</span> : <span class="number">1</span>;</span><br><span class="line">	}</span><br><span class="line">	<span class="comment">// 可能1、不以L开头也不以R结尾</span></span><br><span class="line">	<span class="keyword">int</span> p1 = f(str, L + <span class="number">1</span>, R - <span class="number">1</span>);</span><br><span class="line">	<span class="comment">// 可能2、以L开头不以R结尾</span></span><br><span class="line">	<span class="keyword">int</span> p2 = f(str, L, R - <span class="number">1</span>);</span><br><span class="line">	<span class="comment">// 可能3、不以L开头以R结尾</span></span><br><span class="line">	<span class="keyword">int</span> p3 = f(str, L + <span class="number">1</span>, R);</span><br><span class="line">	<span class="comment">// 可能4、以L开头以R结尾</span></span><br><span class="line">	<span class="keyword">int</span> p4 = str[L] != str[R] ? <span class="number">0</span> : (<span class="number">2</span> + f(str, L + <span class="number">1</span>, R - <span class="number">1</span>));</span><br><span class="line">	<span class="keyword">return</span> Math.max(Math.max(p1, p2), Math.max(p3, p4));</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="动态规划"><a href="#动态规划" class="headerlink" title="动态规划"></a>动态规划</h2><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">lpsl</span><span class="params">(String s)</span> </span>{</span><br><span class="line">	<span class="keyword">if</span> (s == <span class="keyword">null</span> || s.length() == <span class="number">0</span>) {</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	}</span><br><span class="line">	<span class="keyword">char</span>[] str = s.toCharArray();</span><br><span class="line">	<span class="keyword">int</span> N = str.length;</span><br><span class="line">	<span class="comment">// L 0..N-1</span></span><br><span class="line">	<span class="comment">// R 0..N-1</span></span><br><span class="line">	<span class="comment">// L &gt; R 无效，只有表格右上部分有效</span></span><br><span class="line">	<span class="keyword">int</span>[][] dp = <span class="keyword">new</span> <span class="keyword">int</span>[N][N];</span><br><span class="line">	dp[N - <span class="number">1</span>][N - <span class="number">1</span>] = <span class="number">1</span>;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; N - <span class="number">1</span>; i++) { <span class="comment">// base case</span></span><br><span class="line">		dp[i][i] = <span class="number">1</span>; <span class="comment">// 最长对角线</span></span><br><span class="line">		dp[i][i + <span class="number">1</span>] = str[i] == str[i + <span class="number">1</span>] ? <span class="number">2</span> : <span class="number">1</span>; <span class="comment">// 最长-1对角线</span></span><br><span class="line">	}</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 每个格子计算依赖左、下、左下三个位置</span></span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> L = N - <span class="number">3</span>; L &gt;= <span class="number">0</span>; L--) { <span class="comment">// 列，从下往上</span></span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> R = L + <span class="number">2</span>; R &lt; N; R++) { <span class="comment">// 行，从左往右</span></span><br><span class="line">			dp[L][R] = Math.max(dp[L][R - <span class="number">1</span>], dp[L + <span class="number">1</span>][R]); <span class="comment">// 可能2、可能3</span></span><br><span class="line">			<span class="keyword">if</span> (str[L] == str[R]) {</span><br><span class="line">				dp[L][R] = Math.max(dp[L][R], <span class="number">2</span> + dp[L + <span class="number">1</span>][R - <span class="number">1</span>]); <span class="comment">// 可能4</span></span><br><span class="line">			}</span><br><span class="line">		}</span><br><span class="line">	}</span><br><span class="line">	<span class="keyword">return</span> dp[<span class="number">0</span>][N - <span class="number">1</span>];</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="2-象棋固定步数移动到终点"><a href="#2-象棋固定步数移动到终点" class="headerlink" title="2.象棋固定步数移动到终点"></a>2.象棋固定步数移动到终点</h1><p>想像一个象棋的棋盘，将整个棋盘放入第一象限，棋盘的左下角是(0,0)位置，那么整个棋盘就是横坐标上 9 条线、纵坐标上 10 条线的区域。<br>给定三个参数 x、y、k，返回“马”从(0,0)位置出发，必须走 k 步，最后落在(x,y)上的方法数有多少种。</p>
+<h2 id="暴力递归-1"><a href="#暴力递归-1" class="headerlink" title="暴力递归"></a>暴力递归</h2><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 10 * 9</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">jump</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b, <span class="keyword">int</span> k)</span> </span>{</span><br><span class="line">    <span class="keyword">return</span> process(<span class="number">0</span>, <span class="number">0</span>, k, a, b);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// 当前来到的位置是（x,y）</span></span><br><span class="line"><span class="comment">// 还剩下rest步需要跳</span></span><br><span class="line"><span class="comment">// 跳完rest步，正好跳到a，b的方法数是多少？</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">process</span><span class="params">(<span class="keyword">int</span> x, <span class="keyword">int</span> y, <span class="keyword">int</span> rest, <span class="keyword">int</span> a, <span class="keyword">int</span> b)</span> </span>{</span><br><span class="line">    <span class="keyword">if</span> (x &lt; <span class="number">0</span> || x &gt; <span class="number">9</span> || y &lt; <span class="number">0</span> || y &gt; <span class="number">8</span>) { <span class="comment">// 越界检查</span></span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">if</span> (rest == <span class="number">0</span>) {</span><br><span class="line">        <span class="keyword">return</span> (x == a &amp;&amp; y == b) ? <span class="number">1</span> : <span class="number">0</span>;</span><br><span class="line">    }</span><br><span class="line">    <span class="comment">// 每个点都有8种移动方式</span></span><br><span class="line">    <span class="keyword">int</span> ways = process(x + <span class="number">2</span>, y + <span class="number">1</span>, rest - <span class="number">1</span>, a, b);</span><br><span class="line">    ways += process(x + <span class="number">1</span>, y + <span class="number">2</span>, rest - <span class="number">1</span>, a, b);</span><br><span class="line">    ways += process(x - <span class="number">1</span>, y + <span class="number">2</span>, rest - <span class="number">1</span>, a, b);</span><br><span class="line">    ways += process(x - <span class="number">2</span>, y + <span class="number">1</span>, rest - <span class="number">1</span>, a, b);</span><br><span class="line">    ways += process(x - <span class="number">2</span>, y - <span class="number">1</span>, rest - <span class="number">1</span>, a, b);</span><br><span class="line">    ways += process(x - <span class="number">1</span>, y - <span class="number">2</span>, rest - <span class="number">1</span>, a, b);</span><br><span class="line">    ways += process(x + <span class="number">1</span>, y - <span class="number">2</span>, rest - <span class="number">1</span>, a, b);</span><br><span class="line">    ways += process(x + <span class="number">2</span>, y - <span class="number">1</span>, rest - <span class="number">1</span>, a, b);</span><br><span class="line">    <span class="keyword">return</span> ways;</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="动态规划-1"><a href="#动态规划-1" class="headerlink" title="动态规划"></a>动态规划</h2><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">dp</span><span class="params">(<span class="keyword">int</span> a, <span class="keyword">int</span> b, <span class="keyword">int</span> k)</span> </span>{</span><br><span class="line">    <span class="keyword">int</span>[][][] dp = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">10</span>][<span class="number">9</span>][k + <span class="number">1</span>];</span><br><span class="line">    dp[a][b][<span class="number">0</span>] = <span class="number">1</span>; <span class="comment">// 初始化第0层</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> rest = <span class="number">1</span>; rest &lt;= k; rest++) { <span class="comment">// 按层</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> x = <span class="number">0</span>; x &lt; <span class="number">10</span>; x++) {</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> y = <span class="number">0</span>; y &lt; <span class="number">9</span>; y++) {</span><br><span class="line">                <span class="keyword">int</span> ways = pick(dp, x + <span class="number">2</span>, y + <span class="number">1</span>, rest - <span class="number">1</span>);</span><br><span class="line">                ways += pick(dp, x + <span class="number">1</span>, y + <span class="number">2</span>, rest - <span class="number">1</span>);</span><br><span class="line">                ways += pick(dp, x - <span class="number">1</span>, y + <span class="number">2</span>, rest - <span class="number">1</span>);</span><br><span class="line">                ways += pick(dp, x - <span class="number">2</span>, y + <span class="number">1</span>, rest - <span class="number">1</span>);</span><br><span class="line">                ways += pick(dp, x - <span class="number">2</span>, y - <span class="number">1</span>, rest - <span class="number">1</span>);</span><br><span class="line">                ways += pick(dp, x - <span class="number">1</span>, y - <span class="number">2</span>, rest - <span class="number">1</span>);</span><br><span class="line">                ways += pick(dp, x + <span class="number">1</span>, y - <span class="number">2</span>, rest - <span class="number">1</span>);</span><br><span class="line">                ways += pick(dp, x + <span class="number">2</span>, y - <span class="number">1</span>, rest - <span class="number">1</span>);</span><br><span class="line">                dp[x][y][rest] = ways;</span><br><span class="line">            }</span><br><span class="line">        }</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> dp[<span class="number">0</span>][<span class="number">0</span>][k];</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">pick</span><span class="params">(<span class="keyword">int</span>[][][] dp, <span class="keyword">int</span> x, <span class="keyword">int</span> y, <span class="keyword">int</span> rest)</span> </span>{</span><br><span class="line">    <span class="keyword">if</span> (x &lt; <span class="number">0</span> || x &gt; <span class="number">9</span> || y &lt; <span class="number">0</span> || y &gt; <span class="number">8</span>) {</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    }</span><br><span class="line">    <span class="keyword">return</span> dp[x][y][rest];</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="3-洗咖啡杯问题（京东）"><a href="#3-洗咖啡杯问题（京东）" class="headerlink" title="3.洗咖啡杯问题（京东）"></a>3.洗咖啡杯问题（京东）</h1><p>数组 arr 代表每一个咖啡机冲一杯咖啡的时间，每个咖啡机只能串行的制造咖啡。<br>现在有 n 个人需要喝咖啡，认为每个人喝咖啡的时间非常短，冲好的时间即是喝完的时间。<br>每个人喝完之后咖啡杯可以选择洗或者自然挥发干净。只有一台洗咖啡杯的机器，只能串行的洗咖啡杯。<br>洗杯子的机器洗完一个杯子时间为 a，任何一个杯子自然挥发干净的时间为 b。<br>假设时间点从 0 开始，返回所有人喝完咖啡并洗完咖啡杯的全部过程结束后，至少来到什么时间点。</p>
+<h2 id="暴力递归-2"><a href="#暴力递归-2" class="headerlink" title="暴力递归"></a>暴力递归</h2><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">minTime</span><span class="params">(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> n, <span class="keyword">int</span> a, <span class="keyword">int</span> b)</span> </span>{</span><br><span class="line">	<span class="keyword">int</span>[] times = <span class="keyword">new</span> <span class="keyword">int</span>[arr.length];</span><br><span class="line">	<span class="keyword">int</span>[] drink = <span class="keyword">new</span> <span class="keyword">int</span>[n];</span><br><span class="line">	<span class="keyword">return</span> forceMake(arr, times, <span class="number">0</span>, drink, n, a, b);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// 每个人暴力尝试用每一个咖啡机给自己做咖啡</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">forceMake</span><span class="params">(<span class="keyword">int</span>[] arr, <span class="keyword">int</span>[] times, <span class="keyword">int</span> kth, <span class="keyword">int</span>[] drink, <span class="keyword">int</span> n, <span class="keyword">int</span> a, <span class="keyword">int</span> b)</span> </span>{</span><br><span class="line">	<span class="keyword">if</span> (kth == n) { <span class="comment">// 所有咖啡制作完成，判断清洗杯子时间</span></span><br><span class="line">		<span class="keyword">int</span>[] drinkSorted = Arrays.copyOf(drink, kth); <span class="comment">// 每杯咖啡制作完成时间</span></span><br><span class="line">		Arrays.sort(drinkSorted);</span><br><span class="line">		<span class="keyword">return</span> forceWash(drinkSorted, a, b, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">	}</span><br><span class="line">	<span class="keyword">int</span> time = Integer.MAX_VALUE;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; arr.length; i++) { <span class="comment">// 每个咖啡机</span></span><br><span class="line">		<span class="keyword">int</span> work = arr[i]; <span class="comment">// 咖啡机需要的时间</span></span><br><span class="line">		<span class="keyword">int</span> pre = times[i]; <span class="comment">// 上一杯咖啡结束时间</span></span><br><span class="line">		drink[kth] = pre + work; <span class="comment">// 当前杯咖啡制作完成时间</span></span><br><span class="line">		times[i] = pre + work; <span class="comment">// 咖啡机排队时间</span></span><br><span class="line">		time = Math.min(time, forceMake(arr, times, kth + <span class="number">1</span>, drink, n, a, b)); <span class="comment">// 下一杯咖啡所有可能..</span></span><br><span class="line">		drink[kth] = <span class="number">0</span>;</span><br><span class="line">		times[i] = pre;</span><br><span class="line">	}</span><br><span class="line">	<span class="keyword">return</span> time;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">forceWash</span><span class="params">(<span class="keyword">int</span>[] drinks, <span class="keyword">int</span> a, <span class="keyword">int</span> b, <span class="keyword">int</span> index, <span class="keyword">int</span> washLine, <span class="keyword">int</span> time)</span> </span>{</span><br><span class="line">	<span class="keyword">if</span> (index == drinks.length) {</span><br><span class="line">		<span class="keyword">return</span> time;</span><br><span class="line">	}</span><br><span class="line">	<span class="comment">// 选择一：当前index号咖啡杯，选择用洗咖啡机刷干净</span></span><br><span class="line">	<span class="keyword">int</span> wash = Math.max(drinks[index], washLine) + a;</span><br><span class="line">	<span class="keyword">int</span> ans1 = forceWash(drinks, a, b, index + <span class="number">1</span>, wash, Math.max(wash, time));</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 选择二：当前index号咖啡杯，选择自然挥发</span></span><br><span class="line">	<span class="keyword">int</span> dry = drinks[index] + b;</span><br><span class="line">	<span class="keyword">int</span> ans2 = forceWash(drinks, a, b, index + <span class="number">1</span>, washLine, Math.max(dry, time));</span><br><span class="line">	<span class="keyword">return</span> Math.min(ans1, ans2);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="贪心-优良尝试优化"><a href="#贪心-优良尝试优化" class="headerlink" title="贪心+优良尝试优化"></a>贪心+优良尝试优化</h2><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Machine</span> </span>{</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">int</span> timePoint; <span class="comment">// 时间点</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">int</span> workTime; <span class="comment">// 制作咖啡需要的时间</span></span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">Machine</span><span class="params">(<span class="keyword">int</span> t, <span class="keyword">int</span> w)</span> </span>{</span><br><span class="line">		timePoint = t;</span><br><span class="line">		workTime = w;</span><br><span class="line">	}</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">MachineComparator</span> <span class="keyword">implements</span> <span class="title">Comparator</span>&lt;<span class="title">Machine</span>&gt; </span>{</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compare</span><span class="params">(Machine o1, Machine o2)</span> </span>{</span><br><span class="line">		<span class="keyword">return</span> (o1.timePoint + o1.workTime) - (o2.timePoint + o2.workTime);</span><br><span class="line">	}</span><br><span class="line"></span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// 优良一点的暴力尝试的方法</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">minTime</span><span class="params">(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> n, <span class="keyword">int</span> a, <span class="keyword">int</span> b)</span> </span>{</span><br><span class="line">	<span class="comment">// 小根堆</span></span><br><span class="line">	PriorityQueue&lt;Machine&gt; heap = <span class="keyword">new</span> PriorityQueue&lt;Machine&gt;(<span class="keyword">new</span> MachineComparator());</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; arr.length; i++) {</span><br><span class="line">		heap.add(<span class="keyword">new</span> Machine(<span class="number">0</span>, arr[i]));</span><br><span class="line">	}</span><br><span class="line">	<span class="keyword">int</span>[] drinks = <span class="keyword">new</span> <span class="keyword">int</span>[n]; <span class="comment">// 每个人喝完咖啡时间</span></span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++) {</span><br><span class="line">		Machine cur = heap.poll();</span><br><span class="line">		cur.timePoint += cur.workTime;</span><br><span class="line">		drinks[i] = cur.timePoint;</span><br><span class="line">		heap.add(cur);</span><br><span class="line">	}</span><br><span class="line">	<span class="keyword">return</span> bestTime(drinks, a, b, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="comment">// drinks 所有杯子可以开始洗的时间</span></span><br><span class="line"><span class="comment">// wash 单杯洗干净的时间（串行）</span></span><br><span class="line"><span class="comment">// air 挥发干净的时间(并行)</span></span><br><span class="line"><span class="comment">// free 洗的机器什么时候可用</span></span><br><span class="line"><span class="comment">// drinks[index..] 都变干净，最早的结束时间（返回）</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">bestTime</span><span class="params">(<span class="keyword">int</span>[] drinks, <span class="keyword">int</span> wash, <span class="keyword">int</span> air, <span class="keyword">int</span> index, <span class="keyword">int</span> free)</span> </span>{</span><br><span class="line">	<span class="keyword">if</span> (index == drinks.length) {</span><br><span class="line">		<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">	}</span><br><span class="line">	<span class="comment">// index号杯子 决定洗</span></span><br><span class="line">	<span class="keyword">int</span> selfClean1 = Math.max(drinks[index], free) + wash;</span><br><span class="line">	<span class="comment">// 剩余杯子干净时间</span></span><br><span class="line">	<span class="keyword">int</span> restClean1 = bestTime(drinks, wash, air, index + <span class="number">1</span>, selfClean1);</span><br><span class="line">	<span class="keyword">int</span> p1 = Math.max(selfClean1, restClean1);</span><br><span class="line"></span><br><span class="line">	<span class="comment">// index号杯子 决定挥发</span></span><br><span class="line">	<span class="keyword">int</span> selfClean2 = drinks[index] + air;</span><br><span class="line">	<span class="comment">// 剩余杯子干净时间</span></span><br><span class="line">	<span class="keyword">int</span> restClean2 = bestTime(drinks, wash, air, index + <span class="number">1</span>, free);</span><br><span class="line">	<span class="keyword">int</span> p2 = Math.max(selfClean2, restClean2);</span><br><span class="line">	<span class="keyword">return</span> Math.min(p1, p2);</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="动态规划-2"><a href="#动态规划-2" class="headerlink" title="动态规划"></a>动态规划</h2><figure class="highlight java"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Machine</span> </span>{</span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">int</span> timePoint; <span class="comment">// 时间点</span></span><br><span class="line">	<span class="keyword">public</span> <span class="keyword">int</span> workTime; <span class="comment">// 制作咖啡需要的时间</span></span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="title">Machine</span><span class="params">(<span class="keyword">int</span> t, <span class="keyword">int</span> w)</span> </span>{</span><br><span class="line">		timePoint = t;</span><br><span class="line">		workTime = w;</span><br><span class="line">	}</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">MachineComparator</span> <span class="keyword">implements</span> <span class="title">Comparator</span>&lt;<span class="title">Machine</span>&gt; </span>{</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compare</span><span class="params">(Machine o1, Machine o2)</span> </span>{</span><br><span class="line">		<span class="keyword">return</span> (o1.timePoint + o1.workTime) - (o2.timePoint + o2.workTime);</span><br><span class="line">	}</span><br><span class="line"></span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// 贪心+优良尝试改动态规划</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">minTime</span><span class="params">(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> n, <span class="keyword">int</span> a, <span class="keyword">int</span> b)</span> </span>{</span><br><span class="line">	PriorityQueue&lt;Machine&gt; heap = <span class="keyword">new</span> PriorityQueue&lt;Machine&gt;(<span class="keyword">new</span> MachineComparator());</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; arr.length; i++) {</span><br><span class="line">		heap.add(<span class="keyword">new</span> Machine(<span class="number">0</span>, arr[i]));</span><br><span class="line">	}</span><br><span class="line">	<span class="keyword">int</span>[] drinks = <span class="keyword">new</span> <span class="keyword">int</span>[n];</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++) {</span><br><span class="line">		Machine cur = heap.poll();</span><br><span class="line">		cur.timePoint += cur.workTime;</span><br><span class="line">		drinks[i] = cur.timePoint;</span><br><span class="line">		heap.add(cur);</span><br><span class="line">	}</span><br><span class="line">	<span class="keyword">return</span> bestTimeDp(drinks, a, b);</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">bestTimeDp</span><span class="params">(<span class="keyword">int</span>[] drinks, <span class="keyword">int</span> wash, <span class="keyword">int</span> air)</span> </span>{</span><br><span class="line">	<span class="keyword">int</span> N = drinks.length;</span><br><span class="line">	<span class="keyword">int</span> maxFree = <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; drinks.length; i++) {</span><br><span class="line">		maxFree = Math.max(maxFree, drinks[i]) + wash;</span><br><span class="line">	}</span><br><span class="line">	<span class="keyword">int</span>[][] dp = <span class="keyword">new</span> <span class="keyword">int</span>[N + <span class="number">1</span>][maxFree + <span class="number">1</span>];</span><br><span class="line">	<span class="comment">// 最下层都是0</span></span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> index = N - <span class="number">1</span>; index &gt;= <span class="number">0</span>; index--) { <span class="comment">// 从下往上填</span></span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> free = <span class="number">0</span>; free &lt;= maxFree; free++) { <span class="comment">// 从左往右填</span></span><br><span class="line">			<span class="keyword">int</span> selfClean1 = Math.max(drinks[index], free) + wash;</span><br><span class="line">			<span class="keyword">if</span> (selfClean1 &gt; maxFree) {</span><br><span class="line">				<span class="keyword">break</span>; <span class="comment">// 因为后面的也都不用填了</span></span><br><span class="line">			}</span><br><span class="line">			<span class="comment">// index号杯子 决定洗</span></span><br><span class="line">			<span class="keyword">int</span> restClean1 = dp[index + <span class="number">1</span>][selfClean1];</span><br><span class="line">			<span class="keyword">int</span> p1 = Math.max(selfClean1, restClean1);</span><br><span class="line">			<span class="comment">// index号杯子 决定挥发</span></span><br><span class="line">			<span class="keyword">int</span> selfClean2 = drinks[index] + air;</span><br><span class="line">			<span class="keyword">int</span> restClean2 = dp[index + <span class="number">1</span>][free];</span><br><span class="line">			<span class="keyword">int</span> p2 = Math.max(selfClean2, restClean2);</span><br><span class="line">			dp[index][free] = Math.min(p1, p2);</span><br><span class="line">		}</span><br><span class="line">	}</span><br><span class="line">	<span class="keyword">return</span> dp[<span class="number">0</span>][<span class="number">0</span>];</span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>
+
+    
+  </div>
+
+</article>
+
+
+   
+
+   
+  <div class="box-prev-next clearfix">
+    <a class="show pull-left" href="/2022/09/04/algorithm-dp2/">
+        <i class="icon icon-angle-left"></i>
+    </a>
+    <a class="hide pull-right" href="/">
+        <i class="icon icon-angle-right"></i>
+    </a>
+  </div>
+
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/categories/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              分类
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/roaming/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              漫游
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/atom.xml"
+              rel="noopener noreferrer"
+              target="_blank"
+              >
+              RSS
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/search/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              搜索
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+    
+    
+
+    
+
+    
+    
+
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script>
+    <div id="comment" class="vcomment" ></div>
+    <script>
+        var notify = 'false' == true ? true : false;
+        var verify = 'false' == true ? true : false;
+        var GUEST_INFO = ['nick','mail','link'];
+        var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+            return GUEST_INFO.indexOf(item) > -1
+        });
+        guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+        window.valine = new Valine({
+            el: '.vcomment',
+            notify: notify,
+            verify: verify,
+            appId: "masttnqEt9G69mj43i9oaA1C-gzGzoHsz",
+            appKey: "hgIx9VKn0GLDhRcLxQuNMl0E",
+            avatar:'mm',
+            placeholder: "Say something",
+            guest_info:guest_info,
+            pageSize:'10'
+        });
+    </script>
+  
+    
+
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>
