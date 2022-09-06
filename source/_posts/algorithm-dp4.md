@@ -12,7 +12,6 @@ date: 2022-09-06 23:59:00
 # 1.最小距离累加和问题
 
 给定一个二维数组 matrix，一个人必须从左上角出发，最后到达右下角。
-
 中途只能向下或者向右走，沿途的数字都累加就是距离累加和。返回最小距离累加和。
 
 ## 暴力递归
@@ -101,14 +100,12 @@ public static int minPathSum(int[][] m) {
 # 2.零钱兑换问题
 
 货币数组 arr，其中都是正数，每个值都认为是一张不同的货币，即使值相同也认为是不同的。
-
 给定一个正数 aim，返回能组成 aim 的方法数。
 
 例如：arr = {1,1,1}，aim = 2
-
 第 0 个和第 1 个、第 1 个和第 2 个、第 0 个和第 2 个都能组成 2，返回 3。
 
-## &#x20;暴力递归
+## 暴力递归
 
 ```java
 public static int coinWays(int[] arr, int aim) {
@@ -127,7 +124,7 @@ public static int process(int[] arr, int index, int rest) {
 }
 ```
 
-## &#x20;动态规划
+## 动态规划
 
 ```java
 // 暴力递归改动态规划
@@ -150,11 +147,9 @@ public static int dp(int[] arr, int aim) {
 # 3.零钱兑换问题2-面值无限张
 
 面值数组 arr，其中都是正数且没有重复，每个值都认为是一种面值且张数是无限的。
-
 给定一个正数 aim，返回能组成 aim 的方法数。
 
 例如：arr = {1,2}，aim = 4
-
 1+1+1+1、1+1+2、2+2，返回 3。
 
 ## 暴力递归
@@ -228,11 +223,9 @@ public static int dp(int[] arr, int aim) {
 # 4.零钱兑换问题3-面值有限张
 
 货币数组 arr，其中都是正数，每个值都认为是一种面值。值相同的货币没有任何不同。
-
 给定一个正数 aim，返回能组成 aim 的方法数。
 
 例如：arr = {1,2,1,1,2,1,2}，aim = 4
-
 1+1+1+1、1+1+2、2+2，返回 3。
 
 ## 暴力低估
@@ -348,11 +341,8 @@ public static int dp(int[] arr, int aim) {
 # 5.区域内随机移动概率问题
 
 给定 5 个参数，N，M，row，col，k。
-
 表示在 N\*M 区域上，醉汉 Bob 初始会在 (row,col) 位置上，一共会迈出 k 步，每一步等概率向上下左右四个方向走一个单位。
-
 任何时候 Bob 只要离开 N\*M 的区域就会直接死亡。
-
 返回 k 步后，Bob 还在 N\*M 区域的概率。
 
 ## 暴力递归
@@ -410,4 +400,3 @@ public static long pick(long[][][] dp, int N, int M, int r, int c, int rest) {
 	return dp[r][c][rest];
 }
 ```
-
