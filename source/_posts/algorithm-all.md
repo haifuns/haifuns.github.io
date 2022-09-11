@@ -35,6 +35,8 @@ date: 2022-06-15 10:00:00
 - [【算法基础】暴力递归到动态规划（三）](https://haifuns.com/2022/09/05/algorithm-dp3)
 - [【算法基础】暴力递归到动态规划（四）](https://haifuns.com/2022/09/06/algorithm-dp4)
 - [【算法基础】暴力递归到动态规划（五）](https://haifuns.com/2022/09/07/algorithm-dp5)
+- [【算法基础】暴力递归到动态规划（六）](https://haifuns.com/2022/09/11/algorithm-dp6)
+- [【算法基础】暴力递归到动态规划（小结）](https://haifuns.com/2022/09/11/algorithm-dp)
 
 # 常备算法网站
 
