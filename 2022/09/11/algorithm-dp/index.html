@@ -7,25 +7,26 @@
 <head>
   <meta charset="utf-8">
   
-  <title>SVN报错Previous operation has not finished; run &#39;cleanup&#39; if it was interrupted解决 | haifuns的博客</title>
+  <title>【算法基础】暴力递归到动态规划（小结） | haifuns的博客</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
   
-    <meta name="keywords" content="SVN," />
+    <meta name="keywords" content="算法,动态规划," />
   
 
-  <meta name="description" content="现象svn因为版本冲突等问题导致的报错，无法cleanup、update、commit，报错”Previous operation has not finished; run ‘cleanup’ if it was interrupted” 解决步骤1.下载sqlite3.exehttps:&#x2F;&#x2F;www.sqlite.org&#x2F;2019&#x2F;sqlite-tools-win32-x86-3300100.z">
+  <meta name="description" content="什么样的暴力递归可以继续优化 有重复调用一个子问题的解，这类递归可以优化 如果每一个子问题都是不同解，无法优化也不用优化  暴力递归和动态规划的关系 某一个暴力递归有解的重复调用，即可以把这个暴力递归优化为动态规划 任何动态规划问题，都一定对应着某一个有重复过程的暴力递归 不是所有的暴力递归都一定对应着动态规划  暴力递归过程的设计原则（面试） 每一个可变参数的类型不要比 int 类型更加复杂 原">
 <meta property="og:type" content="article">
-<meta property="og:title" content="SVN报错Previous operation has not finished; run &#39;cleanup&#39; if it was interrupted解决">
-<meta property="og:url" content="https://haifuns.com/2019/11/02/svn/index.html">
+<meta property="og:title" content="【算法基础】暴力递归到动态规划（小结）">
+<meta property="og:url" content="https://haifuns.com/2022/09/11/algorithm-dp/index.html">
 <meta property="og:site_name" content="haifuns的博客">
-<meta property="og:description" content="现象svn因为版本冲突等问题导致的报错，无法cleanup、update、commit，报错”Previous operation has not finished; run ‘cleanup’ if it was interrupted” 解决步骤1.下载sqlite3.exehttps:&#x2F;&#x2F;www.sqlite.org&#x2F;2019&#x2F;sqlite-tools-win32-x86-3300100.z">
+<meta property="og:description" content="什么样的暴力递归可以继续优化 有重复调用一个子问题的解，这类递归可以优化 如果每一个子问题都是不同解，无法优化也不用优化  暴力递归和动态规划的关系 某一个暴力递归有解的重复调用，即可以把这个暴力递归优化为动态规划 任何动态规划问题，都一定对应着某一个有重复过程的暴力递归 不是所有的暴力递归都一定对应着动态规划  暴力递归过程的设计原则（面试） 每一个可变参数的类型不要比 int 类型更加复杂 原">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2019-11-02T21:21:00.000Z">
-<meta property="article:modified_time" content="2022-09-11T08:41:04.592Z">
+<meta property="article:published_time" content="2022-09-11T16:40:00.000Z">
+<meta property="article:modified_time" content="2022-09-11T08:41:04.584Z">
 <meta property="article:author" content="haifuns">
-<meta property="article:tag" content="SVN">
+<meta property="article:tag" content="算法">
+<meta property="article:tag" content="动态规划">
 <meta name="twitter:card" content="summary">
 
   
@@ -188,20 +189,20 @@
 
   <div id="toc" class="toc-article">
     <strong class="toc-title">文章目录</strong>
-    <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%8E%B0%E8%B1%A1"><span class="toc-text">现象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%A3%E5%86%B3%E6%AD%A5%E9%AA%A4"><span class="toc-text">解决步骤</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%A0%B7%E7%9A%84%E6%9A%B4%E5%8A%9B%E9%80%92%E5%BD%92%E5%8F%AF%E4%BB%A5%E7%BB%A7%E7%BB%AD%E4%BC%98%E5%8C%96"><span class="toc-text">什么样的暴力递归可以继续优化</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9A%B4%E5%8A%9B%E9%80%92%E5%BD%92%E5%92%8C%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="toc-text">暴力递归和动态规划的关系</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9A%B4%E5%8A%9B%E9%80%92%E5%BD%92%E8%BF%87%E7%A8%8B%E7%9A%84%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99%EF%BC%88%E9%9D%A2%E8%AF%95%EF%BC%89"><span class="toc-text">暴力递归过程的设计原则（面试）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E7%9A%844%E7%A7%8D%E5%B0%9D%E8%AF%95%E6%A8%A1%E5%9E%8B"><span class="toc-text">常见的4种尝试模型</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E6%89%BE%E5%88%B0%E6%9F%90%E4%B8%AA%E9%97%AE%E9%A2%98%E7%9A%84%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E6%96%B9%E5%BC%8F"><span class="toc-text">如何找到某个问题的动态规划方式</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9A%B4%E5%8A%9B%E9%80%92%E5%BD%92%E5%88%B0%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E7%9A%84%E5%A5%97%E8%B7%AF"><span class="toc-text">暴力递归到动态规划的套路</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E7%9A%84%E8%BF%9B%E4%B8%80%E6%AD%A5%E4%BC%98%E5%8C%96"><span class="toc-text">动态规划的进一步优化</span></a></li></ol>
   </div>
 
 
 
 <div class="content content-post CENTER">
-   <article id="post-svn" class="article article-type-post" itemprop="blogPost">
+   <article id="post-algorithm-dp" class="article article-type-post" itemprop="blogPost">
   <header class="article-header">
-    <h1 class="post-title">SVN报错Previous operation has not finished; run &#39;cleanup&#39; if it was interrupted解决</h1>
+    <h1 class="post-title">【算法基础】暴力递归到动态规划（小结）</h1>
 
     <div class="article-meta">
       <span>
         <i class="icon-calendar"></i>
-        <span>2019.11.02</span>
+        <span>2022.09.11</span>
       </span>
 
       
@@ -214,7 +215,7 @@
       
   <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/%E5%B7%A5%E5%85%B7/">工具</a>
+    <a class="article-category-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a>
   </span>
 
 
@@ -234,13 +235,47 @@
 
   <div class="article-content">
     
-      <h3 id="现象"><a href="#现象" class="headerlink" title="现象"></a>现象</h3><p>svn因为版本冲突等问题导致的报错，无法cleanup、update、commit，报错”Previous operation has not finished; run ‘cleanup’ if it was interrupted”</p>
-<h3 id="解决步骤"><a href="#解决步骤" class="headerlink" title="解决步骤"></a>解决步骤</h3><p>1.下载sqlite3.exe<br><a target="_blank" rel="noopener" href="https://www.sqlite.org/2019/sqlite-tools-win32-x86-3300100.zip">https://www.sqlite.org/2019/sqlite-tools-win32-x86-3300100.zip</a></p>
-<p>2.将sqlite3.exe复制到项目.svn文件夹中，通wc.db文件同目录</p>
-<p>3.执行命令</p>
-<p>cd 到.svn目录</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">D:\SVN\***\.svn&gt;sqlite3.exe wc.db</span><br><span class="line">SQLite version 3.30.1 2019-10-10 20:19:45</span><br><span class="line">Enter ".help" for usage hints.</span><br><span class="line">sqlite&gt; .table</span><br><span class="line">ACTUAL_NODE    NODES          PRISTINE       WC_LOCK</span><br><span class="line">EXTERNALS      NODES_BASE     REPOSITORY     WORK_QUEUE</span><br><span class="line">LOCK           NODES_CURRENT  WCROOT</span><br><span class="line">sqlite&gt; DELETE FROM WORK_QUEUE;</span><br><span class="line">sqlite&gt;</span><br></pre></td></tr></tbody></table></figure>
-<p>4.执行svn的clean up操作</p>
+      <h1 id="什么样的暴力递归可以继续优化"><a href="#什么样的暴力递归可以继续优化" class="headerlink" title="什么样的暴力递归可以继续优化"></a>什么样的暴力递归可以继续优化</h1><ol>
+<li>有重复调用一个子问题的解，这类递归可以优化</li>
+<li>如果每一个子问题都是不同解，无法优化也不用优化</li>
+</ol>
+<h1 id="暴力递归和动态规划的关系"><a href="#暴力递归和动态规划的关系" class="headerlink" title="暴力递归和动态规划的关系"></a>暴力递归和动态规划的关系</h1><ol>
+<li>某一个暴力递归有解的重复调用，即可以把这个暴力递归优化为动态规划</li>
+<li>任何动态规划问题，都一定对应着某一个有重复过程的暴力递归</li>
+<li>不是所有的暴力递归都一定对应着动态规划</li>
+</ol>
+<h1 id="暴力递归过程的设计原则（面试）"><a href="#暴力递归过程的设计原则（面试）" class="headerlink" title="暴力递归过程的设计原则（面试）"></a>暴力递归过程的设计原则（面试）</h1><ol>
+<li>每一个可变参数的类型不要比 int 类型更加复杂</li>
+<li>原则1 可以违反，可以让类型突破到一维线性结构，但必须是单一可变参数</li>
+<li>如果原则1 被违反，但是不违反原则2，只需要做到记忆化搜索即可</li>
+<li>可变参数的个数应能少则少</li>
+</ol>
+<h1 id="常见的4种尝试模型"><a href="#常见的4种尝试模型" class="headerlink" title="常见的4种尝试模型"></a>常见的4种尝试模型</h1><ol>
+<li>从左往右的尝试模型</li>
+<li>范围上的尝试模型</li>
+<li>多样本位置全对应的尝试模型</li>
+<li>寻找业务限制的尝试模型</li>
+</ol>
+<h1 id="如何找到某个问题的动态规划方式"><a href="#如何找到某个问题的动态规划方式" class="headerlink" title="如何找到某个问题的动态规划方式"></a>如何找到某个问题的动态规划方式</h1><ol>
+<li><strong>设计暴力递归：重要原则+4种常见尝试模型（重要）</strong></li>
+<li>分析有没有重复解：套路解决</li>
+<li>用记忆化搜索：用严格表结构实现动态规划，套路解决</li>
+<li>看看能够继续优化：套路解决</li>
+</ol>
+<h1 id="暴力递归到动态规划的套路"><a href="#暴力递归到动态规划的套路" class="headerlink" title="暴力递归到动态规划的套路"></a>暴力递归到动态规划的套路</h1><ol>
+<li>已经有个了一个不违反原则的暴力递归，并且存在解的重复调用</li>
+<li>找到哪些参数的变化会影响返回值，对每一个列出变化范围</li>
+<li>参数间的所有组合数量意味着表的大小</li>
+<li>总能改出记忆化搜索的方法，也就是傻缓存，非常容易得到</li>
+<li>规定好严格表的大小，分析位置的依赖顺序，然后从基础填写到最终解</li>
+<li>对于有枚举行为的决策过程，进一步优化</li>
+</ol>
+<h1 id="动态规划的进一步优化"><a href="#动态规划的进一步优化" class="headerlink" title="动态规划的进一步优化"></a>动态规划的进一步优化</h1><ol>
+<li>空间压缩</li>
+<li>状态化简</li>
+<li>四边形不等式</li>
+<li>其他优化技巧</li>
+</ol>
 
     
   </div>
@@ -252,10 +287,10 @@
 
    
   <div class="box-prev-next clearfix">
-    <a class="show pull-left" href="/2019/11/02/frp/">
+    <a class="show pull-left" href="/2022/09/11/algorithm-dp6/">
         <i class="icon icon-angle-left"></i>
     </a>
-    <a class="show pull-right" href="/2019/11/21/mybatis-sharding/">
+    <a class="hide pull-right" href="/">
         <i class="icon icon-angle-right"></i>
     </a>
   </div>
