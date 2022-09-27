@@ -5,7 +5,6 @@ tags:
   - 死锁
 categories:
   - 排查经验
-  - MySQL
 date: 2022-07-26 18:00:00
 
 ---
