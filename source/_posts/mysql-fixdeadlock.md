@@ -1,11 +1,11 @@
-title: 记一次mysql index_merge引发的死锁分析
+title: 【排查经验】记一次mysql index_merge引发的死锁分析
 author: haifun
 tags:
   - MySQL
   - 死锁
 categories:
-  - MySQL
   - 排查经验
+  - MySQL
 date: 2022-07-26 18:00:00
 
 ---
