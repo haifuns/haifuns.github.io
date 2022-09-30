@@ -177,11 +177,11 @@ Netty 主要基于主从 Reactors 多线程模型做了一定的改进，其中�
 5. NioEventLoopGroup 可以有多个线程, 即可以含有多个 NioEventLoop。
 6. 每个 Boss NioEventLoop 循环执行的步骤：
     - 轮询 accept 事件。
-    - 处理 accept 事件，与 client 建立连接，生成 NioScocketChannel ，并将其注册到某个 Worker NIOEventLoop 上 的 selector。
+    - 处理 accept 事件，与 client 建立连接，生成 NioSocketChannel ，并将其注册到某个 Worker NIOEventLoop 上 的 selector。
     - 处理任务队列的任务，即 runAllTasks。
 7. 每个 Worker NIOEventLoop 循环执行的步骤：
     - 轮询 read，write 事件。
-    - 处理 I/O 事件， 即read ，write 事件，在对应 NioScocketChannel 处理业务。
+    - 处理 I/O 事件， 即read ，write 事件，在对应 NioSocketChannel 处理业务。
     - 处理任务队列的任务，即 runAllTasks。
 8. 每个 Worker NIOEventLoop 处理业务时，会使用pipeline（管道），pipeline 中包含了 channel , 即通过pipeline 可以获取到对应通道, 管道中维护了很多的handler 处理器用来处理 channel 中的数据。
 
