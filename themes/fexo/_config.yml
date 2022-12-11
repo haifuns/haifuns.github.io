@@ -19,9 +19,9 @@ home_nav:
 #  - name: Project
 #    url: /project/
 #    target_blank: true #在新页面打开
-  - name: Roaming
-    url: /roaming/
-    target_blank: false
+#  - name: Roaming
+#    url: /roaming/
+#    target_blank: false
   - name: Github
     url: https://github.com/haifuns
     target_blank: true
@@ -40,9 +40,9 @@ page_nav:
   - name: 标签
     url: /tags/
     target_blank: false
-  - name: 漫游
-    url: /roaming/
-    target_blank: false
+#  - name: 漫游
+#    url: /roaming/
+#    target_blank: false
   - name: 关于
     url: /about/
     target_blank: false
