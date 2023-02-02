@@ -1,4 +1,4 @@
-name: Generate Github-Pages from markdown files
+name: Generate Github-Pages
 
 on:
   push:
