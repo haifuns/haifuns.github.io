@@ -23,7 +23,7 @@ jobs:
         run: |
           export TZ='Asia/Shanghai'
           npm install
-          npm run build
+          hexo generate
       - name: Deploy Github-Pages
         uses: JamesIves/github-pages-deploy-action@4.1.4
         with:
@@ -31,7 +31,7 @@ jobs:
           folder: public
 
       - name: Refresh CDN
-        run: npm run deoply:refresh-cdn
+        run: npm run deploy:refresh-cdn
         env:
           CDN_ID: ${{ secrets.CDN_ID }}
           CDN_KEY: ${{ secrets.CDN_KEY }}
