@@ -15,20 +15,20 @@
     <meta name="keywords" content="Spring," />
   
 
-  <meta name="description" content="首先容器启动后，对bean进行初始化。 按照bean定义注入属性。 检测是否实现了XXXAware接口，如BeanNameAware等，将相关实例注入给bean。 以上步骤，bean对象已正确构造，通过实现BeanPostProcessor接口，postProcessBeforeInitialzation方法再进行一些自定义方法处理。 BeanPostProcessor前置处理完成后，可">
+  <meta name="description" content="首先容器启动后，对bean进行初始化。 按照bean定义注入属性。 检测是否实现了XXAware接口，如BeanNameAware等，将相关信息注入到bean实例。 经过以上步骤，bean实例已正确构造，通过实现BeanPostProcessor#postProcessBeforeInitialzation进行前置处理。 BeanPostProcessor前置处理完成后，可以通过实现In">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Spring生命周期">
 <meta property="og:url" content="https://haifuns.com/2019/11/21/flow/index.html">
 <meta property="og:site_name" content="haifuns的博客">
-<meta property="og:description" content="首先容器启动后，对bean进行初始化。 按照bean定义注入属性。 检测是否实现了XXXAware接口，如BeanNameAware等，将相关实例注入给bean。 以上步骤，bean对象已正确构造，通过实现BeanPostProcessor接口，postProcessBeforeInitialzation方法再进行一些自定义方法处理。 BeanPostProcessor前置处理完成后，可">
+<meta property="og:description" content="首先容器启动后，对bean进行初始化。 按照bean定义注入属性。 检测是否实现了XXAware接口，如BeanNameAware等，将相关信息注入到bean实例。 经过以上步骤，bean实例已正确构造，通过实现BeanPostProcessor#postProcessBeforeInitialzation进行前置处理。 BeanPostProcessor前置处理完成后，可以通过实现In">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/img/SpringBean.png">
+<meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/img/spring.png">
 <meta property="article:published_time" content="2019-11-21T13:43:00.000Z">
-<meta property="article:modified_time" content="2023-02-02T07:08:56.066Z">
+<meta property="article:modified_time" content="2023-02-14T09:10:28.328Z">
 <meta property="article:author" content="haifuns">
 <meta property="article:tag" content="Spring">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/img/SpringBean.png">
+<meta name="twitter:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/img/spring.png">
 
   
 
@@ -220,22 +220,22 @@
 
   <div class="article-content">
     
-      <img width="45%" src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/img/SpringBean.png">
+      <img width="45%" src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/img/spring.png">
 
 <br>
 
-<ul>
+<ol>
 <li>首先容器启动后，对bean进行初始化。</li>
 <li>按照bean定义注入属性。</li>
-<li>检测是否实现了XXXAware接口，如BeanNameAware等，将相关实例注入给bean。</li>
-<li>以上步骤，bean对象已正确构造，通过实现BeanPostProcessor接口，postProcessBeforeInitialzation方法再进行一些自定义方法处理。</li>
-<li>BeanPostProcessor前置处理完成后，可以实现@PostConstruct、afterPropertiesSet、init-method方法，增强自定义逻辑。</li>
-<li>通过实现BeanPostProcessor接口，再进行postProcessBeforInitialzation后置处理。</li>
+<li>检测是否实现了XXAware接口，如BeanNameAware等，将相关信息注入到bean实例。</li>
+<li>经过以上步骤，bean实例已正确构造，通过实现BeanPostProcessor#postProcessBeforeInitialzation进行前置处理。</li>
+<li>BeanPostProcessor前置处理完成后，可以通过实现InitializingBean#afterPropertiesSet、@PostConstruct、init-method方法，增强自定义逻辑。</li>
+<li>通过实现BeanPostProcessor#postProcessAfterInitialzation进行后置处理。</li>
 <li>此时bean准备已完成，可以使用。</li>
 <li>容器关闭后，如果bean实现了DisposableBean接口，会执行destory方法。</li>
 <li>最后执行自定义的销毁前destory-method指定方法。</li>
-<li>bean销毁完成。<a target="_blank" rel="noopener" href="https://github.com/haifuns/redisson.git">https://github.com/haifuns/redisson.git</a></li>
-</ul>
+<li>bean销毁完成。</li>
+</ol>
 
     
   </div>
