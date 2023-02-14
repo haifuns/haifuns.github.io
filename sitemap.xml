@@ -2,6 +2,60 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://haifuns.com/2021/01/24/redis-05/</loc>
+    
+    <lastmod>2023-02-14</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://haifuns.com/2021/02/01/redis-06/</loc>
+    
+    <lastmod>2023-02-14</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://haifuns.com/2021/02/13/redis-07/</loc>
+    
+    <lastmod>2023-02-14</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://haifuns.com/2021/12/11/redission-01/</loc>
+    
+    <lastmod>2023-02-14</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://haifuns.com/2021/12/13/redission-02/</loc>
+    
+    <lastmod>2023-02-14</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://haifuns.com/2021/12/14/redission-03/</loc>
+    
+    <lastmod>2023-02-14</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://haifuns.com/2021/12/15/redission-04/</loc>
     
     <lastmod>2023-02-14</lastmod>
@@ -228,6 +282,78 @@
   
   <url>
     <loc>https://haifuns.com/tags/index.html</loc>
+    
+    <lastmod>2023-02-14</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://haifuns.com/2020/12/26/java-concurrent-13/</loc>
+    
+    <lastmod>2023-02-14</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://haifuns.com/2020/12/26/java-concurrent-14/</loc>
+    
+    <lastmod>2023-02-14</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://haifuns.com/2020/12/26/java-concurrent-2/</loc>
+    
+    <lastmod>2023-02-14</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://haifuns.com/2020/12/26/java-concurrent-3/</loc>
+    
+    <lastmod>2023-02-14</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://haifuns.com/2020/12/26/java-concurrent-4/</loc>
+    
+    <lastmod>2023-02-14</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://haifuns.com/2020/12/26/java-concurrent-5/</loc>
+    
+    <lastmod>2023-02-14</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://haifuns.com/2020/12/26/java-concurrent-6/</loc>
+    
+    <lastmod>2023-02-14</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://haifuns.com/2020/12/26/java-concurrent-7/</loc>
     
     <lastmod>2023-02-14</lastmod>
     
@@ -560,7 +686,7 @@
   </url>
   
   <url>
-    <loc>https://haifuns.com/2021/01/24/redis-05/</loc>
+    <loc>https://haifuns.com/2022/06/15/algorithm-all/</loc>
     
     <lastmod>2023-02-14</lastmod>
     
@@ -569,7 +695,7 @@
   </url>
   
   <url>
-    <loc>https://haifuns.com/2021/02/01/redis-06/</loc>
+    <loc>https://haifuns.com/2022/07/30/algorithm-binarytree-problem1/</loc>
     
     <lastmod>2023-02-14</lastmod>
     
@@ -578,7 +704,7 @@
   </url>
   
   <url>
-    <loc>https://haifuns.com/2021/02/13/redis-07/</loc>
+    <loc>https://haifuns.com/2022/08/16/algorithm-binarytree-problem2/</loc>
     
     <lastmod>2023-02-14</lastmod>
     
@@ -587,7 +713,7 @@
   </url>
   
   <url>
-    <loc>https://haifuns.com/2021/12/11/redission-01/</loc>
+    <loc>https://haifuns.com/2022/07/30/algorithm-binarytree/</loc>
     
     <lastmod>2023-02-14</lastmod>
     
@@ -596,7 +722,7 @@
   </url>
   
   <url>
-    <loc>https://haifuns.com/2021/12/13/redission-02/</loc>
+    <loc>https://haifuns.com/2022/06/20/algorithm-complexity/</loc>
     
     <lastmod>2023-02-14</lastmod>
     
@@ -605,7 +731,7 @@
   </url>
   
   <url>
-    <loc>https://haifuns.com/2021/12/14/redission-03/</loc>
+    <loc>https://haifuns.com/2022/06/24/algorithm-datastructure/</loc>
     
     <lastmod>2023-02-14</lastmod>
     
@@ -1002,132 +1128,6 @@
   
   <url>
     <loc>https://haifuns.com/2020/12/26/java-concurrent-12/</loc>
-    
-    <lastmod>2023-02-14</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://haifuns.com/2020/12/26/java-concurrent-13/</loc>
-    
-    <lastmod>2023-02-14</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://haifuns.com/2020/12/26/java-concurrent-14/</loc>
-    
-    <lastmod>2023-02-14</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://haifuns.com/2020/12/26/java-concurrent-2/</loc>
-    
-    <lastmod>2023-02-14</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://haifuns.com/2020/12/26/java-concurrent-3/</loc>
-    
-    <lastmod>2023-02-14</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://haifuns.com/2020/12/26/java-concurrent-4/</loc>
-    
-    <lastmod>2023-02-14</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://haifuns.com/2020/12/26/java-concurrent-5/</loc>
-    
-    <lastmod>2023-02-14</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://haifuns.com/2020/12/26/java-concurrent-6/</loc>
-    
-    <lastmod>2023-02-14</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://haifuns.com/2020/12/26/java-concurrent-7/</loc>
-    
-    <lastmod>2023-02-14</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://haifuns.com/2022/06/15/algorithm-all/</loc>
-    
-    <lastmod>2023-02-14</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://haifuns.com/2022/07/30/algorithm-binarytree-problem1/</loc>
-    
-    <lastmod>2023-02-14</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://haifuns.com/2022/08/16/algorithm-binarytree-problem2/</loc>
-    
-    <lastmod>2023-02-14</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://haifuns.com/2022/07/30/algorithm-binarytree/</loc>
-    
-    <lastmod>2023-02-14</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://haifuns.com/2022/06/20/algorithm-complexity/</loc>
-    
-    <lastmod>2023-02-14</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://haifuns.com/2022/06/24/algorithm-datastructure/</loc>
     
     <lastmod>2023-02-14</lastmod>
     
