@@ -8,9 +8,7 @@ date: 2019-11-21 21:43:00
 copyright: true
 ---
 
-<img width=45% src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/img/spring.png" >
-
-<br>
+![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/img/spring.png)
 
 1. 首先容器启动后，对bean进行初始化。
 2. 按照bean定义注入属性。
