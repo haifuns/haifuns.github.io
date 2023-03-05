@@ -7,25 +7,25 @@
 <head>
   <meta charset="utf-8">
   
-  <title>算法体系学习 | haifun&#39;s blog</title>
+  <title>【ES】写入原理 | haifun&#39;s blog</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
   
-    <meta name="keywords" content="算法," />
+    <meta name="keywords" content="Elasticsearch," />
   
 
-  <meta name="description" content="算法学习路线 【算法基础】复杂度分析 【算法基础】二分法 【算法基础】异或运算 【算法基础】链表、栈、队列 【算法基础】递归 【算法基础】归并排序 【算法基础】快速排序 【算法基础】堆和堆排序 【算法基础】加强堆 【算法基础】前缀树 【算法基础】不基于比较的排序（计数、基数） 【算法基础】排序算法（总） 【算法基础】链表专练 【算法基础】二叉树 【算法基础】二叉树专练（一） 【算法基础】二叉树专练">
+  <meta name="description" content="写索引流程写索引只能先写主分片然后同步到副本，当一个写请求被发送到某个节点后，这个节点会充当协调节点，根据路由策略找到目标主分片，然后协调节点从自身存储的分片信息中找到目标主分片所在节点，如果目标分片在其他节点上，就转发请求到该节点上。 分片路由策略如下： 1shard &#x3D; hash(routing) % number_of_primary_shards  routing 通过 Hash 函数生成">
 <meta property="og:type" content="article">
-<meta property="og:title" content="算法体系学习">
-<meta property="og:url" content="https://haifuns.com/2022/06/15/algorithm-all/index.html">
+<meta property="og:title" content="【ES】写入原理">
+<meta property="og:url" content="https://haifuns.com/2023/03/05/es-03/index.html">
 <meta property="og:site_name" content="haifun&#39;s blog">
-<meta property="og:description" content="算法学习路线 【算法基础】复杂度分析 【算法基础】二分法 【算法基础】异或运算 【算法基础】链表、栈、队列 【算法基础】递归 【算法基础】归并排序 【算法基础】快速排序 【算法基础】堆和堆排序 【算法基础】加强堆 【算法基础】前缀树 【算法基础】不基于比较的排序（计数、基数） 【算法基础】排序算法（总） 【算法基础】链表专练 【算法基础】二叉树 【算法基础】二叉树专练（一） 【算法基础】二叉树专练">
+<meta property="og:description" content="写索引流程写索引只能先写主分片然后同步到副本，当一个写请求被发送到某个节点后，这个节点会充当协调节点，根据路由策略找到目标主分片，然后协调节点从自身存储的分片信息中找到目标主分片所在节点，如果目标分片在其他节点上，就转发请求到该节点上。 分片路由策略如下： 1shard &#x3D; hash(routing) % number_of_primary_shards  routing 通过 Hash 函数生成">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2022-06-15T02:00:00.000Z">
+<meta property="article:published_time" content="2023-03-05T06:00:00.000Z">
 <meta property="article:modified_time" content="2023-03-05T05:55:07.647Z">
 <meta property="article:author" content="haifun">
-<meta property="article:tag" content="算法">
+<meta property="article:tag" content="Elasticsearch">
 <meta name="twitter:card" content="summary">
 
   
@@ -177,20 +177,20 @@
 
   <div id="toc" class="toc-article">
     <strong class="toc-title">文章目录</strong>
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AE%97%E6%B3%95%E5%AD%A6%E4%B9%A0%E8%B7%AF%E7%BA%BF"><span class="toc-text">算法学习路线</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%B8%B8%E5%A4%87%E7%AE%97%E6%B3%95%E7%BD%91%E7%AB%99"><span class="toc-text">常备算法网站</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%86%99%E7%B4%A2%E5%BC%95%E6%B5%81%E7%A8%8B"><span class="toc-text">写索引流程</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8"><span class="toc-text">数据存储</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%AE%B5%E5%90%88%E5%B9%B6"><span class="toc-text">段合并</span></a></li></ol>
   </div>
 
 
 
 <div class="content content-post CENTER">
-   <article id="post-algorithm-all" class="article article-type-post" itemprop="blogPost">
+   <article id="post-es-03" class="article article-type-post" itemprop="blogPost">
   <header class="article-header">
-    <h1 class="post-title">算法体系学习</h1>
+    <h1 class="post-title">【ES】写入原理</h1>
 
     <div class="article-meta">
       <span>
         <i class="icon-calendar"></i>
-        <span>2022.06.15</span>
+        <span>2023.03.05</span>
       </span>
 
       
@@ -203,7 +203,7 @@
       
   <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/%E7%AE%97%E6%B3%95/">算法</a>
+    <a class="article-category-link" href="/categories/%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E/">搜索引擎</a>
   </span>
 
 
@@ -223,40 +223,47 @@
 
   <div class="article-content">
     
-      <h1 id="算法学习路线"><a href="#算法学习路线" class="headerlink" title="算法学习路线"></a>算法学习路线</h1><ul>
-<li><a href="https://haifuns.com/2022/06/20/algorithm-complexity/">【算法基础】复杂度分析</a></li>
-<li><a href="https://haifuns.com/2022/06/21/algorithm-dichotomy/">【算法基础】二分法</a></li>
-<li><a href="https://haifuns.com/2022/06/22/algorithm-xor/">【算法基础】异或运算</a></li>
-<li><a href="https://haifuns.com/2022/06/24/algorithm-datastructure">【算法基础】链表、栈、队列</a></li>
-<li><a href="https://haifuns.com/2022/06/26/algorithm-recursion">【算法基础】递归</a></li>
-<li><a href="https://haifuns.com/2022/06/29/algorithm-mergesort">【算法基础】归并排序</a></li>
-<li><a href="https://haifuns.com/2022/06/30/algorithm-quicksort">【算法基础】快速排序</a></li>
-<li><a href="https://haifuns.com/2022/07/04/algorithm-heapandheapsort">【算法基础】堆和堆排序</a></li>
-<li><a href="https://haifuns.com/2022/07/06/algorithm-heapgreater">【算法基础】加强堆</a></li>
-<li><a href="https://haifuns.com/2022/07/17/algorithm-trietree">【算法基础】前缀树</a></li>
-<li><a href="https://haifuns.com/2022/07/17/algorithm-uncomparesort">【算法基础】不基于比较的排序（计数、基数）</a></li>
-<li><a href="https://haifuns.com/2022/07/18/algorithm-sort/">【算法基础】排序算法（总）</a></li>
-<li><a href="https://haifuns.com/2022/07/25/algorithm-linkedlist/">【算法基础】链表专练</a></li>
-<li><a href="https://haifuns.com/2022/07/30/algorithm-binarytree/">【算法基础】二叉树</a></li>
-<li><a href="https://haifuns.com/2022/07/30/algorithm-binarytree-problem1/">【算法基础】二叉树专练（一）</a></li>
-<li><a href="https://haifuns.com/2022/08/16/algorithm-binarytree-problem2/">【算法基础】二叉树专练（二）</a></li>
-<li><a href="https://haifuns.com/2022/08/28/algorithm-greddy">【算法基础】贪心算法</a></li>
-<li><a href="https://haifuns.com/2022/08/30/algorithm-unionfind">【算法基础】并查集</a></li>
-<li><a href="https://haifuns.com/2022/08/31/algorithm-graph">【算法基础】图</a></li>
-<li><a href="https://haifuns.com/2022/09/01/algorithm-recursion-procedure">【算法基础】经典递归过程</a></li>
-<li><a href="https://haifuns.com/2022/09/03/algorithm-dp1">【算法基础】暴力递归到动态规划（一）</a></li>
-<li><a href="https://haifuns.com/2022/09/04/algorithm-dp2">【算法基础】暴力递归到动态规划（二）</a></li>
-<li><a href="https://haifuns.com/2022/09/05/algorithm-dp3">【算法基础】暴力递归到动态规划（三）</a></li>
-<li><a href="https://haifuns.com/2022/09/06/algorithm-dp4">【算法基础】暴力递归到动态规划（四）</a></li>
-<li><a href="https://haifuns.com/2022/09/07/algorithm-dp5">【算法基础】暴力递归到动态规划（五）</a></li>
-<li><a href="https://haifuns.com/2022/09/11/algorithm-dp6">【算法基础】暴力递归到动态规划（六）</a></li>
-<li><a href="https://haifuns.com/2022/09/11/algorithm-dp">【算法基础】暴力递归到动态规划（小结）</a></li>
+      <h1 id="写索引流程"><a href="#写索引流程" class="headerlink" title="写索引流程"></a>写索引流程</h1><p>写索引只能先写主分片然后同步到副本，当一个写请求被发送到某个节点后，这个节点会充当协调节点，根据路由策略找到目标主分片，然后协调节点从自身存储的分片信息中找到目标主分片所在节点，如果目标分片在其他节点上，就转发请求到该节点上。</p>
+<p>分片路由策略如下：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">shard = hash(routing) % number_of_primary_shards</span><br></pre></td></tr></tbody></table></figure>
+
+<p>routing 通过 Hash 函数生成一个数字，然后除以主分片数量后余数为目标分片，范围是 <code>0 ~ 主分片数 - 1</code>。</p>
+<p>routing 默认是文档的 <code>_id</code>，可以设置成一个自定义的值。</p>
+<blockquote>
+<p>通过了解路由策略也就可以理解为什么在创建索引时就要确定好分片数量并且不可变更，因为如果数量变化，那么所有之前路由的值都会失效，数据也就找不到了。</p>
+</blockquote>
+<p>当写请求被路由到所在主分片对应的节点上后，该数据节点会接受请求并写入到磁盘，然后并发将数据复制到所有副本分片（乐观锁），一旦所有副本都响应成功，主分片所在节点会向协调节点返回成功，协调节点向客户端返回成功。</p>
+<h1 id="数据存储"><a href="#数据存储" class="headerlink" title="数据存储"></a>数据存储</h1><p>ES 内部是通过 Lucene 完成索引的创建写入和搜索，当新增一个文档时，Lucene 首先会进行分词等预处理，然后将文档索引写入到内存缓冲区中，并将本次操作写入事务日志（translog，类似mysql的binlog）用于宕机后内存数据的恢复。translog 写入时会先被写到 os cache，默认情况下每隔 5s 会被 flush 到磁盘中，因此宕机最多会丢失 5s 数据。</p>
+<p>默认情况下，Lucene 每隔 1s （<code>refresh_interval</code>）将内存缓冲区中的数据刷到文件系统缓存中，称为一个段（segment），一旦刷入文件系统缓存，segment才可以被用于索引。</p>
+<blockquote>
+<p><code>refresh_interval</code>决定了 ES 数据的实时性，因此 ES 是一个准实时系统。</p>
+</blockquote>
+<p>segment 在磁盘中是不可修改的，因此避免了磁盘的随机写，所有随机写都在内存中进行。随着时间推移，segment 越来越多，默认情况下 Lucene 每隔 30min 或 segment 空间大于 512M，将缓存中的 segment 持久化到磁盘，称为一个 commit point，此时会删除对应的 translog。 </p>
+<p>segement 存储文件不可修改，新增、更新和删除处理过程如下：</p>
+<ul>
+<li>新增：数据是新的，只需要对当前文档新增一个 segment</li>
+<li>删除：不会移除旧 segemnt 中的文档，而是新增一个 <code>.del</code> 文件标记删除，被标记删除的文档仍可以被查询到，但在最终结果返回前会被移除</li>
+<li>更新：相当于删除+新增两个动作，旧版本文档会被在 <code>.del</code> 文件中标记删除，同时新版本文档会被索引到新 segment。两个版本的文档都会被查询匹配到，但旧版本文档会在结果集返回前被移除。</li>
 </ul>
-<h1 id="常备算法网站"><a href="#常备算法网站" class="headerlink" title="常备算法网站"></a>常备算法网站</h1><ul>
-<li><a target="_blank" rel="noopener" href="https://leetcode.cn/problemset/all/">leetcode：算法题库</a></li>
-<li><a target="_blank" rel="noopener" href="https://visualgo.net/zh">visualgo：算法可视化</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.bigocheatsheet.com/">bigocheatsheet：常用算法数据结构复杂度速查表</a></li>
+<p>segment 不可修改优缺点：</p>
+<ul>
+<li>优点<ul>
+<li>不需要锁，因为没有并发修改数据的问题。</li>
+<li>性能提升，由于其不变性，一旦索引被读入内核的文件系统缓存，便会驻留。只要文件系统缓存还有足够空间，大部分读请求会直接读缓存，而不会读磁盘。</li>
+<li>其他缓存（如 Filter 缓存）在索引声明周期内始终有效，不需要再每次数据变化时重建，因为数据不会变化。</li>
+<li>写入单个大的倒排索引允许数据被压缩，减少磁盘 I/O 和需要被缓存到内存的索引使用量。</li>
 </ul>
+</li>
+<li>缺点<ul>
+<li>空间浪费，更新和删除时，旧文档数据不会立即被删除而是被标记删除占用磁盘空间。</li>
+<li>资源消耗大，每次新增数据都需要新增一个 segment，当 segment 过多时，对服务器资源如文件句柄消耗很大。</li>
+<li>增加了查询负担，查询结果需要排除标记删除的文档。</li>
+</ul>
+</li>
+</ul>
+<h1 id="段合并"><a href="#段合并" class="headerlink" title="段合并"></a>段合并</h1><p>由于每刷新一次就会新建一个 segment，导致短时间内 segment 数量暴增，而且 segment 数量太多会带来很多麻烦。大量 segment 会影响读性能，每个 segment 都会消耗文件句柄、内存和 CPU 运行周期，更重要的是，每个搜索请求都会轮流检查每个 segment 然后合并查询结果，segment 越多，搜索越慢。</p>
+<p>因此 Lucene 会按照一定策略将 segment 合并，合并时会清理被标记删除的文档，合并后数据被拷贝到一个新的大 segment 中。合并过程中不会中断索引和搜索。合并结束后，老的 segment 会被删除，新的 segment 被刷新到磁盘，同时写入一个包含新 segment、排除旧的和较小 segment 的新提交点，新的 segment 被打开用于搜索。</p>
+<p>段合并计算量庞大，并且需要进行大量磁盘 I/O，因而会影响写入速率，ES 在默认情况下会对合并流程进行资源限制，以保证搜索性能。</p>
 
     
   </div>
@@ -268,10 +275,10 @@
 
    
   <div class="box-prev-next clearfix">
-    <a class="show pull-left" href="/2022/04/12/zookeeper-09/">
+    <a class="show pull-left" href="/2023/03/03/es-02/">
         <i class="icon icon-angle-left"></i>
     </a>
-    <a class="show pull-right" href="/2022/06/20/algorithm-complexity/">
+    <a class="hide pull-right" href="/">
         <i class="icon icon-angle-right"></i>
     </a>
   </div>
