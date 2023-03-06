@@ -7,28 +7,26 @@
 <head>
   <meta charset="utf-8">
   
-  <title>分布式共识算法之Gossip协议 | haifun&#39;s blog</title>
+  <title>【ES】搜索原理 | haifun&#39;s blog</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
   
-    <meta name="keywords" content="分布式," />
+    <meta name="keywords" content="Elasticsearch," />
   
 
-  <meta name="description" content="Paxos、Raft、ZAB等分布式算法常被称为“强一致性”的分布式共识协议，其意思是尽管系统内部节点可以存在不一致的状态，但是从系统外部看，不一致情况不会被观测到，所以整体上看系统是强一致的。相对的，还有一类“最终一致”的分布式共识协议，表示系统中的不一致状态有可能会在一定时间内被外部观测到。 最终一致分布式共识协议的一个典型就是DNS协议，在各个节点缓存的ttl过期前是有可能与真实域名翻译结果">
+  <meta name="description" content="Lucene 相关度评分ES 底层基于 Lucene 进行评分，公式如下： $$$score(q,d) &#x3D; \sum \lparen tf(t \ in \ d) * idf(t) ^2 * t.getBoost() * norm(t,d) \rparen$$$ 其中：  q：查询 d：当前文档 t：q 中的词条 tf(t in d)：词条 t 在文档 d 中的词频 idf(t)：词条t在整个索引">
 <meta property="og:type" content="article">
-<meta property="og:title" content="分布式共识算法之Gossip协议">
-<meta property="og:url" content="https://haifuns.com/2021/11/22/gossip/index.html">
+<meta property="og:title" content="【ES】搜索原理">
+<meta property="og:url" content="https://haifuns.com/2023/03/06/es-04/index.html">
 <meta property="og:site_name" content="haifun&#39;s blog">
-<meta property="og:description" content="Paxos、Raft、ZAB等分布式算法常被称为“强一致性”的分布式共识协议，其意思是尽管系统内部节点可以存在不一致的状态，但是从系统外部看，不一致情况不会被观测到，所以整体上看系统是强一致的。相对的，还有一类“最终一致”的分布式共识协议，表示系统中的不一致状态有可能会在一定时间内被外部观测到。 最终一致分布式共识协议的一个典型就是DNS协议，在各个节点缓存的ttl过期前是有可能与真实域名翻译结果">
+<meta property="og:description" content="Lucene 相关度评分ES 底层基于 Lucene 进行评分，公式如下： $$$score(q,d) &#x3D; \sum \lparen tf(t \ in \ d) * idf(t) ^2 * t.getBoost() * norm(t,d) \rparen$$$ 其中：  q：查询 d：当前文档 t：q 中的词条 tf(t in d)：词条 t 在文档 d 中的词频 idf(t)：词条t在整个索引">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/distributed/gossip.gif">
-<meta property="article:published_time" content="2021-11-22T12:30:00.000Z">
+<meta property="article:published_time" content="2023-03-06T02:30:00.000Z">
 <meta property="article:modified_time" content="2023-03-06T02:33:33.915Z">
 <meta property="article:author" content="haifun">
-<meta property="article:tag" content="分布式">
+<meta property="article:tag" content="Elasticsearch">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/distributed/gossip.gif">
 
   
 
@@ -179,20 +177,20 @@
 
   <div id="toc" class="toc-article">
     <strong class="toc-title">文章目录</strong>
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AE%97%E6%B3%95%E6%B5%81%E7%A8%8B"><span class="toc-text">算法流程</span></a></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Lucene-%E7%9B%B8%E5%85%B3%E5%BA%A6%E8%AF%84%E5%88%86"><span class="toc-text">Lucene 相关度评分</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ES-%E6%90%9C%E7%B4%A2%E8%AF%84%E5%88%86%E8%BF%87%E7%A8%8B"><span class="toc-text">ES 搜索评分过程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#QUERY-THEN-FETCH"><span class="toc-text">QUERY_THEN_FETCH</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DFS-QUERY-THEN-FETCH"><span class="toc-text">DFS_QUERY_THEN_FETCH</span></a></li></ol></li></ol>
   </div>
 
 
 
 <div class="content content-post CENTER">
-   <article id="post-gossip" class="article article-type-post" itemprop="blogPost">
+   <article id="post-es-04" class="article article-type-post" itemprop="blogPost">
   <header class="article-header">
-    <h1 class="post-title">分布式共识算法之Gossip协议</h1>
+    <h1 class="post-title">【ES】搜索原理</h1>
 
     <div class="article-meta">
       <span>
         <i class="icon-calendar"></i>
-        <span>2021.11.22</span>
+        <span>2023.03.06</span>
       </span>
 
       
@@ -205,7 +203,7 @@
       
   <span class="article-category">
     <i class="icon-list"></i>
-    <a class="article-category-link" href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F/">分布式</a>
+    <a class="article-category-link" href="/categories/%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E/">搜索引擎</a>
   </span>
 
 
@@ -225,29 +223,48 @@
 
   <div class="article-content">
     
-      <p>Paxos、Raft、ZAB等分布式算法常被称为“强一致性”的分布式共识协议，其意思是尽管系统内部节点可以存在不一致的状态，但是从系统外部看，不一致情况不会被观测到，所以整体上看系统是强一致的。相对的，还有一类“最终一致”的分布式共识协议，表示系统中的不一致状态有可能会在一定时间内被外部观测到。</p>
-<p>最终一致分布式共识协议的一个典型就是DNS协议，在各个节点缓存的ttl过期前是有可能与真实域名翻译结果不一致的情况。另一种具有代表性的则是在比特币网络和许多分布式系统中都有应用的Gossip协议。</p>
-<p>Gossip协议源于施乐公司在论文中提出的一种用于分布式数据库在多节点间复制同步数据的算法，其特点是要同步的消息像流言一样传播、病毒一样扩散，因为也被称为“流言算法”、“瘟疫算法”等。</p>
-<h1 id="算法流程"><a href="#算法流程" class="headerlink" title="算法流程"></a>算法流程</h1><p>Gossip算法的工作流程十分简单，如果有某一项信息需要在整个网络所有节点中传播可以看做是以下两个步骤的简单循环：</p>
+      <h1 id="Lucene-相关度评分"><a href="#Lucene-相关度评分" class="headerlink" title="Lucene 相关度评分"></a>Lucene 相关度评分</h1><p>ES 底层基于 Lucene 进行评分，公式如下：</p>
+<p>$$$<br>score(q,d) = \sum \lparen tf(t \ in \ d) * idf(t) ^2 * t.getBoost() * norm(t,d) \rparen<br>$$$</p>
+<p>其中：</p>
 <ul>
-<li>从信息源开始，选择一个固定的传播周期（譬如1秒），随机选择与它相连的k个节点（称为Fan-Out）来传播消息。</li>
-<li>每一个节点收到消息后，如果这个消息是它没收到过的，在下一个周期内，将在会在除发消息的节点外的其他相邻节点中选择k个发送相同的消息，直到最终网络中所有节点都收到了消息。</li>
+<li>q：查询</li>
+<li>d：当前文档</li>
+<li>t：q 中的词条</li>
+<li>tf(t in d)：词条 t 在文档 d 中的词频</li>
+<li>idf(t)：词条t在整个索引中的逆文档频率（逆文档频率：在同一个索引中存在该词条的文档数的倒数）</li>
 </ul>
-<p>尽管以上流程需要一定的时间，但是理论上最终网络中所有节点都会拥有相同的信息。</p>
-<p>算法流程示意图如下所示：</p>
-<p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/distributed/gossip.gif" alt="image"></p>
-<p>从上图中我们可以看到Gossip协议对网络节点的连通性和稳定性几乎没有任何要求。Gossip将网络某些节点中能与部分节点连通而不是全网络节点连通作为前提，能够容忍网络上节点的随意增加或者减少、随意宕机或者重启，新增或者重启的节点最终会与其他节点同步达成一致。Gossip把网络中的节点平等看待，没有中心化或者主节点的概念，正因如此，Gossip具有极强的鲁棒性，非常适合在公众网络中使用。</p>
-<p>Gossip的缺点也是显而易见的：</p>
-<ul>
-<li>消息是经过多个轮次的散播到达网络中所有节点的，必然存在各个节点状态不一致的情况。</li>
-<li>由于随机选择发送消息的节点，所以尽管可以在整体上测算出统计学意义上的传播速率，但是对于个体消息而言，无法准确地预计需要多长时间才能达到全网一致。</li>
-<li>由于随机选择发送消息的节点，不可避免的存在重复消息发送给同一个节点的情况，消息冗余带来的是网络传输的压力，也给消息节点带来额外的负载。</li>
-</ul>
-<p>达到一致性耗费的时间与网络传输中消息冗余这两个缺点对立，鱼与熊掌不能兼得，因此，Gossip设计了两种可能的消息传播模式：</p>
-<ul>
-<li>反熵模式，同步的所有数据以消除各个节点之间的差异，目标是整个网络各个节点完全一致，但是在节点本身就会发生变动的前提下，这个目标会使得整个网络中消息的数量非常庞大。</li>
-<li>传谣模式，以传播消息为目标，仅仅发送新达到节点的数据，即只对外发送变更数据，此模式下消息数据量将会显著减少，网络开销也相对较小。</li>
-</ul>
+<p>词条在文档中出现的频率越高，得分越高。索引中存在该词条的文档越少，得分越高。</p>
+<h1 id="ES-搜索评分过程"><a href="#ES-搜索评分过程" class="headerlink" title="ES 搜索评分过程"></a>ES 搜索评分过程</h1><p>ES 有两种搜索类型：<code>QUERY_THEN_FETCH</code> 和 <code>DFS_QUERY_THEN_FETCH</code>。下面分别对两种类型搜索过程进行详细介绍。</p>
+<h2 id="QUERY-THEN-FETCH"><a href="#QUERY-THEN-FETCH" class="headerlink" title="QUERY_THEN_FETCH"></a>QUERY_THEN_FETCH</h2><p>ES 默认的搜索类型是<code>QUERY_THEN_FETCH</code>，搜索流程分为 Query 和 Fetch 两个阶段。</p>
+<p>Query 阶段：</p>
+<ol>
+<li>ES 收到客户端搜索请求后，会由协调节点将请求分发给对应所有的每个 Shard 上。</li>
+<li>每个 Shard 的 Lucene 实例基于本地 Shard 内的 TF/IDF 统计信息，独立完成 Shard 内的索引匹配和打分，并根据打分结果完成单个 Shard 内的排序、分页。</li>
+<li>每个 Shard 将排序分页后的结果集元数据（文档id和分数）返回给协调节点。</li>
+<li>协调节点完成整体的汇总、排序和分页，筛选出最终确认返回的搜索结果。</li>
+</ol>
+<p>Fetch 阶段：</p>
+<ol>
+<li>协调节点根据筛选结果去对应 Shard 拉取完整的文档数据。</li>
+<li>整合最终的结果返回给客户端。</li>
+</ol>
+<p><code>QUERY_THEN_FETCH</code>查询可能存在的问题：在极端情况下，Shard 中的文档数差距较大，那么 IDF 在不同 Shard 中起到的作用会截然不同，从而影响单个 Shard 内打分汇总后的结果，导致全局打分汇总的结果与预期产生较大出入。</p>
+<h2 id="DFS-QUERY-THEN-FETCH"><a href="#DFS-QUERY-THEN-FETCH" class="headerlink" title="DFS_QUERY_THEN_FETCH"></a>DFS_QUERY_THEN_FETCH</h2><p>ES 另一种搜索类型是<code>DFS_QUERY_THEN_FETCH</code>，DFS 在这里意思是分布式频率打分，其思想是提前向所有 Shard 进行全局的统计信息搜集，然后将这些统计信息随着查询分发到各个 Shard，让各个 Shard 在本地采用全局 TF/IDF 打分。</p>
+<p>整个搜索流程分为预统计阶段、Query 阶段和 Fetch 阶段。</p>
+<p>预统计阶段：</p>
+<p>ES 在收到客户端搜索请求后，由协调阶段进行一次预统计工作，即向所有相关 Shard 搜集统计信息。</p>
+<p>Query 阶段：</p>
+<ol>
+<li>由协调节点整合所有统计信息，将全局的统计信息连同请求一起分发到对应索引的每个 Shard 上。</li>
+<li>每个 Shard 的 Lucene 实例基于 TF/IDF 统计信息独立完成 Shard 内的索引匹配和打分，并根据打分结果完成单个 Shard 内的排序和分页。</li>
+<li>每个 Shard 将排序分页后的结果集的元数据返回给协调节点。</li>
+<li>协调节点完成整体的汇总、排序和分页，筛选出最终确认返回的搜索结果。</li>
+</ol>
+<p>Fetch 阶段：</p>
+<ol>
+<li>协调节点根据筛选结果去对应 Shard 拉取完整的文档数据。</li>
+<li>整合最终的结果返回给客户端。</li>
+</ol>
 
     
   </div>
@@ -259,10 +276,10 @@
 
    
   <div class="box-prev-next clearfix">
-    <a class="show pull-left" href="/2021/11/22/zab/">
+    <a class="show pull-left" href="/2023/03/05/es-03/">
         <i class="icon icon-angle-left"></i>
     </a>
-    <a class="show pull-right" href="/2021/12/11/redission-01/">
+    <a class="hide pull-right" href="/">
         <i class="icon icon-angle-right"></i>
     </a>
   </div>
