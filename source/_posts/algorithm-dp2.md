@@ -343,7 +343,7 @@ public static int process3(int[][] stickers, String t, HashMap<String, Integer> 
 - 当str1[i] == str2[j]时，1 一定比 4 小，所以 4 参与
 - 当str1[i] != str2[j]时，4 压根不存在，所以 1 参与
 
-因为 1 中时钟有一个样本的范围比 2 和 3 小，所以：
+因为 1 中始终有一个样本的范围比 2 和 3 小，所以：
 - 当 str1[i] == str2[j] 时，需要从 2、3、4 中选出最大值。
 - 当 str1[i] != str2[j] 时，需要从 2、3 中选出最大值。
 
