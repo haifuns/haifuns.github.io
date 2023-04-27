@@ -23,7 +23,7 @@
 <meta property="og:description" content="1.背包的最大价值有一批货物，每个货物的质量和价值已知，用一个称重确定的背包能装入的货物最大价值是多少？ 暴力递归123456789101112131415161718192021222324252627282930313233343536373839404142&#x2F;** * 返回不超重情况下，背包货物的最大价值 * * 暴力递归实现 * * @param w   所有货物质量 * @param v">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-09-04T14:00:00.000Z">
-<meta property="article:modified_time" content="2023-03-07T13:48:13.555Z">
+<meta property="article:modified_time" content="2023-04-27T01:34:34.724Z">
 <meta property="article:author" content="haifun">
 <meta property="article:tag" content="算法">
 <meta property="article:tag" content="动态规划">
@@ -272,7 +272,7 @@
 <li>当str1[i] == str2[j]时，1 一定比 4 小，所以 4 参与</li>
 <li>当str1[i] != str2[j]时，4 压根不存在，所以 1 参与</li>
 </ul>
-<p>因为 1 中时钟有一个样本的范围比 2 和 3 小，所以：</p>
+<p>因为 1 中始终有一个样本的范围比 2 和 3 小，所以：</p>
 <ul>
 <li>当 str1[i] == str2[j] 时，需要从 2、3、4 中选出最大值。</li>
 <li>当 str1[i] != str2[j] 时，需要从 2、3 中选出最大值。</li>
