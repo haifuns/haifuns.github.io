@@ -5,7 +5,7 @@ tags:
   - ChatGPT
 categories:
   - AGI
-date: 2022-01-10 20:50:00
+date: 2023-05-29 10:10:00
 ---
 
 # 编写 Prompt 的原则
