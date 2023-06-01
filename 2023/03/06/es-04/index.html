@@ -23,7 +23,7 @@
 <meta property="og:description" content="Lucene 相关度评分ES 底层基于 Lucene 进行评分，公式如下：  其中：  q：查询 d：当前文档 t：q 中的词条 tf(t in d)：词条 t 在文档 d 中的词频 idf(t)：词条t在整个索引中的逆文档频率（逆文档频率：在同一个索引中存在该词条的文档数的倒数）  词条在文档中出现的频率越高，得分越高。索引中存在该词条的文档越少，得分越高。 ES 搜索评分过程ES 有两种搜索类">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-03-06T02:30:00.000Z">
-<meta property="article:modified_time" content="2023-05-29T02:16:06.418Z">
+<meta property="article:modified_time" content="2023-06-01T10:03:33.956Z">
 <meta property="article:author" content="haifun">
 <meta property="article:tag" content="Elasticsearch">
 <meta name="twitter:card" content="summary">
@@ -350,7 +350,7 @@ mjx-container[display="true"] + br {
 <h2 id="QUERY-THEN-FETCH"><a href="#QUERY-THEN-FETCH" class="headerlink" title="QUERY_THEN_FETCH"></a>QUERY_THEN_FETCH</h2><p>ES 默认的搜索类型是<code>QUERY_THEN_FETCH</code>，搜索流程分为 Query 和 Fetch 两个阶段。</p>
 <p>Query 阶段：</p>
 <ol>
-<li>ES 收到客户端搜索请求后，会由协调节点将请求分发给对应所有的每个 Shard 上。</li>
+<li>ES 收到客户端搜索请求后，会由协调节点将请求分发给对应索引的每个 Shard 上。</li>
 <li>每个 Shard 的 Lucene 实例基于本地 Shard 内的 TF/IDF 统计信息，独立完成 Shard 内的索引匹配和打分，并根据打分结果完成单个 Shard 内的排序、分页。</li>
 <li>每个 Shard 将排序分页后的结果集元数据（文档id和分数）返回给协调节点。</li>
 <li>协调节点完成整体的汇总、排序和分页，筛选出最终确认返回的搜索结果。</li>
