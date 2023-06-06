@@ -1,12 +1,11 @@
 title: 区块链概念
 author: haifun
 tags:
-
-- 区块链
-- 以太坊  
-  categories:
-- 区块链
-  date: 2023-06-06 19:10:00
+  - 区块链
+  - 以太坊  
+categories:
+  - 区块链
+date: 2023-06-06 19:10:00
 
 ---
 
