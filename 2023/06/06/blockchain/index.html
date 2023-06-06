@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>区块链概念 | haifun&#39;s blog</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="区块链,以太坊," />
+  
+
+  <meta name="description" content="基础概念比特币比特币（BTC）是一种基于去中心化，采用点对点网络与共识主动性，开放源代码，以区块链作为底层技术的加密货币，比特币起源于中本聪于 2008 年 10 月 31 日发表的论文，2009 年 1 月 3 日，创世区块诞生。 区块链区块链（Blockchain）是比特币的一个重要概念，区块链本质上是一串使用密码学方法产生的资料块（称为“区块”，block）。新增的区块总能链接到上一个区块，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="区块链概念">
+<meta property="og:url" content="https://haifuns.com/2023/06/06/blockchain/index.html">
+<meta property="og:site_name" content="haifun&#39;s blog">
+<meta property="og:description" content="基础概念比特币比特币（BTC）是一种基于去中心化，采用点对点网络与共识主动性，开放源代码，以区块链作为底层技术的加密货币，比特币起源于中本聪于 2008 年 10 月 31 日发表的论文，2009 年 1 月 3 日，创世区块诞生。 区块链区块链（Blockchain）是比特币的一个重要概念，区块链本质上是一串使用密码学方法产生的资料块（称为“区块”，block）。新增的区块总能链接到上一个区块，">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-06-06T11:10:00.000Z">
+<meta property="article:modified_time" content="2023-06-06T11:19:33.687Z">
+<meta property="article:author" content="haifun">
+<meta property="article:tag" content="区块链">
+<meta property="article:tag" content="以太坊">
+<meta name="twitter:card" content="summary">
+
+  
+
+  
+    <link rel="icon" href="/images/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbeddx" rel="stylesheet">
+
+
+  
+    
+<link rel="stylesheet" href="/css/personal-style.css">
+
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?d3c8edb388553a2084296cbfe9a0785a";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+    <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
+
+<meta name="generator" content="Hexo 5.4.2">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+<link rel="alternate" href="/atom.xml" title="haifun's blog" type="application/atom+xml">
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header CENTER">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/categories/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            分类
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tags/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/atom.xml"
+            rel="noopener noreferrer"
+            target="_blank"
+            >
+            RSS
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/search/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5"><span class="toc-text">基础概念</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%AF%94%E7%89%B9%E5%B8%81"><span class="toc-text">比特币</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8C%BA%E5%9D%97%E9%93%BE"><span class="toc-text">区块链</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%A5%E5%A4%AA%E5%9D%8A"><span class="toc-text">以太坊</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#NFT"><span class="toc-text">NFT</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8C%BA%E5%9D%97"><span class="toc-text">区块</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B4%A6%E6%88%B7"><span class="toc-text">账户</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%A4%E6%98%93"><span class="toc-text">交易</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6"><span class="toc-text">智能合约</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E5%8E%9F%E7%90%86"><span class="toc-text">基本原理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%87%BA%E5%9D%97%EF%BC%88%E6%8C%96%E7%9F%BF%EF%BC%89%E5%8E%9F%E7%90%86"><span class="toc-text">出块（挖矿）原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9A%BE%E5%BA%A6-n-%E7%9A%84%E7%A1%AE%E5%AE%9A"><span class="toc-text">难度 n 的确定</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%A4%E6%98%93%E9%98%B2%E4%BC%AA"><span class="toc-text">交易防伪</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%B1%E8%AF%86%E7%AE%97%E6%B3%95"><span class="toc-text">共识算法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B7%A5%E4%BD%9C%E9%87%8F%E8%AF%81%E6%98%8E%EF%BC%88PoW%EF%BC%89"><span class="toc-text">工作量证明（PoW）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9D%83%E7%9B%8A%E8%AF%81%E6%98%8E%EF%BC%88PoS%EF%BC%89"><span class="toc-text">权益证明（PoS）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A7%94%E6%89%98%E6%9D%83%E7%9B%8A%E8%AF%81%E6%98%8E%EF%BC%88DPoS%EF%BC%89"><span class="toc-text">委托权益证明（DPoS）</span></a></li></ol></li></ol>
+  </div>
+
+
+
+<div class="content content-post CENTER">
+   <article id="post-blockchain" class="article article-type-post" itemprop="blogPost">
+  <header class="article-header">
+    <h1 class="post-title">区块链概念</h1>
+
+    <div class="article-meta">
+      <span>
+        <i class="icon-calendar"></i>
+        <span>2023.06.06</span>
+      </span>
+
+      
+        <span class="article-author">
+          <i class="icon-user"></i>
+          <span>haifun</span>
+        </span>
+      
+
+      
+  <span class="article-category">
+    <i class="icon-list"></i>
+    <a class="article-category-link" href="/categories/%E5%8C%BA%E5%9D%97%E9%93%BE/">区块链</a>
+  </span>
+
+
+
+      
+
+      
+      <i class="fa fa-eye"></i> 
+        <span id="busuanzi_container_page_pv">
+           &nbsp热度 <span id="busuanzi_value_page_pv">
+           <i class="fa fa-spinner fa-spin"></i></span>℃
+        </span>
+      
+      
+    </div>
+  </header>
+
+  <div class="article-content">
+    
+      <h1 id="基础概念"><a href="#基础概念" class="headerlink" title="基础概念"></a>基础概念</h1><h2 id="比特币"><a href="#比特币" class="headerlink" title="比特币"></a>比特币</h2><p>比特币（BTC）是一种基于去中心化，采用点对点网络与共识主动性，开放源代码，以区块链作为底层技术的加密货币，比特币起源于中本聪于 2008 年 10 月 31 日发表的论文，2009 年 1 月 3 日，创世区块诞生。</p>
+<h2 id="区块链"><a href="#区块链" class="headerlink" title="区块链"></a>区块链</h2><p>区块链（Blockchain）是比特币的一个重要概念，区块链本质上是一串使用密码学方法产生的资料块（称为“区块”，block）。新增的区块总能链接到上一个区块，即整条区块链的尾部。比特币点对点网络将所有的交易历史都存储在“区块链”中，所以区块链可以看作记录着比特币交易的账本。</p>
+<p>确认一项交易的过程通过解决一系列数学难题的工作量证明机制来实现。工作量证明机制需要电脑运算一定的时间才能解决，这就使得攻击者无法重写、修改交易历史，除非他能够拥有相对比特币点对点网络系统更强大的计算能力，从而能以更快的速度产生区块链（称为”51%攻击”）。</p>
+<p>工作量证明机制的难度由系统自动调节，所以新区块的生成平均需时 10 分钟。整个比特币点对点网络的节点都会自动检测交易和区块的有效性，并忽略任何违背规则的交易和区块，比如那些产生错误数量的区块，或多次发送同一份额比特币的交易行为。</p>
+<p>参与处理区块的客户端可以得到一定量新发行的比特币，以及相关的交易手续费。为了得到这些新产生的比特币，参与处理区块的客户端需要付出大量的时间和计算力，这些资料处理者称为“矿工”，资料处理活动称之为“挖矿”。</p>
+<h2 id="以太坊"><a href="#以太坊" class="headerlink" title="以太坊"></a>以太坊</h2><p>以太坊（Ethereum）是一个开源的有智能合约功能的公共区块链平台，通过其专用加密货币以太币（Ether，简称“ETH”）提供去中心化的以太虚拟机（Ethereum Virtual Machine）来处理点对点合约。以太坊的概念首次在 2013 年由程序员维塔利克·布特林受比特币启发后提出，大意为“下一代加密货币与去中心化应用平台”，在 2014 年通过 ICO 众筹开始得以发展。以太坊亦被称为“第二代的区块链平台”，仅次于比特币。</p>
+<p>以太坊虚拟机是以太坊的关键组成部分之一，它为以太坊上智能合约的部署和运行提供了必要的环境。任何人都可以运行一段虚拟机程序，并通过网络的共识机制被所有人所接受。以太坊虚拟机赋予了区块链技术极大的灵活性，在此之上可以非常容易地构建各种去中心化应用（Dapp），像去中心化金融（Defi）等都是基于以太坊虚拟机构建的应用。</p>
+<p>以太坊虚拟机（EVM）可以看做是以太坊网络中的一台规范化计算机，其状态得到以太坊网络中所有人的一致同意。 每个参与以太坊网络的人（每个以太坊节点）都会保存一份这台计算机的状态。 此外，任何参与者都可以广播请求这台计算机进行任意计算。 每当广播这样的请求网络时，网络上的其他参与者就会验证、确认并进行（“执行”）计算。 这个命令会导致 EVM 的状态变化，并且在整个网络中传播。</p>
+<p>多条交易记录以及 EVM 的当前状态被打包成区块，存储在区块链中。区块链通过共识机制，各个节点完成校验达成一致后进行存储，确保了数据的一致性，并防止被恶意篡改。</p>
+<h2 id="NFT"><a href="#NFT" class="headerlink" title="NFT"></a>NFT</h2><blockquote>
+<p>数字加密货币大致可以分为原生币（coin）和代币（token）两大类。前者如 BTC、ETH 等，拥有自己的区块链。后者如 Tether、TRON、ONT 等，依附于现有的区块链。市场上流通的基于以太坊的代币大都遵从 ERC20 协议。</p>
+</blockquote>
+<p>NFT 的全称是 Non-Fungible Tokens（非同质化代币），具有不可分割、不可替代、独一无二等特点。每个代币可以代表一个独特的数字资料，作为虚拟商品所有权的电子认证或证书。由于其不能互换的特性，非同质化代币可以代表数字资产，如画作、艺术品、声音、视频、游戏中的项目或其他形式的创意作品。虽然作品本身是可以无限复制的，但这些代表它们的代币在其底层区块链上能被完整追踪，故能为买家提供所有权证明。诸如以太币、比特币等加密货币都有自己的代币标准以定义对 NFT 的使用。</p>
+<p>以太坊社区采用了许多标准，有助于在项目的不同实现中保持统一的兼容性（例如以太坊客户和虚拟钱包)，并确保智能合约和 dapps 仍保持兼容。ERC-721 就是其中 NFT 相关的标准。随着 NFT 的普及和 ERC721 的应用，出现了 ERC721 合约的改良版。当中包括 ERC721A。ERC721A 是 IERC721 的一种实现，在一次交易中铸造多个 NFT 可显著节省 Gas Fee。</p>
+<h2 id="区块"><a href="#区块" class="headerlink" title="区块"></a>区块</h2><p>区块是指一批交易的组合，并且包含链中上一个区块的哈希。 这将区块连接在一起（成为一个链），因为哈希是从区块数据中加密得出的。 这可以防止欺诈，因为以前的任何区块中的任何改变都会使后续所有区块无效，而且所有哈希都会改变，所有运行区块链的人都会注意到。这样就防止了有人对历史数据进行篡改。</p>
+<p>所有已在网络历史上提交给以太坊网络的区块的序列，称为区块链。 每个区块都包含对前一个区块的引用，这有助于我们在所有区块间（同时在精确的历史记录）上保持顺序。在以太网中，我们可以将区块链视为一个可靠的分布式数据库，用于存储整个以太网的历史、以及当前状态。</p>
+<p>以太坊网络中，一个区块中包含如下信息：</p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>timestamp</td>
+<td>开采区块的时间</td>
+</tr>
+<tr>
+<td>blockNumber</td>
+<td>区块链中区块的长度</td>
+</tr>
+<tr>
+<td>baseFeePerGas</td>
+<td>要将交易纳入区块，每个 gas 所需的最低费用</td>
+</tr>
+<tr>
+<td>difficulty</td>
+<td>开采所需的努力</td>
+</tr>
+<tr>
+<td>mixHash</td>
+<td>该区块的唯一标识符</td>
+</tr>
+<tr>
+<td>parentHash</td>
+<td>前一区块的唯一标识符，相当于指向前一区块的指针</td>
+</tr>
+<tr>
+<td>nonce</td>
+<td>哈希，当与 mixHash 结合使用时，可以证明该块已经通过了工作量证明</td>
+</tr>
+<tr>
+<td>transactions</td>
+<td>包含在区块中的交易</td>
+</tr>
+<tr>
+<td>stateRoot</td>
+<td>系统的整个状态：帐户余额、合约存储、合约代码和帐户随机数</td>
+</tr>
+</tbody></table>
+<h2 id="账户"><a href="#账户" class="headerlink" title="账户"></a>账户</h2><p>在创建账户时会随之生成对应的地址和私钥，地址用来唯一确定账户，私钥用来给交易签名，掌握私钥就等于掌握其对应地址中存放的资产。</p>
+<p>以太坊的账户有 2 种类型：</p>
+<ul>
+<li>外部拥有的账户：被私钥的所有者控制且没有任何代码与之关联。</li>
+<li>合约账户：被合约代码控制且有代码与之关联。</li>
+</ul>
+<h2 id="交易"><a href="#交易" class="headerlink" title="交易"></a>交易</h2><p>以以太坊中的交易为例，一次交易部分信息如下：</p>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Transaction Fee</td>
+<td>交易总费用（base fee per gas + max priority fee per gas）* gas</td>
+</tr>
+<tr>
+<td>Gas Price</td>
+<td>gas 价格</td>
+</tr>
+<tr>
+<td>Gas limit</td>
+<td>交易可以消耗的最大 gas 数量</td>
+</tr>
+<tr>
+<td>Gas Usage</td>
+<td>实际使用了多少 gas</td>
+</tr>
+<tr>
+<td>Base fee</td>
+<td>每个 gas 消耗的网络基础费</td>
+</tr>
+<tr>
+<td>Max fee</td>
+<td>愿意为交易支付的最高 gas 价格</td>
+</tr>
+<tr>
+<td>Max Priority fee</td>
+<td>最大 gas 价格 + 矿工小费</td>
+</tr>
+<tr>
+<td>Burnt</td>
+<td>实际烧掉多少 gas</td>
+</tr>
+<tr>
+<td>value</td>
+<td>从发件人向收件人转移 ETH 的金额 （以 WEI 为单位，1ETH = 1*10^8WEI）</td>
+</tr>
+<tr>
+<td>from</td>
+<td>发送地址</td>
+</tr>
+<tr>
+<td>to</td>
+<td>接收地址，如果为合约帐户，交易将执行合约代码</td>
+</tr>
+</tbody></table>
+<h2 id="智能合约"><a href="#智能合约" class="headerlink" title="智能合约"></a>智能合约</h2><p>以太坊最重要的技术贡献就是智能合约。智能合约是存储在区块链上的程序，可以协助和验证合约的谈判和执行。</p>
+<p>因为合约内容公开，合约可以证明其宣称的功能是真实的，例如虚拟赌场可以证明它是公平的。另一方面，区块链上的所有用户都可以看到基于区块链的智能合约，这会导致包括安全漏洞在内的所有漏洞都可见，并且可能无法迅速修复。</p>
+<h1 id="基本原理"><a href="#基本原理" class="headerlink" title="基本原理"></a>基本原理</h1><h2 id="出块（挖矿）原理"><a href="#出块（挖矿）原理" class="headerlink" title="出块（挖矿）原理"></a>出块（挖矿）原理</h2><ol>
+<li>字符串：前块头部+账单+时间+随机数</li>
+<li>Hash：SHA256(SHA256(字符串))</li>
+<li>要求前 n 位是 0</li>
+</ol>
+<h2 id="难度-n-的确定"><a href="#难度-n-的确定" class="headerlink" title="难度 n 的确定"></a>难度 n 的确定</h2><p>出块平均概率 (1/2)^n ，要保证每 10min 出一个块，通过调整 n 的大小使得，2^n=10*60*矿机总算力</p>
+<h2 id="交易防伪"><a href="#交易防伪" class="headerlink" title="交易防伪"></a>交易防伪</h2><ol>
+<li>电子签名，使用非对称加密：私钥、公钥，ECDSA 算法</li>
+<li>双重支付问题<ul>
+<li>余额检查：区块链追溯</li>
+<li>双重支付：区块顺序性</li>
+</ul>
+</li>
+<li>防止篡改<ul>
+<li>最长链原则：分叉以最长链为准</li>
+</ul>
+</li>
+</ol>
+<h1 id="共识算法"><a href="#共识算法" class="headerlink" title="共识算法"></a>共识算法</h1><h2 id="工作量证明（PoW）"><a href="#工作量证明（PoW）" class="headerlink" title="工作量证明（PoW）"></a>工作量证明（PoW）</h2><p>为了让一个区块添加到主链上，一个矿工必须要比其他矿工更快的提供出这个“证明”。通过矿工提供的一个数学机制的“证明”来证实每个区块的过程称之为工作量证明(proof of work)。其简单的原理可以理解为，通过寻找一个随机数 nonce，使得 Hash（mixHash, nonce）的前 n 位为 0。这个方法很容易验证一个 nonce 是否合法，但是求解这个 nonce 的过程则非常耗时，几乎只能通过暴力搜索的方式得到，需要消耗大量的计算资源。最先求解到 nonce 的矿工获得大家的认可，他打包出的区块被所有节点添加到区块链的末尾，在完成区块的创建后，这个矿工会获得新铸造的币 和这个区块内所有的交易费用，作为奖励。</p>
+<p>PoW 的优点是完全去中心化、公平，缺点是浪费资源、处理性能较低。</p>
+<h2 id="权益证明（PoS）"><a href="#权益证明（PoS）" class="headerlink" title="权益证明（PoS）"></a>权益证明（PoS）</h2><p>权益证明机制，即拥有越多股权，就可以获得更多奖励。这里的股权是指持有的数字货币的数量和时间，根据它来分配权益，类似股票的分红制度。</p>
+<p>持有的币越多，持有的时间越长，即币龄（币龄=持币数*持币时间）越大，就能拿到越多的分红，也就有更大的记账权利。</p>
+<p>PoS 的优点是耗能少、作恶成本高昂、达成共识的时间短。缺点是持币趋于集中化、流动性变差。</p>
+<h2 id="委托权益证明（DPoS）"><a href="#委托权益证明（DPoS）" class="headerlink" title="委托权益证明（DPoS）"></a>委托权益证明（DPoS）</h2><p>DPoS 在 PoS 基础上优化而来的，通过投票选举的方式，选出生产者，代表他们履行权利和义务，而不是用算力来决定。</p>
+<p>如果生产者不称职，随时可能会被投票出局。投票的权重和分配的收益，都是按照持有的加密货币数量占总量的百分比来计算的，51%的股东的投票结果是不可逆且有约束力的。</p>
+<p>DPoS 的优点是记账节点数量少、协作高效、记账效率高。其缺点是减弱了去中心化的程度。</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://bitcoin.org/zh_CN/">比特币社区</a></li>
+<li><a target="_blank" rel="noopener" href="https://ethereum.org/zh/">以太坊社区</a></li>
+<li><a target="_blank" rel="noopener" href="https://andersbrownworth.com/blockchain/">区块链示例</a></li>
+</ul>
+
+    
+  </div>
+
+</article>
+
+
+   
+
+   
+  <div class="box-prev-next clearfix">
+    <a class="show pull-left" href="/2023/05/29/chatgpt-prompt/">
+        <i class="icon icon-angle-left"></i>
+    </a>
+    <a class="hide pull-right" href="/">
+        <i class="icon icon-angle-right"></i>
+    </a>
+  </div>
+
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/categories/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              分类
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tags/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/atom.xml"
+              rel="noopener noreferrer"
+              target="_blank"
+              >
+              RSS
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/search/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              搜索
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+    
+    
+
+    
+
+    
+    
+
+    <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/valine@latest/dist/Valine.min.js"></script>
+    <div id="comment" class="vcomment" ></div>
+    <script>
+        var notify = 'false' == true ? true : false;
+        var verify = 'false' == true ? true : false;
+        var GUEST_INFO = ['nick','mail','link'];
+        var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+            return GUEST_INFO.indexOf(item) > -1
+        });
+        guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+        window.valine = new Valine({
+            el: '.vcomment',
+            notify: notify,
+            verify: verify,
+            appId: "masttnqEt9G69mj43i9oaA1C-gzGzoHsz",
+            appKey: "hgIx9VKn0GLDhRcLxQuNMl0E",
+            avatar:'mm',
+            placeholder: "Say something",
+            guest_info:guest_info,
+            pageSize:'10'
+        });
+    </script>
+  
+    
+
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>
