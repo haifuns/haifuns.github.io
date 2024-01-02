@@ -9,9 +9,13 @@
     <%- partial('_partial/component/pagination') %>
   </div>
 </div>
-<footer style="position: absolute;left: 41.8%;bottom: 0px;transform: translateX(-50%);">
-  <a style="font-size:12px; color:#6C6C6C" target="_blank">© 2019-<%= new Date().getFullYear()%> <%= config.author %> | <a style="font-size:12px; color:#6C6C6C" target="_blank" href="https://beian.miit.gov.cn/" rel="nofollow">鲁ICP备19052103号</a></footer>
-
+<% if (page.next===2) { %>
+  <footer style="width: 500px;margin: 100px auto 20px;">
+    <a style="font-size:12px; color:#6C6C6C" target="_blank">© 2019-<%= new Date().getFullYear()%>
+        <%= config.author %> | <a style="font-size:12px; color:#6C6C6C" target="_blank"
+            href="https://beian.miit.gov.cn/" rel="nofollow">鲁ICP备19052103号</a>
+  </footer>
+  <% } %>
 <%- partial('_partial/component/back-top', {showBacktop: theme.backtop.archive}) %>
 
 <%
