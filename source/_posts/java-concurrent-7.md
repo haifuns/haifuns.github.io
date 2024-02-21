@@ -141,7 +141,7 @@ LongAdder 类图结构如下：
 
 ![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/LongAddr-uml.png)
 
-LongAdder 类继承自Striped64 类，在Striped64 内部维护着三个变量。LongAdder 的真实值其实是base 的值与Cell 数组里面所有Cell 元素中的value 值的累加，base 是个基础值，默认为0 。cellsBusy 用来实现自旋锁，状态值只有0 和l ，当创建Cell 元素，扩容Cell 数组或者初始化Cell 数组时，使用CAS 操作该变量来保证同时只有一个线程可以进行其中之一的操作。
+LongAdder 类继承自Striped64 类，在Striped64 内部维护着三个变量。LongAdder 的真实值其实是base 的值与Cell 数组里面所有Cell 元素中的value 值的累加，base 是个基础值，默认为0 。cellsBusy 用来实现自旋锁，状态值只有0 和 1，当创建Cell 元素，扩容Cell 数组或者初始化Cell 数组时，使用CAS 操作该变量来保证同时只有一个线程可以进行其中之一的操作。
 
 Cell 的构造如下：
 ```java
