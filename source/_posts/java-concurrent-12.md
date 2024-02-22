@@ -210,9 +210,9 @@ public boolean contains(Object o) {
 }
 ```
 
-## LinkedBlokingQueue
+## LinkedBlockingQueue
 
-LinkedBlokingQueue是使用独占锁实现的**无界（可指定有界）阻塞**队列。
+LinkedBlockingQueue是使用独占锁实现的**无界（可指定有界）阻塞**队列。
 
 ### 类图
 
@@ -224,7 +224,7 @@ LinkedBlockingQueue 也是使用单向链表实现的，其也有两个Node ，�
 
 另外，notEmpty 和notFull 是条件变量，它们内部都有一个条件队列用来存放进队和出队时被阻塞的线程，其实这是生产者-消费者模型。
 
-从LinkedBlokingQueue 的构造函数可知，其默认容量是0x7fffffff，用户也可以自定义容量，所以从一定程度上可以说从LinkedBlokingQueue 是有界阻塞队列。
+从LinkedBlockingQueue 的构造函数可知，其默认容量是0x7fffffff，用户也可以自定义容量，所以从一定程度上可以说从LinkedBlockingQueue 是有界阻塞队列。
 
 ```java
 public LinkedBlockingQueue() {
