@@ -23,7 +23,7 @@
 <meta property="og:description" content="写索引流程写索引只能先写主分片然后同步到副本，当一个写请求被发送到某个节点后，这个节点会充当协调节点，根据路由策略找到目标主分片，然后协调节点从自身存储的分片信息中找到目标主分片所在节点，如果目标分片在其他节点上，就转发请求到该节点上。 分片路由策略如下： 1shard &#x3D; hash(routing) % number_of_primary_shards  routing 通过 Hash 函数生成">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2023-03-05T06:00:00.000Z">
-<meta property="article:modified_time" content="2024-02-21T04:13:24.571Z">
+<meta property="article:modified_time" content="2024-02-22T01:14:35.743Z">
 <meta property="article:author" content="haifun">
 <meta property="article:tag" content="Elasticsearch">
 <meta name="twitter:card" content="summary">
