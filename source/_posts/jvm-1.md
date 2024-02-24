@@ -26,8 +26,9 @@ copyright: true
 Java虚拟机自带加载器包括以下几种：
 
 * 启动类加载器（BootstrapClassLoader）
-* 平台类加载器（PlatformClassLoader） jdk9, jdk8: 扩展类加载器ExtensionClassLoader
+* 平台类加载器（PlatformClassLoader）jdk9, jdk8：扩展类加载器（ExtensionClassLoader）
 * 应用程序类加载器（AppClassLoader）
+* 模块类加载器（Module Class Loader）jdk9
 * 用户自定义加载器，是java.lang.ClassLoader的子类，用户可以定制类的加载方式，自定义加载器加载顺序在所有系统类加载器之后
 
 ### 类加载器的关系
