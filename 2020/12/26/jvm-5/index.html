@@ -30,7 +30,7 @@
 <meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/jvm/Thread-status.png">
 <meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/jvm/markword.png">
 <meta property="article:published_time" content="2020-12-26T09:22:00.000Z">
-<meta property="article:modified_time" content="2024-02-27T05:05:04.872Z">
+<meta property="article:modified_time" content="2024-02-27T05:21:03.475Z">
 <meta property="article:author" content="haifun">
 <meta property="article:tag" content="JVM">
 <meta name="twitter:card" content="summary">
@@ -303,7 +303,7 @@
 <h4 id="有序性（Ordering）"><a href="#有序性（Ordering）" class="headerlink" title="有序性（Ordering）"></a>有序性（Ordering）</h4><p>如果在本线程内观察，所有的操作都是有序的；如果在一个线程中观察另一个线程，所有的操作都是无序的。前半句是指“线程内似表现为串行的语义”（Within-Thread As-If-SerialSemantics），后半句是指“指令重排序”现象和“工作内存与主内存同步延迟”现象。</p>
 <h2 id="线程"><a href="#线程" class="headerlink" title="线程"></a>线程</h2><h3 id="线程实现"><a href="#线程实现" class="headerlink" title="线程实现"></a>线程实现</h3><p>实现线程主要有三种方式：使用内核线程实现（1：1实现），使用用户线程实现（1：N实现），使用用户线程加轻量级进程混合实现（N：M实现）。</p>
 <h4 id="内核线程实现"><a href="#内核线程实现" class="headerlink" title="内核线程实现"></a>内核线程实现</h4><p>使用内核线程实现的方式也被称为1：1实现。内核线程（Kernel-Level Thread，KLT）就是直接由操作系统内核（Kernel）支持的线程，这种线程由内核来完成线程切换，内核通过操纵调度器（Scheduler）对线程进行调度，并负责将线程的任务映射到各个处理器上。每个内核线程可以视为内核的一个分身，这样操作系统就有能力同时处理多件事情，支持多线程的内核就称为多线程内核（Multi-Threads Kernel）。</p>
-<p>程序一般不会直接使用内核线程，而是使用内核线程的一种高级接口——轻量级进程（Light Weight rocess，LWP），轻量级进程就是通常意义上所讲的线程，由于每个轻量级进程都由一个内核线程支持，因此只有先支持内核线程，才能有轻量级进程。这种轻量级进程与内核线程之间1：1的关系称为一对一的线程模型，如图所示：</p>
+<p>程序一般不会直接使用内核线程，而是使用内核线程的一种高级接口——轻量级进程（Light Weight Process，LWP），轻量级进程就是通常意义上所讲的线程，由于每个轻量级进程都由一个内核线程支持，因此只有先支持内核线程，才能有轻量级进程。这种轻量级进程与内核线程之间1：1的关系称为一对一的线程模型，如图所示：</p>
 <p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/jvm/KLT-Thread.png" alt="image"></p>
 <p>由于内核线程的支持，每个轻量级进程都成为一个独立的调度单元，即使其中某一个轻量级进程在系统调用中被阻塞了，也不会影响整个进程继续工作。</p>
 <p>局限性：</p>
