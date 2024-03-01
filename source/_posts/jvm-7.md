@@ -10,13 +10,13 @@ date: 2021-02-10 23:42:00
 
 * -Xms/-XX:InitialHeapSize ：初始堆大小，默认物理内存1/64
 * -Xmx/-XX:MaxHeapSize ：最大堆大小，默认物理内存1/4
-* -Xmn ：新生代大小，默认物理内存3/8
+* -Xmn ：新生代大小
 * -XX:PermSize/-XX:MetaspaceSize ：永久代大小
 * -XX:MaxPermSize/-XX:MaxMetaspaceSize ：永久代最大大小
 * -Xss ：每个线程的栈内存大小
 * -XX:NewSize ：新生代大小
 * -XX:MaxNewSize ：新生代最大大小
-* -XX:NewRatio ：老年代与新生代比值
+* -XX:NewRatio ：老年代与新生代比值，默认2即比值2:1
 * -XX:SurvivorRatio ：eden区与survivor区比值，默认为8
 * -XX:MaxTenuringThreshold ：对象晋升到老年代的GC次数阈值，默认为15
 * -XX:PretenureSizeThreshold ：大对象直接晋升老年代的字节阈值
