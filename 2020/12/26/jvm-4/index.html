@@ -34,7 +34,7 @@
 <meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/jvm/G1-Region.png">
 <meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/jvm/G1.png">
 <meta property="article:published_time" content="2020-12-26T09:20:00.000Z">
-<meta property="article:modified_time" content="2024-03-01T03:07:39.519Z">
+<meta property="article:modified_time" content="2024-03-01T03:17:42.880Z">
 <meta property="article:author" content="haifun">
 <meta property="article:tag" content="JVM">
 <meta name="twitter:card" content="summary">
@@ -407,7 +407,7 @@
 <p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/jvm/CMS.png" alt="image"></p>
 <h3 id="Garbage-First-收集器"><a href="#Garbage-First-收集器" class="headerlink" title="Garbage First 收集器"></a>Garbage First 收集器</h3><p>G1（Garbage First）是一款主要面向服务端应用的垃圾收集器。与其他收集器相比，具有以下特点：</p>
 <ol>
-<li>G1把内存划分成多个独立的区域（Region），最多2048个Region</li>
+<li>G1把内存划分成多个独立的区域（Region），最多2048个Region，Java 8u20以后上限为4096个</li>
 <li>G1仍采用分代思想，保留了新生代和老年代，但是不再是物理隔离，而是一部分Region集合，且不需要Region是连续的，Region中还有一类特殊的Humongous区域，专门用来存储大对象。G1认为只要大小超过了一个Region容量一半的对象即可判定为大对象。</li>
 <li>G1能充分利用多CPU、多核环境硬件优势，尽量缩短STW</li>
 <li>G1整体上采用标记-整理算法，局部使用复制算法，不会产生内存碎片</li>
