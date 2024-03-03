@@ -23,7 +23,7 @@
 <meta property="og:description" content="Redis除了提供5种基本数据结构外，还提供了一些附加功能：  慢查询分析 Redis Shell Pipeline 事务与Lua Bitmaps HyperLogLog 发布订阅 GEO">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-01-17T15:00:00.000Z">
-<meta property="article:modified_time" content="2024-03-03T08:14:22.821Z">
+<meta property="article:modified_time" content="2024-03-03T08:39:01.880Z">
 <meta property="article:author" content="haifun">
 <meta property="article:tag" content="Redis">
 <meta name="twitter:card" content="summary">
@@ -252,7 +252,7 @@
 <li>使用<code>config set</code>命令动态修改</li>
 </ul>
 <p>例如：</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">config set slowlog-log-slower-than 20000 # 将阈值设置为20000微妙</span><br><span class="line">config set slowlog-max-len 1000 # 将列表长度设置为1000</span><br><span class="line">config rewrite # 将配置文件持久化到本地配置文件</span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">config set slowlog-log-slower-than 20000 # 将阈值设置为20000微秒</span><br><span class="line">config set slowlog-max-len 1000 # 将列表长度设置为1000</span><br><span class="line">config rewrite # 将配置文件持久化到本地配置文件</span><br></pre></td></tr></tbody></table></figure>
 
 <h2 id="查看慢查询"><a href="#查看慢查询" class="headerlink" title="查看慢查询"></a>查看慢查询</h2><ul>
 <li>获取慢查询日志</li>
@@ -400,6 +400,7 @@
 <h1 id="GEO"><a href="#GEO" class="headerlink" title="GEO"></a>GEO</h1><p>Redis3.2版本开始提供了GEO（地理信息定位）功能，支持存储地理位置信息用来实现诸如附近位置、摇一摇这类依赖于地理位置信息的功能。</p>
 <p>GEO的数据类型为zset，Redis将所有地理位置信息的geohash存放在zset中。</p>
 <h2 id="命令-3"><a href="#命令-3" class="headerlink" title="命令"></a>命令</h2><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">geoadd key longitube latitude member [longitude latitude member ...] # 增加地理位置信息</span><br><span class="line">            # longitube：经度</span><br><span class="line">            # latitude：维度</span><br><span class="line">            # member：成员</span><br><span class="line">            </span><br><span class="line">geopos key member [member ...] # 获取地理位置信息</span><br><span class="line"></span><br><span class="line">geodist key member1 member2 [unit] # 获取两个地理位置的距离</span><br><span class="line">            # unit：表示返回结果的单位，包含以下四种</span><br><span class="line">                # m (meters)：米</span><br><span class="line">                # km (kilometers)：公里</span><br><span class="line">                # mi (miles)：英里</span><br><span class="line">                # ft (feet)：尺</span><br><span class="line">                            </span><br><span class="line"># 获取指定位置范围内的地理信息位置集合</span><br><span class="line">georadius key longitude latitude radiusm|km|ft|mi [withcoord] [withdist] [withhash] [COUNT count] [asc|desc] [store key] [storedist key] </span><br><span class="line">georadiusbymember key member radiusm|km|ft|mi [withcoord] [withdist] [withhash] [COUNT count] [asc|desc] [store key] [storedist key]</span><br><span class="line"></span><br><span class="line">            # withcoord：返回结果中包含经纬度</span><br><span class="line">            # withdist：返回结果中包含离中心节点位置的距离</span><br><span class="line">            # withhash：返回结果中包含geohash</span><br><span class="line">            # COUNT count：指定返回结果的数量</span><br><span class="line">            # asc|desc：返回结果按照离中心节点的距离做升序或者降序</span><br><span class="line">            # store key：将返回结果的地理位置信息保存到指定键</span><br><span class="line"></span><br><span class="line">geohash key member [member ...] # 获取geohash。Redis使用geohash将二维经纬度转换为一维字符串</span><br><span class="line"></span><br><span class="line">zrem key member # 删除地理位置信息</span><br></pre></td></tr></tbody></table></figure>
+
     
   </div>
 
