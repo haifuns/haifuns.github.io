@@ -68,7 +68,7 @@ setex key seconds value # 更新value并重新设置过期时间，此命令可�
 setnx key value # set if not exists，key不存在则set，存在无操作
 ```
 
-> setex可以作为分布式锁的一种实现方案，官方实现：http://redis.io/topics/distlock
+> setnx可以作为分布式锁的一种实现方案，官方实现：http://redis.io/topics/distlock
 
 ### 获取值
 
