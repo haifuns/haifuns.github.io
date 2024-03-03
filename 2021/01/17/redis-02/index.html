@@ -23,7 +23,7 @@
 <meta property="og:description" content="Redis除了提供5种基本数据结构外，还提供了一些附加功能：  慢查询分析 Redis Shell Pipeline 事务与Lua Bitmaps HyperLogLog 发布订阅 GEO">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-01-17T15:00:00.000Z">
-<meta property="article:modified_time" content="2024-03-03T08:39:01.880Z">
+<meta property="article:modified_time" content="2024-03-03T08:45:08.725Z">
 <meta property="article:author" content="haifun">
 <meta property="article:tag" content="Redis">
 <meta name="twitter:card" content="summary">
@@ -380,7 +380,7 @@
 </ul>
 <h1 id="Bitmaps"><a href="#Bitmaps" class="headerlink" title="Bitmaps"></a>Bitmaps</h1><p>合理地使用位操作能够有效地提高内存使用率和开发效率。Redis提供了Bitmaps，可以实现对位的操作。Bitmaps不是一种数据结构，其本身就是字符串，但是可以对字符串的位进行操作。</p>
 <p>Bitmaps单独提供了一套命令，可以把Bitmaps看做成以位为单位的数组，数据每个单元只能存放1和0，数组的下标为偏移量。</p>
-<h2 id="命令"><a href="#命令" class="headerlink" title="命令"></a>命令</h2><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">setbit key offset value # 设置值</span><br><span class="line"></span><br><span class="line">gitbit key offset # 获取值</span><br><span class="line"></span><br><span class="line">bitcount [start] [end] # 获取Bitmaps指定范围值为1的个数</span><br><span class="line"></span><br><span class="line">bitop op destkey key [key ...] # 对多个Bitmaps操作，op：and(交集)、or(并集)、not(非)、xor(异或)</span><br><span class="line"></span><br><span class="line">bitpos key targetBit [start] [end] # 计算Bitmaps中第一个值为targetBit的偏移量</span><br></pre></td></tr></tbody></table></figure>
+<h2 id="命令"><a href="#命令" class="headerlink" title="命令"></a>命令</h2><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">setbit key offset value # 设置值</span><br><span class="line"></span><br><span class="line">getbit key offset # 获取值</span><br><span class="line"></span><br><span class="line">bitcount [start] [end] # 获取Bitmaps指定范围值为1的个数</span><br><span class="line"></span><br><span class="line">bitop op destkey key [key ...] # 对多个Bitmaps操作，op：and(交集)、or(并集)、not(非)、xor(异或)</span><br><span class="line"></span><br><span class="line">bitpos key targetBit [start] [end] # 计算Bitmaps中第一个值为targetBit的偏移量</span><br></pre></td></tr></tbody></table></figure>
 
 <h1 id="HyperLogLog"><a href="#HyperLogLog" class="headerlink" title="HyperLogLog"></a>HyperLogLog</h1><p>HyperLogLog 并不是一种新的数据结构（实际类型为字符串类型），而是一种基数算法，通过HyperLogLog可以利用极小的内存空间完成独立总数的统计，数据集可以是IP、Email、ID等。</p>
 <p>HyperLogLog内存占用量非常小，但是存在错误率，在进行数据结构选型时只需要确认以下两条：</p>
