@@ -42,7 +42,7 @@ Redis中有两种方法修改配置：
 
 例如：
 ```
-config set slowlog-log-slower-than 20000 # 将阈值设置为20000微妙
+config set slowlog-log-slower-than 20000 # 将阈值设置为20000微秒
 config set slowlog-max-len 1000 # 将列表长度设置为1000
 config rewrite # 将配置文件持久化到本地配置文件
 ```
