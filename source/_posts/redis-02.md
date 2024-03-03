@@ -240,7 +240,7 @@ Bitmaps单独提供了一套命令，可以把Bitmaps看做成以位为单位的
 ```
 setbit key offset value # 设置值
 
-gitbit key offset # 获取值
+getbit key offset # 获取值
 
 bitcount [start] [end] # 获取Bitmaps指定范围值为1的个数
 
