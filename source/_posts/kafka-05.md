@@ -77,7 +77,7 @@ $ kafka-topic.sh --zookeeper localhost:2181/kafka --delete --topic topic-delete 
 
 分区使用多副本的机制提升可靠性，但是只有leader副本对外提供读写服务，而follower副本只负责在内部进行消息同步。如果分区leader副本不可用，那么整个分区都会不可用，此时Kafka会从剩余的follower副本中挑选一个新的leader副本继续对外提供服务。
 
-为了防止Kafka集群的broker节点遇到故障导致分区漂移从而使集群负载不均衡的情况，Kafka引入了优先副本（preferred replica）的概念。优先副本即AR集合中的第一个副本，理想情况下，优先副本就是分区是的leader副本。Kafka会通过优先副本选举促使优先副本选举为leader副本，促进集群负载均衡，这一行为称为“分区平衡”。
+为了防止Kafka集群的broker节点遇到故障导致分区漂移从而使集群负载不均衡的情况，Kafka引入了优先副本（preferred replica）的概念。优先副本即AR集合中的第一个副本，理想情况下，优先副本就是分区的leader副本。Kafka会通过优先副本选举促使优先副本选举为leader副本，促进集群负载均衡，这一行为称为“分区平衡”。
 
 Kafka提供分区自动平衡的功能，对应broker参数`auto.leader.rebaleance.enable`，默认为true。当开启分区自动平衡时，Kafka控制器会开启一个定时任务轮询所有broker节点，计算分区不平衡率（broker不平衡率=非优先副本leader个数/分区总数）是否超过`leader.imbalance.per.broker.percentage`参数配置的值（默认10%），如果超过设定比值就会自动进行分区平衡。
 
