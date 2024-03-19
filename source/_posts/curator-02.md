@@ -111,7 +111,7 @@ private InternalAcquireResult internalAcquire1Lease(ImmutableList.Builder<Lease>
                     return InternalAcquireResult.RETRY_DUE_TO_MISSING_NODE;
                 }
 
-                // 如果字节点数量小于最大值，那么获取成功
+                // 如果子节点数量小于最大值，那么获取成功
                 if ( children.size() <= maxLeases ) {
                     break;
                 }
