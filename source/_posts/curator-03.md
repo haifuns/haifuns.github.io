@@ -54,7 +54,7 @@ InterProcessMutex readMutex = new InternalInterProcessMutex
 );
 
 private PredicateResults readLockPredicate(List<String> children, String sequenceNodeName) throws Exception {
-        // 如果是当前线程加的读锁，那么写锁可以加锁成功
+        // 如果是当前线程加的写锁，那么读锁可以加锁成功
         if ( writeMutex.isOwnedByCurrentThread() ) {
                 return new PredicateResults(null, true);
         }
