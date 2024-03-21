@@ -69,8 +69,10 @@ Redis所有键都可以设置过期属性，由于进程内保存大量键，维
 
 当Redis所用的内存达到maxmemory上限时会触发相应的溢出控制策略。具体策略受maxmemoey-policy参数控制，支持6种策略：
 1. noeviction：默认策略，不会删除任何数据，拒绝写入并返回OOM错误
-2. volatile-lru：根据LRU算法删除设置了超时属性的键，直到腾出足够空间，如果没有可以删除的键则回退到noeviction策略
+2. volatile-lru：根据LRU算法删除最近最少使用且设置了超时属性的键，直到腾出足够空间，如果没有可以删除的键则回退到noeviction策略
 3. allkeys-lru：根据LRU算法删除键，不管数据有没有设置超时属性，直到腾出足够空间为止
 4. allkeys-random：随机删除所有键，直到腾出足够空间
-5. volatile-random：随机删除过期键，直到腾出足够空间
+5. volatile-random：随机删除设置过期时间的键，直到腾出足够空间
 6. volatile-ttl：根据键值对象的ttl属性，删除最近将要过期的数据，如果没有回退到noevication策略
+7. volatile-lfu：redis4.0新增，根据LFU算法删除最不经常使用且设置了超时属性的键
+8. allkeys-lfu：redis4.0新增，根据LFU算法删除所有键
