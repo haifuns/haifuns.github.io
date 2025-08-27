@@ -32,9 +32,3 @@ jobs:
         with:
           branch: gh-pages
           folder: public
-
-      - name: Refresh CDN
-        run: npm run deploy:refresh-cdn
-        env:
-          CDN_ID: ${{ secrets.CDN_ID }}
-          CDN_KEY: ${{ secrets.CDN_KEY }}
