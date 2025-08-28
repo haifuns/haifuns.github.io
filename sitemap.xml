@@ -2,42 +2,6 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://haifuns.com/roaming/index.html</loc>
-    
-    <lastmod>2025-08-28</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://haifuns.com/tags/index.html</loc>
-    
-    <lastmod>2025-08-28</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://haifuns.com/search/index.html</loc>
-    
-    <lastmod>2025-08-28</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://haifuns.com/2022/03/09/zookeeper-06/</loc>
-    
-    <lastmod>2025-08-28</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://haifuns.com/2022/03/21/zookeeper-07/</loc>
     
     <lastmod>2025-08-28</lastmod>
@@ -74,15 +38,6 @@
   </url>
   
   <url>
-    <loc>https://haifuns.com/about/index.html</loc>
-    
-    <lastmod>2025-08-28</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://haifuns.com/categories/index.html</loc>
     
     <lastmod>2025-08-28</lastmod>
@@ -92,7 +47,7 @@
   </url>
   
   <url>
-    <loc>https://haifuns.com/2022/01/10/stringmatch-04/</loc>
+    <loc>https://haifuns.com/about/index.html</loc>
     
     <lastmod>2025-08-28</lastmod>
     
@@ -101,7 +56,7 @@
   </url>
   
   <url>
-    <loc>https://haifuns.com/2022/01/26/stringmatch-05/</loc>
+    <loc>https://haifuns.com/search/index.html</loc>
     
     <lastmod>2025-08-28</lastmod>
     
@@ -110,7 +65,7 @@
   </url>
   
   <url>
-    <loc>https://haifuns.com/2019/11/02/svn/</loc>
+    <loc>https://haifuns.com/tags/index.html</loc>
     
     <lastmod>2025-08-28</lastmod>
     
@@ -119,16 +74,7 @@
   </url>
   
   <url>
-    <loc>https://haifuns.com/2021/03/13/tcpip/</loc>
-    
-    <lastmod>2025-08-28</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://haifuns.com/2023/07/14/vectorsearch/</loc>
+    <loc>https://haifuns.com/roaming/index.html</loc>
     
     <lastmod>2025-08-28</lastmod>
     
@@ -182,15 +128,6 @@
   </url>
   
   <url>
-    <loc>https://haifuns.com/2022/02/23/zookeeper-04/</loc>
-    
-    <lastmod>2025-08-28</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://haifuns.com/2022/02/28/zookeeper-05/</loc>
     
     <lastmod>2025-08-28</lastmod>
@@ -200,7 +137,7 @@
   </url>
   
   <url>
-    <loc>https://haifuns.com/2021/01/18/redis-03/</loc>
+    <loc>https://haifuns.com/2022/02/23/zookeeper-04/</loc>
     
     <lastmod>2025-08-28</lastmod>
     
@@ -209,16 +146,7 @@
   </url>
   
   <url>
-    <loc>https://haifuns.com/2021/01/23/redis-04/</loc>
-    
-    <lastmod>2025-08-28</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://haifuns.com/2021/01/24/redis-05/</loc>
+    <loc>https://haifuns.com/2022/03/09/zookeeper-06/</loc>
     
     <lastmod>2025-08-28</lastmod>
     
@@ -317,7 +245,43 @@
   </url>
   
   <url>
-    <loc>https://haifuns.com/2020/12/26/rabbitmq-2/</loc>
+    <loc>https://haifuns.com/2022/01/10/stringmatch-04/</loc>
+    
+    <lastmod>2025-08-28</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://haifuns.com/2022/01/26/stringmatch-05/</loc>
+    
+    <lastmod>2025-08-28</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://haifuns.com/2019/11/02/svn/</loc>
+    
+    <lastmod>2025-08-28</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://haifuns.com/2021/03/13/tcpip/</loc>
+    
+    <lastmod>2025-08-28</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://haifuns.com/2023/07/14/vectorsearch/</loc>
     
     <lastmod>2025-08-28</lastmod>
     
@@ -362,6 +326,15 @@
   </url>
   
   <url>
+    <loc>https://haifuns.com/2021/11/18/raft/</loc>
+    
+    <lastmod>2025-08-28</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://haifuns.com/2021/01/15/redis-01/</loc>
     
     <lastmod>2025-08-28</lastmod>
@@ -371,7 +344,7 @@
   </url>
   
   <url>
-    <loc>https://haifuns.com/2021/11/18/raft/</loc>
+    <loc>https://haifuns.com/2021/01/18/redis-03/</loc>
     
     <lastmod>2025-08-28</lastmod>
     
@@ -389,7 +362,7 @@
   </url>
   
   <url>
-    <loc>https://haifuns.com/2021/05/22/kafka-04/</loc>
+    <loc>https://haifuns.com/2021/01/23/redis-04/</loc>
     
     <lastmod>2025-08-28</lastmod>
     
@@ -398,25 +371,7 @@
   </url>
   
   <url>
-    <loc>https://haifuns.com/2021/05/29/kafka-05/</loc>
-    
-    <lastmod>2025-08-28</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://haifuns.com/2021/05/29/kafka-06/</loc>
-    
-    <lastmod>2025-08-28</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://haifuns.com/2021/06/06/kafka-07/</loc>
+    <loc>https://haifuns.com/2021/01/24/redis-05/</loc>
     
     <lastmod>2025-08-28</lastmod>
     
@@ -515,34 +470,7 @@
   </url>
   
   <url>
-    <loc>https://haifuns.com/2020/12/26/java-io/</loc>
-    
-    <lastmod>2025-08-28</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://haifuns.com/2020/12/26/java-nio/</loc>
-    
-    <lastmod>2025-08-28</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://haifuns.com/2020/12/26/jvm-2/</loc>
-    
-    <lastmod>2025-08-28</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://haifuns.com/2020/12/26/jvm-1/</loc>
+    <loc>https://haifuns.com/2020/12/26/rabbitmq-2/</loc>
     
     <lastmod>2025-08-28</lastmod>
     
@@ -632,7 +560,7 @@
   </url>
   
   <url>
-    <loc>https://haifuns.com/2020/12/26/java-concurrent-11/</loc>
+    <loc>https://haifuns.com/2021/05/22/kafka-04/</loc>
     
     <lastmod>2025-08-28</lastmod>
     
@@ -641,7 +569,7 @@
   </url>
   
   <url>
-    <loc>https://haifuns.com/2020/12/26/java-concurrent-12/</loc>
+    <loc>https://haifuns.com/2021/05/29/kafka-05/</loc>
     
     <lastmod>2025-08-28</lastmod>
     
@@ -650,7 +578,16 @@
   </url>
   
   <url>
-    <loc>https://haifuns.com/2020/12/26/java-concurrent-13/</loc>
+    <loc>https://haifuns.com/2021/05/29/kafka-06/</loc>
+    
+    <lastmod>2025-08-28</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://haifuns.com/2021/06/06/kafka-07/</loc>
     
     <lastmod>2025-08-28</lastmod>
     
@@ -686,7 +623,7 @@
   </url>
   
   <url>
-    <loc>https://haifuns.com/2020/12/26/java-concurrent-4/</loc>
+    <loc>https://haifuns.com/2020/12/26/java-concurrent-5/</loc>
     
     <lastmod>2025-08-28</lastmod>
     
@@ -695,7 +632,7 @@
   </url>
   
   <url>
-    <loc>https://haifuns.com/2020/12/26/java-concurrent-5/</loc>
+    <loc>https://haifuns.com/2020/12/26/java-concurrent-4/</loc>
     
     <lastmod>2025-08-28</lastmod>
     
@@ -740,7 +677,7 @@
   </url>
   
   <url>
-    <loc>https://haifuns.com/2023/03/02/es-01/</loc>
+    <loc>https://haifuns.com/2020/12/26/java-io/</loc>
     
     <lastmod>2025-08-28</lastmod>
     
@@ -749,7 +686,7 @@
   </url>
   
   <url>
-    <loc>https://haifuns.com/2023/03/03/es-02/</loc>
+    <loc>https://haifuns.com/2020/12/26/java-nio/</loc>
     
     <lastmod>2025-08-28</lastmod>
     
@@ -758,7 +695,7 @@
   </url>
   
   <url>
-    <loc>https://haifuns.com/2023/03/05/es-03/</loc>
+    <loc>https://haifuns.com/2020/12/26/jvm-1/</loc>
     
     <lastmod>2025-08-28</lastmod>
     
@@ -767,25 +704,7 @@
   </url>
   
   <url>
-    <loc>https://haifuns.com/2023/03/06/es-04/</loc>
-    
-    <lastmod>2025-08-28</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://haifuns.com/2023/03/07/es-05/</loc>
-    
-    <lastmod>2025-08-28</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://haifuns.com/2019/11/21/flow/</loc>
+    <loc>https://haifuns.com/2020/12/26/jvm-2/</loc>
     
     <lastmod>2025-08-28</lastmod>
     
@@ -857,7 +776,7 @@
   </url>
   
   <url>
-    <loc>https://haifuns.com/2022/09/27/high-cpu/</loc>
+    <loc>https://haifuns.com/2020/04/28/hibernatetypes-extend/</loc>
     
     <lastmod>2025-08-28</lastmod>
     
@@ -866,7 +785,7 @@
   </url>
   
   <url>
-    <loc>https://haifuns.com/2020/04/28/hibernatetypes-extend/</loc>
+    <loc>https://haifuns.com/2022/09/27/high-cpu/</loc>
     
     <lastmod>2025-08-28</lastmod>
     
@@ -893,7 +812,7 @@
   </url>
   
   <url>
-    <loc>https://haifuns.com/2022/08/30/algorithm-unionfind/</loc>
+    <loc>https://haifuns.com/2020/12/26/java-concurrent-11/</loc>
     
     <lastmod>2025-08-28</lastmod>
     
@@ -902,7 +821,7 @@
   </url>
   
   <url>
-    <loc>https://haifuns.com/2022/07/17/algorithm-uncomparesort/</loc>
+    <loc>https://haifuns.com/2020/12/26/java-concurrent-12/</loc>
     
     <lastmod>2025-08-28</lastmod>
     
@@ -911,16 +830,7 @@
   </url>
   
   <url>
-    <loc>https://haifuns.com/2023/06/06/blockchain/</loc>
-    
-    <lastmod>2025-08-28</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://haifuns.com/2022/06/22/algorithm-xor/</loc>
+    <loc>https://haifuns.com/2020/12/26/java-concurrent-13/</loc>
     
     <lastmod>2025-08-28</lastmod>
     
@@ -1001,6 +911,24 @@
   </url>
   
   <url>
+    <loc>https://haifuns.com/2023/03/02/es-01/</loc>
+    
+    <lastmod>2025-08-28</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://haifuns.com/2023/03/03/es-02/</loc>
+    
+    <lastmod>2025-08-28</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://haifuns.com/2020/06/14/docker/</loc>
     
     <lastmod>2025-08-28</lastmod>
@@ -1010,7 +938,7 @@
   </url>
   
   <url>
-    <loc>https://haifuns.com/2022/09/05/algorithm-dp3/</loc>
+    <loc>https://haifuns.com/2023/03/05/es-03/</loc>
     
     <lastmod>2025-08-28</lastmod>
     
@@ -1019,7 +947,7 @@
   </url>
   
   <url>
-    <loc>https://haifuns.com/2022/09/06/algorithm-dp4/</loc>
+    <loc>https://haifuns.com/2023/03/06/es-04/</loc>
     
     <lastmod>2025-08-28</lastmod>
     
@@ -1028,7 +956,7 @@
   </url>
   
   <url>
-    <loc>https://haifuns.com/2022/09/07/algorithm-dp5/</loc>
+    <loc>https://haifuns.com/2023/03/07/es-05/</loc>
     
     <lastmod>2025-08-28</lastmod>
     
@@ -1037,7 +965,7 @@
   </url>
   
   <url>
-    <loc>https://haifuns.com/2022/09/11/algorithm-dp6/</loc>
+    <loc>https://haifuns.com/2019/11/21/flow/</loc>
     
     <lastmod>2025-08-28</lastmod>
     
@@ -1082,7 +1010,7 @@
   </url>
   
   <url>
-    <loc>https://haifuns.com/2022/06/29/algorithm-mergesort/</loc>
+    <loc>https://haifuns.com/2022/07/25/algorithm-linkedlist/</loc>
     
     <lastmod>2025-08-28</lastmod>
     
@@ -1091,7 +1019,7 @@
   </url>
   
   <url>
-    <loc>https://haifuns.com/2022/07/25/algorithm-linkedlist/</loc>
+    <loc>https://haifuns.com/2022/06/29/algorithm-mergesort/</loc>
     
     <lastmod>2025-08-28</lastmod>
     
@@ -1137,6 +1065,42 @@
   
   <url>
     <loc>https://haifuns.com/2022/07/17/algorithm-trietree/</loc>
+    
+    <lastmod>2025-08-28</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://haifuns.com/2022/07/17/algorithm-uncomparesort/</loc>
+    
+    <lastmod>2025-08-28</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://haifuns.com/2022/08/30/algorithm-unionfind/</loc>
+    
+    <lastmod>2025-08-28</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://haifuns.com/2022/06/22/algorithm-xor/</loc>
+    
+    <lastmod>2025-08-28</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://haifuns.com/2023/06/06/blockchain/</loc>
     
     <lastmod>2025-08-28</lastmod>
     
@@ -1243,6 +1207,42 @@
     <priority>0.6</priority>
   </url>
   
+  <url>
+    <loc>https://haifuns.com/2022/09/05/algorithm-dp3/</loc>
+    
+    <lastmod>2025-08-28</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://haifuns.com/2022/09/06/algorithm-dp4/</loc>
+    
+    <lastmod>2025-08-28</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://haifuns.com/2022/09/07/algorithm-dp5/</loc>
+    
+    <lastmod>2025-08-28</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://haifuns.com/2022/09/11/algorithm-dp6/</loc>
+    
+    <lastmod>2025-08-28</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
 
   <url>
     <loc>https://haifuns.com/</loc>
@@ -1330,14 +1330,14 @@
   </url>
   
   <url>
-    <loc>https://haifuns.com/tags/%E5%BD%92%E5%B9%B6/</loc>
+    <loc>https://haifuns.com/tags/%E9%93%BE%E8%A1%A8/</loc>
     <lastmod>2025-08-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://haifuns.com/tags/%E9%93%BE%E8%A1%A8/</loc>
+    <loc>https://haifuns.com/tags/%E5%BD%92%E5%B9%B6/</loc>
     <lastmod>2025-08-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1442,14 +1442,14 @@
   </url>
   
   <url>
-    <loc>https://haifuns.com/tags/Docker/</loc>
+    <loc>https://haifuns.com/tags/Elasticsearch/</loc>
     <lastmod>2025-08-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://haifuns.com/tags/Elasticsearch/</loc>
+    <loc>https://haifuns.com/tags/Docker/</loc>
     <lastmod>2025-08-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1491,13 +1491,6 @@
   </url>
   
   <url>
-    <loc>https://haifuns.com/tags/%E6%8E%92%E6%9F%A5%E7%BB%8F%E9%AA%8C/</loc>
-    <lastmod>2025-08-28</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://haifuns.com/tags/Hibernate/</loc>
     <lastmod>2025-08-28</lastmod>
     <changefreq>weekly</changefreq>
@@ -1506,6 +1499,13 @@
   
   <url>
     <loc>https://haifuns.com/tags/PostgreSQL/</loc>
+    <lastmod>2025-08-28</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://haifuns.com/tags/%E6%8E%92%E6%9F%A5%E7%BB%8F%E9%AA%8C/</loc>
     <lastmod>2025-08-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1689,14 +1689,14 @@
   </url>
   
   <url>
-    <loc>https://haifuns.com/categories/Docker/</loc>
+    <loc>https://haifuns.com/categories/%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E/</loc>
     <lastmod>2025-08-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://haifuns.com/categories/%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E/</loc>
+    <loc>https://haifuns.com/categories/Docker/</loc>
     <lastmod>2025-08-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1724,14 +1724,14 @@
   </url>
   
   <url>
-    <loc>https://haifuns.com/categories/%E6%8E%92%E6%9F%A5%E7%BB%8F%E9%AA%8C/</loc>
+    <loc>https://haifuns.com/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/</loc>
     <lastmod>2025-08-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://haifuns.com/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/</loc>
+    <loc>https://haifuns.com/categories/%E6%8E%92%E6%9F%A5%E7%BB%8F%E9%AA%8C/</loc>
     <lastmod>2025-08-28</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
