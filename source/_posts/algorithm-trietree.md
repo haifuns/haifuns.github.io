@@ -18,7 +18,7 @@ date: 2022-07-17 15:30:00
 - 每个节点记录经过当前节点的字符串数量p和是否是字符串结尾e
 - 每条线段表示字符
 
-![image](https://img.haifuns.com/md/img/trie.png)
+![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/md/img/trie.png)
 
 # 前缀树实现
 

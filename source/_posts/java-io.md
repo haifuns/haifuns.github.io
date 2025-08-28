@@ -124,7 +124,7 @@ cmd 窗口使用 telnet 127.0.0.1 8080 创建连接，输入ctrl+]，输入send 
 
 ## NIO 详解
 
-见下一篇[【Java I/O】NIO 详解](https://haifuns.com/2020/12/26/java-nio/)
+见下一篇[【Java I/O】NIO 详解](https://haifs.com/2020/12/26/java-nio/)
 
 ## AIO 介绍
 

@@ -353,7 +353,7 @@ public static void swap(int[] arr, int i, int j) {
 
 ## 动画演示
 
-![image](https://img.haifuns.com/md/img/heapsort.gif)
+![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/md/img/heapsort.gif)
 
 ## 代码示例
 
@@ -431,7 +431,7 @@ public static void swap(int[] arr, int i, int j) {
 
 ## 动画演示
 
-![](https://img.haifuns.com/md/img/countsort.gif)
+![](https://haif-cloud.oss-cn-beijing.aliyuncs.com/md/img/countsort.gif)
 
 ## 代码实现
 
@@ -467,7 +467,7 @@ public static void countSort(int[] arr) {
 
 ## 动画演示
 
-![](https://img.haifuns.com/md/img/radixsort.gif)
+![](https://haif-cloud.oss-cn-beijing.aliyuncs.com/md/img/radixsort.gif)
 
 ## 代码实现
 

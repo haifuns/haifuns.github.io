@@ -18,10 +18,8 @@ const clientConfig = {
 
 const client = new CdnClient(clientConfig);
 const params = {
-    "Paths": [
-        "https://haifuns.com"
-    ],
-    "FlushType": "flush"
+  Paths: ["https://haifs.com"],
+  FlushType: "flush",
 };
 client.PurgePathCache(params).then(
   (data) => {

@@ -12,7 +12,7 @@ date: 2021-05-22 20:30:00
 
 Kafka中多个消费者间的分区分配由消费者协调器（ConsumerCoordinator）和组协调器（GroupCoordinator）共同完成。全部消费组被分为多个子集，每个子集在服务端对应者一个GroupCoordinator进行管理，而消费者客户端中的ConsumerCoordinator组件负责与GroupCoordinator进行交互。
 
-GroupCoordinator与ConsumerCoordinaor之间最重要的工作就是负责执行消费者再均衡。分区分配工作也是在再均衡期间完成的。
+GroupCoordinator与ConsumerCoordinator之间最重要的工作就是负责执行消费者再均衡。分区分配工作也是在再均衡期间完成的。
 
 <!-- more -->
 
@@ -23,7 +23,7 @@ GroupCoordinator与ConsumerCoordinaor之间最重要的工作就是负责执行�
 * 新的消费者加入消费组。
 * 消费者宕机。
 * 消费者主动退出消费组。
-* 消费组对应的GroupCoordinaor节点发生变更。
+* 消费组对应的GroupCoordinator节点发生变更。
 * 消费组内订阅的任一主题或主题分区数量发生变化。
 
 # 再均衡流程
@@ -44,7 +44,7 @@ Kafka收到FindCoordinatorRequest消息后，会根据coordinator_key（即group
 
 * group_id：消费组id。
 * session_timeout：对应消费者session.timeout.ms，默认10s。当GroupCoordinator超过session_timeout指定的时间没有收到心跳则认为消费者已下线。
-* reblance_timeout：对应消费者max.poll.interval.ms，默认5min。表示消费组再平衡时GroupCoordinator等待消费者重新加入的最长时间。
+* rebalance_timeout：对应消费者max.poll.interval.ms，默认5min。表示消费组再平衡时GroupCoordinator等待消费者重新加入的最长时间。
 * member_id：GroupCoordinator分配给消费者的id。消费者第一次发送JoinGroupRequest请求时此字段为null。
 * protocol_type：消费者实现协议，此处传consumer。
 * group_protocols：多个分区分配策略，配置多种策略时包含多个protocol_name和protocol_metadata信息。
@@ -71,7 +71,7 @@ GroupCoordinator需要为消费组内的消费者选举一个消费组leader，�
 
 GroupCoordinator会将leader消费者请求中的分区分配策略连同这个消费组的元数据信息存入Kafka的__consumer_offsets主题中。最后发送分区分配方案给各个消费者。
 
-## 第四阶段（HEARTAEAT）
+## 第四阶段（HEARTBEAT）
 
 进入此阶段后消费组中的所有消费者就会处于正常工作状态。在开始消费前，消费者需要拉取消息的起始位置，如果之前提交过消费位移则通过OffsetFetchRequest向GroupCoordinator获取上次提交的位移并从此处继续消费。
 
