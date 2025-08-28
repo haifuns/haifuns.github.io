@@ -9,14 +9,14 @@
     <meta name="description" content="概述Java NIO 全称 java non-blocking IO，是指 JDK 提供的新 API。从 JDK1.4 开始，Java 提供了一系列改进的输入&#x2F;输出的新特性，被统称为 NIO(即 New IO)，是同步非阻塞的。 NIO 三大核心部分：Channel(通道)，Buffer(缓冲区), Selector(选择器)。 NIO 是面向缓冲区，或者面向块编程的。数据读取到一个它稍后处理的缓">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【Java I&#x2F;O】NIO 详解">
-<meta property="og:url" content="https://haifuns.com/2020/12/26/java-nio/index.html">
+<meta property="og:url" content="https://haifs.com/2020/12/26/java-nio/index.html">
 <meta property="og:site_name" content="haif&#39;s blog">
 <meta property="og:description" content="概述Java NIO 全称 java non-blocking IO，是指 JDK 提供的新 API。从 JDK1.4 开始，Java 提供了一系列改进的输入&#x2F;输出的新特性，被统称为 NIO(即 New IO)，是同步非阻塞的。 NIO 三大核心部分：Channel(通道)，Buffer(缓冲区), Selector(选择器)。 NIO 是面向缓冲区，或者面向块编程的。数据读取到一个它稍后处理的缓">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/io/nio.png">
 <meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/io/nio-flow.png">
 <meta property="article:published_time" content="2020-12-26T09:28:00.000Z">
-<meta property="article:modified_time" content="2025-08-28T08:51:27.063Z">
+<meta property="article:modified_time" content="2025-08-28T08:56:39.152Z">
 <meta property="article:author" content="haifun">
 <meta property="article:tag" content="Java IO">
 <meta name="twitter:card" content="summary">
@@ -117,20 +117,20 @@
     <br/>
     <div id="share" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifuns.com/2020/12/26/java-nio/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifuns.com/2020/12/26/java-nio/&text=【Java I/O】NIO 详解"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifuns.com/2020/12/26/java-nio/&title=【Java I/O】NIO 详解"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifuns.com/2020/12/26/java-nio/&is_video=false&description=【Java I/O】NIO 详解"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=【Java I/O】NIO 详解&body=Check out this article: https://haifuns.com/2020/12/26/java-nio/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifuns.com/2020/12/26/java-nio/&title=【Java I/O】NIO 详解"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifuns.com/2020/12/26/java-nio/&title=【Java I/O】NIO 详解"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifuns.com/2020/12/26/java-nio/&title=【Java I/O】NIO 详解"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifuns.com/2020/12/26/java-nio/&title=【Java I/O】NIO 详解"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifuns.com/2020/12/26/java-nio/&name=【Java I/O】NIO 详解&description=&lt;h1 id=&#34;概述&#34;&gt;&lt;a href=&#34;#概述&#34; class=&#34;headerlink&#34; title=&#34;概述&#34;&gt;&lt;/a&gt;概述&lt;/h1&gt;&lt;p&gt;Java NIO 全称 java non-blocking IO，是指 JDK 提供的新 API。从 JDK1.4 开始，Java 提供了一系列改进的输入/输出的新特性，被统称为 NIO(即 New IO)，是同步非阻塞的。&lt;/p&gt;
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifs.com/2020/12/26/java-nio/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifs.com/2020/12/26/java-nio/&text=【Java I/O】NIO 详解"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifs.com/2020/12/26/java-nio/&title=【Java I/O】NIO 详解"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifs.com/2020/12/26/java-nio/&is_video=false&description=【Java I/O】NIO 详解"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=【Java I/O】NIO 详解&body=Check out this article: https://haifs.com/2020/12/26/java-nio/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifs.com/2020/12/26/java-nio/&title=【Java I/O】NIO 详解"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifs.com/2020/12/26/java-nio/&title=【Java I/O】NIO 详解"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifs.com/2020/12/26/java-nio/&title=【Java I/O】NIO 详解"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifs.com/2020/12/26/java-nio/&title=【Java I/O】NIO 详解"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifs.com/2020/12/26/java-nio/&name=【Java I/O】NIO 详解&description=&lt;h1 id=&#34;概述&#34;&gt;&lt;a href=&#34;#概述&#34; class=&#34;headerlink&#34; title=&#34;概述&#34;&gt;&lt;/a&gt;概述&lt;/h1&gt;&lt;p&gt;Java NIO 全称 java non-blocking IO，是指 JDK 提供的新 API。从 JDK1.4 开始，Java 提供了一系列改进的输入/输出的新特性，被统称为 NIO(即 New IO)，是同步非阻塞的。&lt;/p&gt;
 &lt;p&gt;NIO 三大核心部分：Channel(通道)，Buffer(缓冲区), Selector(选择器)。&lt;/p&gt;
 &lt;p&gt;NIO 是面向缓冲区，或者面向块编程的。数据读取到一个它稍后处理的缓冲区，需要时可在缓冲区中前后移动，这就增加了处理过程中的灵活性，使用它可以提供非阻塞式的高伸缩性网络。&lt;/p&gt;
 &lt;p&gt;Java NIO 的非阻塞模式，使一个线程从某通道发送请求或者读取数据，但是它仅能得到目前可用的数据，如果目前没有数据可用时，就什么都不会获取，而不是保持线程阻塞，所以直至数据变的可以读取之前，该线程可以继续做其他的事情。非阻塞写也是如此，一个线程请求写入一些数据到某通道，但不需要等待它完全写入， 这个线程同时可以去做别的事情。&lt;/p&gt;"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifuns.com/2020/12/26/java-nio/&t=【Java I/O】NIO 详解"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifs.com/2020/12/26/java-nio/&t=【Java I/O】NIO 详解"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
@@ -319,20 +319,20 @@
 
     <div id="share-footer" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifuns.com/2020/12/26/java-nio/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifuns.com/2020/12/26/java-nio/&text=【Java I/O】NIO 详解"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifuns.com/2020/12/26/java-nio/&title=【Java I/O】NIO 详解"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifuns.com/2020/12/26/java-nio/&is_video=false&description=【Java I/O】NIO 详解"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=【Java I/O】NIO 详解&body=Check out this article: https://haifuns.com/2020/12/26/java-nio/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifuns.com/2020/12/26/java-nio/&title=【Java I/O】NIO 详解"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifuns.com/2020/12/26/java-nio/&title=【Java I/O】NIO 详解"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifuns.com/2020/12/26/java-nio/&title=【Java I/O】NIO 详解"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifuns.com/2020/12/26/java-nio/&title=【Java I/O】NIO 详解"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifuns.com/2020/12/26/java-nio/&name=【Java I/O】NIO 详解&description=&lt;h1 id=&#34;概述&#34;&gt;&lt;a href=&#34;#概述&#34; class=&#34;headerlink&#34; title=&#34;概述&#34;&gt;&lt;/a&gt;概述&lt;/h1&gt;&lt;p&gt;Java NIO 全称 java non-blocking IO，是指 JDK 提供的新 API。从 JDK1.4 开始，Java 提供了一系列改进的输入/输出的新特性，被统称为 NIO(即 New IO)，是同步非阻塞的。&lt;/p&gt;
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifs.com/2020/12/26/java-nio/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifs.com/2020/12/26/java-nio/&text=【Java I/O】NIO 详解"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifs.com/2020/12/26/java-nio/&title=【Java I/O】NIO 详解"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifs.com/2020/12/26/java-nio/&is_video=false&description=【Java I/O】NIO 详解"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=【Java I/O】NIO 详解&body=Check out this article: https://haifs.com/2020/12/26/java-nio/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifs.com/2020/12/26/java-nio/&title=【Java I/O】NIO 详解"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifs.com/2020/12/26/java-nio/&title=【Java I/O】NIO 详解"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifs.com/2020/12/26/java-nio/&title=【Java I/O】NIO 详解"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifs.com/2020/12/26/java-nio/&title=【Java I/O】NIO 详解"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifs.com/2020/12/26/java-nio/&name=【Java I/O】NIO 详解&description=&lt;h1 id=&#34;概述&#34;&gt;&lt;a href=&#34;#概述&#34; class=&#34;headerlink&#34; title=&#34;概述&#34;&gt;&lt;/a&gt;概述&lt;/h1&gt;&lt;p&gt;Java NIO 全称 java non-blocking IO，是指 JDK 提供的新 API。从 JDK1.4 开始，Java 提供了一系列改进的输入/输出的新特性，被统称为 NIO(即 New IO)，是同步非阻塞的。&lt;/p&gt;
 &lt;p&gt;NIO 三大核心部分：Channel(通道)，Buffer(缓冲区), Selector(选择器)。&lt;/p&gt;
 &lt;p&gt;NIO 是面向缓冲区，或者面向块编程的。数据读取到一个它稍后处理的缓冲区，需要时可在缓冲区中前后移动，这就增加了处理过程中的灵活性，使用它可以提供非阻塞式的高伸缩性网络。&lt;/p&gt;
 &lt;p&gt;Java NIO 的非阻塞模式，使一个线程从某通道发送请求或者读取数据，但是它仅能得到目前可用的数据，如果目前没有数据可用时，就什么都不会获取，而不是保持线程阻塞，所以直至数据变的可以读取之前，该线程可以继续做其他的事情。非阻塞写也是如此，一个线程请求写入一些数据到某通道，但不需要等待它完全写入， 这个线程同时可以去做别的事情。&lt;/p&gt;"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifuns.com/2020/12/26/java-nio/&t=【Java I/O】NIO 详解"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifs.com/2020/12/26/java-nio/&t=【Java I/O】NIO 详解"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 
     </div>

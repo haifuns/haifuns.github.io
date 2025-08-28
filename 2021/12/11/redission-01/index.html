@@ -9,12 +9,12 @@
     <meta name="description" content="Redission提供的可重入锁RedissonLock实现了java.util.concurrent.locks.Lock接口，使用起来非常简单，示例如下： 12RLock lock &#x3D; redisson.getLock(&quot;anyLock&quot;);lock.lock();  同时，还支持指定锁超时时间、指定获取锁最大等待时间以及异步获取锁的方式： 123456789101112&#x2F;&#x2F; 加锁后10秒钟自">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【Redission源码】可重入锁源码解析">
-<meta property="og:url" content="https://haifuns.com/2021/12/11/redission-01/index.html">
+<meta property="og:url" content="https://haifs.com/2021/12/11/redission-01/index.html">
 <meta property="og:site_name" content="haif&#39;s blog">
 <meta property="og:description" content="Redission提供的可重入锁RedissonLock实现了java.util.concurrent.locks.Lock接口，使用起来非常简单，示例如下： 12RLock lock &#x3D; redisson.getLock(&quot;anyLock&quot;);lock.lock();  同时，还支持指定锁超时时间、指定获取锁最大等待时间以及异步获取锁的方式： 123456789101112&#x2F;&#x2F; 加锁后10秒钟自">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-12-11T15:15:00.000Z">
-<meta property="article:modified_time" content="2025-08-28T08:51:27.067Z">
+<meta property="article:modified_time" content="2025-08-28T08:56:39.155Z">
 <meta property="article:author" content="haifun">
 <meta property="article:tag" content="Redission">
 <meta name="twitter:card" content="summary">
@@ -114,17 +114,17 @@
     <br/>
     <div id="share" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifuns.com/2021/12/11/redission-01/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifuns.com/2021/12/11/redission-01/&text=【Redission源码】可重入锁源码解析"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifuns.com/2021/12/11/redission-01/&title=【Redission源码】可重入锁源码解析"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifuns.com/2021/12/11/redission-01/&is_video=false&description=【Redission源码】可重入锁源码解析"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=【Redission源码】可重入锁源码解析&body=Check out this article: https://haifuns.com/2021/12/11/redission-01/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifuns.com/2021/12/11/redission-01/&title=【Redission源码】可重入锁源码解析"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifuns.com/2021/12/11/redission-01/&title=【Redission源码】可重入锁源码解析"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifuns.com/2021/12/11/redission-01/&title=【Redission源码】可重入锁源码解析"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifuns.com/2021/12/11/redission-01/&title=【Redission源码】可重入锁源码解析"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifuns.com/2021/12/11/redission-01/&name=【Redission源码】可重入锁源码解析&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifuns.com/2021/12/11/redission-01/&t=【Redission源码】可重入锁源码解析"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifs.com/2021/12/11/redission-01/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifs.com/2021/12/11/redission-01/&text=【Redission源码】可重入锁源码解析"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifs.com/2021/12/11/redission-01/&title=【Redission源码】可重入锁源码解析"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifs.com/2021/12/11/redission-01/&is_video=false&description=【Redission源码】可重入锁源码解析"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=【Redission源码】可重入锁源码解析&body=Check out this article: https://haifs.com/2021/12/11/redission-01/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifs.com/2021/12/11/redission-01/&title=【Redission源码】可重入锁源码解析"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifs.com/2021/12/11/redission-01/&title=【Redission源码】可重入锁源码解析"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifs.com/2021/12/11/redission-01/&title=【Redission源码】可重入锁源码解析"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifs.com/2021/12/11/redission-01/&title=【Redission源码】可重入锁源码解析"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifs.com/2021/12/11/redission-01/&name=【Redission源码】可重入锁源码解析&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifs.com/2021/12/11/redission-01/&t=【Redission源码】可重入锁源码解析"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
@@ -252,17 +252,17 @@
 
     <div id="share-footer" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifuns.com/2021/12/11/redission-01/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifuns.com/2021/12/11/redission-01/&text=【Redission源码】可重入锁源码解析"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifuns.com/2021/12/11/redission-01/&title=【Redission源码】可重入锁源码解析"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifuns.com/2021/12/11/redission-01/&is_video=false&description=【Redission源码】可重入锁源码解析"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=【Redission源码】可重入锁源码解析&body=Check out this article: https://haifuns.com/2021/12/11/redission-01/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifuns.com/2021/12/11/redission-01/&title=【Redission源码】可重入锁源码解析"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifuns.com/2021/12/11/redission-01/&title=【Redission源码】可重入锁源码解析"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifuns.com/2021/12/11/redission-01/&title=【Redission源码】可重入锁源码解析"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifuns.com/2021/12/11/redission-01/&title=【Redission源码】可重入锁源码解析"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifuns.com/2021/12/11/redission-01/&name=【Redission源码】可重入锁源码解析&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifuns.com/2021/12/11/redission-01/&t=【Redission源码】可重入锁源码解析"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifs.com/2021/12/11/redission-01/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifs.com/2021/12/11/redission-01/&text=【Redission源码】可重入锁源码解析"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifs.com/2021/12/11/redission-01/&title=【Redission源码】可重入锁源码解析"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifs.com/2021/12/11/redission-01/&is_video=false&description=【Redission源码】可重入锁源码解析"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=【Redission源码】可重入锁源码解析&body=Check out this article: https://haifs.com/2021/12/11/redission-01/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifs.com/2021/12/11/redission-01/&title=【Redission源码】可重入锁源码解析"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifs.com/2021/12/11/redission-01/&title=【Redission源码】可重入锁源码解析"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifs.com/2021/12/11/redission-01/&title=【Redission源码】可重入锁源码解析"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifs.com/2021/12/11/redission-01/&title=【Redission源码】可重入锁源码解析"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifs.com/2021/12/11/redission-01/&name=【Redission源码】可重入锁源码解析&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifs.com/2021/12/11/redission-01/&t=【Redission源码】可重入锁源码解析"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 
     </div>

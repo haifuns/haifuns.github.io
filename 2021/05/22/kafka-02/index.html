@@ -9,13 +9,13 @@
     <meta name="description" content="概述Kafka Producer负责向Kafka发送消息，最新的客户端为Java语言编写，但Kafka社区有提供其他语言的客户端，包括C&#x2F;C++、Python、Go等。 Kafka Producer支持三种消息发送模式：发后即忘、同步发送、异步发送。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【Kafka】：生产者">
-<meta property="og:url" content="https://haifuns.com/2021/05/22/kafka-02/index.html">
+<meta property="og:url" content="https://haifs.com/2021/05/22/kafka-02/index.html">
 <meta property="og:site_name" content="haif&#39;s blog">
 <meta property="og:description" content="概述Kafka Producer负责向Kafka发送消息，最新的客户端为Java语言编写，但Kafka社区有提供其他语言的客户端，包括C&#x2F;C++、Python、Go等。 Kafka Producer支持三种消息发送模式：发后即忘、同步发送、异步发送。">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/kafka/kafka03.png">
 <meta property="article:published_time" content="2021-05-22T12:00:00.000Z">
-<meta property="article:modified_time" content="2025-08-28T08:51:27.064Z">
+<meta property="article:modified_time" content="2025-08-28T08:56:39.153Z">
 <meta property="article:author" content="haifun">
 <meta property="article:tag" content="Kafka">
 <meta name="twitter:card" content="summary">
@@ -116,18 +116,18 @@
     <br/>
     <div id="share" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifuns.com/2021/05/22/kafka-02/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifuns.com/2021/05/22/kafka-02/&text=【Kafka】：生产者"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifuns.com/2021/05/22/kafka-02/&title=【Kafka】：生产者"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifuns.com/2021/05/22/kafka-02/&is_video=false&description=【Kafka】：生产者"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=【Kafka】：生产者&body=Check out this article: https://haifuns.com/2021/05/22/kafka-02/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifuns.com/2021/05/22/kafka-02/&title=【Kafka】：生产者"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifuns.com/2021/05/22/kafka-02/&title=【Kafka】：生产者"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifuns.com/2021/05/22/kafka-02/&title=【Kafka】：生产者"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifuns.com/2021/05/22/kafka-02/&title=【Kafka】：生产者"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifuns.com/2021/05/22/kafka-02/&name=【Kafka】：生产者&description=&lt;h1 id=&#34;概述&#34;&gt;&lt;a href=&#34;#概述&#34; class=&#34;headerlink&#34; title=&#34;概述&#34;&gt;&lt;/a&gt;概述&lt;/h1&gt;&lt;p&gt;Kafka Producer负责向Kafka发送消息，最新的客户端为Java语言编写，但Kafka社区有提供其他语言的客户端，包括C/C++、Python、Go等。&lt;/p&gt;
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifs.com/2021/05/22/kafka-02/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifs.com/2021/05/22/kafka-02/&text=【Kafka】：生产者"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifs.com/2021/05/22/kafka-02/&title=【Kafka】：生产者"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifs.com/2021/05/22/kafka-02/&is_video=false&description=【Kafka】：生产者"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=【Kafka】：生产者&body=Check out this article: https://haifs.com/2021/05/22/kafka-02/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifs.com/2021/05/22/kafka-02/&title=【Kafka】：生产者"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifs.com/2021/05/22/kafka-02/&title=【Kafka】：生产者"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifs.com/2021/05/22/kafka-02/&title=【Kafka】：生产者"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifs.com/2021/05/22/kafka-02/&title=【Kafka】：生产者"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifs.com/2021/05/22/kafka-02/&name=【Kafka】：生产者&description=&lt;h1 id=&#34;概述&#34;&gt;&lt;a href=&#34;#概述&#34; class=&#34;headerlink&#34; title=&#34;概述&#34;&gt;&lt;/a&gt;概述&lt;/h1&gt;&lt;p&gt;Kafka Producer负责向Kafka发送消息，最新的客户端为Java语言编写，但Kafka社区有提供其他语言的客户端，包括C/C++、Python、Go等。&lt;/p&gt;
 &lt;p&gt;Kafka Producer支持三种消息发送模式：发后即忘、同步发送、异步发送。&lt;/p&gt;"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifuns.com/2021/05/22/kafka-02/&t=【Kafka】：生产者"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifs.com/2021/05/22/kafka-02/&t=【Kafka】：生产者"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
@@ -287,18 +287,18 @@
 
     <div id="share-footer" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifuns.com/2021/05/22/kafka-02/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifuns.com/2021/05/22/kafka-02/&text=【Kafka】：生产者"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifuns.com/2021/05/22/kafka-02/&title=【Kafka】：生产者"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifuns.com/2021/05/22/kafka-02/&is_video=false&description=【Kafka】：生产者"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=【Kafka】：生产者&body=Check out this article: https://haifuns.com/2021/05/22/kafka-02/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifuns.com/2021/05/22/kafka-02/&title=【Kafka】：生产者"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifuns.com/2021/05/22/kafka-02/&title=【Kafka】：生产者"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifuns.com/2021/05/22/kafka-02/&title=【Kafka】：生产者"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifuns.com/2021/05/22/kafka-02/&title=【Kafka】：生产者"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifuns.com/2021/05/22/kafka-02/&name=【Kafka】：生产者&description=&lt;h1 id=&#34;概述&#34;&gt;&lt;a href=&#34;#概述&#34; class=&#34;headerlink&#34; title=&#34;概述&#34;&gt;&lt;/a&gt;概述&lt;/h1&gt;&lt;p&gt;Kafka Producer负责向Kafka发送消息，最新的客户端为Java语言编写，但Kafka社区有提供其他语言的客户端，包括C/C++、Python、Go等。&lt;/p&gt;
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifs.com/2021/05/22/kafka-02/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifs.com/2021/05/22/kafka-02/&text=【Kafka】：生产者"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifs.com/2021/05/22/kafka-02/&title=【Kafka】：生产者"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifs.com/2021/05/22/kafka-02/&is_video=false&description=【Kafka】：生产者"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=【Kafka】：生产者&body=Check out this article: https://haifs.com/2021/05/22/kafka-02/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifs.com/2021/05/22/kafka-02/&title=【Kafka】：生产者"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifs.com/2021/05/22/kafka-02/&title=【Kafka】：生产者"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifs.com/2021/05/22/kafka-02/&title=【Kafka】：生产者"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifs.com/2021/05/22/kafka-02/&title=【Kafka】：生产者"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifs.com/2021/05/22/kafka-02/&name=【Kafka】：生产者&description=&lt;h1 id=&#34;概述&#34;&gt;&lt;a href=&#34;#概述&#34; class=&#34;headerlink&#34; title=&#34;概述&#34;&gt;&lt;/a&gt;概述&lt;/h1&gt;&lt;p&gt;Kafka Producer负责向Kafka发送消息，最新的客户端为Java语言编写，但Kafka社区有提供其他语言的客户端，包括C/C++、Python、Go等。&lt;/p&gt;
 &lt;p&gt;Kafka Producer支持三种消息发送模式：发后即忘、同步发送、异步发送。&lt;/p&gt;"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifuns.com/2021/05/22/kafka-02/&t=【Kafka】：生产者"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifs.com/2021/05/22/kafka-02/&t=【Kafka】：生产者"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 
     </div>

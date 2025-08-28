@@ -9,7 +9,7 @@
     <meta name="description" content="集群RabbitMQ 集群允许消费者和生产者在 RabbitMQ 单个节点崩溃的情况下继续运行，它可以通过添加更多的节点来线性地扩展消息通信的吞吐量。当失去一个 RabbitMQ 节点时，客户端能够重新连接到集群中的任何其他节点并继续生产或者消费。 不过 RabbitMQ 集群不能保证消息的万无一失，即将消息、队列、交换器等都设置为可持久化，生产端和消费端都正确地使用了确认方式。当集群中一个 Ra">
 <meta property="og:type" content="article">
 <meta property="og:title" content="RabbitMQ 集群">
-<meta property="og:url" content="https://haifuns.com/2020/12/26/rabbitmq-2/index.html">
+<meta property="og:url" content="https://haifs.com/2020/12/26/rabbitmq-2/index.html">
 <meta property="og:site_name" content="haif&#39;s blog">
 <meta property="og:description" content="集群RabbitMQ 集群允许消费者和生产者在 RabbitMQ 单个节点崩溃的情况下继续运行，它可以通过添加更多的节点来线性地扩展消息通信的吞吐量。当失去一个 RabbitMQ 节点时，客户端能够重新连接到集群中的任何其他节点并继续生产或者消费。 不过 RabbitMQ 集群不能保证消息的万无一失，即将消息、队列、交换器等都设置为可持久化，生产端和消费端都正确地使用了确认方式。当集群中一个 Ra">
 <meta property="og:locale" content="zh_CN">
@@ -22,7 +22,7 @@
 <meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/mq/rabbitmq-shovel2.png">
 <meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/mq/rabbitmq-shovel3.png">
 <meta property="article:published_time" content="2020-12-26T08:16:00.000Z">
-<meta property="article:modified_time" content="2025-08-28T08:51:27.065Z">
+<meta property="article:modified_time" content="2025-08-28T08:56:39.154Z">
 <meta property="article:author" content="haifun">
 <meta property="article:tag" content="RabbitMQ">
 <meta name="twitter:card" content="summary">
@@ -123,16 +123,16 @@
     <br/>
     <div id="share" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifuns.com/2020/12/26/rabbitmq-2/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifuns.com/2020/12/26/rabbitmq-2/&text=RabbitMQ 集群"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifuns.com/2020/12/26/rabbitmq-2/&title=RabbitMQ 集群"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifuns.com/2020/12/26/rabbitmq-2/&is_video=false&description=RabbitMQ 集群"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=RabbitMQ 集群&body=Check out this article: https://haifuns.com/2020/12/26/rabbitmq-2/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifuns.com/2020/12/26/rabbitmq-2/&title=RabbitMQ 集群"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifuns.com/2020/12/26/rabbitmq-2/&title=RabbitMQ 集群"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifuns.com/2020/12/26/rabbitmq-2/&title=RabbitMQ 集群"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifuns.com/2020/12/26/rabbitmq-2/&title=RabbitMQ 集群"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifuns.com/2020/12/26/rabbitmq-2/&name=RabbitMQ 集群&description=&lt;h1 id=&#34;集群&#34;&gt;&lt;a href=&#34;#集群&#34; class=&#34;headerlink&#34; title=&#34;集群&#34;&gt;&lt;/a&gt;集群&lt;/h1&gt;&lt;p&gt;RabbitMQ 集群允许消费者和生产者在 RabbitMQ 单个节点崩溃的情况下继续运行，它可以通过添加更多的节点来线性地扩展消息通信的吞吐量。当失去一个 RabbitMQ 节点时，客户端能够重新连接到集群中的任何其他节点并继续生产或者消费。&lt;/p&gt;
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifs.com/2020/12/26/rabbitmq-2/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifs.com/2020/12/26/rabbitmq-2/&text=RabbitMQ 集群"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifs.com/2020/12/26/rabbitmq-2/&title=RabbitMQ 集群"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifs.com/2020/12/26/rabbitmq-2/&is_video=false&description=RabbitMQ 集群"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=RabbitMQ 集群&body=Check out this article: https://haifs.com/2020/12/26/rabbitmq-2/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifs.com/2020/12/26/rabbitmq-2/&title=RabbitMQ 集群"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifs.com/2020/12/26/rabbitmq-2/&title=RabbitMQ 集群"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifs.com/2020/12/26/rabbitmq-2/&title=RabbitMQ 集群"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifs.com/2020/12/26/rabbitmq-2/&title=RabbitMQ 集群"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifs.com/2020/12/26/rabbitmq-2/&name=RabbitMQ 集群&description=&lt;h1 id=&#34;集群&#34;&gt;&lt;a href=&#34;#集群&#34; class=&#34;headerlink&#34; title=&#34;集群&#34;&gt;&lt;/a&gt;集群&lt;/h1&gt;&lt;p&gt;RabbitMQ 集群允许消费者和生产者在 RabbitMQ 单个节点崩溃的情况下继续运行，它可以通过添加更多的节点来线性地扩展消息通信的吞吐量。当失去一个 RabbitMQ 节点时，客户端能够重新连接到集群中的任何其他节点并继续生产或者消费。&lt;/p&gt;
 &lt;p&gt;不过 RabbitMQ 集群不能保证消息的万无一失，即将消息、队列、交换器等都设置为可持久化，生产端和消费端都正确地使用了确认方式。当集群中一个 RabbitMQ 节点崩溃时，该节点上的所有队列中的消息也会丢失。&lt;/p&gt;
 &lt;p&gt;RabbitMQ 集群中的所有节点都会备份所有的元数据信息，包括以下内容：&lt;/p&gt;
 &lt;ul&gt;
@@ -144,7 +144,7 @@
 &lt;p&gt;但是&lt;strong&gt;不会备份消息&lt;/strong&gt;(当然通过特殊的配置比如镜像队列可以解决这个问题，以后会有介绍)。基于存储空间和性能的考虑，在RabbitMQ 集群中创建队列，集群只会在单个节点而不是在所有节点上创建队列的进程并包含完整的队列信息(元数据 、状态、内容)。这样只有队列的宿主节点即所有者节点知道队列的所有信息，所有其他非所有者节点只知道队列的元数据和指向该队列存在的那个节点的指针。因此当集群节点崩溃时，该节点的队列进程和关联的绑定都会消失。附加在那些队列上的消费者会丢失其所订阅的信息，并且任何匹配该队列绑定信息的新消息也都会消失。&lt;/p&gt;
 &lt;p&gt;不同于队列那样拥有自己的进程，交换器其实只是一个名称和绑定列表。当消息发布到交换器时，实际上是由所连接的信道将消息上的路由键同交换器的绑定列表进行比较，然后再路由消息。当创建一个新的交换器时，RabbitMQ 所要做的就是将绑定列表添加到集群中的所有节点上。这样，每个节点上的每条信道都可以访问到新的交换器了。&lt;/p&gt;
 &lt;h2 id=&#34;集群搭建&#34;&gt;&lt;a href=&#34;#集群搭建&#34; class=&#34;headerlink&#34; title=&#34;集群搭建&#34;&gt;&lt;/a&gt;集群搭建&lt;/h2&gt;"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifuns.com/2020/12/26/rabbitmq-2/&t=RabbitMQ 集群"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifs.com/2020/12/26/rabbitmq-2/&t=RabbitMQ 集群"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
@@ -468,16 +468,16 @@
 
     <div id="share-footer" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifuns.com/2020/12/26/rabbitmq-2/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifuns.com/2020/12/26/rabbitmq-2/&text=RabbitMQ 集群"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifuns.com/2020/12/26/rabbitmq-2/&title=RabbitMQ 集群"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifuns.com/2020/12/26/rabbitmq-2/&is_video=false&description=RabbitMQ 集群"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=RabbitMQ 集群&body=Check out this article: https://haifuns.com/2020/12/26/rabbitmq-2/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifuns.com/2020/12/26/rabbitmq-2/&title=RabbitMQ 集群"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifuns.com/2020/12/26/rabbitmq-2/&title=RabbitMQ 集群"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifuns.com/2020/12/26/rabbitmq-2/&title=RabbitMQ 集群"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifuns.com/2020/12/26/rabbitmq-2/&title=RabbitMQ 集群"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifuns.com/2020/12/26/rabbitmq-2/&name=RabbitMQ 集群&description=&lt;h1 id=&#34;集群&#34;&gt;&lt;a href=&#34;#集群&#34; class=&#34;headerlink&#34; title=&#34;集群&#34;&gt;&lt;/a&gt;集群&lt;/h1&gt;&lt;p&gt;RabbitMQ 集群允许消费者和生产者在 RabbitMQ 单个节点崩溃的情况下继续运行，它可以通过添加更多的节点来线性地扩展消息通信的吞吐量。当失去一个 RabbitMQ 节点时，客户端能够重新连接到集群中的任何其他节点并继续生产或者消费。&lt;/p&gt;
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifs.com/2020/12/26/rabbitmq-2/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifs.com/2020/12/26/rabbitmq-2/&text=RabbitMQ 集群"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifs.com/2020/12/26/rabbitmq-2/&title=RabbitMQ 集群"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifs.com/2020/12/26/rabbitmq-2/&is_video=false&description=RabbitMQ 集群"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=RabbitMQ 集群&body=Check out this article: https://haifs.com/2020/12/26/rabbitmq-2/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifs.com/2020/12/26/rabbitmq-2/&title=RabbitMQ 集群"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifs.com/2020/12/26/rabbitmq-2/&title=RabbitMQ 集群"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifs.com/2020/12/26/rabbitmq-2/&title=RabbitMQ 集群"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifs.com/2020/12/26/rabbitmq-2/&title=RabbitMQ 集群"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifs.com/2020/12/26/rabbitmq-2/&name=RabbitMQ 集群&description=&lt;h1 id=&#34;集群&#34;&gt;&lt;a href=&#34;#集群&#34; class=&#34;headerlink&#34; title=&#34;集群&#34;&gt;&lt;/a&gt;集群&lt;/h1&gt;&lt;p&gt;RabbitMQ 集群允许消费者和生产者在 RabbitMQ 单个节点崩溃的情况下继续运行，它可以通过添加更多的节点来线性地扩展消息通信的吞吐量。当失去一个 RabbitMQ 节点时，客户端能够重新连接到集群中的任何其他节点并继续生产或者消费。&lt;/p&gt;
 &lt;p&gt;不过 RabbitMQ 集群不能保证消息的万无一失，即将消息、队列、交换器等都设置为可持久化，生产端和消费端都正确地使用了确认方式。当集群中一个 RabbitMQ 节点崩溃时，该节点上的所有队列中的消息也会丢失。&lt;/p&gt;
 &lt;p&gt;RabbitMQ 集群中的所有节点都会备份所有的元数据信息，包括以下内容：&lt;/p&gt;
 &lt;ul&gt;
@@ -489,7 +489,7 @@
 &lt;p&gt;但是&lt;strong&gt;不会备份消息&lt;/strong&gt;(当然通过特殊的配置比如镜像队列可以解决这个问题，以后会有介绍)。基于存储空间和性能的考虑，在RabbitMQ 集群中创建队列，集群只会在单个节点而不是在所有节点上创建队列的进程并包含完整的队列信息(元数据 、状态、内容)。这样只有队列的宿主节点即所有者节点知道队列的所有信息，所有其他非所有者节点只知道队列的元数据和指向该队列存在的那个节点的指针。因此当集群节点崩溃时，该节点的队列进程和关联的绑定都会消失。附加在那些队列上的消费者会丢失其所订阅的信息，并且任何匹配该队列绑定信息的新消息也都会消失。&lt;/p&gt;
 &lt;p&gt;不同于队列那样拥有自己的进程，交换器其实只是一个名称和绑定列表。当消息发布到交换器时，实际上是由所连接的信道将消息上的路由键同交换器的绑定列表进行比较，然后再路由消息。当创建一个新的交换器时，RabbitMQ 所要做的就是将绑定列表添加到集群中的所有节点上。这样，每个节点上的每条信道都可以访问到新的交换器了。&lt;/p&gt;
 &lt;h2 id=&#34;集群搭建&#34;&gt;&lt;a href=&#34;#集群搭建&#34; class=&#34;headerlink&#34; title=&#34;集群搭建&#34;&gt;&lt;/a&gt;集群搭建&lt;/h2&gt;"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifuns.com/2020/12/26/rabbitmq-2/&t=RabbitMQ 集群"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifs.com/2020/12/26/rabbitmq-2/&t=RabbitMQ 集群"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 
     </div>

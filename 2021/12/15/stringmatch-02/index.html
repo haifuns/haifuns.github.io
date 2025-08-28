@@ -9,12 +9,12 @@
     <meta name="description" content="与朴素字符串匹配算法相同，Rabin-Karp 算法也是通过滑动一个大小为m的窗口n-m+1次进行匹配判断，不同之处在于Rabin-Karp 算法把字符串转换为字符集长度进制的哈希值，由数值比较代替了字符串直接比较，并且在匹配过程中利用了上一次匹配的信息。 数值计算给定一个模式P[1…m]，假设p表示其对应的进制（为字符集长度）值，相应的，给定文本T[1…n]，假设表示长度为m的子字符串T[s+1">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【字符串匹配】Rabin-Karp 算法">
-<meta property="og:url" content="https://haifuns.com/2021/12/15/stringmatch-02/index.html">
+<meta property="og:url" content="https://haifs.com/2021/12/15/stringmatch-02/index.html">
 <meta property="og:site_name" content="haif&#39;s blog">
 <meta property="og:description" content="与朴素字符串匹配算法相同，Rabin-Karp 算法也是通过滑动一个大小为m的窗口n-m+1次进行匹配判断，不同之处在于Rabin-Karp 算法把字符串转换为字符集长度进制的哈希值，由数值比较代替了字符串直接比较，并且在匹配过程中利用了上一次匹配的信息。 数值计算给定一个模式P[1…m]，假设p表示其对应的进制（为字符集长度）值，相应的，给定文本T[1…n]，假设表示长度为m的子字符串T[s+1">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-12-15T15:05:00.000Z">
-<meta property="article:modified_time" content="2025-08-28T08:51:27.067Z">
+<meta property="article:modified_time" content="2025-08-28T08:56:39.156Z">
 <meta property="article:author" content="haifun">
 <meta property="article:tag" content="文本匹配">
 <meta name="twitter:card" content="summary">
@@ -226,17 +226,17 @@ mjx-container[display="true"] + br {
     <br/>
     <div id="share" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifuns.com/2021/12/15/stringmatch-02/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifuns.com/2021/12/15/stringmatch-02/&text=【字符串匹配】Rabin-Karp 算法"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifuns.com/2021/12/15/stringmatch-02/&title=【字符串匹配】Rabin-Karp 算法"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifuns.com/2021/12/15/stringmatch-02/&is_video=false&description=【字符串匹配】Rabin-Karp 算法"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=【字符串匹配】Rabin-Karp 算法&body=Check out this article: https://haifuns.com/2021/12/15/stringmatch-02/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifuns.com/2021/12/15/stringmatch-02/&title=【字符串匹配】Rabin-Karp 算法"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifuns.com/2021/12/15/stringmatch-02/&title=【字符串匹配】Rabin-Karp 算法"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifuns.com/2021/12/15/stringmatch-02/&title=【字符串匹配】Rabin-Karp 算法"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifuns.com/2021/12/15/stringmatch-02/&title=【字符串匹配】Rabin-Karp 算法"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifuns.com/2021/12/15/stringmatch-02/&name=【字符串匹配】Rabin-Karp 算法&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifuns.com/2021/12/15/stringmatch-02/&t=【字符串匹配】Rabin-Karp 算法"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifs.com/2021/12/15/stringmatch-02/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifs.com/2021/12/15/stringmatch-02/&text=【字符串匹配】Rabin-Karp 算法"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifs.com/2021/12/15/stringmatch-02/&title=【字符串匹配】Rabin-Karp 算法"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifs.com/2021/12/15/stringmatch-02/&is_video=false&description=【字符串匹配】Rabin-Karp 算法"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=【字符串匹配】Rabin-Karp 算法&body=Check out this article: https://haifs.com/2021/12/15/stringmatch-02/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifs.com/2021/12/15/stringmatch-02/&title=【字符串匹配】Rabin-Karp 算法"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifs.com/2021/12/15/stringmatch-02/&title=【字符串匹配】Rabin-Karp 算法"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifs.com/2021/12/15/stringmatch-02/&title=【字符串匹配】Rabin-Karp 算法"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifs.com/2021/12/15/stringmatch-02/&title=【字符串匹配】Rabin-Karp 算法"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifs.com/2021/12/15/stringmatch-02/&name=【字符串匹配】Rabin-Karp 算法&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifs.com/2021/12/15/stringmatch-02/&t=【字符串匹配】Rabin-Karp 算法"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
@@ -362,17 +362,17 @@ mjx-container[display="true"] + br {
 
     <div id="share-footer" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifuns.com/2021/12/15/stringmatch-02/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifuns.com/2021/12/15/stringmatch-02/&text=【字符串匹配】Rabin-Karp 算法"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifuns.com/2021/12/15/stringmatch-02/&title=【字符串匹配】Rabin-Karp 算法"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifuns.com/2021/12/15/stringmatch-02/&is_video=false&description=【字符串匹配】Rabin-Karp 算法"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=【字符串匹配】Rabin-Karp 算法&body=Check out this article: https://haifuns.com/2021/12/15/stringmatch-02/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifuns.com/2021/12/15/stringmatch-02/&title=【字符串匹配】Rabin-Karp 算法"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifuns.com/2021/12/15/stringmatch-02/&title=【字符串匹配】Rabin-Karp 算法"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifuns.com/2021/12/15/stringmatch-02/&title=【字符串匹配】Rabin-Karp 算法"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifuns.com/2021/12/15/stringmatch-02/&title=【字符串匹配】Rabin-Karp 算法"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifuns.com/2021/12/15/stringmatch-02/&name=【字符串匹配】Rabin-Karp 算法&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifuns.com/2021/12/15/stringmatch-02/&t=【字符串匹配】Rabin-Karp 算法"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifs.com/2021/12/15/stringmatch-02/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifs.com/2021/12/15/stringmatch-02/&text=【字符串匹配】Rabin-Karp 算法"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifs.com/2021/12/15/stringmatch-02/&title=【字符串匹配】Rabin-Karp 算法"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifs.com/2021/12/15/stringmatch-02/&is_video=false&description=【字符串匹配】Rabin-Karp 算法"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=【字符串匹配】Rabin-Karp 算法&body=Check out this article: https://haifs.com/2021/12/15/stringmatch-02/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifs.com/2021/12/15/stringmatch-02/&title=【字符串匹配】Rabin-Karp 算法"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifs.com/2021/12/15/stringmatch-02/&title=【字符串匹配】Rabin-Karp 算法"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifs.com/2021/12/15/stringmatch-02/&title=【字符串匹配】Rabin-Karp 算法"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifs.com/2021/12/15/stringmatch-02/&title=【字符串匹配】Rabin-Karp 算法"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifs.com/2021/12/15/stringmatch-02/&name=【字符串匹配】Rabin-Karp 算法&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifs.com/2021/12/15/stringmatch-02/&t=【字符串匹配】Rabin-Karp 算法"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 
     </div>

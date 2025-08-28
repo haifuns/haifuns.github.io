@@ -9,12 +9,12 @@
     <meta name="description" content="在上一篇session处理过程中我们略过了touchSession之后的消息处理过程，本篇将继续分析消息处理器链对消息的处理过程。 Leader处理器链leader节点过滤器链在LeaderZooKeeperServer启动过程中完成初始化，相关代码如下： 123456789101112131415161718192021222324252627282930313233343536&#x2F;&#x2F; ZooKe">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【ZooKeeper源码】消息处理器链">
-<meta property="og:url" content="https://haifuns.com/2022/03/21/zookeeper-07/index.html">
+<meta property="og:url" content="https://haifs.com/2022/03/21/zookeeper-07/index.html">
 <meta property="og:site_name" content="haif&#39;s blog">
 <meta property="og:description" content="在上一篇session处理过程中我们略过了touchSession之后的消息处理过程，本篇将继续分析消息处理器链对消息的处理过程。 Leader处理器链leader节点过滤器链在LeaderZooKeeperServer启动过程中完成初始化，相关代码如下： 123456789101112131415161718192021222324252627282930313233343536&#x2F;&#x2F; ZooKe">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-03-21T11:30:00.000Z">
-<meta property="article:modified_time" content="2025-08-28T08:51:27.069Z">
+<meta property="article:modified_time" content="2025-08-28T08:56:39.157Z">
 <meta property="article:author" content="haifun">
 <meta property="article:tag" content="ZooKeeper">
 <meta name="twitter:card" content="summary">
@@ -114,17 +114,17 @@
     <br/>
     <div id="share" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifuns.com/2022/03/21/zookeeper-07/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifuns.com/2022/03/21/zookeeper-07/&text=【ZooKeeper源码】消息处理器链"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifuns.com/2022/03/21/zookeeper-07/&title=【ZooKeeper源码】消息处理器链"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifuns.com/2022/03/21/zookeeper-07/&is_video=false&description=【ZooKeeper源码】消息处理器链"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=【ZooKeeper源码】消息处理器链&body=Check out this article: https://haifuns.com/2022/03/21/zookeeper-07/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifuns.com/2022/03/21/zookeeper-07/&title=【ZooKeeper源码】消息处理器链"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifuns.com/2022/03/21/zookeeper-07/&title=【ZooKeeper源码】消息处理器链"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifuns.com/2022/03/21/zookeeper-07/&title=【ZooKeeper源码】消息处理器链"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifuns.com/2022/03/21/zookeeper-07/&title=【ZooKeeper源码】消息处理器链"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifuns.com/2022/03/21/zookeeper-07/&name=【ZooKeeper源码】消息处理器链&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifuns.com/2022/03/21/zookeeper-07/&t=【ZooKeeper源码】消息处理器链"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifs.com/2022/03/21/zookeeper-07/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifs.com/2022/03/21/zookeeper-07/&text=【ZooKeeper源码】消息处理器链"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifs.com/2022/03/21/zookeeper-07/&title=【ZooKeeper源码】消息处理器链"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifs.com/2022/03/21/zookeeper-07/&is_video=false&description=【ZooKeeper源码】消息处理器链"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=【ZooKeeper源码】消息处理器链&body=Check out this article: https://haifs.com/2022/03/21/zookeeper-07/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifs.com/2022/03/21/zookeeper-07/&title=【ZooKeeper源码】消息处理器链"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifs.com/2022/03/21/zookeeper-07/&title=【ZooKeeper源码】消息处理器链"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifs.com/2022/03/21/zookeeper-07/&title=【ZooKeeper源码】消息处理器链"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifs.com/2022/03/21/zookeeper-07/&title=【ZooKeeper源码】消息处理器链"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifs.com/2022/03/21/zookeeper-07/&name=【ZooKeeper源码】消息处理器链&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifs.com/2022/03/21/zookeeper-07/&t=【ZooKeeper源码】消息处理器链"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
@@ -278,17 +278,17 @@
 
     <div id="share-footer" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifuns.com/2022/03/21/zookeeper-07/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifuns.com/2022/03/21/zookeeper-07/&text=【ZooKeeper源码】消息处理器链"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifuns.com/2022/03/21/zookeeper-07/&title=【ZooKeeper源码】消息处理器链"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifuns.com/2022/03/21/zookeeper-07/&is_video=false&description=【ZooKeeper源码】消息处理器链"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=【ZooKeeper源码】消息处理器链&body=Check out this article: https://haifuns.com/2022/03/21/zookeeper-07/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifuns.com/2022/03/21/zookeeper-07/&title=【ZooKeeper源码】消息处理器链"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifuns.com/2022/03/21/zookeeper-07/&title=【ZooKeeper源码】消息处理器链"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifuns.com/2022/03/21/zookeeper-07/&title=【ZooKeeper源码】消息处理器链"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifuns.com/2022/03/21/zookeeper-07/&title=【ZooKeeper源码】消息处理器链"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifuns.com/2022/03/21/zookeeper-07/&name=【ZooKeeper源码】消息处理器链&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifuns.com/2022/03/21/zookeeper-07/&t=【ZooKeeper源码】消息处理器链"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifs.com/2022/03/21/zookeeper-07/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifs.com/2022/03/21/zookeeper-07/&text=【ZooKeeper源码】消息处理器链"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifs.com/2022/03/21/zookeeper-07/&title=【ZooKeeper源码】消息处理器链"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifs.com/2022/03/21/zookeeper-07/&is_video=false&description=【ZooKeeper源码】消息处理器链"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=【ZooKeeper源码】消息处理器链&body=Check out this article: https://haifs.com/2022/03/21/zookeeper-07/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifs.com/2022/03/21/zookeeper-07/&title=【ZooKeeper源码】消息处理器链"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifs.com/2022/03/21/zookeeper-07/&title=【ZooKeeper源码】消息处理器链"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifs.com/2022/03/21/zookeeper-07/&title=【ZooKeeper源码】消息处理器链"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifs.com/2022/03/21/zookeeper-07/&title=【ZooKeeper源码】消息处理器链"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifs.com/2022/03/21/zookeeper-07/&name=【ZooKeeper源码】消息处理器链&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifs.com/2022/03/21/zookeeper-07/&t=【ZooKeeper源码】消息处理器链"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 
     </div>

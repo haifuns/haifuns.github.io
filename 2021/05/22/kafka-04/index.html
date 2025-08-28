@@ -9,12 +9,12 @@
     <meta name="description" content="概述Kafka中多个消费者间的分区分配由消费者协调器（ConsumerCoordinator）和组协调器（GroupCoordinator）共同完成。全部消费组被分为多个子集，每个子集在服务端对应者一个GroupCoordinator进行管理，而消费者客户端中的ConsumerCoordinator组件负责与GroupCoordinator进行交互。 GroupCoordinator与Consum">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【Kafka】：再均衡原理剖析">
-<meta property="og:url" content="https://haifuns.com/2021/05/22/kafka-04/index.html">
+<meta property="og:url" content="https://haifs.com/2021/05/22/kafka-04/index.html">
 <meta property="og:site_name" content="haif&#39;s blog">
 <meta property="og:description" content="概述Kafka中多个消费者间的分区分配由消费者协调器（ConsumerCoordinator）和组协调器（GroupCoordinator）共同完成。全部消费组被分为多个子集，每个子集在服务端对应者一个GroupCoordinator进行管理，而消费者客户端中的ConsumerCoordinator组件负责与GroupCoordinator进行交互。 GroupCoordinator与Consum">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-05-22T12:30:00.000Z">
-<meta property="article:modified_time" content="2025-08-28T08:51:27.064Z">
+<meta property="article:modified_time" content="2025-08-28T08:56:39.153Z">
 <meta property="article:author" content="haifun">
 <meta property="article:tag" content="Kafka">
 <meta name="twitter:card" content="summary">
@@ -114,25 +114,25 @@
     <br/>
     <div id="share" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifuns.com/2021/05/22/kafka-04/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifuns.com/2021/05/22/kafka-04/&text=【Kafka】：再均衡原理剖析"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifuns.com/2021/05/22/kafka-04/&title=【Kafka】：再均衡原理剖析"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifuns.com/2021/05/22/kafka-04/&is_video=false&description=【Kafka】：再均衡原理剖析"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=【Kafka】：再均衡原理剖析&body=Check out this article: https://haifuns.com/2021/05/22/kafka-04/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifuns.com/2021/05/22/kafka-04/&title=【Kafka】：再均衡原理剖析"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifuns.com/2021/05/22/kafka-04/&title=【Kafka】：再均衡原理剖析"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifuns.com/2021/05/22/kafka-04/&title=【Kafka】：再均衡原理剖析"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifuns.com/2021/05/22/kafka-04/&title=【Kafka】：再均衡原理剖析"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifuns.com/2021/05/22/kafka-04/&name=【Kafka】：再均衡原理剖析&description=&lt;h1 id=&#34;概述&#34;&gt;&lt;a href=&#34;#概述&#34; class=&#34;headerlink&#34; title=&#34;概述&#34;&gt;&lt;/a&gt;概述&lt;/h1&gt;&lt;p&gt;Kafka中多个消费者间的分区分配由消费者协调器（ConsumerCoordinator）和组协调器（GroupCoordinator）共同完成。全部消费组被分为多个子集，每个子集在服务端对应者一个GroupCoordinator进行管理，而消费者客户端中的ConsumerCoordinator组件负责与GroupCoordinator进行交互。&lt;/p&gt;
-&lt;p&gt;GroupCoordinator与ConsumerCoordinaor之间最重要的工作就是负责执行消费者再均衡。分区分配工作也是在再均衡期间完成的。&lt;/p&gt;"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifuns.com/2021/05/22/kafka-04/&t=【Kafka】：再均衡原理剖析"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifs.com/2021/05/22/kafka-04/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifs.com/2021/05/22/kafka-04/&text=【Kafka】：再均衡原理剖析"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifs.com/2021/05/22/kafka-04/&title=【Kafka】：再均衡原理剖析"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifs.com/2021/05/22/kafka-04/&is_video=false&description=【Kafka】：再均衡原理剖析"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=【Kafka】：再均衡原理剖析&body=Check out this article: https://haifs.com/2021/05/22/kafka-04/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifs.com/2021/05/22/kafka-04/&title=【Kafka】：再均衡原理剖析"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifs.com/2021/05/22/kafka-04/&title=【Kafka】：再均衡原理剖析"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifs.com/2021/05/22/kafka-04/&title=【Kafka】：再均衡原理剖析"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifs.com/2021/05/22/kafka-04/&title=【Kafka】：再均衡原理剖析"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifs.com/2021/05/22/kafka-04/&name=【Kafka】：再均衡原理剖析&description=&lt;h1 id=&#34;概述&#34;&gt;&lt;a href=&#34;#概述&#34; class=&#34;headerlink&#34; title=&#34;概述&#34;&gt;&lt;/a&gt;概述&lt;/h1&gt;&lt;p&gt;Kafka中多个消费者间的分区分配由消费者协调器（ConsumerCoordinator）和组协调器（GroupCoordinator）共同完成。全部消费组被分为多个子集，每个子集在服务端对应者一个GroupCoordinator进行管理，而消费者客户端中的ConsumerCoordinator组件负责与GroupCoordinator进行交互。&lt;/p&gt;
+&lt;p&gt;GroupCoordinator与ConsumerCoordinator之间最重要的工作就是负责执行消费者再均衡。分区分配工作也是在再均衡期间完成的。&lt;/p&gt;"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifs.com/2021/05/22/kafka-04/&t=【Kafka】：再均衡原理剖析"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
     
     
       <div id="toc">
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A6%82%E8%BF%B0"><span class="toc-number">1.</span> <span class="toc-text">概述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%A7%A6%E5%8F%91%E6%97%B6%E6%9C%BA"><span class="toc-number">2.</span> <span class="toc-text">触发时机</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%86%8D%E5%9D%87%E8%A1%A1%E6%B5%81%E7%A8%8B"><span class="toc-number">3.</span> <span class="toc-text">再均衡流程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E9%98%B6%E6%AE%B5%EF%BC%88FIND-COORDINATOR%EF%BC%89"><span class="toc-number">3.1.</span> <span class="toc-text">第一阶段（FIND_COORDINATOR）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E9%98%B6%E6%AE%B5%EF%BC%88JOIN-GROUP%EF%BC%89"><span class="toc-number">3.2.</span> <span class="toc-text">第二阶段（JOIN_GROUP）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%89%E4%B8%BE%E6%B6%88%E8%B4%B9%E8%80%85%E7%BB%84leader"><span class="toc-number">3.2.1.</span> <span class="toc-text">选举消费者组leader</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%89%E4%B8%BE%E5%88%86%E5%8C%BA%E5%88%86%E9%85%8D%E7%AD%96%E7%95%A5"><span class="toc-number">3.2.2.</span> <span class="toc-text">选举分区分配策略</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E9%98%B6%E6%AE%B5%EF%BC%88SYNC-GROUP%EF%BC%89"><span class="toc-number">3.3.</span> <span class="toc-text">第三阶段（SYNC_GROUP）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%9B%9B%E9%98%B6%E6%AE%B5%EF%BC%88HEARTAEAT%EF%BC%89"><span class="toc-number">3.4.</span> <span class="toc-text">第四阶段（HEARTAEAT）</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A6%82%E8%BF%B0"><span class="toc-number">1.</span> <span class="toc-text">概述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%A7%A6%E5%8F%91%E6%97%B6%E6%9C%BA"><span class="toc-number">2.</span> <span class="toc-text">触发时机</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%86%8D%E5%9D%87%E8%A1%A1%E6%B5%81%E7%A8%8B"><span class="toc-number">3.</span> <span class="toc-text">再均衡流程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E9%98%B6%E6%AE%B5%EF%BC%88FIND-COORDINATOR%EF%BC%89"><span class="toc-number">3.1.</span> <span class="toc-text">第一阶段（FIND_COORDINATOR）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E9%98%B6%E6%AE%B5%EF%BC%88JOIN-GROUP%EF%BC%89"><span class="toc-number">3.2.</span> <span class="toc-text">第二阶段（JOIN_GROUP）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%89%E4%B8%BE%E6%B6%88%E8%B4%B9%E8%80%85%E7%BB%84leader"><span class="toc-number">3.2.1.</span> <span class="toc-text">选举消费者组leader</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%89%E4%B8%BE%E5%88%86%E5%8C%BA%E5%88%86%E9%85%8D%E7%AD%96%E7%95%A5"><span class="toc-number">3.2.2.</span> <span class="toc-text">选举分区分配策略</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E9%98%B6%E6%AE%B5%EF%BC%88SYNC-GROUP%EF%BC%89"><span class="toc-number">3.3.</span> <span class="toc-text">第三阶段（SYNC_GROUP）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%9B%9B%E9%98%B6%E6%AE%B5%EF%BC%88HEARTBEAT%EF%BC%89"><span class="toc-number">3.4.</span> <span class="toc-text">第四阶段（HEARTBEAT）</span></a></li></ol></li></ol>
       </div>
     
   </span>
@@ -183,7 +183,7 @@
 
   <div class="content e-content" itemprop="articleBody">
     <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>Kafka中多个消费者间的分区分配由消费者协调器（ConsumerCoordinator）和组协调器（GroupCoordinator）共同完成。全部消费组被分为多个子集，每个子集在服务端对应者一个GroupCoordinator进行管理，而消费者客户端中的ConsumerCoordinator组件负责与GroupCoordinator进行交互。</p>
-<p>GroupCoordinator与ConsumerCoordinaor之间最重要的工作就是负责执行消费者再均衡。分区分配工作也是在再均衡期间完成的。</p>
+<p>GroupCoordinator与ConsumerCoordinator之间最重要的工作就是负责执行消费者再均衡。分区分配工作也是在再均衡期间完成的。</p>
 <span id="more"></span>
 
 <h1 id="触发时机"><a href="#触发时机" class="headerlink" title="触发时机"></a>触发时机</h1><p>触发再均衡的场景如下：</p>
@@ -191,7 +191,7 @@
 <li>新的消费者加入消费组。</li>
 <li>消费者宕机。</li>
 <li>消费者主动退出消费组。</li>
-<li>消费组对应的GroupCoordinaor节点发生变更。</li>
+<li>消费组对应的GroupCoordinator节点发生变更。</li>
 <li>消费组内订阅的任一主题或主题分区数量发生变化。</li>
 </ul>
 <h1 id="再均衡流程"><a href="#再均衡流程" class="headerlink" title="再均衡流程"></a>再均衡流程</h1><h2 id="第一阶段（FIND-COORDINATOR）"><a href="#第一阶段（FIND-COORDINATOR）" class="headerlink" title="第一阶段（FIND_COORDINATOR）"></a>第一阶段（FIND_COORDINATOR）</h2><p>此阶段消费者需要与所属消费组对应的GroupCoordinator所在的broker建立连接。如果消费者已经保存与消费组对应的GroupCoordinator节点的信息，并且与之建立的网络连接正常，那么就直接进入第二阶段。否则，需要向负载最小的节点（leastLoadedNode）发送FindCoordinatorRequest（coordinator_key + coordinator_type）请求来查找对应的GroupCoordinator。</p>
@@ -202,7 +202,7 @@
 <ul>
 <li>group_id：消费组id。</li>
 <li>session_timeout：对应消费者session.timeout.ms，默认10s。当GroupCoordinator超过session_timeout指定的时间没有收到心跳则认为消费者已下线。</li>
-<li>reblance_timeout：对应消费者max.poll.interval.ms，默认5min。表示消费组再平衡时GroupCoordinator等待消费者重新加入的最长时间。</li>
+<li>rebalance_timeout：对应消费者max.poll.interval.ms，默认5min。表示消费组再平衡时GroupCoordinator等待消费者重新加入的最长时间。</li>
 <li>member_id：GroupCoordinator分配给消费者的id。消费者第一次发送JoinGroupRequest请求时此字段为null。</li>
 <li>protocol_type：消费者实现协议，此处传consumer。</li>
 <li>group_protocols：多个分区分配策略，配置多种策略时包含多个protocol_name和protocol_metadata信息。</li>
@@ -218,7 +218,7 @@
 <h2 id="第三阶段（SYNC-GROUP）"><a href="#第三阶段（SYNC-GROUP）" class="headerlink" title="第三阶段（SYNC_GROUP）"></a>第三阶段（SYNC_GROUP）</h2><p>此阶段leader消费者会根据上一个阶段选举出来的分区分配策略进行具体的分区分配，之后通过GroupCorrdinator转发同步分配方案。</p>
 <p>所有消费者会向GroupCoordinator发送SyncGroupRequest请求，并且只有leader消费者的请求中携带分区分配方案。</p>
 <p>GroupCoordinator会将leader消费者请求中的分区分配策略连同这个消费组的元数据信息存入Kafka的__consumer_offsets主题中。最后发送分区分配方案给各个消费者。</p>
-<h2 id="第四阶段（HEARTAEAT）"><a href="#第四阶段（HEARTAEAT）" class="headerlink" title="第四阶段（HEARTAEAT）"></a>第四阶段（HEARTAEAT）</h2><p>进入此阶段后消费组中的所有消费者就会处于正常工作状态。在开始消费前，消费者需要拉取消息的起始位置，如果之前提交过消费位移则通过OffsetFetchRequest向GroupCoordinator获取上次提交的位移并从此处继续消费。</p>
+<h2 id="第四阶段（HEARTBEAT）"><a href="#第四阶段（HEARTBEAT）" class="headerlink" title="第四阶段（HEARTBEAT）"></a>第四阶段（HEARTBEAT）</h2><p>进入此阶段后消费组中的所有消费者就会处于正常工作状态。在开始消费前，消费者需要拉取消息的起始位置，如果之前提交过消费位移则通过OffsetFetchRequest向GroupCoordinator获取上次提交的位移并从此处继续消费。</p>
 <p>消费者通过一个独立的心跳线程向GroupCoordinator发送心跳，心跳间隔由heartbeat.interval.ms指定，默认3s。如果一个消费者发生崩溃并停止消费消息，那么GroupCoordinator会等待session.timeout.ms时间确认消费者死亡后触发再均衡。</p>
 
   </div>
@@ -255,24 +255,24 @@
     
     
       <div id="toc-footer" style="display: none">
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A6%82%E8%BF%B0"><span class="toc-number">1.</span> <span class="toc-text">概述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%A7%A6%E5%8F%91%E6%97%B6%E6%9C%BA"><span class="toc-number">2.</span> <span class="toc-text">触发时机</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%86%8D%E5%9D%87%E8%A1%A1%E6%B5%81%E7%A8%8B"><span class="toc-number">3.</span> <span class="toc-text">再均衡流程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E9%98%B6%E6%AE%B5%EF%BC%88FIND-COORDINATOR%EF%BC%89"><span class="toc-number">3.1.</span> <span class="toc-text">第一阶段（FIND_COORDINATOR）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E9%98%B6%E6%AE%B5%EF%BC%88JOIN-GROUP%EF%BC%89"><span class="toc-number">3.2.</span> <span class="toc-text">第二阶段（JOIN_GROUP）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%89%E4%B8%BE%E6%B6%88%E8%B4%B9%E8%80%85%E7%BB%84leader"><span class="toc-number">3.2.1.</span> <span class="toc-text">选举消费者组leader</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%89%E4%B8%BE%E5%88%86%E5%8C%BA%E5%88%86%E9%85%8D%E7%AD%96%E7%95%A5"><span class="toc-number">3.2.2.</span> <span class="toc-text">选举分区分配策略</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E9%98%B6%E6%AE%B5%EF%BC%88SYNC-GROUP%EF%BC%89"><span class="toc-number">3.3.</span> <span class="toc-text">第三阶段（SYNC_GROUP）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%9B%9B%E9%98%B6%E6%AE%B5%EF%BC%88HEARTAEAT%EF%BC%89"><span class="toc-number">3.4.</span> <span class="toc-text">第四阶段（HEARTAEAT）</span></a></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A6%82%E8%BF%B0"><span class="toc-number">1.</span> <span class="toc-text">概述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%A7%A6%E5%8F%91%E6%97%B6%E6%9C%BA"><span class="toc-number">2.</span> <span class="toc-text">触发时机</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%86%8D%E5%9D%87%E8%A1%A1%E6%B5%81%E7%A8%8B"><span class="toc-number">3.</span> <span class="toc-text">再均衡流程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E9%98%B6%E6%AE%B5%EF%BC%88FIND-COORDINATOR%EF%BC%89"><span class="toc-number">3.1.</span> <span class="toc-text">第一阶段（FIND_COORDINATOR）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E9%98%B6%E6%AE%B5%EF%BC%88JOIN-GROUP%EF%BC%89"><span class="toc-number">3.2.</span> <span class="toc-text">第二阶段（JOIN_GROUP）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%89%E4%B8%BE%E6%B6%88%E8%B4%B9%E8%80%85%E7%BB%84leader"><span class="toc-number">3.2.1.</span> <span class="toc-text">选举消费者组leader</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%89%E4%B8%BE%E5%88%86%E5%8C%BA%E5%88%86%E9%85%8D%E7%AD%96%E7%95%A5"><span class="toc-number">3.2.2.</span> <span class="toc-text">选举分区分配策略</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E9%98%B6%E6%AE%B5%EF%BC%88SYNC-GROUP%EF%BC%89"><span class="toc-number">3.3.</span> <span class="toc-text">第三阶段（SYNC_GROUP）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%9B%9B%E9%98%B6%E6%AE%B5%EF%BC%88HEARTBEAT%EF%BC%89"><span class="toc-number">3.4.</span> <span class="toc-text">第四阶段（HEARTBEAT）</span></a></li></ol></li></ol>
       </div>
     
 
     <div id="share-footer" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifuns.com/2021/05/22/kafka-04/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifuns.com/2021/05/22/kafka-04/&text=【Kafka】：再均衡原理剖析"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifuns.com/2021/05/22/kafka-04/&title=【Kafka】：再均衡原理剖析"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifuns.com/2021/05/22/kafka-04/&is_video=false&description=【Kafka】：再均衡原理剖析"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=【Kafka】：再均衡原理剖析&body=Check out this article: https://haifuns.com/2021/05/22/kafka-04/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifuns.com/2021/05/22/kafka-04/&title=【Kafka】：再均衡原理剖析"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifuns.com/2021/05/22/kafka-04/&title=【Kafka】：再均衡原理剖析"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifuns.com/2021/05/22/kafka-04/&title=【Kafka】：再均衡原理剖析"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifuns.com/2021/05/22/kafka-04/&title=【Kafka】：再均衡原理剖析"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifuns.com/2021/05/22/kafka-04/&name=【Kafka】：再均衡原理剖析&description=&lt;h1 id=&#34;概述&#34;&gt;&lt;a href=&#34;#概述&#34; class=&#34;headerlink&#34; title=&#34;概述&#34;&gt;&lt;/a&gt;概述&lt;/h1&gt;&lt;p&gt;Kafka中多个消费者间的分区分配由消费者协调器（ConsumerCoordinator）和组协调器（GroupCoordinator）共同完成。全部消费组被分为多个子集，每个子集在服务端对应者一个GroupCoordinator进行管理，而消费者客户端中的ConsumerCoordinator组件负责与GroupCoordinator进行交互。&lt;/p&gt;
-&lt;p&gt;GroupCoordinator与ConsumerCoordinaor之间最重要的工作就是负责执行消费者再均衡。分区分配工作也是在再均衡期间完成的。&lt;/p&gt;"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifuns.com/2021/05/22/kafka-04/&t=【Kafka】：再均衡原理剖析"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifs.com/2021/05/22/kafka-04/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifs.com/2021/05/22/kafka-04/&text=【Kafka】：再均衡原理剖析"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifs.com/2021/05/22/kafka-04/&title=【Kafka】：再均衡原理剖析"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifs.com/2021/05/22/kafka-04/&is_video=false&description=【Kafka】：再均衡原理剖析"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=【Kafka】：再均衡原理剖析&body=Check out this article: https://haifs.com/2021/05/22/kafka-04/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifs.com/2021/05/22/kafka-04/&title=【Kafka】：再均衡原理剖析"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifs.com/2021/05/22/kafka-04/&title=【Kafka】：再均衡原理剖析"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifs.com/2021/05/22/kafka-04/&title=【Kafka】：再均衡原理剖析"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifs.com/2021/05/22/kafka-04/&title=【Kafka】：再均衡原理剖析"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifs.com/2021/05/22/kafka-04/&name=【Kafka】：再均衡原理剖析&description=&lt;h1 id=&#34;概述&#34;&gt;&lt;a href=&#34;#概述&#34; class=&#34;headerlink&#34; title=&#34;概述&#34;&gt;&lt;/a&gt;概述&lt;/h1&gt;&lt;p&gt;Kafka中多个消费者间的分区分配由消费者协调器（ConsumerCoordinator）和组协调器（GroupCoordinator）共同完成。全部消费组被分为多个子集，每个子集在服务端对应者一个GroupCoordinator进行管理，而消费者客户端中的ConsumerCoordinator组件负责与GroupCoordinator进行交互。&lt;/p&gt;
+&lt;p&gt;GroupCoordinator与ConsumerCoordinator之间最重要的工作就是负责执行消费者再均衡。分区分配工作也是在再均衡期间完成的。&lt;/p&gt;"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifs.com/2021/05/22/kafka-04/&t=【Kafka】：再均衡原理剖析"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 
     </div>

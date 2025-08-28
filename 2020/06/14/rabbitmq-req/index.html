@@ -9,12 +9,12 @@
     <meta name="description" content="使用消息队列有什么优点？ 解耦，减少系统间关联性。 异步，将消息写入消息队列，非必要的业务逻辑以异步的方式运行，加快响应速度。 削峰，并发量大的时候，请求压力可能加到到数据库，造成数据库连接异常。  使用消息队列有什么缺点？ 系统可用性降低，引入新系统，当其不可用时可能导致整个业务流程故障。 系统复杂性增加:要多考虑很多方面的问题，比如一致性问题、如何保证消息不被重复消费，如何保证消息可靠传输等。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="RabbitMQ 连环问">
-<meta property="og:url" content="https://haifuns.com/2020/06/14/rabbitmq-req/index.html">
+<meta property="og:url" content="https://haifs.com/2020/06/14/rabbitmq-req/index.html">
 <meta property="og:site_name" content="haif&#39;s blog">
 <meta property="og:description" content="使用消息队列有什么优点？ 解耦，减少系统间关联性。 异步，将消息写入消息队列，非必要的业务逻辑以异步的方式运行，加快响应速度。 削峰，并发量大的时候，请求压力可能加到到数据库，造成数据库连接异常。  使用消息队列有什么缺点？ 系统可用性降低，引入新系统，当其不可用时可能导致整个业务流程故障。 系统复杂性增加:要多考虑很多方面的问题，比如一致性问题、如何保证消息不被重复消费，如何保证消息可靠传输等。">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-06-14T04:00:00.000Z">
-<meta property="article:modified_time" content="2025-08-28T08:51:27.066Z">
+<meta property="article:modified_time" content="2025-08-28T08:56:39.154Z">
 <meta property="article:author" content="haifun">
 <meta property="article:tag" content="RabbitMQ">
 <meta name="twitter:card" content="summary">
@@ -114,16 +114,16 @@
     <br/>
     <div id="share" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifuns.com/2020/06/14/rabbitmq-req/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifuns.com/2020/06/14/rabbitmq-req/&text=RabbitMQ 连环问"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifuns.com/2020/06/14/rabbitmq-req/&title=RabbitMQ 连环问"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifuns.com/2020/06/14/rabbitmq-req/&is_video=false&description=RabbitMQ 连环问"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=RabbitMQ 连环问&body=Check out this article: https://haifuns.com/2020/06/14/rabbitmq-req/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifuns.com/2020/06/14/rabbitmq-req/&title=RabbitMQ 连环问"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifuns.com/2020/06/14/rabbitmq-req/&title=RabbitMQ 连环问"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifuns.com/2020/06/14/rabbitmq-req/&title=RabbitMQ 连环问"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifuns.com/2020/06/14/rabbitmq-req/&title=RabbitMQ 连环问"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifuns.com/2020/06/14/rabbitmq-req/&name=RabbitMQ 连环问&description=&lt;h1 id=&#34;使用消息队列有什么优点？&#34;&gt;&lt;a href=&#34;#使用消息队列有什么优点？&#34; class=&#34;headerlink&#34; title=&#34;使用消息队列有什么优点？&#34;&gt;&lt;/a&gt;使用消息队列有什么优点？&lt;/h1&gt;&lt;ol&gt;
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifs.com/2020/06/14/rabbitmq-req/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifs.com/2020/06/14/rabbitmq-req/&text=RabbitMQ 连环问"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifs.com/2020/06/14/rabbitmq-req/&title=RabbitMQ 连环问"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifs.com/2020/06/14/rabbitmq-req/&is_video=false&description=RabbitMQ 连环问"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=RabbitMQ 连环问&body=Check out this article: https://haifs.com/2020/06/14/rabbitmq-req/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifs.com/2020/06/14/rabbitmq-req/&title=RabbitMQ 连环问"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifs.com/2020/06/14/rabbitmq-req/&title=RabbitMQ 连环问"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifs.com/2020/06/14/rabbitmq-req/&title=RabbitMQ 连环问"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifs.com/2020/06/14/rabbitmq-req/&title=RabbitMQ 连环问"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifs.com/2020/06/14/rabbitmq-req/&name=RabbitMQ 连环问&description=&lt;h1 id=&#34;使用消息队列有什么优点？&#34;&gt;&lt;a href=&#34;#使用消息队列有什么优点？&#34; class=&#34;headerlink&#34; title=&#34;使用消息队列有什么优点？&#34;&gt;&lt;/a&gt;使用消息队列有什么优点？&lt;/h1&gt;&lt;ol&gt;
 &lt;li&gt;解耦，减少系统间关联性。&lt;/li&gt;
 &lt;li&gt;异步，将消息写入消息队列，非必要的业务逻辑以异步的方式运行，加快响应速度。&lt;/li&gt;
 &lt;li&gt;削峰，并发量大的时候，请求压力可能加到到数据库，造成数据库连接异常。&lt;/li&gt;
@@ -133,7 +133,7 @@
 &lt;li&gt;系统复杂性增加:要多考虑很多方面的问题，比如一致性问题、如何保证消息不被重复消费，如何保证消息可靠传输等。&lt;/li&gt;
 &lt;/ol&gt;
 &lt;h1 id=&#34;RabbitMQ-中的-broker-是指什么？cluster-又是指什么？&#34;&gt;&lt;a href=&#34;#RabbitMQ-中的-broker-是指什么？cluster-又是指什么？&#34; class=&#34;headerlink&#34; title=&#34;RabbitMQ 中的 broker 是指什么？cluster 又是指什么？&#34;&gt;&lt;/a&gt;RabbitMQ 中的 broker 是指什么？cluster 又是指什么？&lt;/h1&gt;&lt;p&gt;broker 是指一个或多个 erlang node 的逻辑分组，且 node 上运行着 RabbitMQ 应用程序。cluster 是在 broker 的基础之上，增加了 node 之间共享元数据的约束。&lt;/p&gt;"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifuns.com/2020/06/14/rabbitmq-req/&t=RabbitMQ 连环问"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifs.com/2020/06/14/rabbitmq-req/&t=RabbitMQ 连环问"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
@@ -354,16 +354,16 @@
 
     <div id="share-footer" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifuns.com/2020/06/14/rabbitmq-req/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifuns.com/2020/06/14/rabbitmq-req/&text=RabbitMQ 连环问"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifuns.com/2020/06/14/rabbitmq-req/&title=RabbitMQ 连环问"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifuns.com/2020/06/14/rabbitmq-req/&is_video=false&description=RabbitMQ 连环问"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=RabbitMQ 连环问&body=Check out this article: https://haifuns.com/2020/06/14/rabbitmq-req/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifuns.com/2020/06/14/rabbitmq-req/&title=RabbitMQ 连环问"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifuns.com/2020/06/14/rabbitmq-req/&title=RabbitMQ 连环问"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifuns.com/2020/06/14/rabbitmq-req/&title=RabbitMQ 连环问"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifuns.com/2020/06/14/rabbitmq-req/&title=RabbitMQ 连环问"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifuns.com/2020/06/14/rabbitmq-req/&name=RabbitMQ 连环问&description=&lt;h1 id=&#34;使用消息队列有什么优点？&#34;&gt;&lt;a href=&#34;#使用消息队列有什么优点？&#34; class=&#34;headerlink&#34; title=&#34;使用消息队列有什么优点？&#34;&gt;&lt;/a&gt;使用消息队列有什么优点？&lt;/h1&gt;&lt;ol&gt;
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifs.com/2020/06/14/rabbitmq-req/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifs.com/2020/06/14/rabbitmq-req/&text=RabbitMQ 连环问"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifs.com/2020/06/14/rabbitmq-req/&title=RabbitMQ 连环问"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifs.com/2020/06/14/rabbitmq-req/&is_video=false&description=RabbitMQ 连环问"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=RabbitMQ 连环问&body=Check out this article: https://haifs.com/2020/06/14/rabbitmq-req/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifs.com/2020/06/14/rabbitmq-req/&title=RabbitMQ 连环问"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifs.com/2020/06/14/rabbitmq-req/&title=RabbitMQ 连环问"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifs.com/2020/06/14/rabbitmq-req/&title=RabbitMQ 连环问"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifs.com/2020/06/14/rabbitmq-req/&title=RabbitMQ 连环问"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifs.com/2020/06/14/rabbitmq-req/&name=RabbitMQ 连环问&description=&lt;h1 id=&#34;使用消息队列有什么优点？&#34;&gt;&lt;a href=&#34;#使用消息队列有什么优点？&#34; class=&#34;headerlink&#34; title=&#34;使用消息队列有什么优点？&#34;&gt;&lt;/a&gt;使用消息队列有什么优点？&lt;/h1&gt;&lt;ol&gt;
 &lt;li&gt;解耦，减少系统间关联性。&lt;/li&gt;
 &lt;li&gt;异步，将消息写入消息队列，非必要的业务逻辑以异步的方式运行，加快响应速度。&lt;/li&gt;
 &lt;li&gt;削峰，并发量大的时候，请求压力可能加到到数据库，造成数据库连接异常。&lt;/li&gt;
@@ -373,7 +373,7 @@
 &lt;li&gt;系统复杂性增加:要多考虑很多方面的问题，比如一致性问题、如何保证消息不被重复消费，如何保证消息可靠传输等。&lt;/li&gt;
 &lt;/ol&gt;
 &lt;h1 id=&#34;RabbitMQ-中的-broker-是指什么？cluster-又是指什么？&#34;&gt;&lt;a href=&#34;#RabbitMQ-中的-broker-是指什么？cluster-又是指什么？&#34; class=&#34;headerlink&#34; title=&#34;RabbitMQ 中的 broker 是指什么？cluster 又是指什么？&#34;&gt;&lt;/a&gt;RabbitMQ 中的 broker 是指什么？cluster 又是指什么？&lt;/h1&gt;&lt;p&gt;broker 是指一个或多个 erlang node 的逻辑分组，且 node 上运行着 RabbitMQ 应用程序。cluster 是在 broker 的基础之上，增加了 node 之间共享元数据的约束。&lt;/p&gt;"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifuns.com/2020/06/14/rabbitmq-req/&t=RabbitMQ 连环问"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifs.com/2020/06/14/rabbitmq-req/&t=RabbitMQ 连环问"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 
     </div>

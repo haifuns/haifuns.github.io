@@ -9,13 +9,13 @@
     <meta name="description" content="G1垃圾回收器（垃圾优先回收器）：  垃圾回收优先，优先回收垃圾，不会等到空间全部占满然后进行回收 停顿预测模型，预测一次回收可以回收的分区数量，以满足对停顿时间的要求 化整为零的分区机制，内存分为n个大小相同的分区（Region），这种灵活可变的Region机制是G1控制停顿时间的核心设计  G1内存模型：HeapRegion是G1垃圾回收器内存管理的基本单位，也是最小单位。 分区类型：  新生">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【JVM】G1垃圾回收器">
-<meta property="og:url" content="https://haifuns.com/2025/02/23/jvm-g1/index.html">
+<meta property="og:url" content="https://haifs.com/2025/02/23/jvm-g1/index.html">
 <meta property="og:site_name" content="haif&#39;s blog">
 <meta property="og:description" content="G1垃圾回收器（垃圾优先回收器）：  垃圾回收优先，优先回收垃圾，不会等到空间全部占满然后进行回收 停顿预测模型，预测一次回收可以回收的分区数量，以满足对停顿时间的要求 化整为零的分区机制，内存分为n个大小相同的分区（Region），这种灵活可变的Region机制是G1控制停顿时间的核心设计  G1内存模型：HeapRegion是G1垃圾回收器内存管理的基本单位，也是最小单位。 分区类型：  新生">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://img.haifuns.com/jvm/g1-ygc.png">
 <meta property="article:published_time" content="2025-02-23T13:40:00.000Z">
-<meta property="article:modified_time" content="2025-08-28T08:51:27.064Z">
+<meta property="article:modified_time" content="2025-08-28T08:56:39.152Z">
 <meta property="article:author" content="haifun">
 <meta property="article:tag" content="JVM">
 <meta name="twitter:card" content="summary">
@@ -116,17 +116,17 @@
     <br/>
     <div id="share" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifuns.com/2025/02/23/jvm-g1/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifuns.com/2025/02/23/jvm-g1/&text=【JVM】G1垃圾回收器"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifuns.com/2025/02/23/jvm-g1/&title=【JVM】G1垃圾回收器"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifuns.com/2025/02/23/jvm-g1/&is_video=false&description=【JVM】G1垃圾回收器"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=【JVM】G1垃圾回收器&body=Check out this article: https://haifuns.com/2025/02/23/jvm-g1/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifuns.com/2025/02/23/jvm-g1/&title=【JVM】G1垃圾回收器"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifuns.com/2025/02/23/jvm-g1/&title=【JVM】G1垃圾回收器"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifuns.com/2025/02/23/jvm-g1/&title=【JVM】G1垃圾回收器"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifuns.com/2025/02/23/jvm-g1/&title=【JVM】G1垃圾回收器"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifuns.com/2025/02/23/jvm-g1/&name=【JVM】G1垃圾回收器&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifuns.com/2025/02/23/jvm-g1/&t=【JVM】G1垃圾回收器"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifs.com/2025/02/23/jvm-g1/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifs.com/2025/02/23/jvm-g1/&text=【JVM】G1垃圾回收器"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifs.com/2025/02/23/jvm-g1/&title=【JVM】G1垃圾回收器"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifs.com/2025/02/23/jvm-g1/&is_video=false&description=【JVM】G1垃圾回收器"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=【JVM】G1垃圾回收器&body=Check out this article: https://haifs.com/2025/02/23/jvm-g1/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifs.com/2025/02/23/jvm-g1/&title=【JVM】G1垃圾回收器"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifs.com/2025/02/23/jvm-g1/&title=【JVM】G1垃圾回收器"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifs.com/2025/02/23/jvm-g1/&title=【JVM】G1垃圾回收器"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifs.com/2025/02/23/jvm-g1/&title=【JVM】G1垃圾回收器"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifs.com/2025/02/23/jvm-g1/&name=【JVM】G1垃圾回收器&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifs.com/2025/02/23/jvm-g1/&t=【JVM】G1垃圾回收器"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
@@ -455,17 +455,17 @@
 
     <div id="share-footer" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifuns.com/2025/02/23/jvm-g1/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifuns.com/2025/02/23/jvm-g1/&text=【JVM】G1垃圾回收器"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifuns.com/2025/02/23/jvm-g1/&title=【JVM】G1垃圾回收器"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifuns.com/2025/02/23/jvm-g1/&is_video=false&description=【JVM】G1垃圾回收器"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=【JVM】G1垃圾回收器&body=Check out this article: https://haifuns.com/2025/02/23/jvm-g1/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifuns.com/2025/02/23/jvm-g1/&title=【JVM】G1垃圾回收器"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifuns.com/2025/02/23/jvm-g1/&title=【JVM】G1垃圾回收器"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifuns.com/2025/02/23/jvm-g1/&title=【JVM】G1垃圾回收器"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifuns.com/2025/02/23/jvm-g1/&title=【JVM】G1垃圾回收器"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifuns.com/2025/02/23/jvm-g1/&name=【JVM】G1垃圾回收器&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifuns.com/2025/02/23/jvm-g1/&t=【JVM】G1垃圾回收器"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifs.com/2025/02/23/jvm-g1/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifs.com/2025/02/23/jvm-g1/&text=【JVM】G1垃圾回收器"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifs.com/2025/02/23/jvm-g1/&title=【JVM】G1垃圾回收器"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifs.com/2025/02/23/jvm-g1/&is_video=false&description=【JVM】G1垃圾回收器"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=【JVM】G1垃圾回收器&body=Check out this article: https://haifs.com/2025/02/23/jvm-g1/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifs.com/2025/02/23/jvm-g1/&title=【JVM】G1垃圾回收器"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifs.com/2025/02/23/jvm-g1/&title=【JVM】G1垃圾回收器"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifs.com/2025/02/23/jvm-g1/&title=【JVM】G1垃圾回收器"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifs.com/2025/02/23/jvm-g1/&title=【JVM】G1垃圾回收器"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifs.com/2025/02/23/jvm-g1/&name=【JVM】G1垃圾回收器&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifs.com/2025/02/23/jvm-g1/&t=【JVM】G1垃圾回收器"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 
     </div>

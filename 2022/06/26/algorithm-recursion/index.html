@@ -9,12 +9,12 @@
     <meta name="description" content="方法或函数调用自身的方式称为递归调用，调用称为递，返回称为归。递归是一种应用非常广泛的算法（或者编程技巧）。 递归的优缺点：  优点：代码简洁、清晰、可读性高。 缺点：空间复杂度高、有堆栈溢出风险、存在重复计算（如斐波那契数列的递归）、过多的函数调用会耗时较多等问题。  递归需要满足的三个条件：  一个问题的解可以分解为几个子问题的解 这个问题与分解之后的子问题，除了数据规模不同，求解思路完全一样">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【算法基础】递归">
-<meta property="og:url" content="https://haifuns.com/2022/06/26/algorithm-recursion/index.html">
+<meta property="og:url" content="https://haifs.com/2022/06/26/algorithm-recursion/index.html">
 <meta property="og:site_name" content="haif&#39;s blog">
 <meta property="og:description" content="方法或函数调用自身的方式称为递归调用，调用称为递，返回称为归。递归是一种应用非常广泛的算法（或者编程技巧）。 递归的优缺点：  优点：代码简洁、清晰、可读性高。 缺点：空间复杂度高、有堆栈溢出风险、存在重复计算（如斐波那契数列的递归）、过多的函数调用会耗时较多等问题。  递归需要满足的三个条件：  一个问题的解可以分解为几个子问题的解 这个问题与分解之后的子问题，除了数据规模不同，求解思路完全一样">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-06-26T14:30:00.000Z">
-<meta property="article:modified_time" content="2025-08-28T08:51:27.060Z">
+<meta property="article:modified_time" content="2025-08-28T08:56:39.148Z">
 <meta property="article:author" content="haifun">
 <meta property="article:tag" content="算法">
 <meta property="article:tag" content="递归">
@@ -115,17 +115,17 @@
     <br/>
     <div id="share" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifuns.com/2022/06/26/algorithm-recursion/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifuns.com/2022/06/26/algorithm-recursion/&text=【算法基础】递归"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifuns.com/2022/06/26/algorithm-recursion/&title=【算法基础】递归"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifuns.com/2022/06/26/algorithm-recursion/&is_video=false&description=【算法基础】递归"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=【算法基础】递归&body=Check out this article: https://haifuns.com/2022/06/26/algorithm-recursion/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifuns.com/2022/06/26/algorithm-recursion/&title=【算法基础】递归"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifuns.com/2022/06/26/algorithm-recursion/&title=【算法基础】递归"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifuns.com/2022/06/26/algorithm-recursion/&title=【算法基础】递归"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifuns.com/2022/06/26/algorithm-recursion/&title=【算法基础】递归"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifuns.com/2022/06/26/algorithm-recursion/&name=【算法基础】递归&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifuns.com/2022/06/26/algorithm-recursion/&t=【算法基础】递归"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifs.com/2022/06/26/algorithm-recursion/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifs.com/2022/06/26/algorithm-recursion/&text=【算法基础】递归"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifs.com/2022/06/26/algorithm-recursion/&title=【算法基础】递归"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifs.com/2022/06/26/algorithm-recursion/&is_video=false&description=【算法基础】递归"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=【算法基础】递归&body=Check out this article: https://haifs.com/2022/06/26/algorithm-recursion/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifs.com/2022/06/26/algorithm-recursion/&title=【算法基础】递归"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifs.com/2022/06/26/algorithm-recursion/&title=【算法基础】递归"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifs.com/2022/06/26/algorithm-recursion/&title=【算法基础】递归"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifs.com/2022/06/26/algorithm-recursion/&title=【算法基础】递归"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifs.com/2022/06/26/algorithm-recursion/&name=【算法基础】递归&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifs.com/2022/06/26/algorithm-recursion/&t=【算法基础】递归"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
@@ -246,17 +246,17 @@
 
     <div id="share-footer" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifuns.com/2022/06/26/algorithm-recursion/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifuns.com/2022/06/26/algorithm-recursion/&text=【算法基础】递归"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifuns.com/2022/06/26/algorithm-recursion/&title=【算法基础】递归"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifuns.com/2022/06/26/algorithm-recursion/&is_video=false&description=【算法基础】递归"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=【算法基础】递归&body=Check out this article: https://haifuns.com/2022/06/26/algorithm-recursion/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifuns.com/2022/06/26/algorithm-recursion/&title=【算法基础】递归"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifuns.com/2022/06/26/algorithm-recursion/&title=【算法基础】递归"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifuns.com/2022/06/26/algorithm-recursion/&title=【算法基础】递归"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifuns.com/2022/06/26/algorithm-recursion/&title=【算法基础】递归"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifuns.com/2022/06/26/algorithm-recursion/&name=【算法基础】递归&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifuns.com/2022/06/26/algorithm-recursion/&t=【算法基础】递归"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifs.com/2022/06/26/algorithm-recursion/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifs.com/2022/06/26/algorithm-recursion/&text=【算法基础】递归"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifs.com/2022/06/26/algorithm-recursion/&title=【算法基础】递归"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifs.com/2022/06/26/algorithm-recursion/&is_video=false&description=【算法基础】递归"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=【算法基础】递归&body=Check out this article: https://haifs.com/2022/06/26/algorithm-recursion/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifs.com/2022/06/26/algorithm-recursion/&title=【算法基础】递归"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifs.com/2022/06/26/algorithm-recursion/&title=【算法基础】递归"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifs.com/2022/06/26/algorithm-recursion/&title=【算法基础】递归"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifs.com/2022/06/26/algorithm-recursion/&title=【算法基础】递归"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifs.com/2022/06/26/algorithm-recursion/&name=【算法基础】递归&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifs.com/2022/06/26/algorithm-recursion/&t=【算法基础】递归"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 
     </div>

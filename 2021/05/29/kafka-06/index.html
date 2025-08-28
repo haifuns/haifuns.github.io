@@ -9,7 +9,7 @@
     <meta name="description" content="概述Kafka中的消息以主题为基本单位进行归类，每个主题可以分为一个或多个分区，不考虑多副本的情况下，一个分区对应一个日志（Log）。 为了防止Log过大、便于消息维护和管理，Kafka引入了日志分段（LogSegment）的概念，将Log切分为多个LogSegment。Log和LogSegment都不是纯粹物理意义上的概念，实际上，Log在物理层面是以文件夹形式存储，而每个LogSegment对">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【Kafka】：日志存储">
-<meta property="og:url" content="https://haifuns.com/2021/05/29/kafka-06/index.html">
+<meta property="og:url" content="https://haifs.com/2021/05/29/kafka-06/index.html">
 <meta property="og:site_name" content="haif&#39;s blog">
 <meta property="og:description" content="概述Kafka中的消息以主题为基本单位进行归类，每个主题可以分为一个或多个分区，不考虑多副本的情况下，一个分区对应一个日志（Log）。 为了防止Log过大、便于消息维护和管理，Kafka引入了日志分段（LogSegment）的概念，将Log切分为多个LogSegment。Log和LogSegment都不是纯粹物理意义上的概念，实际上，Log在物理层面是以文件夹形式存储，而每个LogSegment对">
 <meta property="og:locale" content="zh_CN">
@@ -17,7 +17,7 @@
 <meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/kafka/kafka06.png">
 <meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/kafka/kafka07.png">
 <meta property="article:published_time" content="2021-05-29T15:10:00.000Z">
-<meta property="article:modified_time" content="2025-08-28T08:51:27.064Z">
+<meta property="article:modified_time" content="2025-08-28T08:56:39.153Z">
 <meta property="article:author" content="haifun">
 <meta property="article:tag" content="Kafka">
 <meta name="twitter:card" content="summary">
@@ -118,16 +118,16 @@
     <br/>
     <div id="share" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifuns.com/2021/05/29/kafka-06/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifuns.com/2021/05/29/kafka-06/&text=【Kafka】：日志存储"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifuns.com/2021/05/29/kafka-06/&title=【Kafka】：日志存储"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifuns.com/2021/05/29/kafka-06/&is_video=false&description=【Kafka】：日志存储"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=【Kafka】：日志存储&body=Check out this article: https://haifuns.com/2021/05/29/kafka-06/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifuns.com/2021/05/29/kafka-06/&title=【Kafka】：日志存储"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifuns.com/2021/05/29/kafka-06/&title=【Kafka】：日志存储"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifuns.com/2021/05/29/kafka-06/&title=【Kafka】：日志存储"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifuns.com/2021/05/29/kafka-06/&title=【Kafka】：日志存储"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifuns.com/2021/05/29/kafka-06/&name=【Kafka】：日志存储&description=&lt;h1 id=&#34;概述&#34;&gt;&lt;a href=&#34;#概述&#34; class=&#34;headerlink&#34; title=&#34;概述&#34;&gt;&lt;/a&gt;概述&lt;/h1&gt;&lt;p&gt;Kafka中的消息以主题为基本单位进行归类，每个主题可以分为一个或多个分区，不考虑多副本的情况下，一个分区对应一个日志（Log）。&lt;/p&gt;
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifs.com/2021/05/29/kafka-06/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifs.com/2021/05/29/kafka-06/&text=【Kafka】：日志存储"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifs.com/2021/05/29/kafka-06/&title=【Kafka】：日志存储"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifs.com/2021/05/29/kafka-06/&is_video=false&description=【Kafka】：日志存储"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=【Kafka】：日志存储&body=Check out this article: https://haifs.com/2021/05/29/kafka-06/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifs.com/2021/05/29/kafka-06/&title=【Kafka】：日志存储"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifs.com/2021/05/29/kafka-06/&title=【Kafka】：日志存储"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifs.com/2021/05/29/kafka-06/&title=【Kafka】：日志存储"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifs.com/2021/05/29/kafka-06/&title=【Kafka】：日志存储"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifs.com/2021/05/29/kafka-06/&name=【Kafka】：日志存储&description=&lt;h1 id=&#34;概述&#34;&gt;&lt;a href=&#34;#概述&#34; class=&#34;headerlink&#34; title=&#34;概述&#34;&gt;&lt;/a&gt;概述&lt;/h1&gt;&lt;p&gt;Kafka中的消息以主题为基本单位进行归类，每个主题可以分为一个或多个分区，不考虑多副本的情况下，一个分区对应一个日志（Log）。&lt;/p&gt;
 &lt;p&gt;为了防止Log过大、便于消息维护和管理，Kafka引入了日志分段（LogSegment）的概念，将Log切分为多个LogSegment。Log和LogSegment都不是纯粹物理意义上的概念，实际上，Log在物理层面是以文件夹形式存储，而每个LogSegment对应磁盘上的一个日志文件和两个索引文件，以及可能的其他文件。&lt;/p&gt;
 &lt;h1 id=&#34;文件目录&#34;&gt;&lt;a href=&#34;#文件目录&#34; class=&#34;headerlink&#34; title=&#34;文件目录&#34;&gt;&lt;/a&gt;文件目录&lt;/h1&gt;&lt;p&gt;Log对应一个命名形式为&lt;code&gt;&amp;lt;topic&amp;gt;-&amp;lt;partiton&amp;gt;&lt;/code&gt;的文件夹，向Log中追加消息时是顺序写入的，只有最后一个LogSegment才能执行写入操作（称为activeSegment，即当前活跃数据），此前的LogSegment都不能写入数据。随着消息的不断写入，当activeSegment满足一定条件时，就会创建新的activeSegment，之后追加消息到新的activeSegment。&lt;/p&gt;
 &lt;p&gt;每个LogSegment中的日志文件都对应两个索引文件：&lt;/p&gt;
@@ -136,7 +136,7 @@
 &lt;li&gt;时间戳索引文件（.timeindex文件后缀）&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;每个LogSegment都有一个基准偏移量baseOffset，用来表示当前LogSegment中的第一条消息的offset。偏移量是一个64位的长整数，日志文件和两个索引文件都是根据baseOffset命名的，名称固定为20位数字，比如第一个LogSegment的baseOffset为0，对应的日志文件为&lt;code&gt;00000000000000000000.log&lt;/code&gt;。&lt;/p&gt;"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifuns.com/2021/05/29/kafka-06/&t=【Kafka】：日志存储"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifs.com/2021/05/29/kafka-06/&t=【Kafka】：日志存储"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
@@ -322,16 +322,16 @@
 
     <div id="share-footer" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifuns.com/2021/05/29/kafka-06/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifuns.com/2021/05/29/kafka-06/&text=【Kafka】：日志存储"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifuns.com/2021/05/29/kafka-06/&title=【Kafka】：日志存储"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifuns.com/2021/05/29/kafka-06/&is_video=false&description=【Kafka】：日志存储"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=【Kafka】：日志存储&body=Check out this article: https://haifuns.com/2021/05/29/kafka-06/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifuns.com/2021/05/29/kafka-06/&title=【Kafka】：日志存储"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifuns.com/2021/05/29/kafka-06/&title=【Kafka】：日志存储"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifuns.com/2021/05/29/kafka-06/&title=【Kafka】：日志存储"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifuns.com/2021/05/29/kafka-06/&title=【Kafka】：日志存储"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifuns.com/2021/05/29/kafka-06/&name=【Kafka】：日志存储&description=&lt;h1 id=&#34;概述&#34;&gt;&lt;a href=&#34;#概述&#34; class=&#34;headerlink&#34; title=&#34;概述&#34;&gt;&lt;/a&gt;概述&lt;/h1&gt;&lt;p&gt;Kafka中的消息以主题为基本单位进行归类，每个主题可以分为一个或多个分区，不考虑多副本的情况下，一个分区对应一个日志（Log）。&lt;/p&gt;
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifs.com/2021/05/29/kafka-06/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifs.com/2021/05/29/kafka-06/&text=【Kafka】：日志存储"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifs.com/2021/05/29/kafka-06/&title=【Kafka】：日志存储"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifs.com/2021/05/29/kafka-06/&is_video=false&description=【Kafka】：日志存储"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=【Kafka】：日志存储&body=Check out this article: https://haifs.com/2021/05/29/kafka-06/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifs.com/2021/05/29/kafka-06/&title=【Kafka】：日志存储"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifs.com/2021/05/29/kafka-06/&title=【Kafka】：日志存储"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifs.com/2021/05/29/kafka-06/&title=【Kafka】：日志存储"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifs.com/2021/05/29/kafka-06/&title=【Kafka】：日志存储"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifs.com/2021/05/29/kafka-06/&name=【Kafka】：日志存储&description=&lt;h1 id=&#34;概述&#34;&gt;&lt;a href=&#34;#概述&#34; class=&#34;headerlink&#34; title=&#34;概述&#34;&gt;&lt;/a&gt;概述&lt;/h1&gt;&lt;p&gt;Kafka中的消息以主题为基本单位进行归类，每个主题可以分为一个或多个分区，不考虑多副本的情况下，一个分区对应一个日志（Log）。&lt;/p&gt;
 &lt;p&gt;为了防止Log过大、便于消息维护和管理，Kafka引入了日志分段（LogSegment）的概念，将Log切分为多个LogSegment。Log和LogSegment都不是纯粹物理意义上的概念，实际上，Log在物理层面是以文件夹形式存储，而每个LogSegment对应磁盘上的一个日志文件和两个索引文件，以及可能的其他文件。&lt;/p&gt;
 &lt;h1 id=&#34;文件目录&#34;&gt;&lt;a href=&#34;#文件目录&#34; class=&#34;headerlink&#34; title=&#34;文件目录&#34;&gt;&lt;/a&gt;文件目录&lt;/h1&gt;&lt;p&gt;Log对应一个命名形式为&lt;code&gt;&amp;lt;topic&amp;gt;-&amp;lt;partiton&amp;gt;&lt;/code&gt;的文件夹，向Log中追加消息时是顺序写入的，只有最后一个LogSegment才能执行写入操作（称为activeSegment，即当前活跃数据），此前的LogSegment都不能写入数据。随着消息的不断写入，当activeSegment满足一定条件时，就会创建新的activeSegment，之后追加消息到新的activeSegment。&lt;/p&gt;
 &lt;p&gt;每个LogSegment中的日志文件都对应两个索引文件：&lt;/p&gt;
@@ -340,7 +340,7 @@
 &lt;li&gt;时间戳索引文件（.timeindex文件后缀）&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;每个LogSegment都有一个基准偏移量baseOffset，用来表示当前LogSegment中的第一条消息的offset。偏移量是一个64位的长整数，日志文件和两个索引文件都是根据baseOffset命名的，名称固定为20位数字，比如第一个LogSegment的baseOffset为0，对应的日志文件为&lt;code&gt;00000000000000000000.log&lt;/code&gt;。&lt;/p&gt;"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifuns.com/2021/05/29/kafka-06/&t=【Kafka】：日志存储"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifs.com/2021/05/29/kafka-06/&t=【Kafka】：日志存储"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 
     </div>

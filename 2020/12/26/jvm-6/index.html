@@ -9,12 +9,12 @@
     <meta name="description" content="基础故障处理工具jps：虚拟机进程状况工具（JVM Process Status Tool），主要用来输出JVM中运行的进程状态信息。 语法格式： 1jps [ options ] [ hostid ]     选项 作用    -q 只输出进程id，省略主类信息   -m 输出虚拟机进程启动时传递给主类main()函数的参数   -l 输出主类全名，如果进程执行的是jar包，输出jar路径">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【JVM】：性能监控与故障处理工具">
-<meta property="og:url" content="https://haifuns.com/2020/12/26/jvm-6/index.html">
+<meta property="og:url" content="https://haifs.com/2020/12/26/jvm-6/index.html">
 <meta property="og:site_name" content="haif&#39;s blog">
 <meta property="og:description" content="基础故障处理工具jps：虚拟机进程状况工具（JVM Process Status Tool），主要用来输出JVM中运行的进程状态信息。 语法格式： 1jps [ options ] [ hostid ]     选项 作用    -q 只输出进程id，省略主类信息   -m 输出虚拟机进程启动时传递给主类main()函数的参数   -l 输出主类全名，如果进程执行的是jar包，输出jar路径">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-12-26T09:23:00.000Z">
-<meta property="article:modified_time" content="2025-08-28T08:51:27.064Z">
+<meta property="article:modified_time" content="2025-08-28T08:56:39.152Z">
 <meta property="article:author" content="haifun">
 <meta property="article:tag" content="JVM">
 <meta name="twitter:card" content="summary">
@@ -114,16 +114,16 @@
     <br/>
     <div id="share" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifuns.com/2020/12/26/jvm-6/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifuns.com/2020/12/26/jvm-6/&text=【JVM】：性能监控与故障处理工具"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifuns.com/2020/12/26/jvm-6/&title=【JVM】：性能监控与故障处理工具"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifuns.com/2020/12/26/jvm-6/&is_video=false&description=【JVM】：性能监控与故障处理工具"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=【JVM】：性能监控与故障处理工具&body=Check out this article: https://haifuns.com/2020/12/26/jvm-6/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifuns.com/2020/12/26/jvm-6/&title=【JVM】：性能监控与故障处理工具"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifuns.com/2020/12/26/jvm-6/&title=【JVM】：性能监控与故障处理工具"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifuns.com/2020/12/26/jvm-6/&title=【JVM】：性能监控与故障处理工具"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifuns.com/2020/12/26/jvm-6/&title=【JVM】：性能监控与故障处理工具"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifuns.com/2020/12/26/jvm-6/&name=【JVM】：性能监控与故障处理工具&description=&lt;h2 id=&#34;基础故障处理工具&#34;&gt;&lt;a href=&#34;#基础故障处理工具&#34; class=&#34;headerlink&#34; title=&#34;基础故障处理工具&#34;&gt;&lt;/a&gt;基础故障处理工具&lt;/h2&gt;&lt;h3 id=&#34;jps：虚拟机进程状况工具&#34;&gt;&lt;a href=&#34;#jps：虚拟机进程状况工具&#34; class=&#34;headerlink&#34; title=&#34;jps：虚拟机进程状况工具&#34;&gt;&lt;/a&gt;jps：虚拟机进程状况工具&lt;/h3&gt;&lt;p&gt;（JVM Process Status Tool），主要用来输出JVM中运行的进程状态信息。&lt;/p&gt;
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifs.com/2020/12/26/jvm-6/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifs.com/2020/12/26/jvm-6/&text=【JVM】：性能监控与故障处理工具"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifs.com/2020/12/26/jvm-6/&title=【JVM】：性能监控与故障处理工具"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifs.com/2020/12/26/jvm-6/&is_video=false&description=【JVM】：性能监控与故障处理工具"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=【JVM】：性能监控与故障处理工具&body=Check out this article: https://haifs.com/2020/12/26/jvm-6/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifs.com/2020/12/26/jvm-6/&title=【JVM】：性能监控与故障处理工具"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifs.com/2020/12/26/jvm-6/&title=【JVM】：性能监控与故障处理工具"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifs.com/2020/12/26/jvm-6/&title=【JVM】：性能监控与故障处理工具"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifs.com/2020/12/26/jvm-6/&title=【JVM】：性能监控与故障处理工具"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifs.com/2020/12/26/jvm-6/&name=【JVM】：性能监控与故障处理工具&description=&lt;h2 id=&#34;基础故障处理工具&#34;&gt;&lt;a href=&#34;#基础故障处理工具&#34; class=&#34;headerlink&#34; title=&#34;基础故障处理工具&#34;&gt;&lt;/a&gt;基础故障处理工具&lt;/h2&gt;&lt;h3 id=&#34;jps：虚拟机进程状况工具&#34;&gt;&lt;a href=&#34;#jps：虚拟机进程状况工具&#34; class=&#34;headerlink&#34; title=&#34;jps：虚拟机进程状况工具&#34;&gt;&lt;/a&gt;jps：虚拟机进程状况工具&lt;/h3&gt;&lt;p&gt;（JVM Process Status Tool），主要用来输出JVM中运行的进程状态信息。&lt;/p&gt;
 &lt;p&gt;语法格式：&lt;/p&gt;
 &lt;figure class=&#34;highlight plaintext&#34;&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&#34;gutter&#34;&gt;&lt;pre&gt;&lt;span class=&#34;line&#34;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#34;code&#34;&gt;&lt;pre&gt;&lt;span class=&#34;line&#34;&gt;jps [ options ] [ hostid ]&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/figure&gt;
 
@@ -151,7 +151,7 @@
 &lt;td&gt;输出虚拟机进程启动时的JVM参数&lt;/td&gt;
 &lt;/tr&gt;
 &lt;/tbody&gt;&lt;/table&gt;"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifuns.com/2020/12/26/jvm-6/&t=【JVM】：性能监控与故障处理工具"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifs.com/2020/12/26/jvm-6/&t=【JVM】：性能监控与故障处理工具"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
@@ -433,16 +433,16 @@
 
     <div id="share-footer" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifuns.com/2020/12/26/jvm-6/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifuns.com/2020/12/26/jvm-6/&text=【JVM】：性能监控与故障处理工具"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifuns.com/2020/12/26/jvm-6/&title=【JVM】：性能监控与故障处理工具"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifuns.com/2020/12/26/jvm-6/&is_video=false&description=【JVM】：性能监控与故障处理工具"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=【JVM】：性能监控与故障处理工具&body=Check out this article: https://haifuns.com/2020/12/26/jvm-6/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifuns.com/2020/12/26/jvm-6/&title=【JVM】：性能监控与故障处理工具"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifuns.com/2020/12/26/jvm-6/&title=【JVM】：性能监控与故障处理工具"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifuns.com/2020/12/26/jvm-6/&title=【JVM】：性能监控与故障处理工具"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifuns.com/2020/12/26/jvm-6/&title=【JVM】：性能监控与故障处理工具"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifuns.com/2020/12/26/jvm-6/&name=【JVM】：性能监控与故障处理工具&description=&lt;h2 id=&#34;基础故障处理工具&#34;&gt;&lt;a href=&#34;#基础故障处理工具&#34; class=&#34;headerlink&#34; title=&#34;基础故障处理工具&#34;&gt;&lt;/a&gt;基础故障处理工具&lt;/h2&gt;&lt;h3 id=&#34;jps：虚拟机进程状况工具&#34;&gt;&lt;a href=&#34;#jps：虚拟机进程状况工具&#34; class=&#34;headerlink&#34; title=&#34;jps：虚拟机进程状况工具&#34;&gt;&lt;/a&gt;jps：虚拟机进程状况工具&lt;/h3&gt;&lt;p&gt;（JVM Process Status Tool），主要用来输出JVM中运行的进程状态信息。&lt;/p&gt;
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifs.com/2020/12/26/jvm-6/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifs.com/2020/12/26/jvm-6/&text=【JVM】：性能监控与故障处理工具"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifs.com/2020/12/26/jvm-6/&title=【JVM】：性能监控与故障处理工具"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifs.com/2020/12/26/jvm-6/&is_video=false&description=【JVM】：性能监控与故障处理工具"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=【JVM】：性能监控与故障处理工具&body=Check out this article: https://haifs.com/2020/12/26/jvm-6/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifs.com/2020/12/26/jvm-6/&title=【JVM】：性能监控与故障处理工具"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifs.com/2020/12/26/jvm-6/&title=【JVM】：性能监控与故障处理工具"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifs.com/2020/12/26/jvm-6/&title=【JVM】：性能监控与故障处理工具"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifs.com/2020/12/26/jvm-6/&title=【JVM】：性能监控与故障处理工具"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifs.com/2020/12/26/jvm-6/&name=【JVM】：性能监控与故障处理工具&description=&lt;h2 id=&#34;基础故障处理工具&#34;&gt;&lt;a href=&#34;#基础故障处理工具&#34; class=&#34;headerlink&#34; title=&#34;基础故障处理工具&#34;&gt;&lt;/a&gt;基础故障处理工具&lt;/h2&gt;&lt;h3 id=&#34;jps：虚拟机进程状况工具&#34;&gt;&lt;a href=&#34;#jps：虚拟机进程状况工具&#34; class=&#34;headerlink&#34; title=&#34;jps：虚拟机进程状况工具&#34;&gt;&lt;/a&gt;jps：虚拟机进程状况工具&lt;/h3&gt;&lt;p&gt;（JVM Process Status Tool），主要用来输出JVM中运行的进程状态信息。&lt;/p&gt;
 &lt;p&gt;语法格式：&lt;/p&gt;
 &lt;figure class=&#34;highlight plaintext&#34;&gt;&lt;table&gt;&lt;tbody&gt;&lt;tr&gt;&lt;td class=&#34;gutter&#34;&gt;&lt;pre&gt;&lt;span class=&#34;line&#34;&gt;1&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#34;code&#34;&gt;&lt;pre&gt;&lt;span class=&#34;line&#34;&gt;jps [ options ] [ hostid ]&lt;/span&gt;&lt;br&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/tbody&gt;&lt;/table&gt;&lt;/figure&gt;
 
@@ -470,7 +470,7 @@
 &lt;td&gt;输出虚拟机进程启动时的JVM参数&lt;/td&gt;
 &lt;/tr&gt;
 &lt;/tbody&gt;&lt;/table&gt;"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifuns.com/2020/12/26/jvm-6/&t=【JVM】：性能监控与故障处理工具"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifs.com/2020/12/26/jvm-6/&t=【JVM】：性能监控与故障处理工具"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 
     </div>

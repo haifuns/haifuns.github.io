@@ -9,7 +9,7 @@
     <meta name="description" content="ConcurrentLinkedQueueConcurrentLinkedQueue 线程安全的无界非阻塞队列，其底层数据结构使用单向链表实现，对于入队和出队操作使用 CAS 来实现线程安全。 类图 ConcurrentLinkedQueue 内部的队列使用单向链表的方式实现，其中有两个volatile 类型的Node 节点分别用来存放队列首、尾节点。 Node 内部则维护一个使用volatile">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【Java 并发编程系列】【J.U.C】：Queue">
-<meta property="og:url" content="https://haifuns.com/2020/12/26/java-concurrent-12/index.html">
+<meta property="og:url" content="https://haifs.com/2020/12/26/java-concurrent-12/index.html">
 <meta property="og:site_name" content="haif&#39;s blog">
 <meta property="og:description" content="ConcurrentLinkedQueueConcurrentLinkedQueue 线程安全的无界非阻塞队列，其底层数据结构使用单向链表实现，对于入队和出队操作使用 CAS 来实现线程安全。 类图 ConcurrentLinkedQueue 内部的队列使用单向链表的方式实现，其中有两个volatile 类型的Node 节点分别用来存放队列首、尾节点。 Node 内部则维护一个使用volatile">
 <meta property="og:locale" content="zh_CN">
@@ -19,7 +19,7 @@
 <meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/PriorityBlockingQueue-uml.png">
 <meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/DelayQueue-uml.png">
 <meta property="article:published_time" content="2020-12-26T09:56:00.000Z">
-<meta property="article:modified_time" content="2025-08-28T08:51:27.062Z">
+<meta property="article:modified_time" content="2025-08-28T08:56:39.151Z">
 <meta property="article:author" content="haifun">
 <meta property="article:tag" content="并发">
 <meta name="twitter:card" content="summary">
@@ -120,20 +120,20 @@
     <br/>
     <div id="share" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifuns.com/2020/12/26/java-concurrent-12/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifuns.com/2020/12/26/java-concurrent-12/&text=【Java 并发编程系列】【J.U.C】：Queue"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifuns.com/2020/12/26/java-concurrent-12/&title=【Java 并发编程系列】【J.U.C】：Queue"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifuns.com/2020/12/26/java-concurrent-12/&is_video=false&description=【Java 并发编程系列】【J.U.C】：Queue"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=【Java 并发编程系列】【J.U.C】：Queue&body=Check out this article: https://haifuns.com/2020/12/26/java-concurrent-12/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifuns.com/2020/12/26/java-concurrent-12/&title=【Java 并发编程系列】【J.U.C】：Queue"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifuns.com/2020/12/26/java-concurrent-12/&title=【Java 并发编程系列】【J.U.C】：Queue"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifuns.com/2020/12/26/java-concurrent-12/&title=【Java 并发编程系列】【J.U.C】：Queue"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifuns.com/2020/12/26/java-concurrent-12/&title=【Java 并发编程系列】【J.U.C】：Queue"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifuns.com/2020/12/26/java-concurrent-12/&name=【Java 并发编程系列】【J.U.C】：Queue&description=&lt;h2 id=&#34;ConcurrentLinkedQueue&#34;&gt;&lt;a href=&#34;#ConcurrentLinkedQueue&#34; class=&#34;headerlink&#34; title=&#34;ConcurrentLinkedQueue&#34;&gt;&lt;/a&gt;ConcurrentLinkedQueue&lt;/h2&gt;&lt;p&gt;ConcurrentLinkedQueue 线程安全的&lt;strong&gt;无界非阻塞&lt;/strong&gt;队列，其底层数据结构使用单向链表实现，对于入队和出队操作使用 CAS 来实现线程安全。&lt;/p&gt;
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifs.com/2020/12/26/java-concurrent-12/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifs.com/2020/12/26/java-concurrent-12/&text=【Java 并发编程系列】【J.U.C】：Queue"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifs.com/2020/12/26/java-concurrent-12/&title=【Java 并发编程系列】【J.U.C】：Queue"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifs.com/2020/12/26/java-concurrent-12/&is_video=false&description=【Java 并发编程系列】【J.U.C】：Queue"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=【Java 并发编程系列】【J.U.C】：Queue&body=Check out this article: https://haifs.com/2020/12/26/java-concurrent-12/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifs.com/2020/12/26/java-concurrent-12/&title=【Java 并发编程系列】【J.U.C】：Queue"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifs.com/2020/12/26/java-concurrent-12/&title=【Java 并发编程系列】【J.U.C】：Queue"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifs.com/2020/12/26/java-concurrent-12/&title=【Java 并发编程系列】【J.U.C】：Queue"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifs.com/2020/12/26/java-concurrent-12/&title=【Java 并发编程系列】【J.U.C】：Queue"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifs.com/2020/12/26/java-concurrent-12/&name=【Java 并发编程系列】【J.U.C】：Queue&description=&lt;h2 id=&#34;ConcurrentLinkedQueue&#34;&gt;&lt;a href=&#34;#ConcurrentLinkedQueue&#34; class=&#34;headerlink&#34; title=&#34;ConcurrentLinkedQueue&#34;&gt;&lt;/a&gt;ConcurrentLinkedQueue&lt;/h2&gt;&lt;p&gt;ConcurrentLinkedQueue 线程安全的&lt;strong&gt;无界非阻塞&lt;/strong&gt;队列，其底层数据结构使用单向链表实现，对于入队和出队操作使用 CAS 来实现线程安全。&lt;/p&gt;
 &lt;h3 id=&#34;类图&#34;&gt;&lt;a href=&#34;#类图&#34; class=&#34;headerlink&#34; title=&#34;类图&#34;&gt;&lt;/a&gt;类图&lt;/h3&gt;&lt;p&gt;&lt;img src=&#34;https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/ConcurrentLinkedQueue-uml.png&#34; alt=&#34;image&#34;&gt;&lt;/p&gt;
 &lt;p&gt;ConcurrentLinkedQueue 内部的队列使用单向链表的方式实现，其中有两个volatile 类型的Node 节点分别用来存放队列首、尾节点。&lt;/p&gt;
 &lt;p&gt;Node 内部则维护一个使用volatile 修饰的item，用来存放节点的值；next 用来存放链表的下一个节点；其内部使用UNSafe 工具类提供的CAS 算法来保证入队时操作链表的原子性。&lt;/p&gt;"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifuns.com/2020/12/26/java-concurrent-12/&t=【Java 并发编程系列】【J.U.C】：Queue"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifs.com/2020/12/26/java-concurrent-12/&t=【Java 并发编程系列】【J.U.C】：Queue"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
@@ -369,20 +369,20 @@
 
     <div id="share-footer" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifuns.com/2020/12/26/java-concurrent-12/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifuns.com/2020/12/26/java-concurrent-12/&text=【Java 并发编程系列】【J.U.C】：Queue"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifuns.com/2020/12/26/java-concurrent-12/&title=【Java 并发编程系列】【J.U.C】：Queue"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifuns.com/2020/12/26/java-concurrent-12/&is_video=false&description=【Java 并发编程系列】【J.U.C】：Queue"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=【Java 并发编程系列】【J.U.C】：Queue&body=Check out this article: https://haifuns.com/2020/12/26/java-concurrent-12/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifuns.com/2020/12/26/java-concurrent-12/&title=【Java 并发编程系列】【J.U.C】：Queue"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifuns.com/2020/12/26/java-concurrent-12/&title=【Java 并发编程系列】【J.U.C】：Queue"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifuns.com/2020/12/26/java-concurrent-12/&title=【Java 并发编程系列】【J.U.C】：Queue"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifuns.com/2020/12/26/java-concurrent-12/&title=【Java 并发编程系列】【J.U.C】：Queue"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifuns.com/2020/12/26/java-concurrent-12/&name=【Java 并发编程系列】【J.U.C】：Queue&description=&lt;h2 id=&#34;ConcurrentLinkedQueue&#34;&gt;&lt;a href=&#34;#ConcurrentLinkedQueue&#34; class=&#34;headerlink&#34; title=&#34;ConcurrentLinkedQueue&#34;&gt;&lt;/a&gt;ConcurrentLinkedQueue&lt;/h2&gt;&lt;p&gt;ConcurrentLinkedQueue 线程安全的&lt;strong&gt;无界非阻塞&lt;/strong&gt;队列，其底层数据结构使用单向链表实现，对于入队和出队操作使用 CAS 来实现线程安全。&lt;/p&gt;
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifs.com/2020/12/26/java-concurrent-12/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifs.com/2020/12/26/java-concurrent-12/&text=【Java 并发编程系列】【J.U.C】：Queue"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifs.com/2020/12/26/java-concurrent-12/&title=【Java 并发编程系列】【J.U.C】：Queue"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifs.com/2020/12/26/java-concurrent-12/&is_video=false&description=【Java 并发编程系列】【J.U.C】：Queue"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=【Java 并发编程系列】【J.U.C】：Queue&body=Check out this article: https://haifs.com/2020/12/26/java-concurrent-12/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifs.com/2020/12/26/java-concurrent-12/&title=【Java 并发编程系列】【J.U.C】：Queue"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifs.com/2020/12/26/java-concurrent-12/&title=【Java 并发编程系列】【J.U.C】：Queue"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifs.com/2020/12/26/java-concurrent-12/&title=【Java 并发编程系列】【J.U.C】：Queue"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifs.com/2020/12/26/java-concurrent-12/&title=【Java 并发编程系列】【J.U.C】：Queue"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifs.com/2020/12/26/java-concurrent-12/&name=【Java 并发编程系列】【J.U.C】：Queue&description=&lt;h2 id=&#34;ConcurrentLinkedQueue&#34;&gt;&lt;a href=&#34;#ConcurrentLinkedQueue&#34; class=&#34;headerlink&#34; title=&#34;ConcurrentLinkedQueue&#34;&gt;&lt;/a&gt;ConcurrentLinkedQueue&lt;/h2&gt;&lt;p&gt;ConcurrentLinkedQueue 线程安全的&lt;strong&gt;无界非阻塞&lt;/strong&gt;队列，其底层数据结构使用单向链表实现，对于入队和出队操作使用 CAS 来实现线程安全。&lt;/p&gt;
 &lt;h3 id=&#34;类图&#34;&gt;&lt;a href=&#34;#类图&#34; class=&#34;headerlink&#34; title=&#34;类图&#34;&gt;&lt;/a&gt;类图&lt;/h3&gt;&lt;p&gt;&lt;img src=&#34;https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/ConcurrentLinkedQueue-uml.png&#34; alt=&#34;image&#34;&gt;&lt;/p&gt;
 &lt;p&gt;ConcurrentLinkedQueue 内部的队列使用单向链表的方式实现，其中有两个volatile 类型的Node 节点分别用来存放队列首、尾节点。&lt;/p&gt;
 &lt;p&gt;Node 内部则维护一个使用volatile 修饰的item，用来存放节点的值；next 用来存放链表的下一个节点；其内部使用UNSafe 工具类提供的CAS 算法来保证入队时操作链表的原子性。&lt;/p&gt;"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifuns.com/2020/12/26/java-concurrent-12/&t=【Java 并发编程系列】【J.U.C】：Queue"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifs.com/2020/12/26/java-concurrent-12/&t=【Java 并发编程系列】【J.U.C】：Queue"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 
     </div>

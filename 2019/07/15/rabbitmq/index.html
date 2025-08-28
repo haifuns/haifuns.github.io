@@ -9,7 +9,7 @@
     <meta name="description" content="消息中间件消息 (Message) 是指在应用间传送的数据。消息可以非常简单，比如只包含文本字符串、 JSON 等，也可以很复杂，比如内嵌对象。 消息队列中间件 (Message Queue Middleware，简称为 MQ) 是指利用高效可靠的消息传递 机制进行与平台无关的数据交流，并基于数据通信来进行分布式系统的集成。通过提供消息传递和消息排队模型，它可以在分布式环境下扩展进程间的通信。 消">
 <meta property="og:type" content="article">
 <meta property="og:title" content="RabbitMQ 基础">
-<meta property="og:url" content="https://haifuns.com/2019/07/15/rabbitmq/index.html">
+<meta property="og:url" content="https://haifs.com/2019/07/15/rabbitmq/index.html">
 <meta property="og:site_name" content="haif&#39;s blog">
 <meta property="og:description" content="消息中间件消息 (Message) 是指在应用间传送的数据。消息可以非常简单，比如只包含文本字符串、 JSON 等，也可以很复杂，比如内嵌对象。 消息队列中间件 (Message Queue Middleware，简称为 MQ) 是指利用高效可靠的消息传递 机制进行与平台无关的数据交流，并基于数据通信来进行分布式系统的集成。通过提供消息传递和消息排队模型，它可以在分布式环境下扩展进程间的通信。 消">
 <meta property="og:locale" content="zh_CN">
@@ -17,7 +17,7 @@
 <meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/mq/rabbitmq-tx-rollback.png">
 <meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/mq/rabbitmq-confirm.png">
 <meta property="article:published_time" content="2019-07-15T12:30:00.000Z">
-<meta property="article:modified_time" content="2025-08-28T08:51:27.066Z">
+<meta property="article:modified_time" content="2025-08-28T08:56:39.154Z">
 <meta property="article:author" content="haifun">
 <meta property="article:tag" content="RabbitMQ">
 <meta name="twitter:card" content="summary">
@@ -118,16 +118,16 @@
     <br/>
     <div id="share" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifuns.com/2019/07/15/rabbitmq/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifuns.com/2019/07/15/rabbitmq/&text=RabbitMQ 基础"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifuns.com/2019/07/15/rabbitmq/&title=RabbitMQ 基础"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifuns.com/2019/07/15/rabbitmq/&is_video=false&description=RabbitMQ 基础"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=RabbitMQ 基础&body=Check out this article: https://haifuns.com/2019/07/15/rabbitmq/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifuns.com/2019/07/15/rabbitmq/&title=RabbitMQ 基础"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifuns.com/2019/07/15/rabbitmq/&title=RabbitMQ 基础"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifuns.com/2019/07/15/rabbitmq/&title=RabbitMQ 基础"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifuns.com/2019/07/15/rabbitmq/&title=RabbitMQ 基础"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifuns.com/2019/07/15/rabbitmq/&name=RabbitMQ 基础&description=&lt;h1 id=&#34;消息中间件&#34;&gt;&lt;a href=&#34;#消息中间件&#34; class=&#34;headerlink&#34; title=&#34;消息中间件&#34;&gt;&lt;/a&gt;消息中间件&lt;/h1&gt;&lt;p&gt;消息 (Message) 是指在应用间传送的数据。消息可以非常简单，比如只包含文本字符串、 JSON 等，也可以很复杂，比如内嵌对象。&lt;/p&gt;
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifs.com/2019/07/15/rabbitmq/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifs.com/2019/07/15/rabbitmq/&text=RabbitMQ 基础"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifs.com/2019/07/15/rabbitmq/&title=RabbitMQ 基础"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifs.com/2019/07/15/rabbitmq/&is_video=false&description=RabbitMQ 基础"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=RabbitMQ 基础&body=Check out this article: https://haifs.com/2019/07/15/rabbitmq/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifs.com/2019/07/15/rabbitmq/&title=RabbitMQ 基础"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifs.com/2019/07/15/rabbitmq/&title=RabbitMQ 基础"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifs.com/2019/07/15/rabbitmq/&title=RabbitMQ 基础"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifs.com/2019/07/15/rabbitmq/&title=RabbitMQ 基础"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifs.com/2019/07/15/rabbitmq/&name=RabbitMQ 基础&description=&lt;h1 id=&#34;消息中间件&#34;&gt;&lt;a href=&#34;#消息中间件&#34; class=&#34;headerlink&#34; title=&#34;消息中间件&#34;&gt;&lt;/a&gt;消息中间件&lt;/h1&gt;&lt;p&gt;消息 (Message) 是指在应用间传送的数据。消息可以非常简单，比如只包含文本字符串、 JSON 等，也可以很复杂，比如内嵌对象。&lt;/p&gt;
 &lt;p&gt;消息队列中间件 (Message Queue Middleware，简称为 MQ) 是指利用高效可靠的消息传递 机制进行与平台无关的数据交流，并基于数据通信来进行分布式系统的集成。通过提供消息传递和消息排队模型，它可以在分布式环境下扩展进程间的通信。&lt;/p&gt;
 &lt;p&gt;消息队列中间件，也可以称为消息队列或者消息中间件。它一般有两种传递模式:点对点 (P2P, Point-to-Point) 模式和发布/订阅 (Pub/Sub) 模式。&lt;/p&gt;
 &lt;h2 id=&#34;中间件作用&#34;&gt;&lt;a href=&#34;#中间件作用&#34; class=&#34;headerlink&#34; title=&#34;中间件作用&#34;&gt;&lt;/a&gt;中间件作用&lt;/h2&gt;&lt;ul&gt;
@@ -151,7 +151,7 @@
 &lt;li&gt;插件机制：插件丰富可扩展&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h1 id=&#34;安装&#34;&gt;&lt;a href=&#34;#安装&#34; class=&#34;headerlink&#34; title=&#34;安装&#34;&gt;&lt;/a&gt;安装&lt;/h1&gt;"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifuns.com/2019/07/15/rabbitmq/&t=RabbitMQ 基础"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifs.com/2019/07/15/rabbitmq/&t=RabbitMQ 基础"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
@@ -471,16 +471,16 @@
 
     <div id="share-footer" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifuns.com/2019/07/15/rabbitmq/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifuns.com/2019/07/15/rabbitmq/&text=RabbitMQ 基础"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifuns.com/2019/07/15/rabbitmq/&title=RabbitMQ 基础"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifuns.com/2019/07/15/rabbitmq/&is_video=false&description=RabbitMQ 基础"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=RabbitMQ 基础&body=Check out this article: https://haifuns.com/2019/07/15/rabbitmq/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifuns.com/2019/07/15/rabbitmq/&title=RabbitMQ 基础"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifuns.com/2019/07/15/rabbitmq/&title=RabbitMQ 基础"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifuns.com/2019/07/15/rabbitmq/&title=RabbitMQ 基础"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifuns.com/2019/07/15/rabbitmq/&title=RabbitMQ 基础"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifuns.com/2019/07/15/rabbitmq/&name=RabbitMQ 基础&description=&lt;h1 id=&#34;消息中间件&#34;&gt;&lt;a href=&#34;#消息中间件&#34; class=&#34;headerlink&#34; title=&#34;消息中间件&#34;&gt;&lt;/a&gt;消息中间件&lt;/h1&gt;&lt;p&gt;消息 (Message) 是指在应用间传送的数据。消息可以非常简单，比如只包含文本字符串、 JSON 等，也可以很复杂，比如内嵌对象。&lt;/p&gt;
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifs.com/2019/07/15/rabbitmq/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifs.com/2019/07/15/rabbitmq/&text=RabbitMQ 基础"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifs.com/2019/07/15/rabbitmq/&title=RabbitMQ 基础"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifs.com/2019/07/15/rabbitmq/&is_video=false&description=RabbitMQ 基础"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=RabbitMQ 基础&body=Check out this article: https://haifs.com/2019/07/15/rabbitmq/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifs.com/2019/07/15/rabbitmq/&title=RabbitMQ 基础"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifs.com/2019/07/15/rabbitmq/&title=RabbitMQ 基础"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifs.com/2019/07/15/rabbitmq/&title=RabbitMQ 基础"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifs.com/2019/07/15/rabbitmq/&title=RabbitMQ 基础"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifs.com/2019/07/15/rabbitmq/&name=RabbitMQ 基础&description=&lt;h1 id=&#34;消息中间件&#34;&gt;&lt;a href=&#34;#消息中间件&#34; class=&#34;headerlink&#34; title=&#34;消息中间件&#34;&gt;&lt;/a&gt;消息中间件&lt;/h1&gt;&lt;p&gt;消息 (Message) 是指在应用间传送的数据。消息可以非常简单，比如只包含文本字符串、 JSON 等，也可以很复杂，比如内嵌对象。&lt;/p&gt;
 &lt;p&gt;消息队列中间件 (Message Queue Middleware，简称为 MQ) 是指利用高效可靠的消息传递 机制进行与平台无关的数据交流，并基于数据通信来进行分布式系统的集成。通过提供消息传递和消息排队模型，它可以在分布式环境下扩展进程间的通信。&lt;/p&gt;
 &lt;p&gt;消息队列中间件，也可以称为消息队列或者消息中间件。它一般有两种传递模式:点对点 (P2P, Point-to-Point) 模式和发布/订阅 (Pub/Sub) 模式。&lt;/p&gt;
 &lt;h2 id=&#34;中间件作用&#34;&gt;&lt;a href=&#34;#中间件作用&#34; class=&#34;headerlink&#34; title=&#34;中间件作用&#34;&gt;&lt;/a&gt;中间件作用&lt;/h2&gt;&lt;ul&gt;
@@ -504,7 +504,7 @@
 &lt;li&gt;插件机制：插件丰富可扩展&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h1 id=&#34;安装&#34;&gt;&lt;a href=&#34;#安装&#34; class=&#34;headerlink&#34; title=&#34;安装&#34;&gt;&lt;/a&gt;安装&lt;/h1&gt;"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifuns.com/2019/07/15/rabbitmq/&t=RabbitMQ 基础"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifs.com/2019/07/15/rabbitmq/&t=RabbitMQ 基础"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 
     </div>

@@ -9,13 +9,13 @@
     <meta name="description" content="ThreadLocalThreadLocal 即线程本地变量，也就是如果创建了一个ThreadLocal变量，那么访问这个变量的每个线程都会有这个变量的一个本地副本。当多个线程操作这个变量时，实际操作的是自己本地内存里面的变量，从而避免了线程安全问题。 ThreadLocal 实现原理ThreadLocal 相关类类图如下：">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【Java 并发编程系列】：ThreadLocal">
-<meta property="og:url" content="https://haifuns.com/2020/12/26/java-concurrent-6/index.html">
+<meta property="og:url" content="https://haifs.com/2020/12/26/java-concurrent-6/index.html">
 <meta property="og:site_name" content="haif&#39;s blog">
 <meta property="og:description" content="ThreadLocalThreadLocal 即线程本地变量，也就是如果创建了一个ThreadLocal变量，那么访问这个变量的每个线程都会有这个变量的一个本地副本。当多个线程操作这个变量时，实际操作的是自己本地内存里面的变量，从而避免了线程安全问题。 ThreadLocal 实现原理ThreadLocal 相关类类图如下：">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/threadlocal-uml.png">
 <meta property="article:published_time" content="2020-12-26T09:46:00.000Z">
-<meta property="article:modified_time" content="2025-08-28T08:51:27.063Z">
+<meta property="article:modified_time" content="2025-08-28T08:56:39.151Z">
 <meta property="article:author" content="haifun">
 <meta property="article:tag" content="并发">
 <meta name="twitter:card" content="summary">
@@ -116,19 +116,19 @@
     <br/>
     <div id="share" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifuns.com/2020/12/26/java-concurrent-6/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifuns.com/2020/12/26/java-concurrent-6/&text=【Java 并发编程系列】：ThreadLocal"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifuns.com/2020/12/26/java-concurrent-6/&title=【Java 并发编程系列】：ThreadLocal"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifuns.com/2020/12/26/java-concurrent-6/&is_video=false&description=【Java 并发编程系列】：ThreadLocal"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=【Java 并发编程系列】：ThreadLocal&body=Check out this article: https://haifuns.com/2020/12/26/java-concurrent-6/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifuns.com/2020/12/26/java-concurrent-6/&title=【Java 并发编程系列】：ThreadLocal"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifuns.com/2020/12/26/java-concurrent-6/&title=【Java 并发编程系列】：ThreadLocal"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifuns.com/2020/12/26/java-concurrent-6/&title=【Java 并发编程系列】：ThreadLocal"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifuns.com/2020/12/26/java-concurrent-6/&title=【Java 并发编程系列】：ThreadLocal"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifuns.com/2020/12/26/java-concurrent-6/&name=【Java 并发编程系列】：ThreadLocal&description=&lt;h2 id=&#34;ThreadLocal&#34;&gt;&lt;a href=&#34;#ThreadLocal&#34; class=&#34;headerlink&#34; title=&#34;ThreadLocal&#34;&gt;&lt;/a&gt;ThreadLocal&lt;/h2&gt;&lt;p&gt;ThreadLocal 即线程本地变量，也就是如果创建了一个ThreadLocal变量，那么访问这个变量的每个线程都会有这个变量的一个本地副本。当多个线程操作这个变量时，实际操作的是自己本地内存里面的变量，从而避免了线程安全问题。&lt;/p&gt;
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifs.com/2020/12/26/java-concurrent-6/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifs.com/2020/12/26/java-concurrent-6/&text=【Java 并发编程系列】：ThreadLocal"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifs.com/2020/12/26/java-concurrent-6/&title=【Java 并发编程系列】：ThreadLocal"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifs.com/2020/12/26/java-concurrent-6/&is_video=false&description=【Java 并发编程系列】：ThreadLocal"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=【Java 并发编程系列】：ThreadLocal&body=Check out this article: https://haifs.com/2020/12/26/java-concurrent-6/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifs.com/2020/12/26/java-concurrent-6/&title=【Java 并发编程系列】：ThreadLocal"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifs.com/2020/12/26/java-concurrent-6/&title=【Java 并发编程系列】：ThreadLocal"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifs.com/2020/12/26/java-concurrent-6/&title=【Java 并发编程系列】：ThreadLocal"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifs.com/2020/12/26/java-concurrent-6/&title=【Java 并发编程系列】：ThreadLocal"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifs.com/2020/12/26/java-concurrent-6/&name=【Java 并发编程系列】：ThreadLocal&description=&lt;h2 id=&#34;ThreadLocal&#34;&gt;&lt;a href=&#34;#ThreadLocal&#34; class=&#34;headerlink&#34; title=&#34;ThreadLocal&#34;&gt;&lt;/a&gt;ThreadLocal&lt;/h2&gt;&lt;p&gt;ThreadLocal 即线程本地变量，也就是如果创建了一个ThreadLocal变量，那么访问这个变量的每个线程都会有这个变量的一个本地副本。当多个线程操作这个变量时，实际操作的是自己本地内存里面的变量，从而避免了线程安全问题。&lt;/p&gt;
 &lt;h2 id=&#34;ThreadLocal-实现原理&#34;&gt;&lt;a href=&#34;#ThreadLocal-实现原理&#34; class=&#34;headerlink&#34; title=&#34;ThreadLocal 实现原理&#34;&gt;&lt;/a&gt;ThreadLocal 实现原理&lt;/h2&gt;&lt;p&gt;ThreadLocal 相关类类图如下：&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/threadlocal-uml.png&#34; alt=&#34;image&#34;&gt;&lt;/p&gt;"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifuns.com/2020/12/26/java-concurrent-6/&t=【Java 并发编程系列】：ThreadLocal"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifs.com/2020/12/26/java-concurrent-6/&t=【Java 并发编程系列】：ThreadLocal"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
@@ -268,19 +268,19 @@
 
     <div id="share-footer" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifuns.com/2020/12/26/java-concurrent-6/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifuns.com/2020/12/26/java-concurrent-6/&text=【Java 并发编程系列】：ThreadLocal"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifuns.com/2020/12/26/java-concurrent-6/&title=【Java 并发编程系列】：ThreadLocal"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifuns.com/2020/12/26/java-concurrent-6/&is_video=false&description=【Java 并发编程系列】：ThreadLocal"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=【Java 并发编程系列】：ThreadLocal&body=Check out this article: https://haifuns.com/2020/12/26/java-concurrent-6/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifuns.com/2020/12/26/java-concurrent-6/&title=【Java 并发编程系列】：ThreadLocal"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifuns.com/2020/12/26/java-concurrent-6/&title=【Java 并发编程系列】：ThreadLocal"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifuns.com/2020/12/26/java-concurrent-6/&title=【Java 并发编程系列】：ThreadLocal"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifuns.com/2020/12/26/java-concurrent-6/&title=【Java 并发编程系列】：ThreadLocal"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifuns.com/2020/12/26/java-concurrent-6/&name=【Java 并发编程系列】：ThreadLocal&description=&lt;h2 id=&#34;ThreadLocal&#34;&gt;&lt;a href=&#34;#ThreadLocal&#34; class=&#34;headerlink&#34; title=&#34;ThreadLocal&#34;&gt;&lt;/a&gt;ThreadLocal&lt;/h2&gt;&lt;p&gt;ThreadLocal 即线程本地变量，也就是如果创建了一个ThreadLocal变量，那么访问这个变量的每个线程都会有这个变量的一个本地副本。当多个线程操作这个变量时，实际操作的是自己本地内存里面的变量，从而避免了线程安全问题。&lt;/p&gt;
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifs.com/2020/12/26/java-concurrent-6/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifs.com/2020/12/26/java-concurrent-6/&text=【Java 并发编程系列】：ThreadLocal"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifs.com/2020/12/26/java-concurrent-6/&title=【Java 并发编程系列】：ThreadLocal"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifs.com/2020/12/26/java-concurrent-6/&is_video=false&description=【Java 并发编程系列】：ThreadLocal"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=【Java 并发编程系列】：ThreadLocal&body=Check out this article: https://haifs.com/2020/12/26/java-concurrent-6/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifs.com/2020/12/26/java-concurrent-6/&title=【Java 并发编程系列】：ThreadLocal"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifs.com/2020/12/26/java-concurrent-6/&title=【Java 并发编程系列】：ThreadLocal"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifs.com/2020/12/26/java-concurrent-6/&title=【Java 并发编程系列】：ThreadLocal"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifs.com/2020/12/26/java-concurrent-6/&title=【Java 并发编程系列】：ThreadLocal"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifs.com/2020/12/26/java-concurrent-6/&name=【Java 并发编程系列】：ThreadLocal&description=&lt;h2 id=&#34;ThreadLocal&#34;&gt;&lt;a href=&#34;#ThreadLocal&#34; class=&#34;headerlink&#34; title=&#34;ThreadLocal&#34;&gt;&lt;/a&gt;ThreadLocal&lt;/h2&gt;&lt;p&gt;ThreadLocal 即线程本地变量，也就是如果创建了一个ThreadLocal变量，那么访问这个变量的每个线程都会有这个变量的一个本地副本。当多个线程操作这个变量时，实际操作的是自己本地内存里面的变量，从而避免了线程安全问题。&lt;/p&gt;
 &lt;h2 id=&#34;ThreadLocal-实现原理&#34;&gt;&lt;a href=&#34;#ThreadLocal-实现原理&#34; class=&#34;headerlink&#34; title=&#34;ThreadLocal 实现原理&#34;&gt;&lt;/a&gt;ThreadLocal 实现原理&lt;/h2&gt;&lt;p&gt;ThreadLocal 相关类类图如下：&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/threadlocal-uml.png&#34; alt=&#34;image&#34;&gt;&lt;/p&gt;"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifuns.com/2020/12/26/java-concurrent-6/&t=【Java 并发编程系列】：ThreadLocal"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifs.com/2020/12/26/java-concurrent-6/&t=【Java 并发编程系列】：ThreadLocal"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 
     </div>

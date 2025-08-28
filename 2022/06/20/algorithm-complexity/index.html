@@ -9,12 +9,12 @@
     <meta name="description" content="衡量不同算法之间的优劣主要是从算法所占用的「时间」、「空间」两个维度考量，即：  时间维度：指执行当前算法所消耗的时间，由流程决定，通常用「时间复杂度」描述。 空间维度：指执行当前算法需要占用多少内存空间，由流程决定，通常用「空间复杂度」描述。  时间复杂度时间复杂度通过运行程序验证所消耗时间时，受运行环境、数据规模等因素影响差异很大，因此使用通用表示法描述时间复杂度。例如，大O符号表示法，即T(">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【算法基础】复杂度分析">
-<meta property="og:url" content="https://haifuns.com/2022/06/20/algorithm-complexity/index.html">
+<meta property="og:url" content="https://haifs.com/2022/06/20/algorithm-complexity/index.html">
 <meta property="og:site_name" content="haif&#39;s blog">
 <meta property="og:description" content="衡量不同算法之间的优劣主要是从算法所占用的「时间」、「空间」两个维度考量，即：  时间维度：指执行当前算法所消耗的时间，由流程决定，通常用「时间复杂度」描述。 空间维度：指执行当前算法需要占用多少内存空间，由流程决定，通常用「空间复杂度」描述。  时间复杂度时间复杂度通过运行程序验证所消耗时间时，受运行环境、数据规模等因素影响差异很大，因此使用通用表示法描述时间复杂度。例如，大O符号表示法，即T(">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-06-20T14:30:00.000Z">
-<meta property="article:modified_time" content="2025-08-28T08:51:27.059Z">
+<meta property="article:modified_time" content="2025-08-28T08:56:39.147Z">
 <meta property="article:author" content="haifun">
 <meta property="article:tag" content="算法">
 <meta property="article:tag" content="复杂度">
@@ -227,17 +227,17 @@ mjx-container[display="true"] + br {
     <br/>
     <div id="share" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifuns.com/2022/06/20/algorithm-complexity/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifuns.com/2022/06/20/algorithm-complexity/&text=【算法基础】复杂度分析"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifuns.com/2022/06/20/algorithm-complexity/&title=【算法基础】复杂度分析"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifuns.com/2022/06/20/algorithm-complexity/&is_video=false&description=【算法基础】复杂度分析"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=【算法基础】复杂度分析&body=Check out this article: https://haifuns.com/2022/06/20/algorithm-complexity/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifuns.com/2022/06/20/algorithm-complexity/&title=【算法基础】复杂度分析"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifuns.com/2022/06/20/algorithm-complexity/&title=【算法基础】复杂度分析"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifuns.com/2022/06/20/algorithm-complexity/&title=【算法基础】复杂度分析"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifuns.com/2022/06/20/algorithm-complexity/&title=【算法基础】复杂度分析"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifuns.com/2022/06/20/algorithm-complexity/&name=【算法基础】复杂度分析&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifuns.com/2022/06/20/algorithm-complexity/&t=【算法基础】复杂度分析"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifs.com/2022/06/20/algorithm-complexity/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifs.com/2022/06/20/algorithm-complexity/&text=【算法基础】复杂度分析"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifs.com/2022/06/20/algorithm-complexity/&title=【算法基础】复杂度分析"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifs.com/2022/06/20/algorithm-complexity/&is_video=false&description=【算法基础】复杂度分析"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=【算法基础】复杂度分析&body=Check out this article: https://haifs.com/2022/06/20/algorithm-complexity/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifs.com/2022/06/20/algorithm-complexity/&title=【算法基础】复杂度分析"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifs.com/2022/06/20/algorithm-complexity/&title=【算法基础】复杂度分析"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifs.com/2022/06/20/algorithm-complexity/&title=【算法基础】复杂度分析"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifs.com/2022/06/20/algorithm-complexity/&title=【算法基础】复杂度分析"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifs.com/2022/06/20/algorithm-complexity/&name=【算法基础】复杂度分析&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifs.com/2022/06/20/algorithm-complexity/&t=【算法基础】复杂度分析"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
@@ -361,17 +361,17 @@ mjx-container[display="true"] + br {
 
     <div id="share-footer" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifuns.com/2022/06/20/algorithm-complexity/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifuns.com/2022/06/20/algorithm-complexity/&text=【算法基础】复杂度分析"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifuns.com/2022/06/20/algorithm-complexity/&title=【算法基础】复杂度分析"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifuns.com/2022/06/20/algorithm-complexity/&is_video=false&description=【算法基础】复杂度分析"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=【算法基础】复杂度分析&body=Check out this article: https://haifuns.com/2022/06/20/algorithm-complexity/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifuns.com/2022/06/20/algorithm-complexity/&title=【算法基础】复杂度分析"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifuns.com/2022/06/20/algorithm-complexity/&title=【算法基础】复杂度分析"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifuns.com/2022/06/20/algorithm-complexity/&title=【算法基础】复杂度分析"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifuns.com/2022/06/20/algorithm-complexity/&title=【算法基础】复杂度分析"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifuns.com/2022/06/20/algorithm-complexity/&name=【算法基础】复杂度分析&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifuns.com/2022/06/20/algorithm-complexity/&t=【算法基础】复杂度分析"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifs.com/2022/06/20/algorithm-complexity/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifs.com/2022/06/20/algorithm-complexity/&text=【算法基础】复杂度分析"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifs.com/2022/06/20/algorithm-complexity/&title=【算法基础】复杂度分析"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifs.com/2022/06/20/algorithm-complexity/&is_video=false&description=【算法基础】复杂度分析"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=【算法基础】复杂度分析&body=Check out this article: https://haifs.com/2022/06/20/algorithm-complexity/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifs.com/2022/06/20/algorithm-complexity/&title=【算法基础】复杂度分析"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifs.com/2022/06/20/algorithm-complexity/&title=【算法基础】复杂度分析"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifs.com/2022/06/20/algorithm-complexity/&title=【算法基础】复杂度分析"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifs.com/2022/06/20/algorithm-complexity/&title=【算法基础】复杂度分析"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifs.com/2022/06/20/algorithm-complexity/&name=【算法基础】复杂度分析&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifs.com/2022/06/20/algorithm-complexity/&t=【算法基础】复杂度分析"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 
     </div>

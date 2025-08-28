@@ -9,13 +9,13 @@
     <meta name="description" content="I&#x2F;O 模型BIOBIO 就是传统的java.io包，同步并阻塞，基于流模型实现，在读入输入流或者输出流时，在读写动作完成之前，线程会一直阻塞。  优点是代码比较简单、直观 缺点是效率和扩展性很低，容易成为应用性能瓶颈  NIONIO 是Java 1.4引入的java.nio包，同步非阻塞，提供了 Channel、Selector、Buffer 等新的抽象，可以构建多路复用的、同步非阻塞 IO 程">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【Java I&#x2F;O】BIO、NIO、AIO">
-<meta property="og:url" content="https://haifuns.com/2020/12/26/java-io/index.html">
+<meta property="og:url" content="https://haifs.com/2020/12/26/java-io/index.html">
 <meta property="og:site_name" content="haif&#39;s blog">
 <meta property="og:description" content="I&#x2F;O 模型BIOBIO 就是传统的java.io包，同步并阻塞，基于流模型实现，在读入输入流或者输出流时，在读写动作完成之前，线程会一直阻塞。  优点是代码比较简单、直观 缺点是效率和扩展性很低，容易成为应用性能瓶颈  NIONIO 是Java 1.4引入的java.nio包，同步非阻塞，提供了 Channel、Selector、Buffer 等新的抽象，可以构建多路复用的、同步非阻塞 IO 程">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/io/bio.png">
 <meta property="article:published_time" content="2020-12-26T09:26:00.000Z">
-<meta property="article:modified_time" content="2025-08-28T08:51:27.063Z">
+<meta property="article:modified_time" content="2025-08-28T08:56:39.152Z">
 <meta property="article:author" content="haifun">
 <meta property="article:tag" content="Java IO">
 <meta name="twitter:card" content="summary">
@@ -116,23 +116,23 @@
     <br/>
     <div id="share" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifuns.com/2020/12/26/java-io/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifuns.com/2020/12/26/java-io/&text=【Java I/O】BIO、NIO、AIO"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifuns.com/2020/12/26/java-io/&title=【Java I/O】BIO、NIO、AIO"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifuns.com/2020/12/26/java-io/&is_video=false&description=【Java I/O】BIO、NIO、AIO"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=【Java I/O】BIO、NIO、AIO&body=Check out this article: https://haifuns.com/2020/12/26/java-io/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifuns.com/2020/12/26/java-io/&title=【Java I/O】BIO、NIO、AIO"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifuns.com/2020/12/26/java-io/&title=【Java I/O】BIO、NIO、AIO"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifuns.com/2020/12/26/java-io/&title=【Java I/O】BIO、NIO、AIO"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifuns.com/2020/12/26/java-io/&title=【Java I/O】BIO、NIO、AIO"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifuns.com/2020/12/26/java-io/&name=【Java I/O】BIO、NIO、AIO&description=&lt;h2 id=&#34;I-x2F-O-模型&#34;&gt;&lt;a href=&#34;#I-x2F-O-模型&#34; class=&#34;headerlink&#34; title=&#34;I/O 模型&#34;&gt;&lt;/a&gt;I/O 模型&lt;/h2&gt;&lt;h3 id=&#34;BIO&#34;&gt;&lt;a href=&#34;#BIO&#34; class=&#34;headerlink&#34; title=&#34;BIO&#34;&gt;&lt;/a&gt;BIO&lt;/h3&gt;&lt;p&gt;BIO 就是传统的&lt;code&gt;java.io&lt;/code&gt;包，&lt;strong&gt;同步并阻塞&lt;/strong&gt;，基于流模型实现，在读入输入流或者输出流时，在读写动作完成之前，线程会一直阻塞。&lt;/p&gt;
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifs.com/2020/12/26/java-io/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifs.com/2020/12/26/java-io/&text=【Java I/O】BIO、NIO、AIO"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifs.com/2020/12/26/java-io/&title=【Java I/O】BIO、NIO、AIO"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifs.com/2020/12/26/java-io/&is_video=false&description=【Java I/O】BIO、NIO、AIO"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=【Java I/O】BIO、NIO、AIO&body=Check out this article: https://haifs.com/2020/12/26/java-io/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifs.com/2020/12/26/java-io/&title=【Java I/O】BIO、NIO、AIO"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifs.com/2020/12/26/java-io/&title=【Java I/O】BIO、NIO、AIO"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifs.com/2020/12/26/java-io/&title=【Java I/O】BIO、NIO、AIO"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifs.com/2020/12/26/java-io/&title=【Java I/O】BIO、NIO、AIO"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifs.com/2020/12/26/java-io/&name=【Java I/O】BIO、NIO、AIO&description=&lt;h2 id=&#34;I-x2F-O-模型&#34;&gt;&lt;a href=&#34;#I-x2F-O-模型&#34; class=&#34;headerlink&#34; title=&#34;I/O 模型&#34;&gt;&lt;/a&gt;I/O 模型&lt;/h2&gt;&lt;h3 id=&#34;BIO&#34;&gt;&lt;a href=&#34;#BIO&#34; class=&#34;headerlink&#34; title=&#34;BIO&#34;&gt;&lt;/a&gt;BIO&lt;/h3&gt;&lt;p&gt;BIO 就是传统的&lt;code&gt;java.io&lt;/code&gt;包，&lt;strong&gt;同步并阻塞&lt;/strong&gt;，基于流模型实现，在读入输入流或者输出流时，在读写动作完成之前，线程会一直阻塞。&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;优点是代码比较简单、直观&lt;/li&gt;
 &lt;li&gt;缺点是效率和扩展性很低，容易成为应用性能瓶颈&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3 id=&#34;NIO&#34;&gt;&lt;a href=&#34;#NIO&#34; class=&#34;headerlink&#34; title=&#34;NIO&#34;&gt;&lt;/a&gt;NIO&lt;/h3&gt;&lt;p&gt;NIO 是&lt;em&gt;Java 1.4&lt;/em&gt;引入的&lt;code&gt;java.nio&lt;/code&gt;包，&lt;strong&gt;同步非阻塞&lt;/strong&gt;，提供了 Channel、Selector、Buffer 等新的抽象，可以构建多路复用的、同步非阻塞 IO 程序，同时提供了更接近操作系统底层高性能的数据操作方式。&lt;/p&gt;
 &lt;h3 id=&#34;AIO&#34;&gt;&lt;a href=&#34;#AIO&#34; class=&#34;headerlink&#34; title=&#34;AIO&#34;&gt;&lt;/a&gt;AIO&lt;/h3&gt;&lt;p&gt;AIO 是&lt;em&gt;Java 1.7&lt;/em&gt;之后引入的包，是 NIO 的升级版本，&lt;strong&gt;异步非阻塞&lt;/strong&gt;，（Asynchronous IO），异步 IO 是基于事件和回调机制实现的，也就是应用操作之后会直接返回，不会堵塞在那里，当后台处理完成，操作系统会通知相应的线程进行后续的操作。&lt;/p&gt;"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifuns.com/2020/12/26/java-io/&t=【Java I/O】BIO、NIO、AIO"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifs.com/2020/12/26/java-io/&t=【Java I/O】BIO、NIO、AIO"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
@@ -260,7 +260,7 @@
 <li>当并发数较大时，需要创建大量线程来处理连接，系统资源占用较大</li>
 <li>连接建立后，如果当前线程暂时没有数据可读，则线程就阻塞在 Read 操作上，造成线程资源浪费</li>
 </ul>
-<h2 id="NIO-详解"><a href="#NIO-详解" class="headerlink" title="NIO 详解"></a>NIO 详解</h2><p>见下一篇<a href="https://haifuns.com/2020/12/26/java-nio/">【Java I/O】NIO 详解</a></p>
+<h2 id="NIO-详解"><a href="#NIO-详解" class="headerlink" title="NIO 详解"></a>NIO 详解</h2><p>见下一篇<a href="https://haifs.com/2020/12/26/java-nio/">【Java I/O】NIO 详解</a></p>
 <h2 id="AIO-介绍"><a href="#AIO-介绍" class="headerlink" title="AIO 介绍"></a>AIO 介绍</h2><p>JDK 7 引入了 Asynchronous I/O，即 AIO。在进行 I/O 编程中，常用到两种模式：Reactor 和 Proactor。Java 的 NIO 就是 Reactor，当有事件触发时，服务器端得到通知，进行相应的处理。</p>
 <p>AIO 即 NIO2.0，叫做异步不阻塞的 IO。AIO 引入异步通道的概念，采用了 Proactor 模式，简化了程序编写，有效的请求才启动线程，它的特点是先由操作系统完成后才通知服务端程序启动线程去处理，一般适用于连接数较多且连接时间较长的应用。</p>
 <p>目前 AIO 还没有广泛应用，Netty 也是基于 NIO, 而不是 AIO。</p>
@@ -305,23 +305,23 @@
 
     <div id="share-footer" style="display: none">
       <ul>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifuns.com/2020/12/26/java-io/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifuns.com/2020/12/26/java-io/&text=【Java I/O】BIO、NIO、AIO"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifuns.com/2020/12/26/java-io/&title=【Java I/O】BIO、NIO、AIO"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifuns.com/2020/12/26/java-io/&is_video=false&description=【Java I/O】BIO、NIO、AIO"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=【Java I/O】BIO、NIO、AIO&body=Check out this article: https://haifuns.com/2020/12/26/java-io/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifuns.com/2020/12/26/java-io/&title=【Java I/O】BIO、NIO、AIO"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifuns.com/2020/12/26/java-io/&title=【Java I/O】BIO、NIO、AIO"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifuns.com/2020/12/26/java-io/&title=【Java I/O】BIO、NIO、AIO"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifuns.com/2020/12/26/java-io/&title=【Java I/O】BIO、NIO、AIO"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifuns.com/2020/12/26/java-io/&name=【Java I/O】BIO、NIO、AIO&description=&lt;h2 id=&#34;I-x2F-O-模型&#34;&gt;&lt;a href=&#34;#I-x2F-O-模型&#34; class=&#34;headerlink&#34; title=&#34;I/O 模型&#34;&gt;&lt;/a&gt;I/O 模型&lt;/h2&gt;&lt;h3 id=&#34;BIO&#34;&gt;&lt;a href=&#34;#BIO&#34; class=&#34;headerlink&#34; title=&#34;BIO&#34;&gt;&lt;/a&gt;BIO&lt;/h3&gt;&lt;p&gt;BIO 就是传统的&lt;code&gt;java.io&lt;/code&gt;包，&lt;strong&gt;同步并阻塞&lt;/strong&gt;，基于流模型实现，在读入输入流或者输出流时，在读写动作完成之前，线程会一直阻塞。&lt;/p&gt;
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifs.com/2020/12/26/java-io/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifs.com/2020/12/26/java-io/&text=【Java I/O】BIO、NIO、AIO"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifs.com/2020/12/26/java-io/&title=【Java I/O】BIO、NIO、AIO"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifs.com/2020/12/26/java-io/&is_video=false&description=【Java I/O】BIO、NIO、AIO"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=【Java I/O】BIO、NIO、AIO&body=Check out this article: https://haifs.com/2020/12/26/java-io/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifs.com/2020/12/26/java-io/&title=【Java I/O】BIO、NIO、AIO"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifs.com/2020/12/26/java-io/&title=【Java I/O】BIO、NIO、AIO"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifs.com/2020/12/26/java-io/&title=【Java I/O】BIO、NIO、AIO"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifs.com/2020/12/26/java-io/&title=【Java I/O】BIO、NIO、AIO"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifs.com/2020/12/26/java-io/&name=【Java I/O】BIO、NIO、AIO&description=&lt;h2 id=&#34;I-x2F-O-模型&#34;&gt;&lt;a href=&#34;#I-x2F-O-模型&#34; class=&#34;headerlink&#34; title=&#34;I/O 模型&#34;&gt;&lt;/a&gt;I/O 模型&lt;/h2&gt;&lt;h3 id=&#34;BIO&#34;&gt;&lt;a href=&#34;#BIO&#34; class=&#34;headerlink&#34; title=&#34;BIO&#34;&gt;&lt;/a&gt;BIO&lt;/h3&gt;&lt;p&gt;BIO 就是传统的&lt;code&gt;java.io&lt;/code&gt;包，&lt;strong&gt;同步并阻塞&lt;/strong&gt;，基于流模型实现，在读入输入流或者输出流时，在读写动作完成之前，线程会一直阻塞。&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;优点是代码比较简单、直观&lt;/li&gt;
 &lt;li&gt;缺点是效率和扩展性很低，容易成为应用性能瓶颈&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3 id=&#34;NIO&#34;&gt;&lt;a href=&#34;#NIO&#34; class=&#34;headerlink&#34; title=&#34;NIO&#34;&gt;&lt;/a&gt;NIO&lt;/h3&gt;&lt;p&gt;NIO 是&lt;em&gt;Java 1.4&lt;/em&gt;引入的&lt;code&gt;java.nio&lt;/code&gt;包，&lt;strong&gt;同步非阻塞&lt;/strong&gt;，提供了 Channel、Selector、Buffer 等新的抽象，可以构建多路复用的、同步非阻塞 IO 程序，同时提供了更接近操作系统底层高性能的数据操作方式。&lt;/p&gt;
 &lt;h3 id=&#34;AIO&#34;&gt;&lt;a href=&#34;#AIO&#34; class=&#34;headerlink&#34; title=&#34;AIO&#34;&gt;&lt;/a&gt;AIO&lt;/h3&gt;&lt;p&gt;AIO 是&lt;em&gt;Java 1.7&lt;/em&gt;之后引入的包，是 NIO 的升级版本，&lt;strong&gt;异步非阻塞&lt;/strong&gt;，（Asynchronous IO），异步 IO 是基于事件和回调机制实现的，也就是应用操作之后会直接返回，不会堵塞在那里，当后台处理完成，操作系统会通知相应的线程进行后续的操作。&lt;/p&gt;"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifuns.com/2020/12/26/java-io/&t=【Java I/O】BIO、NIO、AIO"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifs.com/2020/12/26/java-io/&t=【Java I/O】BIO、NIO、AIO"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
