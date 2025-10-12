@@ -13,13 +13,13 @@
 <meta property="og:site_name" content="haif&#39;s blog">
 <meta property="og:description" content="G1垃圾回收器（垃圾优先回收器）：  垃圾回收优先，优先回收垃圾，不会等到空间全部占满然后进行回收 停顿预测模型，预测一次回收可以回收的分区数量，以满足对停顿时间的要求 化整为零的分区机制，内存分为n个大小相同的分区（Region），这种灵活可变的Region机制是G1控制停顿时间的核心设计  G1内存模型：HeapRegion是G1垃圾回收器内存管理的基本单位，也是最小单位。 分区类型：  新生">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://img.haifuns.com/jvm/g1-ygc.png">
+<meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/jvm/g1-ygc.png">
 <meta property="article:published_time" content="2025-02-23T13:40:00.000Z">
-<meta property="article:modified_time" content="2025-08-28T08:56:39.152Z">
+<meta property="article:modified_time" content="2025-10-12T14:54:48.035Z">
 <meta property="article:author" content="haifun">
 <meta property="article:tag" content="JVM">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://img.haifuns.com/jvm/g1-ygc.png">
+<meta name="twitter:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/jvm/g1-ygc.png">
     
     
       
@@ -362,7 +362,7 @@
 </ol>
 </li>
 </ol>
-<p><img src="https://img.haifuns.com/jvm/g1-ygc.png" alt="YGC流程"></p>
+<p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/jvm/g1-ygc.png" alt="YGC流程"></p>
 <h2 id="MixedGC"><a href="#MixedGC" class="headerlink" title="MixedGC"></a>MixedGC</h2><p>MixedGC流程：</p>
 <ol>
 <li>初始标记，Stop The World，伴随一次YGC，YGC结束时会判断是否需要开启并发标记</li>
