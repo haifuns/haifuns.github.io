@@ -1,5 +1,5 @@
 title: 分布式共识算法之Multi Paxos算法
-author: haifun
+author: haif.
 tags:
   - 分布式
 categories:
@@ -22,7 +22,7 @@ Multi Paxos对Basic Paxos的核心改进是增加了“选主”的过程。提�
 
 此时算法流程如下图所示：
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/distributed/paxos/multi-paxos-01.png)
+![image](https://img.haifs.com/distributed/paxos/multi-paxos-01.png)
 
 如上图所示，请求中Accept请求中多了一个i，i为主节点的“任期编号”，任期编号必须是单调递增的，用于应对主节点陷于网络分区中恢复，但是另外一部分节点仍然有多数派且已经完成选举的情况。此时必须以任期编号大的主节点为准。
 
@@ -30,4 +30,4 @@ Multi Paxos对Basic Paxos的核心改进是增加了“选主”的过程。提�
 
 此时算法流程如下图所示：
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/distributed/paxos/multi-paxos-02.png)
+![image](https://img.haifs.com/distributed/paxos/multi-paxos-02.png)

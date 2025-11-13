@@ -1,5 +1,5 @@
 title: 【算法基础】链表专练
-author: haifun
+author: haif.
 tags:
   - 算法
   - 链表

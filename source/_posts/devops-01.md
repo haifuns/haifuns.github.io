@@ -1,5 +1,5 @@
 title: Docker搭建Prometheus+Grafana监控
-author: Haif.
+author: haif.
 tags:
   - DevOps
 categories:

@@ -1,5 +1,5 @@
 title: 【Java 并发编程系列】：ThreadLocal
-author: Haif.
+author: haif.
 tags:
   - 并发
 categories:
@@ -16,7 +16,7 @@ ThreadLocal 即线程本地变量，也就是如果创建了一个ThreadLocal变
 
 ThreadLocal 相关类类图如下：
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/threadlocal-uml.png)
+![image](https://img.haifs.com/concurrent/threadlocal-uml.png)
 
 <!-- more -->
 

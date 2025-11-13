@@ -1,5 +1,5 @@
 title: 【算法基础】不基于比较的排序（计数、基数）
-author: haifun
+author: haif.
 tags:
   - 算法
   - 排序

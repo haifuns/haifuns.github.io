@@ -1,5 +1,5 @@
 title: 【Go入门】函数&方法&接口
-author: haifun
+author: haif.
 tags:
   - Go入门
 categories:

@@ -1,5 +1,5 @@
 title: 【ZooKeeper源码】Session管理机制
-author: haifun
+author: haif.
 tags:
   - ZooKeeper
 categories:

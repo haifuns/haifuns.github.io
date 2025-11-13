@@ -1,5 +1,5 @@
 title: 【算法基础】并查集
-author: haifun
+author: haif.
 tags:
   - 算法
   - 并查集

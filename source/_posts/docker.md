@@ -1,5 +1,5 @@
 title: docker入门指南
-author: Haif.
+author: haif.
 tags:
   - Docker
 categories:

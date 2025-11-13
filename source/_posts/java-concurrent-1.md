@@ -1,5 +1,5 @@
 title: 【Java 并发编程系列】：并发编程基础
-author: Haif.
+author: haif.
 tags:
   - 并发
 categories:
@@ -14,7 +14,7 @@ date: 2020-12-26 17:40:00
 
 图示为两级Cache结构：
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/cpu-cache1.png)
+![image](https://img.haifs.com/concurrent/cpu-cache1.png)
 
 <!-- more -->
 
@@ -38,7 +38,7 @@ I 无效 (Invalid) | 这行数据无效。| 无
 
 MESI状态转换如图所示：
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/MESI.jpg)
+![image](https://img.haifs.com/concurrent/MESI.jpg)
 
 事件 |	描述
 ---|---
@@ -49,7 +49,7 @@ MESI状态转换如图所示：
 
 状态之间的相互转换关系也可以使用下表进行表示:
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/MESI2.png)
+![image](https://img.haifs.com/concurrent/MESI2.png)
 
 ## 伪共享
 
@@ -59,7 +59,7 @@ CPU 访问某个变量时，首先会去看CPU Cache 内是否有该变量，如
 
 由于存放到Cache 行的是内存块而不是单个变量，所以可能会把多个变量存放到一个Cache 行中。当多个线程同时修改一个缓存行里面的多个变量时，由于同时只能有一个线程操作缓存行，所以相比将每个变量放到一个缓存行，性能会有所下降，这就是伪共享。
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/FalseSharing.png)
+![image](https://img.haifs.com/concurrent/FalseSharing.png)
 
 如图所示，变量x 和y 同时被放到了CPU 的一级和二级缓存， 当线程1 使用CPU1 对变量x 进行更新时，首先会修改CPU1 的一级缓存变量x 所在的缓存行，这时候在缓存一致性协议下， CPU2 中变量x 对应的缓存行失效。那么线程2 在写入变量x 时就只能去 二级缓存里查找，这就破坏了一级缓存。而一级缓存比二级缓存更快，这也说明了多个线程不可能同时去修改自己所使用的CPU 中相同缓存行里面的变量。更坏的情况是，如果CPU 只有一级缓存，则会导致频繁地访问主内存。
 

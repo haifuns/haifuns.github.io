@@ -1,5 +1,5 @@
 title: Mybatis拦截器实现水平分表
-author: Haif.
+author: haif.
 tags:
   - ORM
 copyright: true

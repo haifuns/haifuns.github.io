@@ -1,5 +1,5 @@
 title: 【字符串匹配】DFA 算法（确定有限自动机）
-author: haifun
+author: haif.
 tags:
   - 文本匹配
 categories:
@@ -20,7 +20,7 @@ mathjax: true
 
 有限自动机开始于状态$q_0$，每次读入输入字符串的一个字符。如果有限自动机在状态q时读入了字符a，则它将从状态q转移为状态$\delta(q,a)$。每当其当前状态q属于A时，就认为自动机M接受了读入的所有字符串。
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/algorithm/stringmatch/dfa-01.png)
+![image](https://img.haifs.com/algorithm/stringmatch/dfa-01.png)
 
 如上图，一个拥有状态集Q={0,1}的简单状态自动机，开始状态$q_0$为0，字母表$\Sigma$ = {a, b}，图左用表格表示转移函数$\delta$，图右为等价的状态转换图。状态1是唯一的接受状态。这个自动机接收奇数个a结尾的字符串，例如对于输入abaaa，包含初始状态，这个自动机输入状态序列为{0,1,0,1,0,1}，因此它接收这个输入，如果输入是abbaa，自动机输入状态序列为{0,1,0,0,1,0}，因此它拒绝这个输入。
 
@@ -55,7 +55,7 @@ return δ
 
 匹配示例：
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/algorithm/stringmatch/dfa-02.png)
+![image](https://img.haifs.com/algorithm/stringmatch/dfa-02.png)
 
 上图中：
 

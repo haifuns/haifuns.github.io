@@ -3,7 +3,7 @@ date: 2020-01-01 20:01:01
 layout: roaming
 comments: false
 ---
-<!-- <img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/img/reading.jpg" width="60%"> -->
+<!-- <img src="https://img.haifs.com/img/reading.jpg" width="60%"> -->
 
 # 2022年
 

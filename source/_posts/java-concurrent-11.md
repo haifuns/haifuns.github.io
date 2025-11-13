@@ -1,5 +1,5 @@
 title: 【Java 并发编程系列】【J.U.C】：Lock
-author: Haif.
+author: haif.
 tags:
   - 并发
 categories:
@@ -18,7 +18,7 @@ ReentrantLock 是可重入的独占锁，同时只能有一个线程可以获取
 
 ReentrantLock 类图如下：
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/ReentrantLock-uml.png)
+![image](https://img.haifs.com/concurrent/ReentrantLock-uml.png)
 
 <!-- more -->
 
@@ -242,7 +242,7 @@ ReentrantReadWriteLock 采用读写分离的策略，允许多个线程可以同
 
 ReentrantReadWriteLock 类图如下：
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/ReentrantReadWriteLock-uml.png)
+![image](https://img.haifs.com/concurrent/ReentrantReadWriteLock-uml.png)
 
 读写锁的内部维护了一个ReadLock 和一个WriteLock ，它们依赖Sync 实现具体功能。而Sync 继承自AQS ，并且也提供了公平和非公平的实现。
 
@@ -581,7 +581,7 @@ StampedLock 是并发包里面JDK8 版本新增的一个锁，该锁提供了三
 
 StampedLock 内部组成如图所示：
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/StampedLock.png)
+![image](https://img.haifs.com/concurrent/StampedLock.png)
 
 StampedLock 提供的三种读写模式的锁分别如下：
 

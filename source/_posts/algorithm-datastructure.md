@@ -1,5 +1,5 @@
 title: 【算法基础】链表、栈、队列
-author: haifun
+author: haif.
 tags:
   - 算法
   - 数据结构

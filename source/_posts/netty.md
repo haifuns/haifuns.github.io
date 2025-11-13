@@ -1,5 +1,5 @@
 title: 【Netty】工作原理解析
-author: Haif.
+author: haif.
 tags:
   - Netty
 categories:
@@ -31,7 +31,7 @@ Netty 线程模式：Netty 主要基于主从 Reactor 多线程模型做了一�
 
 ## 工作原理示意图
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/netty/old-io-model.png)
+![image](https://img.haifs.com/netty/old-io-model.png)
 
 ## 模型特点
 
@@ -56,7 +56,7 @@ Reactor: 反应器模式，也被称为分发者模式(Dispatcher)或通知者�
 
 Reactor 模式基本设计思想是I/O 复用结合线程池，如下图所示：
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/netty/reactor-model.png)
+![image](https://img.haifs.com/netty/reactor-model.png)
 
 1. Reactor 模式，通过一个或多个输入同时传递给服务处理器(基于事件驱动) 。
 2. 服务器端程序处理传入的多个请求，并将它们同步分派到相应的处理线程，因此 Reactor 模式也叫 Dispatcher 模式。
@@ -78,7 +78,7 @@ Reactor 模式基本设计思想是I/O 复用结合线程池，如下图所示�
 
 ### 工作原理示意图
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/netty/reactor-model1.png)
+![image](https://img.haifs.com/netty/reactor-model1.png)
 
 ### 工作流程说明
 
@@ -101,7 +101,7 @@ Reactor 模式基本设计思想是I/O 复用结合线程池，如下图所示�
 
 ### 工作原理示意图
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/netty/reactor-model2.png)
+![image](https://img.haifs.com/netty/reactor-model2.png)
 
 ### 工作流程说明
 
@@ -123,7 +123,7 @@ Reactor 模式基本设计思想是I/O 复用结合线程池，如下图所示�
 
 ### 工作原理示意图
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/netty/reactor-model3.png)
+![image](https://img.haifs.com/netty/reactor-model3.png)
 
 ### 工作流程说明
 
@@ -166,7 +166,7 @@ Netty 主要基于主从 Reactors 多线程模型做了一定的改进，其中�
 
 ## 工作原理示意图
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/netty/netty-model.png)
+![image](https://img.haifs.com/netty/netty-model.png)
 
 ## 工作流程说明
 
@@ -417,7 +417,7 @@ Future 表示异步的执行结果, 可以通过它提供的方法来检测执�
 
 ## 工作原理示意图
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/netty/async-model.png)
+![image](https://img.haifs.com/netty/async-model.png)
 
 说明: 
 1. 在使用 Netty 编程时，拦截操作和转换出入站数据只需要提供 callback 或利用 future 即可。这使得链式操作简单、高效，并有利于编写可重用的、通用的代码。

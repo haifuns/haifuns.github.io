@@ -1,5 +1,5 @@
 title: 【Java 并发编程系列】【J.U.C】：CountDownLatch&CyclicBarrier&Semaphore
-author: Haif.
+author: haif.
 tags:
   - 并发
 categories:
@@ -84,7 +84,7 @@ all child thread over!
 
 #### UML
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/CountDownLatch-uml.png)
+![image](https://img.haifs.com/concurrent/CountDownLatch-uml.png)
 
 从类图可以看出，CountDownLatch 是使用AQS 实现的。通过下面的构造函数可知，实际上是把计数器的值赋给了AQS 的状态变量state ，也就是使用AQS 状态值来表示计数器值。
 
@@ -248,7 +248,7 @@ Thread[pool-1-thread-1,5,main] task-1 enter out barrier
 
 #### UML
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/CyclicBarrier-uml.png)
+![image](https://img.haifs.com/concurrent/CyclicBarrier-uml.png)
 
 由类图可知，CyclicBarrier 基于独占锁实现，其底层还是基于AQS 的。parties 用来记录线程个数，这里表示多少线程调用await 后，所有线程才会冲破屏障。而count 一开始等于parties ，每当有线程调用await 就减1 ，当count 为0 表示所有线程都到了屏障点。
 
@@ -423,7 +423,7 @@ all child thread over
 
 #### UML
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/Semaphore-uml.png)
+![image](https://img.haifs.com/concurrent/Semaphore-uml.png)
 
 由类图可知，Semaphor 还是使用AQS 实现的。 Sync 只是对AQS 的一个修饰，并且Sync 有两个实现类，用来指定获取信号量时是否采用公平策略。例如，下面的代码在创建Semaphore 时会使用一个变量指定是否使用非公平策略。
 

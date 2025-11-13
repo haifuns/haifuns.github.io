@@ -1,5 +1,5 @@
 title: 【算法基础】异或运算
-author: haifun
+author: haif.
 tags:
   - 算法
   - 异或

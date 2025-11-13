@@ -1,5 +1,5 @@
 title: 【Kafka】：生产者
-author: Haif.
+author: haif.
 tags:
   - Kafka
 categories:
@@ -72,7 +72,7 @@ public class KafkaProducerTest {
 
 # 消息发送流程
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/kafka/kafka03.png)
+![image](https://img.haifs.com/kafka/kafka03.png)
 
 消息发送流程：
 

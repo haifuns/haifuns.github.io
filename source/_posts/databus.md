@@ -1,5 +1,5 @@
 title: Databus简介
-author: HAIF.
+author: haif.
 tags:
   - Databus
 categories:
@@ -12,7 +12,7 @@ date: 2021-08-12 21:50:00
 
 在互联网架构中，数据系统通常可以分为真实数据系统以及衍生数据系统。前者作为基础数据库存储用户产生的写操作，后者通常复制自主数据并对数据进行转换或业务处理，提供读取和其他复杂查询操作。
 
-![dataflow](https://haif-cloud.oss-cn-beijing.aliyuncs.com/databus/dataflow.png)
+![dataflow](https://img.haifs.com/databus/dataflow.png)
 
 # 数据同步方案
 
@@ -22,7 +22,7 @@ date: 2021-08-12 21:50:00
 
 应用双写指在写数据到DB时，同时写入缓存。但是应用双写存在数据不一致的情况，如下图所示：
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/databus/databus-redis.png)
+![image](https://img.haifs.com/databus/databus-redis.png)
 
 另外，在变更DB后更新缓存时，如果出现操作失败的情况，也有可能造成数据不一致。在需要保证严格数据一致时，使用应用双写策略并不容易实现。
 
@@ -30,7 +30,7 @@ date: 2021-08-12 21:50:00
 
 日志挖掘通过提取数据库变更日志实现数据同步，这从根本上解决了数据一致性问题。如下图所示：
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/databus/databus-flow.png)
+![image](https://img.haifs.com/databus/databus-flow.png)
 
 <!-- more -->
 
@@ -38,7 +38,7 @@ date: 2021-08-12 21:50:00
 
 Databus是LinkedIn于2013年开源的低延迟数据变更抓取系统。Databus支持端到端毫秒级别的延时，每台服务器每秒可处理数千更改事件，同时支持无限回溯并且有丰富的订阅功能。
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/databus/databus-usecases.jpg)
+![image](https://img.haifs.com/databus/databus-usecases.jpg)
 
 如上图所示，搜索引擎和只读副本等系统充当事件消费者，当主OLTP数据库发生写入时，连接到此数据库的中继服务会将更改事件同步给事件消费者，从而实现索引或副本与源数据保持一致。
 
@@ -72,15 +72,15 @@ binlog的日志格式由binlog_format参数控制，可选格式有STATMENT、RO
 
 ### 主从同步
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/databus/mysql-replication.png)
+![image](https://img.haifs.com/databus/mysql-replication.png)
 
 ## Databus日志挖掘方式
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/databus/databus-replication.png)
+![image](https://img.haifs.com/databus/databus-replication.png)
 
 # Databus 整体架构
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/databus/databus-as-a-service.png)
+![image](https://img.haifs.com/databus/databus-as-a-service.png)
 
 Databus系统的构成如上图所示，其中包括中继（Relay）、Bootstrap服务和客户端库。Bootstrap服务中包括Bootstrap Producer和Bootstrap Server。消费者从Relay中获取最新事件，如果一个消费者的数据更新大幅落后，就需要到Bootstrap Producer里获取，提交给它的将会是自消费者上次处理变更之后的所有数据变更快照。
 
@@ -109,7 +109,7 @@ Databus Relays主要功能如下：
 1. 从源数据库中的读取变化的行并序列化为Databus中的更改事件保存在内存缓冲区中。
 2. 监听Databus客户端的请求，并将Databus中的更改事件传输到客户端。
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/databus/databus-relays.png)
+![image](https://img.haifs.com/databus/databus-relays.png)
 
 ## Event Producer
 
@@ -140,7 +140,7 @@ Databus依靠[Apache Helix](http://helix.apache.org/)进行集群管理。Helix�
 
 Databus Clients负责拉取Relays中的事件，处理后发送给感兴趣的消费者。
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/databus/databus-clients.png)
+![image](https://img.haifs.com/databus/databus-clients.png)
 
 * Relay Puller：负责从Relay拉取数据，具体工作有挑选Relay，请求Source，请求Register，校验Schema，设置Dispatcher等。
 * Bootstrap Puller：负责从Bootstrap servers拉取数据，功能类似Relay Puller。

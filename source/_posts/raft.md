@@ -1,5 +1,5 @@
 title: 分布式共识算法之Raft算法
-author: haifun
+author: haif.
 tags:
   - 分布式
 categories:

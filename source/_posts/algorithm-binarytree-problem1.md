@@ -1,5 +1,5 @@
 title: 【算法基础】二叉树专练（一）
-author: haifun
+author: haif.
 tags:
   - 算法
   - 二叉树
@@ -15,7 +15,7 @@ date: 2022-07-30 23:20:00
 
 解题思路：对于任意节点a，将其所有子节点放在左子树的右边界上。如下图所示：
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/md/img/EncodeNaryTreeToBinaryTree.png)
+![image](https://img.haifs.com/md/img/EncodeNaryTreeToBinaryTree.png)
 
 ```java
 // N叉树
@@ -221,7 +221,7 @@ public static Node getLeftMost(Node node) {
 模拟对折几次可以发现，每次对折都是在上一次的每条折痕前新增一条凹折痕，后新增一条凸折痕，形成一个二叉树，折痕的打印即二叉树中序遍历。
 如下图所示：
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/md/img/BinaryTree_PaperFolding.png)
+![image](https://img.haifs.com/md/img/BinaryTree_PaperFolding.png)
 
 ```java
 public static void printAllFolds(int N) {

@@ -1,5 +1,5 @@
 title: 【JVM】：垃圾回收
-author: Haif.
+author: haif.
 tags:
   - JVM
 categories:
@@ -26,7 +26,7 @@ copyright: true
 
 通过一系列称为“GC Roots”的根对象作为起始节点集，根据引用关系向下搜索，搜索过程所走过的路径称为“引用链”（Reference Chain），如果某个对象到GC Roots间没有任何引用链相连，或者用图论的话来说就是从GC Roots到这个对象不可达时，则证明此对象是不可能再被使用的。
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/jvm/ReachabilityAnalysis.png)
+![image](https://img.haifs.com/jvm/ReachabilityAnalysis.png)
 
 如图所示，对象object 5、object 6、object 7虽然互有关联，但是它们到GC Roots是不可达的，因此它们将会被判定为可回收的对象。
 
@@ -130,7 +130,7 @@ Java引用分为强引用（Strongly Re-ference）、软引用（Soft Reference�
 
 标记 - 清除算法执行过程如图所示：
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/jvm/mark-sweep.png)
+![image](https://img.haifs.com/jvm/mark-sweep.png)
 
 ### 标记 - 复制算法
 
@@ -144,7 +144,7 @@ Java引用分为强引用（Strongly Re-ference）、软引用（Soft Reference�
 
 标记 - 复制算法执行过程如图所示：
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/jvm/copying.png)
+![image](https://img.haifs.com/jvm/copying.png)
 
 HotSpot虚拟机的Serial、ParNew等新生代收集器中：
 
@@ -170,11 +170,11 @@ HotSpot虚拟机默认Eden和Survivor的大小比例是8∶1，也即每次新�
 
 标记 - 整理算法执行过程如图所示：
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/jvm/mark-compact.png)
+![image](https://img.haifs.com/jvm/mark-compact.png)
 
 ## 垃圾收集器
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/jvm/GarbageCollector.png)
+![image](https://img.haifs.com/jvm/GarbageCollector.png)
 
 如图所示，七种作用于不同分代的收集器，如果两个收集器之间存在连线，就说明它们可以搭配使用（由于维护和兼容性测试的成本，在JDK 8时将Serial+CMS、ParNew+Serial Old这两个组合声明为废弃，并在JDK 9中完全取消了这些组合的支持），图中收集器所处的区域，则表示它是属于新生代收集器抑或是老年代收集器。
 
@@ -189,7 +189,7 @@ Serial收集器是最基础、历史最悠久的收集器。在JDK 1.3.1 之前�
 
 Serial/Serial Old收集器的运行过程如下图：
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/jvm/Serial.png)
+![image](https://img.haifs.com/jvm/Serial.png)
 
 ### ParNew 收集器
 
@@ -204,7 +204,7 @@ ParNew 收集器是不少运行在服务端模式下的HotSpot虚拟机，尤其
 
 ParNew 收集器的运行过程如下图：
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/jvm/ParNew.png)
+![image](https://img.haifs.com/jvm/ParNew.png)
 
 ### Parallel Scavenge 收集器
 
@@ -222,7 +222,7 @@ CMS等收集器的关注点是尽可能地缩短垃圾收集时用户线程的�
 
 Parallel Scavenge 收集器的运行过程如下图：
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/jvm/ParallelScavenge.png)
+![image](https://img.haifs.com/jvm/ParallelScavenge.png)
 
 ### CMS 收集器
 
@@ -258,7 +258,7 @@ CMS收集器是基于标记-清除算法实现的，它的运作过程相对于�
 
 CMS 收集器的运行过程如下图：
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/jvm/CMS.png)
+![image](https://img.haifs.com/jvm/CMS.png)
 
 ### Garbage First 收集器
 
@@ -271,7 +271,7 @@ G1（Garbage First）是一款主要面向服务端应用的垃圾收集器。�
 5. G1停顿可预测，能明确指定在一段时间内，消耗在垃圾收集上的最大时间
 6. G1跟踪各个Region里面的垃圾价值大小，在后台维护优先列表，每次根据允许的时间回收价值最大的区域，从而保证在有限时间内高效收集
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/jvm/G1-Region.png)
+![image](https://img.haifs.com/jvm/G1-Region.png)
 
 G1收集器的运作过程大致可划分为以下四个步骤：
 
@@ -293,7 +293,7 @@ G1收集器的运作过程大致可划分为以下四个步骤：
 
 G1 收集器的运行过程如下图：
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/jvm/G1.png)
+![image](https://img.haifs.com/jvm/G1.png)
 
 开启参数：-XX:+UseG1GC 开启G1 JDK9开始默认开启
 

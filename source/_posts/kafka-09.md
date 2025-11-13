@@ -1,5 +1,5 @@
 title: 【Kafka】：高级应用
-author: HAIF.
+author: haif.
 tags:
   - Kafka
 categories:

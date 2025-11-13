@@ -1,5 +1,5 @@
 title: 【MySQL】改表是否会锁表？
-author: haifun
+author: haif.
 tags:
   - MySQL
 categories:

@@ -1,5 +1,5 @@
 title: 【Kafka】：主题与分区
-author: Haif.
+author: haif.
 tags:
   - Kafka
 categories:

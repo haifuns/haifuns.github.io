@@ -1,5 +1,5 @@
 title: SVN报错Previous operation has not finished; run 'cleanup' if it was interrupted解决
-author: Haif.
+author: haif.
 tags:
   - SVN
 categories:

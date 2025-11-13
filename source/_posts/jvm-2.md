@@ -1,5 +1,5 @@
 title: 【JVM】：内存分配
-author: Haif.
+author: haif.
 tags:
   - JVM
 categories:
@@ -11,7 +11,7 @@ copyright: true
 
 ## 运行时数据区
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/jvm/jvm.png)
+![image](https://img.haifs.com/jvm/jvm.png)
 
 <!-- more -->
 
@@ -124,7 +124,7 @@ copyright: true
 
 32位HotSpot虚拟机对象头Mark Word内容如图所示：
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/jvm/markword.png)
+![image](https://img.haifs.com/jvm/markword.png)
 
 #### 实例数据
 
@@ -144,13 +144,13 @@ Java堆会划分一块内存作为句柄池，reference中存的是对象的句�
 
 优势：reference中存储的是稳定的句柄指针，对象被移动时只会改变句柄中的实例数据指针，而reference本身不需要修改。
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/jvm/handle-reference.png)
+![image](https://img.haifs.com/jvm/handle-reference.png)
 
 #### 使用直接内存访问
 
 优势：速度更快，节省了一次指针定位开销。
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/jvm/reference.png)
+![image](https://img.haifs.com/jvm/reference.png)
 
 ## Trace追踪和参数配置
 

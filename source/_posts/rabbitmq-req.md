@@ -1,5 +1,5 @@
 title: RabbitMQ 连环问
-author: Haif.
+author: haif.
 tags:
 
   - RabbitMQ

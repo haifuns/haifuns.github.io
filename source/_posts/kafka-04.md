@@ -1,5 +1,5 @@
 title: 【Kafka】：再均衡原理剖析
-author: Haif.
+author: haif.
 tags:
   - Kafka
 categories:

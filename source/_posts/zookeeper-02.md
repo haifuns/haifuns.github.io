@@ -1,5 +1,5 @@
 title: 【ZooKeeper源码】Leader选举
-author: haifun
+author: haif.
 tags:
   - ZooKeeper
 categories:

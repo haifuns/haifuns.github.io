@@ -1,5 +1,5 @@
 title: 分布式共识算法之ZAB协议
-author: haifun
+author: haif.
 tags:
   - 分布式
 categories:
@@ -78,4 +78,4 @@ ZAB协议包含消息广播和故障恢复两个过程，进一步可以细分�
 
 算法流程图如下所示：
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/distributed/zab.png)
+![image](https://img.haifs.com/distributed/zab.png)

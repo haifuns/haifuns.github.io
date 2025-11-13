@@ -1,5 +1,5 @@
 title: 【算法基础】图
-author: haifun
+author: haif.
 tags:
   - 算法
   - 图

@@ -1,5 +1,5 @@
 title: 【Java I/O】BIO、NIO、AIO
-author: Haif.
+author: haif.
 tags:
   - Java IO
 categories:
@@ -54,7 +54,7 @@ BIO(blocking I/O) ： 同步阻塞，服务器实现模式为一个连接一个�
 
 ### 工作机制
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/io/bio.png)
+![image](https://img.haifs.com/io/bio.png)
 
 1. 服务器端启动一个 ServerSocket 
 2. 客户端启动 Socket 对服务器进行通信，默认情况下服务器端需要对每个客户建立一个线程与之通讯

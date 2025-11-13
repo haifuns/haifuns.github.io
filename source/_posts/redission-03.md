@@ -1,5 +1,5 @@
 title: 【Redission源码】联锁&红锁源码解析
-author: haifun
+author: haif.
 tags:
   - Redission
 categories:

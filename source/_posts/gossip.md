@@ -1,5 +1,5 @@
 title: 分布式共识算法之Gossip协议
-author: haifun
+author: haif.
 tags:
   - 分布式
 categories:
@@ -25,7 +25,7 @@ Gossip算法的工作流程十分简单，如果有某一项信息需要在整�
 
 算法流程示意图如下所示：
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/distributed/gossip.gif)
+![image](https://img.haifs.com/distributed/gossip.gif)
 
 从上图中我们可以看到Gossip协议对网络节点的连通性和稳定性几乎没有任何要求。Gossip将网络某些节点中能与部分节点连通而不是全网络节点连通作为前提，能够容忍网络上节点的随意增加或者减少、随意宕机或者重启，新增或者重启的节点最终会与其他节点同步达成一致。Gossip把网络中的节点平等看待，没有中心化或者主节点的概念，正因如此，Gossip具有极强的鲁棒性，非常适合在公众网络中使用。
 

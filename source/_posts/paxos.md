@@ -1,5 +1,5 @@
 title: 分布式共识算法之Paxos算法
-author: haifun
+author: haif.
 tags:
   - 分布式
 categories:
@@ -48,7 +48,7 @@ Paxos算法包含准备和批准两个阶段来协商已达成共识。
 
 当提案节点收到了多数派决策节点的应答（称为 Accepted 应答）后，协商结束，共识决议形成，将形成的决议发送给所有记录节点进行学习。整个过程时序图如下所示：
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/distributed/paxos/paxos01.png)
+![image](https://img.haifs.com/distributed/paxos/paxos01.png)
 
 # 工作实例
 
@@ -58,18 +58,18 @@ Paxos算法包含准备和批准两个阶段来协商已达成共识。
 
 **情况1**：S1选定提案ID是3.1，先取得了多数派决策节点的Promise和Accepted应答，此时S5选定的提案ID为4.5，发起Prepare请求，此时收到的多数派应答中至少会包含一个此前已经应答过S1的决策节点，假设为S3，那么S3返回的应答中必将包含S1已经设定的值X，S5就必须无条件地使用X代替Y作为自己的提案值，此时整个系统对“取值为X”这个事实达成一致。如下图所示：
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/distributed/paxos/paxos-example-01.png)
+![image](https://img.haifs.com/distributed/paxos/paxos-example-01.png)
 
 **情况2**：对于情况1，X被选定为最终值是必然结果，从上图可以看出X被选定为最终值并不是必定经过多数派批准，只取决于S5提案时得到的Promise应答中是否包含批准过X值的决策节点，例如下图所示，当S5发起提案的Prepare请求时，X并为获得多数派批准，但由于S3已经批准，最终共识结果仍然是X。
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/distributed/paxos/paxos-example-02.png)
+![image](https://img.haifs.com/distributed/paxos/paxos-example-02.png)
 
 **情况3**：S5提案时Promise应答中不包含批准过X的决策节点，例如应答S5提案时，节点S1已经批准了X，节点S2、S3未批准但返回了Promise应答，此时S5以更大的提案ID获得了S3、S4、S5的Promise应答，这三个节点均未批准过任何值，那么S3将不会再接收来自S1的Accept请求，因为S1的提案ID已经不是最大的了，这三个节点将批准Y的取值，整个系统最终将会对取值“Y”达成一致，如下图所示：
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/distributed/paxos/paxos-example-03.png)
+![image](https://img.haifs.com/distributed/paxos/paxos-example-03.png)
 
 **情况4**：从情况3可以推导出一种极端情况，如果两个提案节点交替使用最大ID使得准备阶段成功，但是批准阶段失败，那么就会形成活锁（Live Lock），如下图所示。在算法实现中需要引入随机超时机制来避免活锁的产生。
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/distributed/paxos/paxos-example-04.png)
+![image](https://img.haifs.com/distributed/paxos/paxos-example-04.png)
 
 以上是基于Basic Paxos、以未出现网络分区的正常流程进行讲解Paxos算法。Basic Paxos的价值在于开拓了分布式共识算法的发展思路，但是它仍存在以下缺陷，一般不会直接用于实践：Basic Paxos只能对单个值形成决议，并且决议的形成至少需要两次网络请求和应答（准备和批准），在高并发情况下将会产生较大的网络开销，极端情况下甚至可能形成活锁。在实际的应用中都是基于Multi Paxos和Fast Paxos算法以及一些等价的算法（如Raft、ZAB等）。

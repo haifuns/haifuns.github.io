@@ -1,5 +1,5 @@
 title: 【Kafka】：初识篇
-author: Haif.
+author: haif.
 tags:
   - Kafka
 categories:
@@ -38,7 +38,7 @@ bash-4.4$ kafka-console-producer.sh --broker-list 192.168.40.134:9092 --topic to
 
 典型的Kafka体系架构包含若干Producer、若干Broker、若干Consumer以及一个ZooKeeper集群。如下图所示：
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/kafka/kafka01.png)
+![image](https://img.haifs.com/kafka/kafka01.png)
 
 其中：
 * Producer为生产者，负责创建消息并投递到Kafka。
@@ -60,4 +60,4 @@ Kafka中还有两个重要概念：
 
 如下图所示，日志文件中有9条消息，起始消息offset为0，最后一条为8，offset=9表示下一条待写入的消息。日志文件的HW为6，表示消费者只能拉取到offset在[0,5]的消息。HW及以后的消息消费者不可见。
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/kafka/kafka02.png)
+![image](https://img.haifs.com/kafka/kafka02.png)

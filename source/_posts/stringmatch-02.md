@@ -1,5 +1,5 @@
 title: 【字符串匹配】Rabin-Karp 算法
-author: haifun
+author: haif.
 tags:
   - 文本匹配
 categories:

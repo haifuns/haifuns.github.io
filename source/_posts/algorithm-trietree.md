@@ -1,5 +1,5 @@
 title: 【算法基础】前缀树
-author: haifun
+author: haif.
 tags:
   - 算法
   - 异或
@@ -18,7 +18,7 @@ date: 2022-07-17 15:30:00
 - 每个节点记录经过当前节点的字符串数量p和是否是字符串结尾e
 - 每条线段表示字符
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/md/img/trie.png)
+![image](https://img.haifs.com/md/img/trie.png)
 
 # 前缀树实现
 

@@ -1,5 +1,5 @@
 title: 【ZooKeeper源码】故障感知与恢复
-author: haifun
+author: haif.
 tags:
   - ZooKeeper
 categories:

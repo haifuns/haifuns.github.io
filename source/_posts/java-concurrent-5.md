@@ -1,5 +1,5 @@
 title: 【Java 并发编程系列】：线程基础
-author: Haif.
+author: haif.
 tags:
   - 并发
 categories:
@@ -214,7 +214,7 @@ TERMINATED | 终止状态，线程已执行完毕
 
 ### 线程状态转换
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/threadstatus.png)
+![image](https://img.haifs.com/concurrent/threadstatus.png)
 
 ## 线程上下文切换
 

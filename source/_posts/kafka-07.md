@@ -1,5 +1,5 @@
 title: 【Kafka】：控制器
-author: HAIF.
+author: haif.
 tags:
   - Kafka
 categories:

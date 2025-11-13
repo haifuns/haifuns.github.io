@@ -1,5 +1,5 @@
 title: 【JVM】：核心参数
-author: HAIF.
+author: haif.
 tags:
   - JVM
 categories:

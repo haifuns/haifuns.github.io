@@ -1,5 +1,5 @@
 title: 【Kafka】：消费者
-author: Haif.
+author: haif.
 tags:
   - Kafka
 categories:
@@ -128,7 +128,7 @@ SkickyAssignor分配策略有两个目的：
 
 在新的客户端中，消费位移存储在Kafka内部的主题__consumer_offsets中。在消费完消息之后，消费者需要进行消费位移的提交。如下图所示，当前拉取消息的起始位置是上一次提交的消费位移，而本次将要提交的消费位置是拉取到的最大位移+1。
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/kafka/kafka04.png)
+![image](https://img.haifs.com/kafka/kafka04.png)
 
 > __consumer_offsets主题在Kafka集群第一次有消费者消费消息时自动创建，副本数由offsets.topic.replication.factor参数设置，默认3，分区数由offsets.topic.num.partitions参数设置，默认50。
 

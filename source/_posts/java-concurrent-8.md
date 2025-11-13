@@ -1,5 +1,5 @@
 title: 【Java 并发编程系列】【J.U.C】：CopyOnWriteArrayList
-author: Haif.
+author: haif.
 tags:
   - 并发
 categories:
@@ -14,7 +14,7 @@ date: 2020-12-26 17:48:00
 
 CopyOnWriteArrayList 类图结构如下：
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/CopyOnWriteArrayList-uml.png)
+![image](https://img.haifs.com/concurrent/CopyOnWriteArrayList-uml.png)
 
 在CopyOnWriteArrayList 的类图中，每个CopyOnWriteArrayList 对象里面有一个array 数组对象用来存放具体元素， ReentrantLock 独占锁对象用来保证同时只有一个线程对array 进行修改。
 

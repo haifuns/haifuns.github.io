@@ -1,5 +1,5 @@
 title: 【Java 并发编程系列】【J.U.C】：LockSupport
-author: Haif.
+author: haif.
 tags:
   - 并发
 categories:

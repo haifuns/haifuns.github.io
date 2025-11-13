@@ -1,5 +1,5 @@
 title: 【算法基础】排序算法（总）
-author: haifun
+author: haif.
 tags:
   - 算法
   - 排序
@@ -33,7 +33,7 @@ date: 2022-07-18 23:00:00
 
 ## 动画演示
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/algorithm/BubbleSort.gif)
+![image](https://img.haifs.com/algorithm/BubbleSort.gif)
 
 ## 代码示例
 
@@ -94,7 +94,7 @@ public static void swap(int[] arr, int i, int j) {
 
 ## 动画演示
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/algorithm/InsertionSort.gif)
+![image](https://img.haifs.com/algorithm/InsertionSort.gif)
 
 ## 代码示例
 
@@ -137,7 +137,7 @@ public static void swap(int[] arr, int i, int j) {
 
 ## 动画演示
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/algorithm/SelectionSort.gif)
+![image](https://img.haifs.com/algorithm/SelectionSort.gif)
 
 ## 代码示例
 
@@ -179,7 +179,7 @@ public static void swap(int[] arr, int i, int j) {
 
 ## 动画演示
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/algorithm/MergeSort.gif)
+![image](https://img.haifs.com/algorithm/MergeSort.gif)
 
 ## 代码示例
 
@@ -266,7 +266,7 @@ public static void merge(int[] arr, int l, int mid, int r) {
 
 ## 动画演示
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/algorithm/QuickSort.gif)
+![image](https://img.haifs.com/algorithm/QuickSort.gif)
 
 ## 代码示例
 
@@ -353,7 +353,7 @@ public static void swap(int[] arr, int i, int j) {
 
 ## 动画演示
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/md/img/heapsort.gif)
+![image](https://img.haifs.com/md/img/heapsort.gif)
 
 ## 代码示例
 
@@ -431,7 +431,7 @@ public static void swap(int[] arr, int i, int j) {
 
 ## 动画演示
 
-![](https://haif-cloud.oss-cn-beijing.aliyuncs.com/md/img/countsort.gif)
+![](https://img.haifs.com/md/img/countsort.gif)
 
 ## 代码实现
 
@@ -467,7 +467,7 @@ public static void countSort(int[] arr) {
 
 ## 动画演示
 
-![](https://haif-cloud.oss-cn-beijing.aliyuncs.com/md/img/radixsort.gif)
+![](https://img.haifs.com/md/img/radixsort.gif)
 
 ## 代码实现
 
@@ -546,4 +546,4 @@ public static int getDigit(int x, int d) {
 
 # 排序算法复杂度快查表
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/algorithm/sort.png)
+![image](https://img.haifs.com/algorithm/sort.png)

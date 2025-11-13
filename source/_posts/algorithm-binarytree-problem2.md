@@ -1,5 +1,5 @@
 title: 【算法基础】二叉树专练（二）
-author: haifun
+author: haif.
 tags:
   - 算法
   - 二叉树

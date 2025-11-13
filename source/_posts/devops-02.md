@@ -1,5 +1,5 @@
 title: Prometheus+Grafana监控JVM
-author: Haif.
+author: haif.
 tags:
   - DevOps
 categories:

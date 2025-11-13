@@ -1,5 +1,5 @@
 title: "pgbench\_--\_PostgreSQL基准测试工具"
-author: Haif.
+author: haif.
 tags:
   - PostgreSQL
   - Pgbench

@@ -1,5 +1,5 @@
 title: 【算法基础】加强堆
-author: haifun
+author: haif.
 tags:
   - 算法
   - 堆

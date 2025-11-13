@@ -1,5 +1,5 @@
 title: 网络基础
-author: Haif.
+author: haif.
 tags:
   - TCP/IP
 categories:
@@ -26,7 +26,7 @@ date: 2021-03-13 16:00:00
 
 除了标准的OSI七层模型以外，常见的网络层次划分还有TCP/IP四层协议以及TCP/IP五层协议，它们之间的对应关系如下图所示：
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/tcpip/tcpip-model.png)
+![image](https://img.haifs.com/tcpip/tcpip-model.png)
 
 # OSI七层网络模型
 
@@ -108,7 +108,7 @@ IP地址分为四个级别，分别是A类、B类、C类、D类。根据IP地址
 
 TCP数据被封装在一个IP数据报中，如下图所示：
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/tcpip/tcp-header.png)
+![image](https://img.haifs.com/tcpip/tcp-header.png)
 
 图中同时展示了TCP首部的数据格式，如果不计任选字段，通常是20个字节。包含如下部分：
 
@@ -131,7 +131,7 @@ TCP数据被封装在一个IP数据报中，如下图所示：
 
 TCP连接建立与终止流程如下图所示：
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/tcpip/tcp-conn.png)
+![image](https://img.haifs.com/tcpip/tcp-conn.png)
 
 ### 连接建立：三次握手
 

@@ -1,5 +1,5 @@
 title: 【Redis】内存管理
-author: HAIF.
+author: haif.
 tags:
   - Redis
 categories:

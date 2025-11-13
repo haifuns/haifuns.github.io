@@ -1,5 +1,5 @@
 title: ZooKeeper入门
-author: Haif.
+author: haif.
 tags:
   - ZooKeeper
 categories:

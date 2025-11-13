@@ -1,5 +1,5 @@
 title: 【Redis】哨兵模式
-author: HAIF.
+author: haif.
 tags:
   - Redis
 categories:
@@ -37,7 +37,7 @@ Redis Sentinel是一个分布式架构，其中包含若干个Sentinel节点和R
 
 如下图所示，Redis Sentinel与Redis主从复制模式只是多了若干Sentinel节点并没有针对Redis节点做了特殊处理。
 
-![Redis主从复制与Redis Sentinel架构的区别](https://haif-cloud.oss-cn-beijing.aliyuncs.com/redis/redis-sentinel-1.png)
+![Redis主从复制与Redis Sentinel架构的区别](https://img.haifs.com/redis/redis-sentinel-1.png)
 
 # 安装部署
 

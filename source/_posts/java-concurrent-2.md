@@ -1,5 +1,5 @@
 title: 【Java 并发编程系列】：深入剖析volatile关键字
-author: Haif.
+author: haif.
 tags:
   - 并发
 categories:
@@ -77,7 +77,7 @@ public class Singleton {
 ```
 通过对比发现，关键变化在于有volatile修饰的变量，赋值后多执行了一个` “lock addl $0x0,(%rsp)” `操作，
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/volatile01.png)
+![image](https://img.haifs.com/concurrent/volatile01.png)
 
 这个操作的作用相当于一个内存屏障
 （Memory Barrier或Memory Fence，指令重排序时不能把后面的指令重排序到内存屏障之前的位置）。
@@ -97,17 +97,17 @@ IA-32架构软件开发者手册中规定，Lock前缀的指令在多核处理�
 
 JMM针对编译器制定volatile重排序规则表：
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/volatile.png)
+![image](https://img.haifs.com/concurrent/volatile.png)
 
 需要注意的是：volatile写是在前面和后面分别插入内存屏障，而volatile读操作是在后面插入两个内存屏障。
 
 * 写操作：
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/volatile02.png)
+![image](https://img.haifs.com/concurrent/volatile02.png)
 
 * 读操作：
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/volatile03.png)
+![image](https://img.haifs.com/concurrent/volatile03.png)
 
 ## 使用场景
 

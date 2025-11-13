@@ -1,5 +1,5 @@
 title: 【Java 并发编程系列】【J.U.C】：ThreadPoolExecutor
-author: Haif.
+author: haif.
 tags:
   - 并发
 categories:
@@ -119,7 +119,7 @@ public static ScheduledExecutorService newScheduledThreadPool(
 
 ### 类图
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/ThreadPoolExecutor-uml.png)
+![image](https://img.haifs.com/concurrent/ThreadPoolExecutor-uml.png)
 
 
 如上ThreadPoolExecutor 类图所示，其中：
@@ -400,7 +400,7 @@ ScheduledThreadPoolExecutor是一个可以在指定一定延迟时间后或者�
 
 ### 类图
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/ScheduledThreadPoolExecutor-uml.png)
+![image](https://img.haifs.com/concurrent/ScheduledThreadPoolExecutor-uml.png)
 
 ScheduledFutureTask 是具有返回值的任务，继承自FutureTask 。FutureTask 的内部有一个变量state 用来表示任务的状态，一开始状态为NEW ，所有状态为：
 

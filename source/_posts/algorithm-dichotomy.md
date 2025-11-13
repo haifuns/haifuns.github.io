@@ -1,5 +1,5 @@
 title: 【算法基础】二分法
-author: haifun
+author: haif.
 tags:
   - 算法
   - 二分法

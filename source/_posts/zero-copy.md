@@ -1,5 +1,5 @@
 title: 零拷贝（zero-copy）原理详解
-author: Haif.
+author: haif.
 tags:
   - Java IO
 categories:
@@ -30,7 +30,7 @@ DMA 即Direct Memory Access ，直接存储器访问。DMA 控制方式是以存
 
 如下图所示：
 
-![](https://haif-cloud.oss-cn-beijing.aliyuncs.com/io/old-io.png)
+![](https://img.haifs.com/io/old-io.png)
 
 1. JVM 发出read() 系统调用，上下文从用户态切换到内核态（第一次上下文切换）。通过DMA（Direct Memory Access，直接存储器访问）引擎将文件中的数据从磁盘上读取到内核空间缓冲区（第一次拷贝: hard drive -> kernel buffer）。
 2. 将内核空间缓冲区的数据拷贝到用户空间缓冲区（第二次拷贝：kernel buffer -> user buffer），然后read系统调用返回。而系统调用的返回又会导致一次内核态到用户态的上下文切换（第二次上下文切换）。
@@ -57,7 +57,7 @@ mmap 是一种内存映射文件的方法，即将一个文件或者其它对象
 
 基于mmap的拷贝流程如下图：
 
-![](https://haif-cloud.oss-cn-beijing.aliyuncs.com/io/mmap.png)
+![](https://img.haifs.com/io/mmap.png)
 
 1. 发出mmap 系统调用，上下文从用户态切换到内核态（第一次上下文切换）。通过DMA 将磁盘文件中的内容拷贝到内核空间缓冲区中（第一次拷贝：hard drive -> kernel buffer）。
 2.  mmap 系统调用返回，上下文从内核态切换到用户态（第二次上下文切换）。接着用户空间和内核空间共享这个缓冲区而不需要进行数据拷贝。
@@ -72,7 +72,7 @@ mmap 是一种内存映射文件的方法，即将一个文件或者其它对象
 
 ## sendfile 实现
 
-![](https://haif-cloud.oss-cn-beijing.aliyuncs.com/io/sendfile.png)
+![](https://img.haifs.com/io/sendfile.png)
 
 1.  发出sendfile 系统调用，上下文从用户态切换到内核态（第一次上下文切换）。通过DMA 将磁盘文件中的内容拷贝到内核空间缓冲区中（第一次拷贝：hard drive -> kernel buffer）。
 2.  将数据从内核空间缓冲区拷贝到内核中与socket相关的缓冲区中（第二次拷贝:kernel buffer -> socket buffer）。
@@ -96,7 +96,7 @@ public void transferTo(long position, long count, WritableByteChannel target);
 
 从 Linux 2.4 版本开始，操作系统底层提供了带有 scatter/gather 的DMA 来从内核空间缓冲区中将数据读取到协议引擎中。这样一来待传输的数据可以分散在存储的不同位置上，而不需要在连续存储中存放。那么从文件中读出的数据就根本不需要被拷贝到socket 缓冲区中去，只是需要将缓冲区描述符添加到socket 缓冲区中去，DMA 收集操作会根据缓冲区描述符中的信息将内核空间中的数据直接拷贝到协议引擎中。
 
-![](https://haif-cloud.oss-cn-beijing.aliyuncs.com/io/sendfile-gather.png)
+![](https://img.haifs.com/io/sendfile-gather.png)
 
 1.  发出sendfile 系统调用，上下文从用户态切换到内核态（第一次上下文切换）。通过DMA 将磁盘文件中的内容拷贝到内核空间缓冲区中（第一次拷贝：hard drive -> kernel buffer）。
 2. 没有数据拷贝到socket缓冲区。取而代之的是只有相应的描述符信息会被拷贝到相应的socket 缓冲区当中。该描述符包含了两方面的信息：kernel buffer 的内存地址和kernel buffer 的偏移量。

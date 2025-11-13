@@ -1,5 +1,5 @@
 title: 【算法基础】暴力递归到动态规划（一）
-author: haifun
+author: haif.
 tags:
   - 算法
   - 动态规划

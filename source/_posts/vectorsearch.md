@@ -1,5 +1,5 @@
 title: 向量检索技术（了解）
-author: haifun
+author: haif.
 tags:
   - 向量检索
 categories:

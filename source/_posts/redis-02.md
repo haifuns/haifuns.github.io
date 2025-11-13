@@ -1,5 +1,5 @@
 title: 【Redis】附加功能
-author: HAIF.
+author: haif.
 tags:
   - Redis
 categories:

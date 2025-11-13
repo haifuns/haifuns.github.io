@@ -1,5 +1,5 @@
 title: RabbitMQ 存储&告警&流控&镜像队列
-author: Haif.
+author: haif.
 tags:
   - RabbitMQ
 categories:
@@ -62,7 +62,7 @@ RabbitMQ 在运行时会根据统计的消息传送速度定期计算一个当�
 
 队列的结构可以参考下图：
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/mq/rabbitmq-queue.png)
+![image](https://img.haifs.com/mq/rabbitmq-queue.png)
 
 其中：
 
@@ -298,7 +298,7 @@ RabbitMQ 使用了一种基于信用证算法 (credit-based algorithm) 的流控
 以下图为例，进程A 接收消息并转发至进程B ，进程B 接收消息并转发至进程C 。每个进程中都有一对关于收发消息的credit 值。以进程B 为例， {% raw %}{{credit_from, C}, value}{% endraw %} 表示能发送多少条消息给C ，每发送一条消息该值减 1，当为 0 时，进程B 不再往进程C 发送消息也不再接收进程 A 的消息。 {% raw %}{{credit_to, A}, value}{% endraw %} 表示再接收多少条消息就向进程A 发送增加 credit 值的通知，进程A 接收到该通知后就增加 {% raw %}{{credit_from, B}, value}{% endraw %} 所对应的值，这样进程A 就能持续发送消息。当上游发送速率高于下游接收速率时，credit 
 值就会被逐渐耗光，这时进程就会被阻塞，阻塞的情况会一直传递到最上游。当上游进程收到来自下游进程的增加 credit 值的通知时，若此时上游进程处于阻塞状态则解除阻塞，开始接收更上游进程的消息，一个个传导最终能够解除最上游的阻塞状态。由此可知，基于信用证的流控机制最终将消息发送进程的发送速率限制在消息处理进程的处理能力范围之内。
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/mq/rabbitmq-flowcontrol1.png)
+![image](https://img.haifs.com/mq/rabbitmq-flowcontrol1.png)
 
 一个连接 (Connection) 触发流控时会处于 "flow" 的状态，也就意味着这个 Connection 的状态每秒在 blocked 和unblocked 之间来回切换数次，这样可以将消息发送的速率控制在服务器能够支撑的范围之内。可以通过 `rabbitmqctl_list_connections` 命令或者 Web 管理页面来查看Connection 状态。
 
@@ -306,7 +306,7 @@ RabbitMQ 使用了一种基于信用证算法 (credit-based algorithm) 的流控
 
 流控机制不只是作用于Connection ，同样作用于信道(Channel)和队列。从Connection 到Channel，再到队列，最后是消息持久化存储形成一个完整的流控链，对于处于整个流控链中的任意进程，只要该进程阻塞，上游的进程必定全部被阻塞，也就是说，如果某个进程达到性能瓶颈，必然会导致上游所有的进程被阻塞。所以我们可以利用流控机制的这个特点找出瓶颈之所在。处理消息的几个关键进程及其对应的顺序关系如下图所示：
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/mq/rabbitmq-flowcontrol2.png)
+![image](https://img.haifs.com/mq/rabbitmq-flowcontrol2.png)
 
 其中的各个进程如下所述：
 
@@ -328,7 +328,7 @@ RabbitMQ 使用了一种基于信用证算法 (credit-based algorithm) 的流控
 
 引入镜像队列 (Mirror Queue) 的机制，可以将队列镜像到集群中的其他 Broker 节点之上，如果集群中的一个节点失效了，队列能自动地切换到镜像中的另一个节点上以保证服务的可用性。在通常的用法中，针对每一个配置镜像的队列(以下简称镜像队列)都包含一个主节点(master) 和若干个从节点(slave)，相应的结构可以参考下图：
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/mq/rabbitmq-mirror-queue.png)
+![image](https://img.haifs.com/mq/rabbitmq-mirror-queue.png)
 
 slave 会准确地按照 master 执行命令的顺序进行动作，故slave 与master 上维护的状态应该是相同的。如果master 由于某种原因失效，那么"资历最老"的slave 会被提升为新的 master。根据slave 加入的时间排序，时间最长的slave即为"资历最老"。发送到镜像队列的所有消息会
 被同时发往master 和所有的slave 上，如果此时master 挂掉了，消息还会在slave 上，这样slave 提升为master 的时候消息也不会丢失。除发送消息(Basic.Publish) 外的所有动作都只会向master 发送，然后再由master 将命令执行的结果广播给各个slave。
@@ -343,7 +343,7 @@ RabbitMQ 的镜像队列同时支持 publisher confirm 和事务两种机制。�
 
 不同于普通的非镜像队列，镜像队列的 backing_queue 比较特殊，其实现并非是 `rabbit_variable_queue`，它内部包裹了普通 backing_queue 进行本地消息消息持久化处理，在此基础上增加了将消息和ack 复制到所有镜像的功能。镜像队列的结构可以参考下图，master 的backing_queue 采用的是 `rabbit_mirror_queue_master`，而slave 的backing queue 实现是 `rabbit_mirror_queue_slave`。
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/mq/rabbitmq-mirror-queue2.png)
+![image](https://img.haifs.com/mq/rabbitmq-mirror-queue2.png)
 
 所有对 `rabbit_mirror_queue_master` 的操作都会通过组播 GM (Guaranteed Multicast) 的方式同步到各个slave 中。GM 负责消息的广播，`rabbit_mirror_queue_slave` 负责回调处理，而 master 上的回调处理是由 coordinator 负责完成的，如前所述，除了Basic.Publish，所有的操作都是通过master 来完成的，master 消息进行处理的同时将消息的处理通过 GM 广播给所有的 slave，slave GM 收到消息后，通过回调交由
 `rabbit_mirror queue_slave` 进行实际的处理。

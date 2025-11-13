@@ -1,5 +1,5 @@
 title: 【Redis】内存模型
-author: HAIF.
+author: haif.
 tags:
   - Redis
 categories:

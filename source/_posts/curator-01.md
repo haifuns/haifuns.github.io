@@ -1,5 +1,5 @@
 title: 【Curator源码】可重入锁源码解析
-author: haifun
+author: haif.
 tags:
   - Curator
   - ZooKeeper

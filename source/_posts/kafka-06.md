@@ -1,5 +1,5 @@
 title: 【Kafka】：日志存储
-author: Haif.
+author: haif.
 tags:
   - Kafka
 categories:
@@ -33,7 +33,7 @@ Log对应一个命名形式为`<topic>-<partiton>`的文件夹，向Log中追加
 
 Kafka消息格式（V1版本，未压缩）如下图所示，图中RECORD为消息体，offset和message size为日志头部（LOG_OVERHEAD）。与消息对应的还有消息集的概念，消息集中包含一条或者多条消息，消息集不仅是存储于磁盘及在网络上传输（Produce & Fetch）的基本形式，而且是Kafka中压缩的基本单元，结构如图中右边部分。
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/kafka/kafka05.png)
+![image](https://img.haifs.com/kafka/kafka05.png)
 
 消息格式中的各个字段如下：
 * crc32（4B）：crc32校验值，校验范围为magic到value之间。
@@ -53,7 +53,7 @@ Kafka日志压缩方式通过参数`compression.type`配置，默认值为produc
 
 消息压缩时，将整个消息集作为内层消息，内层消息整体作为外层的value。压缩后的消息key为null，value是多条压缩消息。当生产者创建压缩消息时，对内部压缩消息设置的offset从0开始，offset由broker进行转换，保存内层最后一条的绝对位移在外层offset。如下图所示：
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/kafka/kafka06.png)
+![image](https://img.haifs.com/kafka/kafka06.png)
 
 ## V2版本
 
@@ -61,7 +61,7 @@ V2版本中的消息集称为Record Batch，而不是Messgage Set，其内部也
 
 生产者客户端中的ProducerBatch对应RecordBatch，而ProducerRecord对应Record。
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/kafka/kafka07.png)
+![image](https://img.haifs.com/kafka/kafka07.png)
 
 消息格式中Record部分字段为varints变长字段，Kafka会根据具体值确定需要几个字节保存。部分字段解释如下：
 

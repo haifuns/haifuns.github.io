@@ -1,5 +1,5 @@
 title: 【Redis】集群
-author: HAIF.
+author: haif.
 tags:
   - Redis
 categories:
@@ -103,7 +103,7 @@ redis-server conf/redis-6384.conf
 
 Redis节点第一次启动时如果没有配置文件则会自动创建，文件名由cluster-config-file参数项控制，建议使用node-{port}.conf格式定义，使用端口号区分不同节点，防止同一机器侠多个节点彼此覆盖，造成集群信息异常。如果启动时存在集群配置文件，节点会使用配置文件内容初始化集群信息。启动过程如下图所示：
 
-![Redis集群模式启动过程](https://haif-cloud.oss-cn-beijing.aliyuncs.com/redis/redis-cluster-start.png)
+![Redis集群模式启动过程](https://img.haifs.com/redis/redis-cluster-start.png)
 
 集群文件中记录着集群的状态信息，其中最重要的是节点Id，是一个40位16进制的字符串，用于唯一标识集群内的节点，节点Id重启不会变化。
 
@@ -111,7 +111,7 @@ Redis节点第一次启动时如果没有配置文件则会自动创建，文件
 
 节点握手是指一批运行在集群模式下的节点通过Gossip协议彼此通信，达到感知对方的过程。节点握手是集群彼此通信的第一步，由客户端发起命令：`cluster meet {ip} {port}`，cluster meet是一个异步命令，执行后立刻返回。节点内部发起与目标节点进行握手通信，如下图所示：
 
-![cluster meet命令进行节点握手的过程](https://haif-cloud.oss-cn-beijing.aliyuncs.com/redis/redis-cluster-meet.png)
+![cluster meet命令进行节点握手的过程](https://img.haifs.com/redis/redis-cluster-meet.png)
 
 1. 节点6379本地创建6380节点信息对象，并发送meet消息
 2. 节点6380接收到meet消息后，保存6379节点信息并回复pong消息
@@ -156,7 +156,7 @@ Gossip协议的主要职责是信息交换。消息交换的载体是节点彼�
 
 常用的Gossip消息可分为：ping消息、pong消息、meet消息、fail消息等。它们之间的通信模式如下图所示：
 
-![Gossip 通信模式](https://haif-cloud.oss-cn-beijing.aliyuncs.com/redis/redis-gossip.png)
+![Gossip 通信模式](https://img.haifs.com/redis/redis-gossip.png)
 
 * meet消息：用于通知新节点加入。
 * ping消息：用于检测节点是否在线和交换彼此状态信息，ping消息发送封装了自身节点和其他节点的状态信息。ping消息是集群内交换最频繁的消息。

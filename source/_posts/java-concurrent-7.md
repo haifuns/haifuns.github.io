@@ -1,5 +1,5 @@
 title: 【Java 并发编程系列】【J.U.C】：Atomic
-author: Haif.
+author: haif.
 tags:
   - 并发
 categories:
@@ -120,7 +120,7 @@ public final boolean compareAndSet(long expect, long update) {
 
 如下图所示，LongAdder 在内部维护多个Cell 变量，每个Cell 里面有一个初始值为0 的long 型变量，在同等并发量的情况下，争夺单个变量更新操作的线程量会减少，减少了争夺共享资源的并发量。另外，多个线程在争夺同一个Cell 原子变量时如果失败了， 它并不是在当前Cell 变量上一直自旋CAS 重试，而是尝试在其他Cell 的变量上进行CAS 尝试，这个改变增加了当前线程重试CAS 成功的可能性。在获取LongAdder 当前值时， 是把所有Cell 变量的value 值累加后再加上base 返回的。
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/LongAddr.png)
+![image](https://img.haifs.com/concurrent/LongAddr.png)
 
 LongAdder 维护了一个延迟初始化的原子性更新数组（默认情况下Cell 数组是null）和一个基值变量base。由于Cells 占用的内存是相对比较大的，所以一开始并不创建它，而是在需要时创建，也就是惰性加载。
 
@@ -139,7 +139,7 @@ LongAdder 维护了一个延迟初始化的原子性更新数组（默认情况�
 
 LongAdder 类图结构如下：
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/LongAddr-uml.png)
+![image](https://img.haifs.com/concurrent/LongAddr-uml.png)
 
 LongAdder 类继承自Striped64 类，在Striped64 内部维护着三个变量。LongAdder 的真实值其实是base 的值与Cell 数组里面所有Cell 元素中的value 值的累加，base 是个基础值，默认为0 。cellsBusy 用来实现自旋锁，状态值只有0 和 1，当创建Cell 元素，扩容Cell 数组或者初始化Cell 数组时，使用CAS 操作该变量来保证同时只有一个线程可以进行其中之一的操作。
 

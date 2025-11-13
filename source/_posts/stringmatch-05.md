@@ -1,5 +1,5 @@
 title: 【字符串匹配】AC自动机
-author: haifun
+author: haif.
 tags:
   - 文本匹配
 categories:
@@ -13,11 +13,11 @@ date: 2022-01-26 20:00:00
 
 以bachelor, baby, badge, jar四个单词构成的Trie树为例，array实现需要为每一个字符开辟一个字母表大小的数据，如下图所示：
 
-![trie array实现](https://haif-cloud.oss-cn-beijing.aliyuncs.com/algorithm/stringmatch/trie-array.png)
+![trie array实现](https://img.haifs.com/algorithm/stringmatch/trie-array.png)
 
 array实现的trie树查询时间复杂度为O(n)，但是存在大量的空间浪费。linked-list实现避免了空间浪费，却增加了查询时的复杂度（公共前缀需要回溯），如下图所示：
 
-![trie linked-list实现](https://haif-cloud.oss-cn-beijing.aliyuncs.com/algorithm/stringmatch/trie-linkedlist.png)
+![trie linked-list实现](https://img.haifs.com/algorithm/stringmatch/trie-linkedlist.png)
 
 # AC自动机
 
@@ -31,7 +31,7 @@ AC自动机包含三个核心函数：
 
 以文本“ushers”，模式串“he”、“she”、“his”、“hers”为例，构建的自动机如下图所示：
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/algorithm/stringmatch/Aho-Corasick.png)
+![image](https://img.haifs.com/algorithm/stringmatch/Aho-Corasick.png)
 
 匹配过程：
 

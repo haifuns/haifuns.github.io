@@ -1,5 +1,5 @@
 title: 算法体系学习
-author: haifun
+author: haif.
 tags:
   - 算法
 categories:

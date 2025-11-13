@@ -1,5 +1,5 @@
 title: 【算法基础】贪心算法
-author: haifun
+author: haif.
 tags:
   - 算法
   - 贪心算法

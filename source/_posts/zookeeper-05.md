@@ -1,5 +1,5 @@
 title: 【ZooKeeper源码】客户端通信
-author: haifun
+author: haif.
 tags:
   - ZooKeeper
 categories:

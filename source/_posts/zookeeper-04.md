@@ -1,5 +1,5 @@
 title: 【ZooKeeper源码】初始化数据同步
-author: haifun
+author: haif.
 tags:
   - ZooKeeper
 categories:

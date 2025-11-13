@@ -1,5 +1,5 @@
 title: 【JVM】G1垃圾回收器
-author: haifun
+author: haif.
 tags:
     - JVM
 categories:
@@ -213,7 +213,7 @@ YoungGC流程：
 5. 判断是否需要开启并发标记
     1. 老年代内存使用率达到45%，在YGC结束后开启并发标记 
 
-![YGC流程](https://haif-cloud.oss-cn-beijing.aliyuncs.com/jvm/g1-ygc.png)
+![YGC流程](https://img.haifs.com/jvm/g1-ygc.png)
 
 ## MixedGC
 

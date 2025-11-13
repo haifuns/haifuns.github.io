@@ -1,5 +1,5 @@
 title: 【Redis】主从复制
-author: HAIF.
+author: haif.
 tags:
   - Redis
 categories:
@@ -153,7 +153,7 @@ psync命令运行流程如下：
 
 psync全量复制流程与2.8前的sync全量复制机制基本一致，psync全量复制完整运行流程如图所示：
 
-![全量复制流程](https://haif-cloud.oss-cn-beijing.aliyuncs.com/redis/redis-psync.png)
+![全量复制流程](https://img.haifs.com/redis/redis-psync.png)
 
 1. 发送psync命令进行数据同步，由于是第一次进行复制，从节点没有复制偏移量和主节点运行ID，发送psync ? -1
 2. 主节点回复+FULLRESYNC {runId} {offset}响应
@@ -171,7 +171,7 @@ psync全量复制流程与2.8前的sync全量复制机制基本一致，psync全
 
 部分复制的流程如下图所示：
 
-![部分复制流程](https://haif-cloud.oss-cn-beijing.aliyuncs.com/redis/redis-psync2.png)
+![部分复制流程](https://img.haifs.com/redis/redis-psync2.png)
 
 1. 当主从节点之间出现网络中断时，如果超过repl-timeout时间，主节点会认为从节点故障并中断复制连接
 2. 主从连接中断期间主节点依然响应命令同时写入复制积压缓冲区

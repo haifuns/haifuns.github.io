@@ -1,5 +1,5 @@
 title: 【Java 并发编程系列】【J.U.C】：AQS
-author: Haif.
+author: haif.
 tags:
   - 并发
 categories:
@@ -14,7 +14,7 @@ AbstractQueuedSynchronizer 抽象同步队列简称AQS，它是实现同步器�
 
 AQS 类图结构如图：
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/AQS-uml.png)
+![image](https://img.haifs.com/concurrent/AQS-uml.png)
 
 <!-- more -->
 
@@ -113,7 +113,7 @@ private Node enq(final Node node) {
 如上代码，当要在AQS 队列尾部插入元素时， AQS 队列头、尾节点都指向null 时，使用CAS 算法设置一个哨兵节点为头节点，如果CAS 设置成功，则让尾部节点也指向哨兵节点，这时候队列状态如下图中（2）所示；
 然后再插入node 节点，设置node 的前驱节点为尾部节点（4），然后通过CAS 算法设置node 节点为尾部节点（5），CAS 成功后再设置原来的尾部节点的后驱节点为node（6）。
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/AQS-Queue.png)
+![image](https://img.haifs.com/concurrent/AQS-Queue.png)
 
 ## 条件变量的支持
 
@@ -227,7 +227,7 @@ private Node addConditionWaiter() {
 
 如图所示：
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/AQS-Condition.png)
+![image](https://img.haifs.com/concurrent/AQS-Condition.png)
 
 ## 基于AQS实现自定义同步器
 

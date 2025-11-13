@@ -1,5 +1,5 @@
 title: 【Kafka】：副本剖析
-author: HAIF.
+author: haif.
 tags:
   - Kafka
 categories:

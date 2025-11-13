@@ -1,5 +1,5 @@
 title: 【Go入门】数据类型
-author: haifun
+author: haif.
 tags:
   - Go入门
 categories:

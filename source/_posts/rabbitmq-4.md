@@ -1,5 +1,5 @@
 title: RabbitMQ 网络分区&扩展
-author: Haif.
+author: haif.
 tags:
   - RabbitMQ
 categories:
@@ -20,7 +20,7 @@ RabbitMQ 网络分区带来的影响大多是负面的，极端情况下不仅�
 
 <!-- more -->
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/mq/rabbitmq-network-partition1.png)
+![image](https://img.haifs.com/mq/rabbitmq-network-partition1.png)
 
 图中为某队列配置了4 个镜像，其中A 节点作为 master 节点，其余B、C、D 节点为 slave 节点，4 个镜像节点组成一个环形结构。
 
@@ -36,7 +36,7 @@ RabbitMQ 集群节点内部通信端口默认为25672 ，两两节点之间都�
 
 将连续4 次的 tick 时间记为 T，那么T 的取值范围为 `0.75 * net_ticktime < T < 1.25 * net_ticktime`。下图可以形象地描绘出这个取值范围的缘由：
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/mq/rabbitmq-network-partition2.png)
+![image](https://img.haifs.com/mq/rabbitmq-network-partition2.png)
 
 图中每个节点代表一次 tick 判定的时间戳，在2 个临界值 0.75  * net_ticktime 和
 1.25 * net_ticktime 之间可以连续执行4 次的 tick 判定。默认情况下，在 45s < T < 75s 之间会判定出net_tick_timeout。

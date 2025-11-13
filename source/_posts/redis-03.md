@@ -1,5 +1,5 @@
 title: 【Redis】持久化
-author: HAIF.
+author: haif.
 tags:
   - Redis
 categories:
@@ -31,7 +31,7 @@ Redis内部还存在自动触发RDB持久化机制，例如以下场景：
 
 bgsave是主流的触发RDB持久化方式，其运作流程如下图所示：
 
-![RDB持久化流程](https://haif-cloud.oss-cn-beijing.aliyuncs.com/redis/redis-bgsave.png)
+![RDB持久化流程](https://img.haifs.com/redis/redis-bgsave.png)
 
 1. 执行bgsave命令，Redis父进程判断当前是否存在正在执行的子进程，如RDB/AOF子进程，如果存在则bgsave命令直接返回
 2. 父进程执行fork操作创建子进程，fork操作过程中父进程会阻塞，通过info stats命令查看latest_fork_usec选项，可以获得最近一个fork操作的耗时，单位为微秒
@@ -67,7 +67,7 @@ AOF的主要作用是解决了数据持久化的实时性，目前已经是Redis
 
 AOF的工作流程操作：命令写入（append）、文件同步（sync）、文件重写（rewrite）、重启加载（load），如下图所示：
 
-![AOF工作流程](https://haif-cloud.oss-cn-beijing.aliyuncs.com/redis/redis-aof.png)
+![AOF工作流程](https://img.haifs.com/redis/redis-aof.png)
 
 1. 所有的写入命令都会追加到aof_buf（缓冲区）中
 2. AOF缓冲区根据对应的策略向硬盘做同步操作
@@ -128,7 +128,7 @@ AOF重写过程可以手动触发和自动触发：
 
 ### AOF重写运作流程
 
-![AOF重写运作流程](https://haif-cloud.oss-cn-beijing.aliyuncs.com/redis/redis-aof-rewrite.png)
+![AOF重写运作流程](https://img.haifs.com/redis/redis-aof-rewrite.png)
 
 AOF重写运作流程说明：
 
@@ -147,7 +147,7 @@ AOF重写运作流程说明：
 
 AOF和RDB文件都可以用于服务器重启时的数据恢复。如下图所示，表示Redis持久化文件加载流程。
 
-![Redis持久化文件加载流程](https://haif-cloud.oss-cn-beijing.aliyuncs.com/redis/redis-load.png)
+![Redis持久化文件加载流程](https://img.haifs.com/redis/redis-load.png)
 
 Redis持久化文件加载流程说明：
 1. AOF持久化开启且存在AOF文件时，优先加载AOF文件

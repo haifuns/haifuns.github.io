@@ -1,5 +1,5 @@
 title: 【JVM】：字节码执行引擎
-author: Haif.
+author: haif.
 tags:
   - JVM
 categories:
@@ -19,7 +19,7 @@ JVM字节码执行引擎功能基本上就是输入字节码文件，然后对�
 
 栈帧是用于支持JVM进行方法调用和方法执行的数据结构，栈帧随方法调用创建，方法结束销毁。栈帧中存储方法局部变量表、操作数栈、动态连接、方法返回地址等信息。
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/jvm/stackframe.png)
+![image](https://img.haifs.com/jvm/stackframe.png)
 
 ### 局部变量表
 

@@ -1,5 +1,5 @@
 title: 【JVM】：高效并发
-author: Haif.
+author: haif.
 tags:
   - JVM
 categories:
@@ -26,7 +26,7 @@ Java内存模型规定：
 
 线程、主内存、工作内存三者的交互关系如图所示：
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/jvm/JavaMemoryModel.png)
+![image](https://img.haifs.com/jvm/JavaMemoryModel.png)
 
 这里所讲的主内存、工作内存与Java内存区域中的Java堆、栈、方法区等并不是同一个层次的对内存的划分，这两者基本上是没有任何关系的。
 
@@ -45,7 +45,7 @@ Java内存模型定义了8种操作来实现内存间交互，Java虚拟机实�
 
 内存间的交互操作如下图所示：
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/jvm/MemoryInteraction.png)
+![image](https://img.haifs.com/jvm/MemoryInteraction.png)
 
 ### 内存间的交互操作规则
 
@@ -123,7 +123,7 @@ Java内存模型要求内存间交互的八种操作都具有原子性，但是�
 
 程序一般不会直接使用内核线程，而是使用内核线程的一种高级接口——轻量级进程（Light Weight Process，LWP），轻量级进程就是通常意义上所讲的线程，由于每个轻量级进程都由一个内核线程支持，因此只有先支持内核线程，才能有轻量级进程。这种轻量级进程与内核线程之间1：1的关系称为一对一的线程模型，如图所示：
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/jvm/KLT-Thread.png)
+![image](https://img.haifs.com/jvm/KLT-Thread.png)
 
 由于内核线程的支持，每个轻量级进程都成为一个独立的调度单元，即使其中某一个轻量级进程在系统调用中被阻塞了，也不会影响整个进程继续工作。
 
@@ -135,7 +135,7 @@ Java内存模型要求内存间交互的八种操作都具有原子性，但是�
 
 使用用户线程实现的方式被称为1：N实现。狭义上，用户线程指的是完全建立在用户空间的线程库上，系统内核不能感知到用户线程的存在及如何实现的。用户线程的建立、同步、销毁和调度完全在用户态中完成，不需要内核的帮助。
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/jvm/UT-Thread.png)
+![image](https://img.haifs.com/jvm/UT-Thread.png)
 
 - 优势：不需要切换到内核态，操作快速、低消耗，支持大规模线程数。
 - 劣势：没有系统内核支援，线程操作需要用户自行处理，实现复杂。
@@ -146,7 +146,7 @@ Java内存模型要求内存间交互的八种操作都具有原子性，但是�
 
 用户线程还是完全建立在用户空间中，因此用户线程的创建、切换、析构等操作依然廉价，并且可以支持大规模的用户线程并发。而操作系统支持的轻量级进程则作为用户线程和内核线程之间的桥梁，这样可以使用内核提供的线程调度功能及处理器映射，并且用户线程的系统调用要通过轻量级进程来完成，这大大降低了整个进程被完全阻塞的风险。
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/jvm/MN-Thread.png)
+![image](https://img.haifs.com/jvm/MN-Thread.png)
 
 ### 线程调度
 
@@ -186,7 +186,7 @@ Java语言定义了6种线程状态，在任意一个时间点中，一个线程
 
 线程状态转换关系如图所示：
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/jvm/Thread-status.png)
+![image](https://img.haifs.com/jvm/Thread-status.png)
 
 ## 线程安全
 
@@ -231,7 +231,7 @@ Java线程安全的处理方法：
 “轻量级”是相对于使用操作系统互斥量来实现的传统锁而言，设计初衷是在没有多线程竞争的前提下，减少传统的重量级锁使用操作系统互斥量产生的性能消耗。
 
 先进行回忆HotSpot虚拟机对象的内存布局（尤其是对象头部分）：
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/jvm/markword.png)
+![image](https://img.haifs.com/jvm/markword.png)
 
 #### 加锁过程
 

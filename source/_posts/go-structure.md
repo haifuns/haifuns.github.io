@@ -1,5 +1,5 @@
 title: 【Go入门】程序结构
-author: haifun
+author: haif.
 tags:
   - Go入门
 categories:

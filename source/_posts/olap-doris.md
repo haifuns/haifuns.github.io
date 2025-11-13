@@ -1,5 +1,5 @@
 title: OLAP-ApacheDoris
-author: haifun
+author: haif.
 tags:
   - Doris
 categories:

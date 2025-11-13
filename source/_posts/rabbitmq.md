@@ -1,5 +1,5 @@
 title: RabbitMQ 基础
-author: Haif.
+author: haif.
 tags:
   - RabbitMQ
 categories:
@@ -359,11 +359,11 @@ try {
 
 事务确认流程：
 
-![Image text](https://haif-cloud.oss-cn-beijing.aliyuncs.com/mq/rabbitmq-tx-commit.png)
+![Image text](https://img.haifs.com/mq/rabbitmq-tx-commit.png)
 
 事务回滚流程：
 
-![Image text](https://haif-cloud.oss-cn-beijing.aliyuncs.com/mq/rabbitmq-tx-rollback.png)
+![Image text](https://img.haifs.com/mq/rabbitmq-tx-rollback.png)
 
 ### 发送方确认机制（publisher confirm）
 
@@ -420,7 +420,7 @@ try{
 
 发送方确认机制：
 
-![Image text](https://haif-cloud.oss-cn-beijing.aliyuncs.com/mq/rabbitmq-confirm.png)
+![Image text](https://img.haifs.com/mq/rabbitmq-confirm.png)
 
 ## 消息可靠性
 

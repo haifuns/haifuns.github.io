@@ -1,5 +1,5 @@
 title: 【Java 并发编程系列】【J.U.C】：Queue
-author: Haif.
+author: haif.
 tags:
   - 并发
 categories:
@@ -14,7 +14,7 @@ ConcurrentLinkedQueue 线程安全的**无界非阻塞**队列，其底层数据
 
 ### 类图
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/ConcurrentLinkedQueue-uml.png)
+![image](https://img.haifs.com/concurrent/ConcurrentLinkedQueue-uml.png)
 
 ConcurrentLinkedQueue 内部的队列使用单向链表的方式实现，其中有两个volatile 类型的Node 节点分别用来存放队列首、尾节点。
 
@@ -216,7 +216,7 @@ LinkedBlockingQueue是使用独占锁实现的**无界（可指定有界）阻�
 
 ### 类图
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/LinkedBlokingQueue-uml.png)
+![image](https://img.haifs.com/concurrent/LinkedBlokingQueue-uml.png)
 
 LinkedBlockingQueue 也是使用单向链表实现的，其也有两个Node ，分别用来存放首、尾节点，并且还有一个初始值为 0 的原子变量count ，用来记录队列元素个数。
 
@@ -469,7 +469,7 @@ ArrayBlockingQueue 是用**有界数组**方式实现的**阻塞**队列。
 
 ### 类图
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/ArrayBlockingQueue-uml.png)
+![image](https://img.haifs.com/concurrent/ArrayBlockingQueue-uml.png)
 
 ArrayBlockingQueue 内部结构如下：
 
@@ -642,7 +642,7 @@ PriorityBlockingQueue 是**带优先级的无界阻塞**队列，每次出队都
 
 ### 类图
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/PriorityBlockingQueue-uml.png)
+![image](https://img.haifs.com/concurrent/PriorityBlockingQueue-uml.png)
 
 PriorityBlockingQueue 内部结构如下：
 
@@ -837,7 +837,7 @@ DelayQueue 并发队列是一个**无界阻塞延迟**队列，队列中的每�
 
 ### 类图
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/concurrent/DelayQueue-uml.png)
+![image](https://img.haifs.com/concurrent/DelayQueue-uml.png)
 
 DelayQueue 内部使用PriorityQueue 存放数据，使用ReentrantLock 实现线程同步。队列中的元素需要实现Delayed 接口，实现比较接口。
 

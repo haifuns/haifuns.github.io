@@ -1,5 +1,5 @@
 title: 【JVM】：类从加载、连接、初始化到卸载
-author: Haif.
+author: haif.
 tags:
   - JVM
 categories:
@@ -33,7 +33,7 @@ Java虚拟机自带加载器包括以下几种：
 
 ### 类加载器的关系
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/jvm/classloader.png)
+![image](https://img.haifs.com/jvm/classloader.png)
 
 ### 双亲委派模型
 

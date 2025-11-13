@@ -1,5 +1,5 @@
 title: 【Java I/O】NIO 详解
-author: Haif.
+author: haif.
 tags:
   - Java IO
 categories:
@@ -33,7 +33,7 @@ Java NIO 的非阻塞模式，使一个线程从某通道发送请求或者读�
 
 NIO 简单原理示意如下图所示：
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/io/nio.png)
+![image](https://img.haifs.com/io/nio.png)
 
 * Buffer 是内存块，底层是数组，数据的读取写入通过Buffer ，Buffer 可以读也可以写，需要flip 方法切换
 * Channel 是双向的，可以反映底层操作系统的情况，比如Linux 底层的操作系统通道就是双向的，每个Channel 都会对应一个Buffer
@@ -287,7 +287,7 @@ public Selector wakeup()
 
 NIO 非阻塞 网络编程相关的(Selector、SelectionKey、ServerSocketChannel 和 SocketChannel) 关系梳理图如下：
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/io/nio-flow.png)
+![image](https://img.haifs.com/io/nio-flow.png)
 
 1. 当客户端连接时，会通过 ServerSocketChannel 得到 SocketChannel 
 2. Selector 进行监听 select 方法, 返回有事件发生的通道的个数

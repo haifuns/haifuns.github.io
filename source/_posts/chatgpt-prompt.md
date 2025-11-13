@@ -1,5 +1,5 @@
 title: ChatGPT Prompt
-author: haifun
+author: haif.
 tags:
   - AIGC
   - ChatGPT

@@ -1,5 +1,5 @@
 title: GitHub SSH配置
-author: Haif.
+author: haif.
 tags:
   - Git
 categories:

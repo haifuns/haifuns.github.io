@@ -1,5 +1,5 @@
 title: 【ZooKeeper源码】消息处理器链
-author: haifun
+author: haif.
 tags:
   - ZooKeeper
 categories:

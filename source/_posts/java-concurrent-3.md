@@ -1,5 +1,5 @@
 title: 【Java 并发编程系列】：深入浅出synchronized
-author: Haif.
+author: haif.
 tags:
   - 并发
 categories:
@@ -94,7 +94,7 @@ monitorenter 和 monitorexit 这两个字节码指令都需要一个reference类
 
 对象头存储结构如下（32位虚拟机）：
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/jvm/markword.png)
+![image](https://img.haifs.com/jvm/markword.png)
 
 ### monitor
 

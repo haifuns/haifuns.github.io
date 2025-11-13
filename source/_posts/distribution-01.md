@@ -1,5 +1,5 @@
 title: 常见限流方案设计
-author: HAIF.
+author: haif.
 tags:
   - 高可用
   - 分布式
@@ -52,13 +52,13 @@ date: 2021-04-04 20:46:00
 
 一般来说，代码实现时会使用一个队列实现“漏桶”效果，当请求过多时，队列中的请求开始积压，当队列满了系统就开始拒绝请求。
 
-![](https://haif-cloud.oss-cn-beijing.aliyuncs.com/distribution/%E6%BC%8F%E6%A1%B6%E7%AE%97%E6%B3%95.png)
+![](https://img.haifs.com/distribution/%E6%BC%8F%E6%A1%B6%E7%AE%97%E6%B3%95.png)
 
 ## 令牌桶算法
 
 令牌桶与漏桶算法的效果一致，但是原理相反：如下图所示，随着时间的流逝，系统会按照指定速率往令牌桶中添加token，每来一个新请求就从桶中拿走一个token，没有token就拒绝服务。这种算法的好处是便于控制系统的处理速度，甚至可以通过统计信息实时优化令牌桶的大小。
 
-![](https://haif-cloud.oss-cn-beijing.aliyuncs.com/distribution/%E4%BB%A4%E7%89%8C%E6%A1%B6%E7%AE%97%E6%B3%95.png)
+![](https://img.haifs.com/distribution/%E4%BB%A4%E7%89%8C%E6%A1%B6%E7%AE%97%E6%B3%95.png)
 
 漏桶算法和令牌桶算法一个是保持流出速率恒定，另一个是保持流入速率恒定。两者用途有一些差别，令牌桶限制的是平均流入速率而不是瞬时速率，因为可能出现一段时间没有请求进来，令牌桶中存满了令牌，然后短时间内突发流量过来，一瞬间从桶中拿令牌出来；漏桶有点类似消息队列，起到削峰的作用，平滑了突发流入速率。
 
@@ -70,7 +70,7 @@ date: 2021-04-04 20:46:00
 
 一般来说，时间窗口可以循环复用，在复用时重新初始化即可。滑动时间窗口能够支持的瞬时流量最大可为该窗口上限，而令牌桶算法能够支持的瞬时流量最大为桶大小。
 
-![](https://haif-cloud.oss-cn-beijing.aliyuncs.com/distribution/%E6%97%B6%E9%97%B4%E7%AA%97%E5%8F%A3%E7%AE%97%E6%B3%95.png)
+![](https://img.haifs.com/distribution/%E6%97%B6%E9%97%B4%E7%AA%97%E5%8F%A3%E7%AE%97%E6%B3%95.png)
 
 参考文献：
 

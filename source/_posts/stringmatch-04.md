@@ -1,5 +1,5 @@
 title: 【字符串匹配】KMP算法&BM算法
-author: haifun
+author: haif.
 tags:
   - 文本匹配
 categories:
@@ -22,7 +22,7 @@ KMP算法预处理时间复杂度为O(m)，匹配时间复杂度为O(n)。
 
 例如对于模式ababaca的完整前缀函数如下图(a)所示：
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/algorithm/stringmatch/KMP-01.png)
+![image](https://img.haifs.com/algorithm/stringmatch/KMP-01.png)
 
 前缀函数computePrefixFunction(P)构建伪代码如下：
 

@@ -1,5 +1,5 @@
 title: 【算法基础】二叉树
-author: haifun
+author: haif.
 tags:
   - 算法
   - 二叉树

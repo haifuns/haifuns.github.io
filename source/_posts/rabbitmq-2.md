@@ -1,5 +1,5 @@
 title: RabbitMQ 集群
-author: Haif.
+author: haif.
 tags:
 
   - RabbitMQ
@@ -319,7 +319,7 @@ RabbitMQ 本身提供的 Federation Shove 插件都可以实现此功能，确�
 
 如图所示，将整个 RabbitMQ 集群资源的使用分为三个部分：客户端、集群、 ZooKeeper配置管理。
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/mq/rabbitmq-autobackup.png)
+![image](https://img.haifs.com/mq/rabbitmq-autobackup.png)
 
 在集群中创建元数据资源时都需要在 ZooKeeper 生成相应的配置，比如在 cluster1 集群中创建交换器 exchange1 之后，需要在 /rmqNode/exchanges 路径下创建实节点 exchange1 并赋予节点的数据内容为：
 
@@ -423,7 +423,7 @@ Federation 插件可以让多个交换器或者多个队列进行联邦：
 
 使用 Federation 插件就可以很好地解决这个问题：
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/mq/rabbitmq-federated-exchange.png)
+![image](https://img.haifs.com/mq/rabbitmq-federated-exchange.png)
 
 如下图所示，在 broker3 中为交换器exchangeA（broker3 中的队列 queueA 通过 "rkA" 与 exchangeA 进行了绑定）与广州的 broker1 之间建立一条单向的 Federation link 。
 
@@ -433,7 +433,7 @@ Federation 插件可以让多个交换器或者多个队列进行联邦：
 
 这些操作都是内部的，对外部业务客户端来说这条 Federation link 建立在broker1 exchangeA 与broker3 exchangeA 之间。
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/mq/rabbitmq-federation-link.png)
+![image](https://img.haifs.com/mq/rabbitmq-federation-link.png)
 
 
 回到前面的问题，部署在北京的业务 ClientB 可以连接 broker1 并向 exchangeA 发送消息，这样 ClientB 可以迅速发送完消息并收到确认信息，而之后消息通过 Federation link 转发到 broker3 交换器 exchangeA，最终消息会存入与 exchangeA 绑定的队列 queueA 中，消费者最终可以消费队列 queueA 中的消息。经过 Federation link 转发的消息会带有特殊的 headers 性标记。
@@ -453,14 +453,14 @@ Federation 插件可以让多个交换器或者多个队列进行联邦：
     * 如果队列 queue1 (或 queue2)本身有若干消息堆积，那么 ClientA 直接消费这些消息，此时 broker2 中的 queue1 (或 queue2)并不会拉取 broker1 中的 queue1 (或 queue2) 的消息；
     * 如果队列 queue1 (或 queue2) 中没有消息堆积或者消息被消费完了，那么它会通过 Federation link 拉取在 broker1 中的上游队列 queue1 (或queue2) 中的消息(如果有消息)，然后存储到本地，之后再被消费者 ClientA 进行消费。
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/mq/rabbitmq-federated-queue.png)
+![image](https://img.haifs.com/mq/rabbitmq-federated-queue.png)
 
 
 消费者既可以消费 broker2 中的队列，又可以消费 broker1 中的队列，Federation 的这种分布式队列的部署可以提升单个队列的容量。如果在 broker1 端部署的消费者来不及消费队列queue1 中的消息，那么 broker2 端部署的消费者可以为其分担消费，也可以达到某种意义上的负载均衡。
 
 与federated exchange 不同，一条消息可以在联邦队列间转发无限次，如图中两个队列queue 互为联邦队列。
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/mq/rabbitmq-federated-queue-2.png)
+![image](https://img.haifs.com/mq/rabbitmq-federated-queue-2.png)
 
 
 ### Federation 的使用
@@ -500,17 +500,17 @@ Shovel 的主要优势在于：
 当一条内容为 "shovel test payload" 的消息从客户端发送至交换器 exchange1 的时候，这条消息会经过图图示中的数据流转最后存储在队列 queue2 中。如果在配置 Shovel link 时设置了
 `add-forward-headers` 参数为 true，则在消费到队列 queue2 中这条消息的时候会有特殊headers 属性标记。
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/mq/rabbitmq-shovel.png)
+![image](https://img.haifs.com/mq/rabbitmq-shovel.png)
 
 通常情况下，使用 shovel 时配置队列作为源端，交换器作为目的端。同样可以将队列配置为目的端，如下图所示：
 
 虽然看起来队列 queue2 是通过 Shovel link 直接将消息转发至 queue2 ，其实中间也是经由 brokr2 的交换器转发，只不过这个交换器是默认的交换器而己。
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/mq/rabbitmq-shovel2.png)
+![image](https://img.haifs.com/mq/rabbitmq-shovel2.png)
 
 如下图所示，配置交换器为源端也是可行的。虽然看起来交换器 exchange1 是通过 Shovel link 直接将消息转发至exchange2 上的，实际上在 broker1 中会新建一个队列(名称由 RabbitMQ 自定义，比如图中的 "amq.gen-ZwolUsoUchY6a7xaPyrZZH") 并绑定 exchange1，消息从交换器 exchange1 过来先存储在这个队列中，然后 Shovel 再从这个队列中拉取消息进而转发至换器 exchange2。
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/mq/rabbitmq-shovel3.png)
+![image](https://img.haifs.com/mq/rabbitmq-shovel3.png)
 
 前面所阐述的 broker1 broker2 中的 exchange1 queue1 exchange2 queue2 都可以在 Shovel 成功连接源端或者目的端 Broker 之后再第一次创建(执行一系列相应的 AMQP 配置声明时)，它们并不一定需要在 Shovel link 建立之前创建。Shovel 可以为源端或者目的端配置多个 Broker 的地址，这样可以使得源端或者目的端的 Broker 失效后能够重连到其他 Broker 之上(随机挑选)，可以设置 `reconnect_delay` 参数以避免由于重连行为导致的网络泛洪，或者可以在重连失败后直接停止连接。针对源端和目的端的所有配置声明连成功之后被新发送。
 
