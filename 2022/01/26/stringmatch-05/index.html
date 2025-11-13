@@ -13,15 +13,15 @@
 <meta property="og:site_name" content="haif&#39;s blog">
 <meta property="og:description" content="Trie树在了解AC自动机前需要先简单了解一下Trie树：Trie树也称为字典树、前缀树，是一种常被用于词检索的树结构。其思想非常简单：利用词的共同前缀以达到节省空间的目的。基本实现有array和linked-list两种。 以bachelor, baby, badge, jar四个单词构成的Trie树为例，array实现需要为每一个字符开辟一个字母表大小的数据，如下图所示：  array实现的t">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/algorithm/stringmatch/trie-array.png">
-<meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/algorithm/stringmatch/trie-linkedlist.png">
-<meta property="og:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/algorithm/stringmatch/Aho-Corasick.png">
+<meta property="og:image" content="https://img.haifs.com/algorithm/stringmatch/trie-array.png">
+<meta property="og:image" content="https://img.haifs.com/algorithm/stringmatch/trie-linkedlist.png">
+<meta property="og:image" content="https://img.haifs.com/algorithm/stringmatch/Aho-Corasick.png">
 <meta property="article:published_time" content="2022-01-26T12:00:00.000Z">
-<meta property="article:modified_time" content="2025-10-12T14:54:48.038Z">
-<meta property="article:author" content="haifun">
+<meta property="article:modified_time" content="2025-11-13T11:33:40.913Z">
+<meta property="article:author" content="haif.">
 <meta property="article:tag" content="文本匹配">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://haif-cloud.oss-cn-beijing.aliyuncs.com/algorithm/stringmatch/trie-array.png">
+<meta name="twitter:image" content="https://img.haifs.com/algorithm/stringmatch/trie-array.png">
     
     
       
@@ -155,7 +155,7 @@
 
     <div class="meta">
       <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
-        <span class="p-name" itemprop="name">haifun</span>
+        <span class="p-name" itemprop="name">haif.</span>
       </span>
       
     <div class="postdate">
@@ -187,9 +187,9 @@
   <div class="content e-content" itemprop="articleBody">
     <h1 id="Trie树"><a href="#Trie树" class="headerlink" title="Trie树"></a>Trie树</h1><p>在了解AC自动机前需要先简单了解一下Trie树：Trie树也称为字典树、前缀树，是一种常被用于词检索的树结构。其思想非常简单：利用词的共同前缀以达到节省空间的目的。基本实现有array和linked-list两种。</p>
 <p>以bachelor, baby, badge, jar四个单词构成的Trie树为例，array实现需要为每一个字符开辟一个字母表大小的数据，如下图所示：</p>
-<p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/algorithm/stringmatch/trie-array.png" alt="trie array实现"></p>
+<p><img src="https://img.haifs.com/algorithm/stringmatch/trie-array.png" alt="trie array实现"></p>
 <p>array实现的trie树查询时间复杂度为O(n)，但是存在大量的空间浪费。linked-list实现避免了空间浪费，却增加了查询时的复杂度（公共前缀需要回溯），如下图所示：</p>
-<p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/algorithm/stringmatch/trie-linkedlist.png" alt="trie linked-list实现"></p>
+<p><img src="https://img.haifs.com/algorithm/stringmatch/trie-linkedlist.png" alt="trie linked-list实现"></p>
 <h1 id="AC自动机"><a href="#AC自动机" class="headerlink" title="AC自动机"></a>AC自动机</h1><p>AC自动机通过将模式串预处理为确定有限状态自动机，扫描文本一遍就能结束，匹配复杂度为O(n)。</p>
 <p>AC自动机包含三个核心函数：</p>
 <ul>
@@ -198,7 +198,7 @@
 <li>emits，命中一个模式串，也称为output表</li>
 </ul>
 <p>以文本“ushers”，模式串“he”、“she”、“his”、“hers”为例，构建的自动机如下图所示：</p>
-<p><img src="https://haif-cloud.oss-cn-beijing.aliyuncs.com/algorithm/stringmatch/Aho-Corasick.png" alt="image"></p>
+<p><img src="https://img.haifs.com/algorithm/stringmatch/Aho-Corasick.png" alt="image"></p>
 <p>匹配过程：</p>
 <ol>
 <li>接收到字符u，首先尝试按照success表转移（图中实线），没有相应路线，转移失败</li>
@@ -318,7 +318,7 @@
     
     
     2019-2025
-    haifun
+    haif.
     <a target="_blank" rel="noopener" href="https://beian.miit.gov.cn/">
       鲁ICP备19052103号
     </a>
