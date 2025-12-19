@@ -1,9 +1,9 @@
 title: 【AI】提示词指南
 author: haif.
 tags:
-  - ai
+  - Prompt
 categories:
-  - ai
+  - AGI
 date: 2025-08-27 20:15:00
 
 ---
