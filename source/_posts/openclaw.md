@@ -8,7 +8,7 @@ date: 2026-03-05 14:00:00
 
 ---
 
-# 安装 - docker
+# 安装 - Docker
 
 ```bash
 git clone https://github.com/openclaw/openclaw.git
@@ -95,9 +95,11 @@ docker compose exec openclaw-gateway openclaw devices list
 docker compose exec openclaw-gateway openclaw devices approve <requestId>
 ```
 
-# 安装Skills
+管理后台：<https://domain-name/openclaw>
 
-服务器centos7不支持node>=20，利用docker下载skills：
+# 安装 Skills
+
+服务器 centos7 不支持 node >= 20，利用 docker 下载 skills：
 
 ```bash
 
@@ -113,6 +115,7 @@ docker run -it --rm \
  
 npx clawhub@latest install <skill-slug>
 ```
+
 # 相关资料
 
 *   [OpenClaw官方仓库](https://github.com/openclaw/openclaw)
