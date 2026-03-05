@@ -118,8 +118,8 @@ npx clawhub@latest install <skill-slug>
 
 # 相关资料
 
-*   [OpenClaw官方仓库](https://github.com/openclaw/openclaw)
-*   [OpenClaw官方文档](https://docs.openclaw.ai/zh-CN)
+*   [OpenClaw 官方仓库](https://github.com/openclaw/openclaw)
+*   [OpenClaw 官方文档](https://docs.openclaw.ai/zh-CN)
 *   [ClawHub 社区](https://clawhub.ai/)，[awesome-openclaw-skills](https://github.com/VoltAgent/awesome-openclaw-skills)，[skillsmp](https://skillsmp.com/)，[skills.sh](https://skills.sh/)
-*   [智谱 GLM](https://bigmodel.cn/)，[GLM免费模型](https://docs.bigmodel.cn/cn/guide/models/free/glm-4.7-flash)，[MiniMax](https://minimaxi.com/)
+*   [智谱 GLM](https://bigmodel.cn/)，[GLM 免费模型](https://docs.bigmodel.cn/cn/guide/models/free/glm-4.7-flash)，[MiniMax](https://minimaxi.com/)
 *   [飞书开放平台](https://open.feishu.cn/)
