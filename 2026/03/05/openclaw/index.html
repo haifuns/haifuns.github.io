@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="安装 - docker1234567891011121314151617git clone https:&#x2F;&#x2F;github.com&#x2F;openclaw&#x2F;openclaw.git# github加速 https:&#x2F;&#x2F;ghfast.top cd openclaw.&#x2F;docker-setup.sh# docker加速镜像 https:&#x2F;&#x2F;github.com&#x2F;dongyubin&#x2F;DockerHub # 启动">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【AI】部署 OpenClaw">
+<meta property="og:url" content="https://haifs.com/2026/03/05/openclaw/index.html">
+<meta property="og:site_name" content="haif&#39;s blog">
+<meta property="og:description" content="安装 - docker1234567891011121314151617git clone https:&#x2F;&#x2F;github.com&#x2F;openclaw&#x2F;openclaw.git# github加速 https:&#x2F;&#x2F;ghfast.top cd openclaw.&#x2F;docker-setup.sh# docker加速镜像 https:&#x2F;&#x2F;github.com&#x2F;dongyubin&#x2F;DockerHub # 启动">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-03-05T06:00:00.000Z">
+<meta property="article:modified_time" content="2026-03-05T06:12:25.375Z">
+<meta property="article:author" content="haif.">
+<meta property="article:tag" content="Agent">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>【AI】部署 OpenClaw</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+      <link rel="alternate" href="/true" title="haif&#39;s blog" type="application/atom+xml" />
+    
+	<!-- mathjax -->
+	
+		<script type="text/x-mathjax-config">
+		  MathJax.Hub.Config({
+			tex2jax: {
+			  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+			  inlineMath: [['$','$']]
+			}
+		  });
+		</script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
+	
+<meta name="generator" content="Hexo 5.4.2">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="顶部" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a href="/tags/">标签</a></li><!--
+     --><!--
+       --><li><a href="/categories/">分类</a></li><!--
+     --><!--
+       --><li><a href="/search/">搜索</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="下一篇" href="/2025/08/27/ai_prompt/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="返回顶部" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="分享文章" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifs.com/2026/03/05/openclaw/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifs.com/2026/03/05/openclaw/&text=【AI】部署 OpenClaw"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifs.com/2026/03/05/openclaw/&title=【AI】部署 OpenClaw"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifs.com/2026/03/05/openclaw/&is_video=false&description=【AI】部署 OpenClaw"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=【AI】部署 OpenClaw&body=Check out this article: https://haifs.com/2026/03/05/openclaw/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifs.com/2026/03/05/openclaw/&title=【AI】部署 OpenClaw"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifs.com/2026/03/05/openclaw/&title=【AI】部署 OpenClaw"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifs.com/2026/03/05/openclaw/&title=【AI】部署 OpenClaw"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifs.com/2026/03/05/openclaw/&title=【AI】部署 OpenClaw"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifs.com/2026/03/05/openclaw/&name=【AI】部署 OpenClaw&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifs.com/2026/03/05/openclaw/&t=【AI】部署 OpenClaw"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AE%89%E8%A3%85-docker"><span class="toc-number">1.</span> <span class="toc-text">安装 - docker</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%BB%E8%A6%81%E7%9B%AE%E5%BD%95"><span class="toc-number">2.</span> <span class="toc-text">主要目录</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E6%A8%A1%E5%9E%8B"><span class="toc-number">3.</span> <span class="toc-text">配置模型</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%99%BA%E8%B0%B1"><span class="toc-number">3.1.</span> <span class="toc-text">智谱</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MiniMax"><span class="toc-number">3.2.</span> <span class="toc-text">MiniMax</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E6%B6%88%E6%81%AF%E6%B8%A0%E9%81%93-%E9%A3%9E%E4%B9%A6"><span class="toc-number">4.</span> <span class="toc-text">配置消息渠道 - 飞书</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E8%BF%9C%E7%A8%8B%E8%AE%BF%E9%97%AE-%E5%9F%9F%E5%90%8D"><span class="toc-number">5.</span> <span class="toc-text">配置远程访问 - 域名</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AE%89%E8%A3%85Skills"><span class="toc-number">6.</span> <span class="toc-text">安装Skills</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%9B%B8%E5%85%B3%E8%B5%84%E6%96%99"><span class="toc-number">7.</span> <span class="toc-text">相关资料</span></a></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        【AI】部署 OpenClaw
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">haif.</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2026-03-05T06:00:00.000Z" class="dt-published" itemprop="datePublished">2026-03-05</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/AGI/">AGI</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/Agent/" rel="tag">Agent</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h1 id="安装-docker"><a href="#安装-docker" class="headerlink" title="安装 - docker"></a>安装 - docker</h1><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/openclaw/openclaw.git</span><br><span class="line"><span class="comment"># github加速 https://ghfast.top</span></span><br><span class="line"> </span><br><span class="line"><span class="built_in">cd</span> openclaw</span><br><span class="line">./docker-setup.sh</span><br><span class="line"><span class="comment"># docker加速镜像 https://github.com/dongyubin/DockerHub</span></span><br><span class="line"> </span><br><span class="line"><span class="comment"># 启动后引导配置先尽量跳过</span></span><br><span class="line"> </span><br><span class="line"><span class="comment"># 查看日志</span></span><br><span class="line">docker compose <span class="built_in">exec</span> openclaw-gateway openclaw logs --follow</span><br><span class="line"> </span><br><span class="line"><span class="comment"># 重新设置配置</span></span><br><span class="line">docker compose run --rm openclaw-cli onboard</span><br><span class="line"> </span><br><span class="line"><span class="comment"># 启动网关</span></span><br><span class="line">docker compose <span class="built_in">exec</span> openclaw-gateway openclaw gateway</span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="主要目录"><a href="#主要目录" class="headerlink" title="主要目录"></a>主要目录</h1><ol>
+<li><p>~/.openclaw - 配置</p>
+<ul>
+<li>存储 OpenClaw 记忆</li>
+<li>配置文件</li>
+<li>第三方 API 密钥等</li>
+</ul>
+</li>
+<li><p>~/openclaw/workspace - 工作空间</p>
+<ul>
+<li>Agent 可访问文件</li>
+<li>Agent 创建的文件</li>
+</ul>
+</li>
+</ol>
+<h1 id="配置模型"><a href="#配置模型" class="headerlink" title="配置模型"></a>配置模型</h1><h2 id="智谱"><a href="#智谱" class="headerlink" title="智谱"></a>智谱</h2><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 配置GLM模型 https://docs.openclaw.ai/zh-CN/providers/zai</span></span><br><span class="line">docker compose <span class="built_in">exec</span> openclaw-gateway openclaw onboard --auth-choice zai-api-key</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="MiniMax"><a href="#MiniMax" class="headerlink" title="MiniMax"></a>MiniMax</h2><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment"># https://docs.openclaw.ai/zh-CN/providers/minimax</span></span><br><span class="line">docker compose <span class="built_in">exec</span> openclaw-gateway openclaw plugins <span class="built_in">enable</span> minimax-portal-auth  <span class="comment"># 如果已加载则跳过</span></span><br><span class="line">docker compose <span class="built_in">exec</span> openclaw-gateway openclaw gateway restart  <span class="comment"># 如果 Gateway 网关已在运行则重启</span></span><br><span class="line">docker compose <span class="built_in">exec</span> openclaw-gateway openclaw onboard --auth-choice minimax-portal</span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="配置消息渠道-飞书"><a href="#配置消息渠道-飞书" class="headerlink" title="配置消息渠道 - 飞书"></a>配置消息渠道 - 飞书</h1><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment"># 安装飞书插件 https://docs.openclaw.ai/zh-CN/channels/feishu</span></span><br><span class="line">docker compose <span class="built_in">exec</span> openclaw-gateway openclaw plugins install @openclaw/feishu</span><br><span class="line">docker compose <span class="built_in">exec</span> openclaw-gateway openclaw channels add</span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="配置远程访问-域名"><a href="#配置远程访问-域名" class="headerlink" title="配置远程访问 - 域名"></a>配置远程访问 - 域名</h1><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 修改配置，允许远程访问</span></span><br><span class="line">vim ~/.openclaw/openclaw.json</span><br><span class="line"><span class="comment">#{"gateway":{"bind":"lan","controlUi":{"allowedOrigins":["10.18.*.*:18798"]}}}</span></span><br><span class="line"> </span><br><span class="line"><span class="comment"># nginx 反向代理</span></span><br><span class="line">location /openclaw/ {</span><br><span class="line">        proxy_http_version 1.1;</span><br><span class="line">        proxy_set_header Connection <span class="string">"upgrade"</span>;</span><br><span class="line">        proxy_set_header Upgrade <span class="variable">$http_upgrade</span>;</span><br><span class="line">        proxy_set_header Host 10.18.*.*:18789/;</span><br><span class="line">        proxy_pass http://10.18.*.*:18789/;</span><br><span class="line">    }</span><br><span class="line"> </span><br><span class="line"><span class="comment"># 设备配对（首次连接）</span></span><br><span class="line"><span class="comment"># 获取登录链接，关注token</span></span><br><span class="line">docker compose <span class="built_in">exec</span> openclaw-gateway openclaw dashboard --no-open</span><br><span class="line"><span class="comment"># 列出待处理的请求</span></span><br><span class="line">docker compose <span class="built_in">exec</span> openclaw-gateway openclaw devices list</span><br><span class="line"><span class="comment"># 按请求 ID 批准</span></span><br><span class="line">docker compose <span class="built_in">exec</span> openclaw-gateway openclaw devices approve &lt;requestId&gt;</span><br></pre></td></tr></tbody></table></figure>
+
+<h1 id="安装Skills"><a href="#安装Skills" class="headerlink" title="安装Skills"></a>安装Skills</h1><p>服务器centos7不支持node&gt;=20，利用docker下载skills：</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">mkdir -p ~/.openclaw/workspace/skills</span><br><span class="line"> </span><br><span class="line"><span class="comment"># 启动交互式 Docker 容器，映射数据卷</span></span><br><span class="line">docker run -it --rm \</span><br><span class="line">  --name clawhub-installer \</span><br><span class="line">  -v <span class="string">"/root/.openclaw/workspace/skills:/app/skills"</span> \</span><br><span class="line">  -w /app \</span><br><span class="line">  node:24-alpine \</span><br><span class="line">  sh</span><br><span class="line"> </span><br><span class="line">npx clawhub@latest install &lt;skill-slug&gt;</span><br></pre></td></tr></tbody></table></figure>
+<h1 id="相关资料"><a href="#相关资料" class="headerlink" title="相关资料"></a>相关资料</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/openclaw/openclaw">OpenClaw官方仓库</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.openclaw.ai/zh-CN">OpenClaw官方文档</a></li>
+<li><a target="_blank" rel="noopener" href="https://clawhub.ai/">ClawHub 社区</a>，<a target="_blank" rel="noopener" href="https://github.com/VoltAgent/awesome-openclaw-skills">awesome-openclaw-skills</a>，<a target="_blank" rel="noopener" href="https://skillsmp.com/">skillsmp</a>，<a target="_blank" rel="noopener" href="https://skills.sh/">skills.sh</a></li>
+<li><a target="_blank" rel="noopener" href="https://bigmodel.cn/">智谱 GLM</a>，<a target="_blank" rel="noopener" href="https://docs.bigmodel.cn/cn/guide/models/free/glm-4.7-flash">GLM免费模型</a>，<a target="_blank" rel="noopener" href="https://minimaxi.com/">MiniMax</a></li>
+<li><a target="_blank" rel="noopener" href="https://open.feishu.cn/">飞书开放平台</a></li>
+</ul>
+
+  </div>
+</article>
+
+
+    <div class="blog-post-comments">
+        <div id="utterances_thread">
+            <noscript>加载评论需要在浏览器启用 JavaScript 脚本支持。</noscript>
+        </div>
+    </div>
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">首页</a></li>
+        
+          <li><a href="/archives/">归档</a></li>
+        
+          <li><a href="/tags/">标签</a></li>
+        
+          <li><a href="/categories/">分类</a></li>
+        
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AE%89%E8%A3%85-docker"><span class="toc-number">1.</span> <span class="toc-text">安装 - docker</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%BB%E8%A6%81%E7%9B%AE%E5%BD%95"><span class="toc-number">2.</span> <span class="toc-text">主要目录</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E6%A8%A1%E5%9E%8B"><span class="toc-number">3.</span> <span class="toc-text">配置模型</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%99%BA%E8%B0%B1"><span class="toc-number">3.1.</span> <span class="toc-text">智谱</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MiniMax"><span class="toc-number">3.2.</span> <span class="toc-text">MiniMax</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E6%B6%88%E6%81%AF%E6%B8%A0%E9%81%93-%E9%A3%9E%E4%B9%A6"><span class="toc-number">4.</span> <span class="toc-text">配置消息渠道 - 飞书</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E8%BF%9C%E7%A8%8B%E8%AE%BF%E9%97%AE-%E5%9F%9F%E5%90%8D"><span class="toc-number">5.</span> <span class="toc-text">配置远程访问 - 域名</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AE%89%E8%A3%85Skills"><span class="toc-number">6.</span> <span class="toc-text">安装Skills</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%9B%B8%E5%85%B3%E8%B5%84%E6%96%99"><span class="toc-number">7.</span> <span class="toc-text">相关资料</span></a></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifs.com/2026/03/05/openclaw/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifs.com/2026/03/05/openclaw/&text=【AI】部署 OpenClaw"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifs.com/2026/03/05/openclaw/&title=【AI】部署 OpenClaw"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifs.com/2026/03/05/openclaw/&is_video=false&description=【AI】部署 OpenClaw"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=【AI】部署 OpenClaw&body=Check out this article: https://haifs.com/2026/03/05/openclaw/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifs.com/2026/03/05/openclaw/&title=【AI】部署 OpenClaw"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifs.com/2026/03/05/openclaw/&title=【AI】部署 OpenClaw"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifs.com/2026/03/05/openclaw/&title=【AI】部署 OpenClaw"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifs.com/2026/03/05/openclaw/&title=【AI】部署 OpenClaw"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifs.com/2026/03/05/openclaw/&name=【AI】部署 OpenClaw&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifs.com/2026/03/05/openclaw/&t=【AI】部署 OpenClaw"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2019-2026
+    haif.
+    <a target="_blank" rel="noopener" href="https://beian.miit.gov.cn/">
+      鲁ICP备19052103号
+    </a>
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a href="/tags/">标签</a></li><!--
+     --><!--
+       --><li><a href="/categories/">分类</a></li><!--
+     --><!--
+       --><li><a href="/search/">搜索</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板！\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功！");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+  <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?d3c8edb388553a2084296cbfe9a0785a";
+          var s = document.getElementsByTagName("script")[0];
+          s.parentNode.insertBefore(hm, s);
+        })();
+        </script>
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+    <script type="text/javascript">
+      var utterances_repo = 'haifuns/haifuns.github.io';
+      var utterances_issue_term = 'pathname';
+      var utterances_label = 'Comment';
+      var utterances_theme = 'github-light';
+
+      (function(){
+          var script = document.createElement('script');
+
+          script.src = 'https://utteranc.es/client.js';
+          script.setAttribute('repo', utterances_repo);
+          script.setAttribute('issue-term', 'pathname');
+          script.setAttribute('label', utterances_label);
+          script.setAttribute('theme', utterances_theme);
+          script.setAttribute('crossorigin', 'anonymous');
+          script.async = true;
+          (document.getElementById('utterances_thread')).appendChild(script);
+      }());
+  </script>
+
+</body>
+</html>
