@@ -61,6 +61,69 @@ docker compose exec openclaw-gateway openclaw gateway restart  # 如果 Gateway 
 docker compose exec openclaw-gateway openclaw onboard --auth-choice minimax-portal
 ```
 
+## LongCat
+
+自定义提供商，修改~/.openclaw/openclaw.json
+
+```
+{
+    "auth":
+    {
+        "profiles":
+        {
+            "longcat:default":
+            {
+                "provider": "longcat",
+                "mode": "api_key"
+            }
+        }
+    },
+    "models":
+    {
+        "mode": "merge",
+        "providers":
+        {
+            "longcat":
+            {
+                "baseUrl": "https://api.longcat.chat/anthropic",
+                "apiKey": "ak_*****",
+                "auth": "api-key",
+                "api": "anthropic-messages",
+                "authHeader": true,
+                "models":
+                [
+                    {
+                        "id": "LongCat-Flash-Chat",
+                        "name": "LongCat-Flash-Chat",
+                        "reasoning": false,
+                        "input":
+                        [
+                            "text"
+                        ],
+                        "contextWindow": 200000,
+                        "maxTokens": 8192,
+                        "compat":
+                        {
+                            "maxTokensField": "max_tokens"
+                        }
+                    }
+                ]
+            }
+        }
+    },
+    "agents":
+    {
+        "defaults":
+        {
+            "model":
+            {
+                "primary": "longcat/LongCat-Flash-Chat"
+            }
+        }
+    }
+}
+```
+
 # 配置消息渠道 - 飞书
 
 ```bash
@@ -121,5 +184,5 @@ npx clawhub@latest install <skill-slug>
 *   [OpenClaw 官方仓库](https://github.com/openclaw/openclaw)
 *   [OpenClaw 官方文档](https://docs.openclaw.ai/zh-CN)
 *   [ClawHub 社区](https://clawhub.ai/)，[awesome-openclaw-skills](https://github.com/VoltAgent/awesome-openclaw-skills)，[skillsmp](https://skillsmp.com/)，[skills.sh](https://skills.sh/)
-*   [智谱 GLM](https://bigmodel.cn/)，[GLM 免费模型](https://docs.bigmodel.cn/cn/guide/models/free/glm-4.7-flash)，[MiniMax](https://minimaxi.com/)
+*   [智谱 GLM](https://bigmodel.cn/)，[GLM 免费模型](https://docs.bigmodel.cn/cn/guide/models/free/glm-4.7-flash)，[MiniMax](https://minimaxi.com/)，[LongCat 开放平台](https://longcat.chat/platform/api_keys)
 *   [飞书开放平台](https://open.feishu.cn/)
