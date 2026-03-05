@@ -14,7 +14,7 @@
 <meta property="og:description" content="安装 - Docker1234567891011121314151617git clone https:&#x2F;&#x2F;github.com&#x2F;openclaw&#x2F;openclaw.git# github加速 https:&#x2F;&#x2F;ghfast.top cd openclaw.&#x2F;docker-setup.sh# docker加速镜像 https:&#x2F;&#x2F;github.com&#x2F;dongyubin&#x2F;DockerHub # 启动">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2026-03-05T06:00:00.000Z">
-<meta property="article:modified_time" content="2026-03-05T06:18:24.843Z">
+<meta property="article:modified_time" content="2026-03-05T06:20:37.386Z">
 <meta property="article:author" content="haif.">
 <meta property="article:tag" content="Agent">
 <meta name="twitter:card" content="summary">
@@ -209,10 +209,10 @@
 <figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">mkdir -p ~/.openclaw/workspace/skills</span><br><span class="line"> </span><br><span class="line"><span class="comment"># 启动交互式 Docker 容器，映射数据卷</span></span><br><span class="line">docker run -it --rm \</span><br><span class="line">  --name clawhub-installer \</span><br><span class="line">  -v <span class="string">"/root/.openclaw/workspace/skills:/app/skills"</span> \</span><br><span class="line">  -w /app \</span><br><span class="line">  node:24-alpine \</span><br><span class="line">  sh</span><br><span class="line"> </span><br><span class="line">npx clawhub@latest install &lt;skill-slug&gt;</span><br></pre></td></tr></tbody></table></figure>
 
 <h1 id="相关资料"><a href="#相关资料" class="headerlink" title="相关资料"></a>相关资料</h1><ul>
-<li><a target="_blank" rel="noopener" href="https://github.com/openclaw/openclaw">OpenClaw官方仓库</a></li>
-<li><a target="_blank" rel="noopener" href="https://docs.openclaw.ai/zh-CN">OpenClaw官方文档</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/openclaw/openclaw">OpenClaw 官方仓库</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.openclaw.ai/zh-CN">OpenClaw 官方文档</a></li>
 <li><a target="_blank" rel="noopener" href="https://clawhub.ai/">ClawHub 社区</a>，<a target="_blank" rel="noopener" href="https://github.com/VoltAgent/awesome-openclaw-skills">awesome-openclaw-skills</a>，<a target="_blank" rel="noopener" href="https://skillsmp.com/">skillsmp</a>，<a target="_blank" rel="noopener" href="https://skills.sh/">skills.sh</a></li>
-<li><a target="_blank" rel="noopener" href="https://bigmodel.cn/">智谱 GLM</a>，<a target="_blank" rel="noopener" href="https://docs.bigmodel.cn/cn/guide/models/free/glm-4.7-flash">GLM免费模型</a>，<a target="_blank" rel="noopener" href="https://minimaxi.com/">MiniMax</a></li>
+<li><a target="_blank" rel="noopener" href="https://bigmodel.cn/">智谱 GLM</a>，<a target="_blank" rel="noopener" href="https://docs.bigmodel.cn/cn/guide/models/free/glm-4.7-flash">GLM 免费模型</a>，<a target="_blank" rel="noopener" href="https://minimaxi.com/">MiniMax</a></li>
 <li><a target="_blank" rel="noopener" href="https://open.feishu.cn/">飞书开放平台</a></li>
 </ul>
 
