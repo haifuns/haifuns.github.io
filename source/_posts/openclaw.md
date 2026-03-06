@@ -162,7 +162,8 @@ docker compose exec openclaw-gateway openclaw devices approve <requestId>
 
 # 安装 Skills
 
-服务器 centos7 不支持 node >= 20，利用 docker 下载 skills：
+服务器 centos7 不支持 node >= 20，
+方式1，利用 docker 下载 skills：
 
 ```bash
 
@@ -177,6 +178,22 @@ docker run -it --rm \
   sh
  
 npx clawhub@latest install <skill-slug>
+```
+方式2，下载zip
+
+```bash
+# 安装baidu-search skill
+cd ~/.openclaw/workspace/skills
+# 从 clawhub 找 zip 下载链接
+wget -O baidu-search.zip https://wry-manatee-359.convex.site/api/v1/download?slug=baidu-search
+unzip baidu-search.zip -d ./baidu-search
+
+vi .env
+# BAIDU_API_KEY=bce-v3/ALTAK-****
+
+# 重启 gateway
+cd /opt/docker/openclaw
+docker compose exec openclaw-gateway openclaw gateway restart
 ```
 
 # 相关资料
