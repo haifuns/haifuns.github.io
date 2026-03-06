@@ -1,4 +1,4 @@
-title: 【AI】什么是 Skill ？
+title: 【AI】什么是 Skill？
 author: haif.
 tags:
   - Skill
