@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://haifs.com/search/index.html</loc>
+    
+    <lastmod>2026-03-06</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://haifs.com/roaming/index.html</loc>
     
     <lastmod>2026-03-06</lastmod>
@@ -20,7 +29,7 @@
   </url>
   
   <url>
-    <loc>https://haifs.com/search/index.html</loc>
+    <loc>https://haifs.com/2022/03/09/zookeeper-06/</loc>
     
     <lastmod>2026-03-06</lastmod>
     
@@ -38,7 +47,7 @@
   </url>
   
   <url>
-    <loc>https://haifs.com/2022/04/07/zookeeper-08/</loc>
+    <loc>https://haifs.com/2022/04/12/zookeeper-09/</loc>
     
     <lastmod>2026-03-06</lastmod>
     
@@ -47,7 +56,7 @@
   </url>
   
   <url>
-    <loc>https://haifs.com/2022/04/12/zookeeper-09/</loc>
+    <loc>https://haifs.com/2022/04/07/zookeeper-08/</loc>
     
     <lastmod>2026-03-06</lastmod>
     
@@ -65,6 +74,15 @@
   </url>
   
   <url>
+    <loc>https://haifs.com/about/index.html</loc>
+    
+    <lastmod>2026-03-06</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://haifs.com/categories/index.html</loc>
     
     <lastmod>2026-03-06</lastmod>
@@ -74,7 +92,25 @@
   </url>
   
   <url>
-    <loc>https://haifs.com/about/index.html</loc>
+    <loc>https://haifs.com/2019/11/02/svn/</loc>
+    
+    <lastmod>2026-03-06</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://haifs.com/2021/03/13/tcpip/</loc>
+    
+    <lastmod>2026-03-06</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://haifs.com/2023/07/14/vectorsearch/</loc>
     
     <lastmod>2026-03-06</lastmod>
     
@@ -128,15 +164,6 @@
   </url>
   
   <url>
-    <loc>https://haifs.com/2022/02/23/zookeeper-04/</loc>
-    
-    <lastmod>2026-03-06</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://haifs.com/2022/02/28/zookeeper-05/</loc>
     
     <lastmod>2026-03-06</lastmod>
@@ -146,7 +173,34 @@
   </url>
   
   <url>
-    <loc>https://haifs.com/2022/03/09/zookeeper-06/</loc>
+    <loc>https://haifs.com/2022/02/23/zookeeper-04/</loc>
+    
+    <lastmod>2026-03-06</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://haifs.com/2021/01/24/redis-05/</loc>
+    
+    <lastmod>2026-03-06</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://haifs.com/2021/02/01/redis-06/</loc>
+    
+    <lastmod>2026-03-06</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://haifs.com/2021/02/13/redis-07/</loc>
     
     <lastmod>2026-03-06</lastmod>
     
@@ -209,15 +263,6 @@
   </url>
   
   <url>
-    <loc>https://haifs.com/2021/12/21/stringmatch-03/</loc>
-    
-    <lastmod>2026-03-06</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://haifs.com/2021/12/15/stringmatch-01/</loc>
     
     <lastmod>2026-03-06</lastmod>
@@ -236,7 +281,7 @@
   </url>
   
   <url>
-    <loc>https://haifs.com/2022/01/10/stringmatch-04/</loc>
+    <loc>https://haifs.com/2021/12/21/stringmatch-03/</loc>
     
     <lastmod>2026-03-06</lastmod>
     
@@ -245,7 +290,7 @@
   </url>
   
   <url>
-    <loc>https://haifs.com/2019/11/02/svn/</loc>
+    <loc>https://haifs.com/2022/01/10/stringmatch-04/</loc>
     
     <lastmod>2026-03-06</lastmod>
     
@@ -263,16 +308,7 @@
   </url>
   
   <url>
-    <loc>https://haifs.com/2021/03/13/tcpip/</loc>
-    
-    <lastmod>2026-03-06</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://haifs.com/2023/07/14/vectorsearch/</loc>
+    <loc>https://haifs.com/2020/12/26/rabbitmq-3/</loc>
     
     <lastmod>2026-03-06</lastmod>
     
@@ -353,7 +389,7 @@
   </url>
   
   <url>
-    <loc>https://haifs.com/2021/01/24/redis-05/</loc>
+    <loc>https://haifs.com/2021/06/06/kafka-09/</loc>
     
     <lastmod>2026-03-06</lastmod>
     
@@ -362,7 +398,7 @@
   </url>
   
   <url>
-    <loc>https://haifs.com/2021/02/01/redis-06/</loc>
+    <loc>https://haifs.com/2021/11/17/multi-paxos/</loc>
     
     <lastmod>2026-03-06</lastmod>
     
@@ -371,7 +407,7 @@
   </url>
   
   <url>
-    <loc>https://haifs.com/2021/02/13/redis-07/</loc>
+    <loc>https://haifs.com/2019/11/21/mybatis-sharding/</loc>
     
     <lastmod>2026-03-06</lastmod>
     
@@ -398,15 +434,6 @@
   </url>
   
   <url>
-    <loc>https://haifs.com/2023/09/11/olap-doris/</loc>
-    
-    <lastmod>2026-03-06</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://haifs.com/2020/12/26/netty/</loc>
     
     <lastmod>2026-03-06</lastmod>
@@ -417,6 +444,15 @@
   
   <url>
     <loc>https://haifs.com/2026/03/05/openclaw/</loc>
+    
+    <lastmod>2026-03-06</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://haifs.com/2023/09/11/olap-doris/</loc>
     
     <lastmod>2026-03-06</lastmod>
     
@@ -443,7 +479,7 @@
   </url>
   
   <url>
-    <loc>https://haifs.com/2020/12/26/rabbitmq-3/</loc>
+    <loc>https://haifs.com/2020/12/26/rabbitmq-2/</loc>
     
     <lastmod>2026-03-06</lastmod>
     
@@ -452,7 +488,7 @@
   </url>
   
   <url>
-    <loc>https://haifs.com/2020/12/26/rabbitmq-2/</loc>
+    <loc>https://haifs.com/2020/12/26/jvm-4/</loc>
     
     <lastmod>2026-03-06</lastmod>
     
@@ -488,15 +524,6 @@
   </url>
   
   <url>
-    <loc>https://haifs.com/2021/05/15/kafka-01/</loc>
-    
-    <lastmod>2026-03-06</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://haifs.com/2025/02/23/jvm-g1/</loc>
     
     <lastmod>2026-03-06</lastmod>
@@ -515,7 +542,7 @@
   </url>
   
   <url>
-    <loc>https://haifs.com/2021/05/22/kafka-03/</loc>
+    <loc>https://haifs.com/2021/05/15/kafka-01/</loc>
     
     <lastmod>2026-03-06</lastmod>
     
@@ -524,7 +551,7 @@
   </url>
   
   <url>
-    <loc>https://haifs.com/2021/05/29/kafka-05/</loc>
+    <loc>https://haifs.com/2021/05/22/kafka-03/</loc>
     
     <lastmod>2026-03-06</lastmod>
     
@@ -542,25 +569,16 @@
   </url>
   
   <url>
+    <loc>https://haifs.com/2021/05/29/kafka-05/</loc>
+    
+    <lastmod>2026-03-06</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://haifs.com/2021/05/29/kafka-06/</loc>
-    
-    <lastmod>2026-03-06</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://haifs.com/2021/06/06/kafka-07/</loc>
-    
-    <lastmod>2026-03-06</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://haifs.com/2021/06/06/kafka-09/</loc>
     
     <lastmod>2026-03-06</lastmod>
     
@@ -578,7 +596,7 @@
   </url>
   
   <url>
-    <loc>https://haifs.com/2019/11/21/mybatis-sharding/</loc>
+    <loc>https://haifs.com/2021/06/06/kafka-07/</loc>
     
     <lastmod>2026-03-06</lastmod>
     
@@ -587,7 +605,16 @@
   </url>
   
   <url>
-    <loc>https://haifs.com/2021/11/17/multi-paxos/</loc>
+    <loc>https://haifs.com/2020/12/26/java-concurrent-3/</loc>
+    
+    <lastmod>2026-03-06</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://haifs.com/2020/12/26/java-concurrent-4/</loc>
     
     <lastmod>2026-03-06</lastmod>
     
@@ -614,7 +641,7 @@
   </url>
   
   <url>
-    <loc>https://haifs.com/2020/12/26/java-concurrent-7/</loc>
+    <loc>https://haifs.com/2020/12/26/java-concurrent-8/</loc>
     
     <lastmod>2026-03-06</lastmod>
     
@@ -623,7 +650,7 @@
   </url>
   
   <url>
-    <loc>https://haifs.com/2020/12/26/java-concurrent-8/</loc>
+    <loc>https://haifs.com/2020/12/26/java-concurrent-7/</loc>
     
     <lastmod>2026-03-06</lastmod>
     
@@ -678,15 +705,6 @@
   
   <url>
     <loc>https://haifs.com/2020/12/26/jvm-3/</loc>
-    
-    <lastmod>2026-03-06</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://haifs.com/2020/12/26/jvm-4/</loc>
     
     <lastmod>2026-03-06</lastmod>
     
@@ -776,24 +794,6 @@
   </url>
   
   <url>
-    <loc>https://haifs.com/2020/12/26/java-concurrent-4/</loc>
-    
-    <lastmod>2026-03-06</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://haifs.com/2020/12/26/java-concurrent-3/</loc>
-    
-    <lastmod>2026-03-06</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://haifs.com/2021/04/04/distribution-01/</loc>
     
     <lastmod>2026-03-06</lastmod>
@@ -803,7 +803,7 @@
   </url>
   
   <url>
-    <loc>https://haifs.com/2020/06/14/docker/</loc>
+    <loc>https://haifs.com/2023/03/02/es-01/</loc>
     
     <lastmod>2026-03-06</lastmod>
     
@@ -812,7 +812,7 @@
   </url>
   
   <url>
-    <loc>https://haifs.com/2023/03/02/es-01/</loc>
+    <loc>https://haifs.com/2020/06/14/docker/</loc>
     
     <lastmod>2026-03-06</lastmod>
     
@@ -848,15 +848,6 @@
   </url>
   
   <url>
-    <loc>https://haifs.com/2023/03/07/es-05/</loc>
-    
-    <lastmod>2026-03-06</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://haifs.com/2019/11/21/flow/</loc>
     
     <lastmod>2026-03-06</lastmod>
@@ -866,7 +857,7 @@
   </url>
   
   <url>
-    <loc>https://haifs.com/2019/11/02/frp/</loc>
+    <loc>https://haifs.com/2023/03/07/es-05/</loc>
     
     <lastmod>2026-03-06</lastmod>
     
@@ -876,6 +867,15 @@
   
   <url>
     <loc>https://haifs.com/2019/06/28/git/</loc>
+    
+    <lastmod>2026-03-06</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://haifs.com/2019/11/02/frp/</loc>
     
     <lastmod>2026-03-06</lastmod>
     
@@ -902,7 +902,7 @@
   </url>
   
   <url>
-    <loc>https://haifs.com/2021/11/22/gossip/</loc>
+    <loc>https://haifs.com/2022/08/29/go-structure/</loc>
     
     <lastmod>2026-03-06</lastmod>
     
@@ -911,7 +911,7 @@
   </url>
   
   <url>
-    <loc>https://haifs.com/2022/08/29/go-structure/</loc>
+    <loc>https://haifs.com/2021/11/22/gossip/</loc>
     
     <lastmod>2026-03-06</lastmod>
     
@@ -929,25 +929,7 @@
   </url>
   
   <url>
-    <loc>https://haifs.com/2022/09/01/algorithm-recursion-procedure/</loc>
-    
-    <lastmod>2026-03-06</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://haifs.com/2022/06/26/algorithm-recursion/</loc>
-    
-    <lastmod>2026-03-06</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://haifs.com/2022/07/18/algorithm-sort/</loc>
     
     <lastmod>2026-03-06</lastmod>
     
@@ -965,7 +947,7 @@
   </url>
   
   <url>
-    <loc>https://haifs.com/2022/07/17/algorithm-uncomparesort/</loc>
+    <loc>https://haifs.com/2022/07/18/algorithm-sort/</loc>
     
     <lastmod>2026-03-06</lastmod>
     
@@ -974,7 +956,7 @@
   </url>
   
   <url>
-    <loc>https://haifs.com/2022/06/22/algorithm-xor/</loc>
+    <loc>https://haifs.com/2022/07/17/algorithm-uncomparesort/</loc>
     
     <lastmod>2026-03-06</lastmod>
     
@@ -992,6 +974,15 @@
   </url>
   
   <url>
+    <loc>https://haifs.com/2022/06/22/algorithm-xor/</loc>
+    
+    <lastmod>2026-03-06</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://haifs.com/2023/06/06/blockchain/</loc>
     
     <lastmod>2026-03-06</lastmod>
@@ -1001,7 +992,7 @@
   </url>
   
   <url>
-    <loc>https://haifs.com/2022/01/04/curator-01/</loc>
+    <loc>https://haifs.com/2023/05/29/chatgpt-prompt/</loc>
     
     <lastmod>2026-03-06</lastmod>
     
@@ -1010,7 +1001,7 @@
   </url>
   
   <url>
-    <loc>https://haifs.com/2023/05/29/chatgpt-prompt/</loc>
+    <loc>https://haifs.com/2022/01/04/curator-01/</loc>
     
     <lastmod>2026-03-06</lastmod>
     
@@ -1082,15 +1073,6 @@
   </url>
   
   <url>
-    <loc>https://haifs.com/2022/07/30/algorithm-binarytree-problem1/</loc>
-    
-    <lastmod>2026-03-06</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://haifs.com/2022/08/16/algorithm-binarytree-problem2/</loc>
     
     <lastmod>2026-03-06</lastmod>
@@ -1100,7 +1082,7 @@
   </url>
   
   <url>
-    <loc>https://haifs.com/2022/07/30/algorithm-binarytree/</loc>
+    <loc>https://haifs.com/2022/07/30/algorithm-binarytree-problem1/</loc>
     
     <lastmod>2026-03-06</lastmod>
     
@@ -1118,7 +1100,7 @@
   </url>
   
   <url>
-    <loc>https://haifs.com/2022/06/24/algorithm-datastructure/</loc>
+    <loc>https://haifs.com/2022/07/30/algorithm-binarytree/</loc>
     
     <lastmod>2026-03-06</lastmod>
     
@@ -1145,7 +1127,7 @@
   </url>
   
   <url>
-    <loc>https://haifs.com/2022/09/03/algorithm-dp1/</loc>
+    <loc>https://haifs.com/2022/06/24/algorithm-datastructure/</loc>
     
     <lastmod>2026-03-06</lastmod>
     
@@ -1155,6 +1137,15 @@
   
   <url>
     <loc>https://haifs.com/2022/09/04/algorithm-dp2/</loc>
+    
+    <lastmod>2026-03-06</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://haifs.com/2022/09/03/algorithm-dp1/</loc>
     
     <lastmod>2026-03-06</lastmod>
     
@@ -1261,6 +1252,15 @@
     <priority>0.6</priority>
   </url>
   
+  <url>
+    <loc>https://haifs.com/2022/09/01/algorithm-recursion-procedure/</loc>
+    
+    <lastmod>2026-03-06</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
 
   <url>
     <loc>https://haifs.com/</loc>
@@ -1299,13 +1299,6 @@
   </url>
   
   <url>
-    <loc>https://haifs.com/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/</loc>
-    <lastmod>2026-03-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://haifs.com/tags/%E4%BA%8C%E5%88%86%E6%B3%95/</loc>
     <lastmod>2026-03-06</lastmod>
     <changefreq>weekly</changefreq>
@@ -1314,6 +1307,13 @@
   
   <url>
     <loc>https://haifs.com/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/</loc>
+    <lastmod>2026-03-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://haifs.com/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/</loc>
     <lastmod>2026-03-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1397,20 +1397,6 @@
   </url>
   
   <url>
-    <loc>https://haifs.com/tags/Curator/</loc>
-    <lastmod>2026-03-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://haifs.com/tags/ZooKeeper/</loc>
-    <lastmod>2026-03-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://haifs.com/tags/AIGC/</loc>
     <lastmod>2026-03-06</lastmod>
     <changefreq>weekly</changefreq>
@@ -1419,6 +1405,20 @@
   
   <url>
     <loc>https://haifs.com/tags/ChatGPT/</loc>
+    <lastmod>2026-03-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://haifs.com/tags/Curator/</loc>
+    <lastmod>2026-03-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://haifs.com/tags/ZooKeeper/</loc>
     <lastmod>2026-03-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1460,14 +1460,14 @@
   </url>
   
   <url>
-    <loc>https://haifs.com/tags/Docker/</loc>
+    <loc>https://haifs.com/tags/Elasticsearch/</loc>
     <lastmod>2026-03-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://haifs.com/tags/Elasticsearch/</loc>
+    <loc>https://haifs.com/tags/Docker/</loc>
     <lastmod>2026-03-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1481,14 +1481,14 @@
   </url>
   
   <url>
-    <loc>https://haifs.com/tags/Frp/</loc>
+    <loc>https://haifs.com/tags/Git/</loc>
     <lastmod>2026-03-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://haifs.com/tags/Git/</loc>
+    <loc>https://haifs.com/tags/Frp/</loc>
     <lastmod>2026-03-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1579,13 +1579,6 @@
   </url>
   
   <url>
-    <loc>https://haifs.com/tags/Doris/</loc>
-    <lastmod>2026-03-06</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>https://haifs.com/tags/Netty/</loc>
     <lastmod>2026-03-06</lastmod>
     <changefreq>weekly</changefreq>
@@ -1594,6 +1587,13 @@
   
   <url>
     <loc>https://haifs.com/tags/Agent/</loc>
+    <lastmod>2026-03-06</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://haifs.com/tags/Doris/</loc>
     <lastmod>2026-03-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1714,14 +1714,14 @@
   </url>
   
   <url>
-    <loc>https://haifs.com/categories/Docker/</loc>
+    <loc>https://haifs.com/categories/%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E/</loc>
     <lastmod>2026-03-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://haifs.com/categories/%E6%90%9C%E7%B4%A2%E5%BC%95%E6%93%8E/</loc>
+    <loc>https://haifs.com/categories/Docker/</loc>
     <lastmod>2026-03-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -1784,14 +1784,14 @@
   </url>
   
   <url>
-    <loc>https://haifs.com/categories/OLAP/</loc>
+    <loc>https://haifs.com/categories/Netty/</loc>
     <lastmod>2026-03-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>https://haifs.com/categories/Netty/</loc>
+    <loc>https://haifs.com/categories/OLAP/</loc>
     <lastmod>2026-03-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
