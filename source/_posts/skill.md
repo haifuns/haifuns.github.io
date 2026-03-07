@@ -8,7 +8,7 @@ date: 2026-03-06 19:30:00
 
 ---
 
-# 什么是Skill？
+# 什么是 Skill
 
 Agent Skills 最初是 Anthropic 在 2025.12 提出，用于解决一个问题：每次都需要重新教 AI，Skill = 可复用的工作方法。
 
