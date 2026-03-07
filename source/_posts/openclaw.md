@@ -138,7 +138,7 @@ docker compose exec openclaw-gateway openclaw channels add
 ```bash
 # 修改配置，允许远程访问
 vim ~/.openclaw/openclaw.json
-#{"gateway":{"bind":"lan","controlUi":{"allowedOrigins":["10.18.*.*:18798"]}}}
+#{"gateway":{"bind":"lan","controlUi":{"allowedOrigins":["10.18.*.*:18789"]}}}
  
 # nginx 反向代理
 location /openclaw/ {
