@@ -3,7 +3,7 @@ author: haif.
 tags:
   - Prompt
 categories:
-  - AGI
+  - AI
 date: 2025-08-27 20:15:00
 
 ---
