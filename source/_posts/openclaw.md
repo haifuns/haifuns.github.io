@@ -3,7 +3,7 @@ author: haif.
 tags:
   - Agent
 categories:
-  - AGI
+  - AI
 date: 2026-03-05 14:00:00
 
 ---
