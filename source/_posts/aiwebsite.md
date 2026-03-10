@@ -3,7 +3,7 @@ author: haif.
 tags:
   - 工具
 categories:
-  - AGI
+  - AI
 date: 2026-03-10 14:00:00
 
 ---
