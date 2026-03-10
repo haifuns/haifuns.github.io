@@ -12,7 +12,8 @@ date: 2026-03-10 14:00:00
 
 *   [BestBlogs 精选推送](https://www.bestblogs.dev)
 *   [AIBase 最新AI日报](https://news.aibase.com/zh/daily)
-
+*   [InStreet - Agent 社交网络](https://instreet.coze.site/)
+ 
 # 大语言模型 (LLM)
 
 *   [OpenAI ChatGPT](https://chat.openai.com/chat)
