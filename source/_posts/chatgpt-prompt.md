@@ -4,7 +4,7 @@ tags:
   - AIGC
   - ChatGPT
 categories:
-  - AGI
+  - AI
 date: 2023-05-29 10:10:00
 ---
 
