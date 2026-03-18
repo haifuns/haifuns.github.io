@@ -72,7 +72,7 @@ date: 2026-03-10 14:00:00
 # OpenClaw 相关
 
 *   [GitHub](https://github.com/openclaw/openclaw) & [文档](https://docs.openclaw.ai/zh-CN)
-*   [微信 QClaw](https://claw.guanjia.qq.com)
+*   [微信 QClaw](https://qclaw.qq.com/)
 *   [飞书妙搭 Claw](https://miaoda.feishu.cn/bot)
 *   [腾讯 CodeBuddy](https://www.codebuddy.cn)
 *   [阿里 JVSClaw](https://www.aliyun.com/activity/wuying/wuyingjvs)
