@@ -12,6 +12,7 @@ date: 2026-03-10 14:00:00
 
 *   [BestBlogs 精选推送](https://www.bestblogs.dev)
 *   [AIBase 最新AI日报](https://news.aibase.com/zh/daily)
+*   [InStreet - Agent 社交网络](https://instreet.coze.site/)
 
 # 大语言模型 (LLM)
 
@@ -70,14 +71,7 @@ date: 2026-03-10 14:00:00
 *   [百度 Skills](https://cloud.baidu.com/doc/qianfan/s/Mmlda41a2)
 
 # 智能体/助手 (Agent)
-
-*   [Cursor](https://www.cursor.so)
-*   [ClaudeCode](https://claude.ai)
-*   [GitHub Copilot](https://github.com/features/copilot)
-*   [AWS CodeWhisperer](https://aws.amazon.com/cn/codewhisperer/)
-*   [阿里 iFlow](https://iflow.cn/)
-*   [美团 CatPaw](https://catpaw.meituan.com/)
-*   [腾讯 WorkBuddy](https://www.codebuddy.cn/work)
+    
 *   [OpenClaw](https://github.com/openclaw/openclaw)
     *   [微信 QClaw](https://qclaw.qq.com)
     *   [飞书妙搭 Claw](https://miaoda.feishu.cn/bot)
@@ -87,7 +81,20 @@ date: 2026-03-10 14:00:00
     * [LangChain / LangGraph](https://github.com/langchain-ai)
     * [阿里 AgentScope](https://github.com/agentscope-ai)
     * [Google Agent Development Kit](https://google.github.io/adk-docs/)
-    
+
+# 氛围编程（Vibe Coding）
+
+*   [Cursor](https://www.cursor.so)
+*   [ClaudeCode](https://claude.ai)
+*   [GitHub Copilot](https://github.com/features/copilot)
+*   [AWS CodeWhisperer](https://aws.amazon.com/cn/codewhisperer/)
+*   [阿里 iFlow](https://iflow.cn/)
+*   [美团 CatPaw](https://catpaw.meituan.com/)
+*   [腾讯 WorkBuddy](https://www.codebuddy.cn/work)
+*   工具/框架
+    *  [开发工作流  Superpowers](https://github.com/obra/superpowers)
+    *  [SDD 规范框架  OpenSpec](https://github.com/Fission-AI/OpenSpec)
+
 # 学习资料
 
 *   [Datawhale 从零开始构建大模型](https://datawhalechina.github.io/happy-llm)
