@@ -12,7 +12,6 @@ date: 2026-03-10 14:00:00
 
 *   [BestBlogs 精选推送](https://www.bestblogs.dev)
 *   [AIBase 最新AI日报](https://news.aibase.com/zh/daily)
-*   [InStreet - Agent 社交网络](https://instreet.coze.site/)
 
 # 大语言模型 (LLM)
 
@@ -78,9 +77,10 @@ date: 2026-03-10 14:00:00
     *   [腾讯 CodeBuddy](https://www.codebuddy.cn)
     *   [阿里 JVSClaw](https://www.aliyun.com/activity/wuying/wuyingjvs)
 *   开发框架
-    * [LangChain / LangGraph](https://github.com/langchain-ai)
-    * [阿里 AgentScope](https://github.com/agentscope-ai)
-    * [Google Agent Development Kit](https://google.github.io/adk-docs/)
+    *   [LangChain / LangGraph](https://github.com/langchain-ai)
+    *   [阿里 AgentScope](https://github.com/agentscope-ai)
+    *   [Google ADK](https://google.github.io/adk-docs/)
+    *   [字节 DeerFlow](https://github.com/bytedance/deer-flow)
 
 # 氛围编程（Vibe Coding）
 
@@ -92,8 +92,9 @@ date: 2026-03-10 14:00:00
 *   [美团 CatPaw](https://catpaw.meituan.com/)
 *   [腾讯 WorkBuddy](https://www.codebuddy.cn/work)
 *   工具/框架
-    *  [开发工作流  Superpowers](https://github.com/obra/superpowers)
-    *  [SDD 规范框架  OpenSpec](https://github.com/Fission-AI/OpenSpec)
+    *   [开发工作流  Superpowers](https://github.com/obra/superpowers)
+    *   [轻量规范框架 GSD](https://github.com/gsd-build/get-shit-done)
+    *   [规范驱动(SDD)框架  OpenSpec](https://github.com/Fission-AI/OpenSpec)
 
 # 学习资料
 
