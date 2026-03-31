@@ -85,12 +85,13 @@ date: 2026-03-10 14:00:00
 # 氛围编程（Vibe Coding）
 
 *   [Cursor](https://www.cursor.so)
-*   [ClaudeCode](https://claude.ai)
+*   [Claude Code](https://claude.ai)
+*   [腾讯 WorkBuddy](https://www.codebuddy.cn/work)
+*   [字节 TRAE](https://www.trae.cn/)
+*   [阿里 通义灵码](https://lingma.aliyun.com/)，[阿里 iFlow](https://iflow.cn/)
+*   [美团 CatPaw](https://catpaw.meituan.com/)
 *   [GitHub Copilot](https://github.com/features/copilot)
 *   [AWS CodeWhisperer](https://aws.amazon.com/cn/codewhisperer/)
-*   [阿里 iFlow](https://iflow.cn/)
-*   [美团 CatPaw](https://catpaw.meituan.com/)
-*   [腾讯 WorkBuddy](https://www.codebuddy.cn/work)
 *   工具/框架
     *   [开发工作流  Superpowers](https://github.com/obra/superpowers)
     *   [轻量规范框架 GSD](https://github.com/gsd-build/get-shit-done)
