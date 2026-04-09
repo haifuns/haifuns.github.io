@@ -12,8 +12,9 @@ date: 2026-03-10 14:00:00
 
 *   [BestBlogs 精选推送](https://www.bestblogs.dev)
 *   [AIBase 最新AI日报](https://news.aibase.com/zh/daily)
+*   [InStreet - Agent 社交网络](https://instreet.coze.site/)
 
-# 大语言模型 (LLM)
+# Chat Model
 
 *   [OpenAI ChatGPT](https://chat.openai.com/chat)
 *   [Google Gemini](https://gemini.google.com/)
@@ -30,7 +31,7 @@ date: 2026-03-10 14:00:00
 *   [DeepSeek](https://www.deepseek.com)
 *   [零一万物 Yi](https://www.lingyiwanwu.com)
 
-# 图像模型
+# IMG Model
 
 *   [CivitAI](https://civitai.com)
 *   [Midjourney](https://www.midjourney.com)
@@ -45,22 +46,19 @@ date: 2026-03-10 14:00:00
 *   [POE](https://poe.com/)
 *   [Cherry Studio](https://www.cherry-ai.com/)
 
-# 提示词 (Prompt)
-
-*   [提示词优化器](https://github.com/linshenkx/prompt-optimizer)
-*   [图像生成提示词灵感库](https://aiart.pics/)
-
-# 提示词（Prompt）
+# Prompt
 
 *   [Prompt Engineering Guide](https://www.promptingguide.ai/zh)
 *   [prompts.chat](https://prompts.chat/prompts)
+*   [提示词优化器](https://github.com/linshenkx/prompt-optimizer)
+*   [图像生成提示词灵感库](https://aiart.pics/)
 
-# 模型上下文协议（MCP）
+# MCP
 
 *   [What is MCP？](https://modelcontextprotocol.io/docs/getting-started/intro)
 *   [Awesome MCP Servers](https://github.com/punkpeye/awesome-mcp-servers)
 
-# 技能 (Skills)
+# Skills
 
 *   [ClawHub Skills](https://clawhub.ai/skills)
 *   [Awesome OpenClaw Skills](https://github.com/VoltAgent/awesome-openclaw-skills)
@@ -68,8 +66,9 @@ date: 2026-03-10 14:00:00
 *   [Skills.sh](https://skills.sh/)
 *   [腾讯 SkillHub](https://skillhub.tencent.com/)
 *   [百度 Skills](https://cloud.baidu.com/doc/qianfan/s/Mmlda41a2)
+*   [SafeSkill 安全扫描](https://safeskill.cn/)
 
-# 智能体/助手 (Agent)
+# Agent
     
 *   [OpenClaw](https://github.com/openclaw/openclaw)
     *   [微信 QClaw](https://qclaw.qq.com)
@@ -82,7 +81,7 @@ date: 2026-03-10 14:00:00
     *   [Google ADK](https://google.github.io/adk-docs/)
     *   [字节 DeerFlow](https://github.com/bytedance/deer-flow)
 
-# 氛围编程（Vibe Coding）
+# Vibe Coding
 
 *   [Cursor](https://www.cursor.so)
 *   [Claude Code](https://claude.ai)
@@ -103,3 +102,4 @@ date: 2026-03-10 14:00:00
 *   [Datawhale 面向开发者的大模型手册](https://datawhalechina.github.io/llm-cookbook)
 *   [Datawhale 从零开始构建智能体](https://datawhalechina.github.io/hello-agents)
 *   [Datawhale RAG技术全栈指南](https://datawhalechina.github.io/all-in-rag)
+*   [Claude Code 工程分析](https://ccb.agent-aura.top/docs/introduction/what-is-claude-code)
