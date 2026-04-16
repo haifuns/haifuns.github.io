@@ -75,6 +75,7 @@ date: 2026-03-10 14:00:00
     *   [飞书妙搭 Claw](https://miaoda.feishu.cn/bot)
     *   [腾讯 CodeBuddy](https://www.codebuddy.cn)
     *   [阿里 JVSClaw](https://www.aliyun.com/activity/wuying/wuyingjvs)
+*   [Hermes Agent](https://github.com/NousResearch/hermes-agent)
 *   开发框架
     *   [LangChain / LangGraph](https://github.com/langchain-ai)
     *   [阿里 AgentScope](https://github.com/agentscope-ai)
@@ -85,16 +86,19 @@ date: 2026-03-10 14:00:00
 
 *   [Cursor](https://www.cursor.so)
 *   [Claude Code](https://claude.ai)
-*   [腾讯 WorkBuddy](https://www.codebuddy.cn/work)
+    *   [Claude Code 最佳实践](https://github.com/shanraisshan/claude-code-best-practice)
+*   [腾讯 CodeBuddy & WorkBuddy](https://www.codebuddy.cn)
 *   [字节 TRAE](https://www.trae.cn/)
 *   [阿里 通义灵码](https://lingma.aliyun.com/)，[阿里 iFlow](https://iflow.cn/)
 *   [美团 CatPaw](https://catpaw.meituan.com/)
 *   [GitHub Copilot](https://github.com/features/copilot)
 *   [AWS CodeWhisperer](https://aws.amazon.com/cn/codewhisperer/)
 *   工具/框架
-    *   [开发工作流  Superpowers](https://github.com/obra/superpowers)
-    *   [轻量规范框架 GSD](https://github.com/gsd-build/get-shit-done)
-    *   [规范驱动(SDD)框架  OpenSpec](https://github.com/Fission-AI/OpenSpec)
+    *   [Claude Code 配置集合 - Everything Claude Code ](https://github.com/affaan-m/everything-claude-code)
+    *   [开发工作流 - Superpowers](https://github.com/obra/superpowers)
+    *   [轻量规范框架 - Get Shit Done](https://github.com/gsd-build/get-shit-done)
+    *   [规范驱动(SDD)框架 - OpenSpec](https://github.com/Fission-AI/OpenSpec)
+    *   [规范驱动(SDD)套件 - Spec Kit](https://github.com/github/spec-kit)
 
 # 学习资料
 
