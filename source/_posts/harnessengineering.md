@@ -1,4 +1,4 @@
-title: 【AI】Harness Engineering：构建可靠 AI Agent 系统的工程蓝图
+title: 【AI】Harness Engineering：构建可靠 AI Agent 系统的工程范式
 author: haif.
 tags:
   - Harness
