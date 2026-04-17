@@ -6,15 +6,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="一句话解释Harness Engineering（驾驭工程） 是一种 AI 工程新范式。其核心是：在不改动大模型本身参数的前提下，为 AI Agent 构建一套外部管控系统——管它的输出、管它的行为、管它的安全——把它从横冲直撞的「天才」变成企业能用、能靠得住的「可靠员工」。  为什么会出现这个概念？AI Agent 的「天才病」用过大模型写代码的人都有类似体验：让它写一个函数，强；让它写一个有">
+    <meta name="description" content="什么是 Harness Engineering？Harness Engineering（驾驭工程） 是一种为 AI Agent 搭建可运行、可约束工程环境的系统性开发范式。其核心等式为：  Agent &#x3D; Model + Harness  Model 提供底层智能，Harness 是让这个智能能够可靠、可控运行的外循环基础设施。评估一个 Agent 的效果，评估的是”模型 + 驾驭系统”这个组合体">
 <meta property="og:type" content="article">
-<meta property="og:title" content="【AI】Harness Engineering：让 AI Agent 可靠完成任务的工程范式">
+<meta property="og:title" content="【AI】Harness Engineering：构建可靠 AI Agent 系统的工程蓝图">
 <meta property="og:url" content="https://haifs.com/2026/04/11/harnessengineering/index.html">
 <meta property="og:site_name" content="haif&#39;s blog">
-<meta property="og:description" content="一句话解释Harness Engineering（驾驭工程） 是一种 AI 工程新范式。其核心是：在不改动大模型本身参数的前提下，为 AI Agent 构建一套外部管控系统——管它的输出、管它的行为、管它的安全——把它从横冲直撞的「天才」变成企业能用、能靠得住的「可靠员工」。  为什么会出现这个概念？AI Agent 的「天才病」用过大模型写代码的人都有类似体验：让它写一个函数，强；让它写一个有">
+<meta property="og:description" content="什么是 Harness Engineering？Harness Engineering（驾驭工程） 是一种为 AI Agent 搭建可运行、可约束工程环境的系统性开发范式。其核心等式为：  Agent &#x3D; Model + Harness  Model 提供底层智能，Harness 是让这个智能能够可靠、可控运行的外循环基础设施。评估一个 Agent 的效果，评估的是”模型 + 驾驭系统”这个组合体">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2026-04-11T02:20:00.000Z">
-<meta property="article:modified_time" content="2026-04-16T08:32:32.664Z">
+<meta property="article:modified_time" content="2026-04-17T05:08:21.921Z">
 <meta property="article:author" content="haif.">
 <meta property="article:tag" content="Harness">
 <meta property="article:tag" content="Agent">
@@ -38,7 +38,7 @@
       
     
     <!-- title -->
-    <title>【AI】Harness Engineering：让 AI Agent 可靠完成任务的工程范式</title>
+    <title>【AI】Harness Engineering：构建可靠 AI Agent 系统的工程蓝图</title>
     <!-- async scripts -->
     <!-- Google Analytics -->
 
@@ -114,23 +114,23 @@
     <div id="share" style="display: none">
       <ul>
   <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifs.com/2026/04/11/harnessengineering/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifs.com/2026/04/11/harnessengineering/&text=【AI】Harness Engineering：让 AI Agent 可靠完成任务的工程范式"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifs.com/2026/04/11/harnessengineering/&title=【AI】Harness Engineering：让 AI Agent 可靠完成任务的工程范式"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifs.com/2026/04/11/harnessengineering/&is_video=false&description=【AI】Harness Engineering：让 AI Agent 可靠完成任务的工程范式"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=【AI】Harness Engineering：让 AI Agent 可靠完成任务的工程范式&body=Check out this article: https://haifs.com/2026/04/11/harnessengineering/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifs.com/2026/04/11/harnessengineering/&title=【AI】Harness Engineering：让 AI Agent 可靠完成任务的工程范式"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifs.com/2026/04/11/harnessengineering/&title=【AI】Harness Engineering：让 AI Agent 可靠完成任务的工程范式"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifs.com/2026/04/11/harnessengineering/&title=【AI】Harness Engineering：让 AI Agent 可靠完成任务的工程范式"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifs.com/2026/04/11/harnessengineering/&title=【AI】Harness Engineering：让 AI Agent 可靠完成任务的工程范式"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifs.com/2026/04/11/harnessengineering/&name=【AI】Harness Engineering：让 AI Agent 可靠完成任务的工程范式&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifs.com/2026/04/11/harnessengineering/&t=【AI】Harness Engineering：让 AI Agent 可靠完成任务的工程范式"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifs.com/2026/04/11/harnessengineering/&text=【AI】Harness Engineering：构建可靠 AI Agent 系统的工程蓝图"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifs.com/2026/04/11/harnessengineering/&title=【AI】Harness Engineering：构建可靠 AI Agent 系统的工程蓝图"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifs.com/2026/04/11/harnessengineering/&is_video=false&description=【AI】Harness Engineering：构建可靠 AI Agent 系统的工程蓝图"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=【AI】Harness Engineering：构建可靠 AI Agent 系统的工程蓝图&body=Check out this article: https://haifs.com/2026/04/11/harnessengineering/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifs.com/2026/04/11/harnessengineering/&title=【AI】Harness Engineering：构建可靠 AI Agent 系统的工程蓝图"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifs.com/2026/04/11/harnessengineering/&title=【AI】Harness Engineering：构建可靠 AI Agent 系统的工程蓝图"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifs.com/2026/04/11/harnessengineering/&title=【AI】Harness Engineering：构建可靠 AI Agent 系统的工程蓝图"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifs.com/2026/04/11/harnessengineering/&title=【AI】Harness Engineering：构建可靠 AI Agent 系统的工程蓝图"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifs.com/2026/04/11/harnessengineering/&name=【AI】Harness Engineering：构建可靠 AI Agent 系统的工程蓝图&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifs.com/2026/04/11/harnessengineering/&t=【AI】Harness Engineering：构建可靠 AI Agent 系统的工程蓝图"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
     
     
       <div id="toc">
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E5%8F%A5%E8%AF%9D%E8%A7%A3%E9%87%8A"><span class="toc-number">1.</span> <span class="toc-text">一句话解释</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BC%9A%E5%87%BA%E7%8E%B0%E8%BF%99%E4%B8%AA%E6%A6%82%E5%BF%B5%EF%BC%9F"><span class="toc-number">2.</span> <span class="toc-text">为什么会出现这个概念？</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#AI-Agent-%E7%9A%84%E3%80%8C%E5%A4%A9%E6%89%8D%E7%97%85%E3%80%8D"><span class="toc-number">2.1.</span> <span class="toc-text">AI Agent 的「天才病」</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%8E%E3%80%8C%E8%B0%83%E6%A8%A1%E5%9E%8B%E3%80%8D%E5%88%B0%E3%80%8C%E6%90%AD%E7%8E%AF%E5%A2%83%E3%80%8D"><span class="toc-number">2.2.</span> <span class="toc-text">从「调模型」到「搭环境」</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E5%85%AC%E5%BC%8F"><span class="toc-number">3.</span> <span class="toc-text">核心公式</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Harness-%E7%9A%84%E5%85%AD%E5%A4%A7%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6"><span class="toc-number">4.</span> <span class="toc-text">Harness 的六大核心组件</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E7%BA%A6%E6%9D%9F%EF%BC%88Constraints%EF%BC%89"><span class="toc-number">4.1.</span> <span class="toc-text">1. 约束（Constraints）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E4%B8%8A%E4%B8%8B%E6%96%87%E6%9E%B6%E6%9E%84%EF%BC%88Context-Architecture%EF%BC%89"><span class="toc-number">4.2.</span> <span class="toc-text">2. 上下文架构（Context Architecture）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E9%AA%8C%E8%AF%81%E5%9B%9E%E8%B7%AF%EF%BC%88Self-Validation-Loop%EF%BC%89"><span class="toc-number">4.3.</span> <span class="toc-text">3. 验证回路（Self-Validation Loop）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E4%BF%AE%E5%A4%8D%E6%9C%BA%E5%88%B6%EF%BC%88Error-Recovery%EF%BC%89"><span class="toc-number">4.4.</span> <span class="toc-text">4. 修复机制（Error Recovery）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E7%8A%B6%E6%80%81%E7%AE%A1%E7%90%86%EF%BC%88State-Management%EF%BC%89"><span class="toc-number">4.5.</span> <span class="toc-text">5. 状态管理（State Management）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E4%B8%8E%E5%8D%8F%E4%BD%9C%EF%BC%88Lifecycle-amp-Collaboration%EF%BC%89"><span class="toc-number">4.6.</span> <span class="toc-text">6. 生命周期与协作（Lifecycle &amp; Collaboration）</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%90%BD%E5%9C%B0%E4%B8%89%E9%98%B6%E6%AE%B5%EF%BC%9A%E4%B8%8D%E8%A6%81%E4%B8%80%E6%AD%A5%E5%88%B0%E4%BD%8D"><span class="toc-number">5.</span> <span class="toc-text">落地三阶段：不要一步到位</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Phase-1%EF%BC%9A%E4%BF%A1%E6%81%AF%E5%B1%82%EF%BC%881-2-%E5%A4%A9%EF%BC%89"><span class="toc-number">5.1.</span> <span class="toc-text">Phase 1：信息层（1-2 天）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Phase-2%EF%BC%9A%E7%BA%A6%E6%9D%9F%E5%B1%82%EF%BC%883-5-%E5%A4%A9%EF%BC%89"><span class="toc-number">5.2.</span> <span class="toc-text">Phase 2：约束层（3-5 天）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Phase-3%EF%BC%9A%E8%87%AA%E5%8A%A8%E5%8C%96%E5%B1%82%EF%BC%881-2-%E5%91%A8%EF%BC%89"><span class="toc-number">5.3.</span> <span class="toc-text">Phase 3：自动化层（1-2 周）</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%8D%E6%A8%A1%E5%BC%8F%EF%BC%9A%E4%B8%83%E4%B8%AA%E5%B8%B8%E8%A7%81%E8%AF%AF%E5%8C%BA"><span class="toc-number">6.</span> <span class="toc-text">反模式：七个常见误区</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%8E-SDD%EF%BC%88Spec-Driven-Development%EF%BC%89%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="toc-number">7.</span> <span class="toc-text">与 SDD（Spec-Driven Development）的关系</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9C%AA%E6%9D%A5%E6%96%B9%E5%90%91%EF%BC%9AMeta-Harness"><span class="toc-number">8.</span> <span class="toc-text">未来方向：Meta-Harness</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">9.</span> <span class="toc-text">总结</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF-Harness-Engineering%EF%BC%9F"><span class="toc-number">1.</span> <span class="toc-text">什么是 Harness Engineering？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%AE%83%EF%BC%9F"><span class="toc-number">2.</span> <span class="toc-text">为什么需要它？</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%8C%83%E5%BC%8F%E6%BC%94%E8%BF%9B"><span class="toc-number">2.1.</span> <span class="toc-text">范式演进</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E6%94%AF%E6%92%91"><span class="toc-number">2.2.</span> <span class="toc-text">数据支撑</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E7%90%86%E5%BF%B5"><span class="toc-number">3.</span> <span class="toc-text">核心理念</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9E%B6%E6%9E%84%EF%BC%9A%E4%B8%83%E5%B1%82%E5%A4%96%E5%BE%AA%E7%8E%AF%E7%B3%BB%E7%BB%9F"><span class="toc-number">4.</span> <span class="toc-text">架构：七层外循环系统</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%AD%E5%A4%A7%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6"><span class="toc-number">5.</span> <span class="toc-text">六大核心组件</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E4%B8%BB%E5%BE%AA%E7%8E%AF%E5%BC%95%E6%93%8E%EF%BC%88Agent-Loop%EF%BC%89"><span class="toc-number">5.1.</span> <span class="toc-text">1. 主循环引擎（Agent Loop）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%B7%A5%E5%85%B7%E6%B2%BB%E7%90%86%E4%B8%8E%E5%AE%89%E5%85%A8%E6%A8%A1%E5%9E%8B"><span class="toc-number">5.2.</span> <span class="toc-text">2. 工具治理与安全模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E4%B8%8A%E4%B8%8B%E6%96%87%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F"><span class="toc-number">5.3.</span> <span class="toc-text">3. 上下文管理系统</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E9%AA%8C%E8%AF%81%E4%B8%8E%E8%B4%A8%E9%87%8F%E9%97%A8%E7%A6%81%EF%BC%88Validation-Gates%EF%BC%89"><span class="toc-number">5.4.</span> <span class="toc-text">4. 验证与质量门禁（Validation Gates）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E7%8A%B6%E6%80%81%E6%8C%81%E4%B9%85%E5%8C%96%E4%B8%8E%E6%95%85%E9%9A%9C%E6%81%A2%E5%A4%8D"><span class="toc-number">5.5.</span> <span class="toc-text">5. 状态持久化与故障恢复</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E5%8F%AF%E6%89%A9%E5%B1%95%E6%8A%80%E8%83%BD%E7%B3%BB%E7%BB%9F%EF%BC%88Skills%EF%BC%89"><span class="toc-number">5.6.</span> <span class="toc-text">6. 可扩展技能系统（Skills）</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A4%9A-Agent-%E5%8D%8F%E8%B0%83%E4%B8%8E%E6%95%85%E9%9A%9C%E9%9A%94%E7%A6%BB"><span class="toc-number">6.</span> <span class="toc-text">多 Agent 协调与故障隔离</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%B8%90%E8%BF%9B%E5%BC%8F%E8%90%BD%E5%9C%B0%E7%AD%96%E7%95%A5"><span class="toc-number">7.</span> <span class="toc-text">渐进式落地策略</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E5%8F%8D%E6%A8%A1%E5%BC%8F"><span class="toc-number">8.</span> <span class="toc-text">常见反模式</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%8E-SDD%EF%BC%88%E8%A7%84%E8%8C%83%E9%A9%B1%E5%8A%A8%E5%BC%80%E5%8F%91%EF%BC%89%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="toc-number">9.</span> <span class="toc-text">与 SDD（规范驱动开发）的关系</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9C%AA%E6%9D%A5%E6%96%B9%E5%90%91%EF%BC%9AMeta-Harness"><span class="toc-number">10.</span> <span class="toc-text">未来方向：Meta-Harness</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">11.</span> <span class="toc-text">总结</span></a></li></ol>
       </div>
     
   </span>
@@ -143,7 +143,7 @@
   <header>
     
     <h1 class="posttitle p-name" itemprop="name headline">
-        【AI】Harness Engineering：让 AI Agent 可靠完成任务的工程范式
+        【AI】Harness Engineering：构建可靠 AI Agent 系统的工程蓝图
     </h1>
 
 
@@ -180,11 +180,13 @@
   
 
   <div class="content e-content" itemprop="articleBody">
-    <h1 id="一句话解释"><a href="#一句话解释" class="headerlink" title="一句话解释"></a>一句话解释</h1><p><strong>Harness Engineering（驾驭工程）</strong> 是一种 AI 工程新范式。其核心是：在不改动大模型本身参数的前提下，为 AI Agent 构建一套外部管控系统——管它的输出、管它的行为、管它的安全——把它从横冲直撞的「天才」变成企业能用、能靠得住的「可靠员工」。</p>
+    <h1 id="什么是-Harness-Engineering？"><a href="#什么是-Harness-Engineering？" class="headerlink" title="什么是 Harness Engineering？"></a>什么是 Harness Engineering？</h1><p><strong>Harness Engineering（驾驭工程）</strong> 是一种为 AI Agent 搭建可运行、可约束工程环境的系统性开发范式。其核心等式为：</p>
+<blockquote>
+<p><strong>Agent = Model + Harness</strong></p>
+</blockquote>
+<p>Model 提供底层智能，Harness 是让这个智能能够可靠、可控运行的外循环基础设施。评估一个 Agent 的效果，评估的是”模型 + 驾驭系统”这个组合体，而非模型单体。</p>
 <hr>
-<h1 id="为什么会出现这个概念？"><a href="#为什么会出现这个概念？" class="headerlink" title="为什么会出现这个概念？"></a>为什么会出现这个概念？</h1><h2 id="AI-Agent-的「天才病」"><a href="#AI-Agent-的「天才病」" class="headerlink" title="AI Agent 的「天才病」"></a>AI Agent 的「天才病」</h2><p>用过大模型写代码的人都有类似体验：让它写一个函数，强；让它写一个有 15 个文件的项目，崩。它会忘记前面文件的接口定义，会重复定义同一个变量，会在「修复」一个 bug 时引入三个新 bug，会在任务跑到一半时突然停下来问你要不要喝咖啡。</p>
-<p>这不是因为模型不够聪明，而是因为<strong>模型缺乏工程化运行环境</strong>。</p>
-<h2 id="从「调模型」到「搭环境」"><a href="#从「调模型」到「搭环境」" class="headerlink" title="从「调模型」到「搭环境」"></a>从「调模型」到「搭环境」</h2><p>行业经历了三个阶段：</p>
+<h1 id="为什么需要它？"><a href="#为什么需要它？" class="headerlink" title="为什么需要它？"></a>为什么需要它？</h1><h2 id="范式演进"><a href="#范式演进" class="headerlink" title="范式演进"></a>范式演进</h2><p>AI 工程经历了三个阶段的演进：</p>
 <table>
 <thead>
 <tr>
@@ -194,103 +196,136 @@
 </tr>
 </thead>
 <tbody><tr>
-<td>Prompt Engineering（提示词工程）</td>
+<td>Prompt Engineering</td>
 <td>怎么问模型才答得好</td>
-<td>写更好的 prompt</td>
+<td>优化 prompt</td>
 </tr>
 <tr>
-<td>Context Engineering（上下文工程）</td>
+<td>Context Engineering</td>
 <td>怎么给模型足够的信息上下文</td>
 <td>RAG、文档注入</td>
 </tr>
 <tr>
-<td><strong>Harness Engineering（驾驭工程）</strong></td>
+<td><strong>Harness Engineering</strong></td>
 <td><strong>如何让 Agent 在长程任务中稳定可靠</strong></td>
-<td><strong>构建完整运行控制系统</strong></td>
+<td><strong>构建完整外循环控制系统</strong></td>
+</tr>
+</tbody></table>
+<p>AI Agent 在复杂任务中反复出错，往往不是因为模型不够智能，而是因为它”看不见”项目的隐式规则——架构分层、命名规范、依赖约定。Harness 将这些规则变得对 AI 可见且可验证。</p>
+<h2 id="数据支撑"><a href="#数据支撑" class="headerlink" title="数据支撑"></a>数据支撑</h2><ul>
+<li><strong>LangChain 2026 年 3 月实验</strong>：仅通过优化 Harness，同一模型在 Terminal Bench 2.0 上的任务通过率从 52.8% 提升至 66.5%，排名跃升前五。瓶颈往往在基础设施，而非模型智能本身。</li>
+<li><strong>OpenAI 2026 年 2 月案例</strong>：3 名工程师在 5 个月内零手写代码，完全依靠 Agent 生成约 100 万行代码，完成 1500 个 Pull Request，效率提升约 90%。背后依赖的正是成熟的 Harness 系统。</li>
+</ul>
+<hr>
+<h1 id="核心理念"><a href="#核心理念" class="headerlink" title="核心理念"></a>核心理念</h1><p>Harness Engineering 带来了工程师角色的根本性转变：</p>
+<ol>
+<li>**从”编码执行”到”环境设计”**：不再手写每一行代码，而是将业务逻辑、工程判断和团队规范编码为机器可读的约束系统。</li>
+<li>**从”优化单点”到”构建系统”**：焦点从优化单次交互，转向设计和维护能让 Agent 自主、可靠、大规模工作的完整工程系统。</li>
+<li><strong>安全默认化</strong>：在所有设计环节贯彻”默认拒绝、最小权限”原则，构建纵深防御体系。</li>
+<li><strong>系统进化性</strong>：将运行中的失败经验自动沉淀为新规则，使 Harness 越用越完善。</li>
+</ol>
+<hr>
+<h1 id="架构：七层外循环系统"><a href="#架构：七层外循环系统" class="headerlink" title="架构：七层外循环系统"></a>架构：七层外循环系统</h1><p>Harness 的宏观架构是围绕核心模型（内循环）的七层外循环控制系统，构成从目标输入到可靠输出的完整闭环：</p>
+<table>
+<thead>
+<tr>
+<th>层级</th>
+<th>核心职责</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1. 目标层（意图）</td>
+<td>结构化定义任务目标，是控制回路的起点</td>
+</tr>
+<tr>
+<td>2. 引导层（前馈控制）</td>
+<td>AGENTS.md 与架构指南，提供确定性规则和推断性原则</td>
+</tr>
+<tr>
+<td>3. 执行层（Agent 循环）</td>
+<td>Planner / Generator / Evaluator 三角色循环，完成计划、执行、评估</td>
+</tr>
+<tr>
+<td>4. 能力层 &amp; 交互层</td>
+<td>工具系统与上下文管理，按需注入技能，对抗信息膨胀</td>
+</tr>
+<tr>
+<td>5. 约束与反馈层（反馈控制）</td>
+<td>Sensors &amp; Hooks，自动化校验，决定继续、停止或回退</td>
+</tr>
+<tr>
+<td>6. 状态与恢复层</td>
+<td>持久化任务进度与会话状态，支持跨会话可靠恢复</td>
+</tr>
+<tr>
+<td>7. 进化层（反熵治理）</td>
+<td>将失败经验沉淀为新规则，自动清理技术债，实现系统自我演进</td>
 </tr>
 </tbody></table>
 <hr>
-<h1 id="核心公式"><a href="#核心公式" class="headerlink" title="核心公式"></a>核心公式</h1><p>LangChain 给出了最精准的技术定义：</p>
-<blockquote>
-<p><strong>Agent = Model + Harness</strong></p>
-<p>模型提供智能，Harness 让这个智能能用起来。</p>
-</blockquote>
-<p>类比来说：</p>
+<h1 id="六大核心组件"><a href="#六大核心组件" class="headerlink" title="六大核心组件"></a>六大核心组件</h1><h2 id="1-主循环引擎（Agent-Loop）"><a href="#1-主循环引擎（Agent-Loop）" class="headerlink" title="1. 主循环引擎（Agent Loop）"></a>1. 主循环引擎（Agent Loop）</h2><p>封装完整的查询生命周期，采用异步生成器管理对话流，天然支持流式响应、中断与背压控制。每个会话创建独立实例，统一管理消息历史、会话状态、权限与预算。</p>
+<h2 id="2-工具治理与安全模型"><a href="#2-工具治理与安全模型" class="headerlink" title="2. 工具治理与安全模型"></a>2. 工具治理与安全模型</h2><p>采用 Fail-Closed（默认拒绝）策略，构建五级纵深防御：工具不可见（Deny）→ 工具级黑白名单 → 通用规则检查 → 运行模式限制 → 动态分类器判断。高级做法是让模型通过写代码调用工具，将工具发现与执行移出模型上下文，提升效率并降低不确定性。</p>
+<h2 id="3-上下文管理系统"><a href="#3-上下文管理系统" class="headerlink" title="3. 上下文管理系统"></a>3. 上下文管理系统</h2><p>应对上下文窗口限制，实现渐进式四级压缩策略按需触发（轻量修剪 → 缓存压缩 → 读时投影 → LLM 智能摘要）。通过技能系统（Skills）按需动态注入能力描述，而非启动时全量加载。建立分层记忆系统区分项目级、持久化和会话级知识。</p>
+<h2 id="4-验证与质量门禁（Validation-Gates）"><a href="#4-验证与质量门禁（Validation-Gates）" class="headerlink" title="4. 验证与质量门禁（Validation Gates）"></a>4. 验证与质量门禁（Validation Gates）</h2><p>代码生成后强制执行不可跳过的验证管道，将团队约定编码为可执行规则（语法检查、编译检查、架构依赖合规性检查等）。支持预验证（Pre-validation）在高风险操作前提前拦截，实现”事前预防”。</p>
+<h2 id="5-状态持久化与故障恢复"><a href="#5-状态持久化与故障恢复" class="headerlink" title="5. 状态持久化与故障恢复"></a>5. 状态持久化与故障恢复</h2><p>将任务状态、中间决策和已完成子目标持久化到版本控制管理的文件中，作为可版本化的检查点。通过 Transcript 与 Sidecar 机制保存完整会话轨迹，支持从精确断点恢复，无需从头重来。</p>
+<h2 id="6-可扩展技能系统（Skills）"><a href="#6-可扩展技能系统（Skills）" class="headerlink" title="6. 可扩展技能系统（Skills）"></a>6. 可扩展技能系统（Skills）</h2><p>技能以 Markdown 文件形式存在（含 frontmatter 元数据），降低扩展门槛，易于版本化管理。根据任务动态将相关技能描述注入 Agent 上下文，提供精准的能力指引，实现零代码扩展。</p>
+<hr>
+<h1 id="多-Agent-协调与故障隔离"><a href="#多-Agent-协调与故障隔离" class="headerlink" title="多 Agent 协调与故障隔离"></a>多 Agent 协调与故障隔离</h1><p>复杂任务采用主 Session 作为 Orchestrator，创建多个 Worker Agent 并行处理。可靠性通过隔离来保障：</p>
 <ul>
-<li>如果把 AI Agent 比作一辆马车</li>
-<li><strong>Model（模型）</strong> = 那匹力大无穷、智力超群的马</li>
-<li><strong>Harness（驾驭系统）</strong> = 连接马与车厢、控制方向、调节速度的缰绳和装具</li>
+<li>Worker 之间不共享原始上下文，只传递结构化消息，防止上下文污染</li>
+<li>每个 Worker 拥有独立会话上下文，一个 Worker 崩溃不会导致级联故障</li>
+<li>Orchestrator 负责监控所有 Worker 状态、错误重试调度和最终结果合成</li>
 </ul>
 <hr>
-<h1 id="Harness-的六大核心组件"><a href="#Harness-的六大核心组件" class="headerlink" title="Harness 的六大核心组件"></a>Harness 的六大核心组件</h1><p>一个完整的 Harness 通常包含以下六大组件：</p>
-<h2 id="1-约束（Constraints）"><a href="#1-约束（Constraints）" class="headerlink" title="1. 约束（Constraints）"></a>1. 约束（Constraints）</h2><p>Agent 能做什么、不能做什么的边界定义。</p>
-<ul>
-<li>架构边界（如禁止跨层依赖）</li>
-<li>权限控制（如禁止删除文件）</li>
-<li>依赖规则（如只能 import 哪些包）</li>
-</ul>
-<h2 id="2-上下文架构（Context-Architecture）"><a href="#2-上下文架构（Context-Architecture）" class="headerlink" title="2. 上下文架构（Context Architecture）"></a>2. 上下文架构（Context Architecture）</h2><p>Agent 需要知道什么才能做好任务。</p>
-<ul>
-<li>项目结构文档（AGENTS.md）</li>
-<li>编码规范与风格指南</li>
-<li>业务领域知识库</li>
-</ul>
-<h2 id="3-验证回路（Self-Validation-Loop）"><a href="#3-验证回路（Self-Validation-Loop）" class="headerlink" title="3. 验证回路（Self-Validation Loop）"></a>3. 验证回路（Self-Validation Loop）</h2><p>Agent 做完了怎么知道做得对不对。</p>
-<ul>
-<li>Linter 自动检测代码规范违规</li>
-<li>单元测试 / 集成测试自动运行</li>
-<li>截图对比（UI 类任务的视觉回归）</li>
-</ul>
-<h2 id="4-修复机制（Error-Recovery）"><a href="#4-修复机制（Error-Recovery）" class="headerlink" title="4. 修复机制（Error Recovery）"></a>4. 修复机制（Error Recovery）</h2><p>Agent 做错了怎么纠正，同样的错不犯第二次。</p>
-<ul>
-<li>错误信息含修复指令（而非仅报错）</li>
-<li>规则沉淀（同类错误写入 Harness 规则库）</li>
-<li>自动回滚机制</li>
-</ul>
-<h2 id="5-状态管理（State-Management）"><a href="#5-状态管理（State-Management）" class="headerlink" title="5. 状态管理（State Management）"></a>5. 状态管理（State Management）</h2><p>Agent 在长程任务中如何维护进度和上下文。</p>
-<ul>
-<li>持久化知识记录</li>
-<li>任务进度追踪</li>
-<li>多轮对话中的记忆管理</li>
-</ul>
-<h2 id="6-生命周期与协作（Lifecycle-amp-Collaboration）"><a href="#6-生命周期与协作（Lifecycle-amp-Collaboration）" class="headerlink" title="6. 生命周期与协作（Lifecycle &amp; Collaboration）"></a>6. 生命周期与协作（Lifecycle &amp; Collaboration）</h2><p>Agent 怎么启动、怎么交接、怎么与人协作。</p>
-<ul>
-<li>审批流（人工复核节点）</li>
-<li>子 Agent 派发策略</li>
-<li>与外部系统的交互协议</li>
-</ul>
+<h1 id="渐进式落地策略"><a href="#渐进式落地策略" class="headerlink" title="渐进式落地策略"></a>渐进式落地策略</h1><p>Harness Engineering 的落地是渐进式的，切勿一步到位：</p>
+<table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>周期</th>
+<th>目标</th>
+<th>关键动作</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Phase 1：信息层</td>
+<td>1-2 天</td>
+<td>Agent 输出一致</td>
+<td>AGENTS.md + 结构化文档 + 编码规范文档化</td>
+</tr>
+<tr>
+<td>Phase 2：约束层</td>
+<td>3-5 天</td>
+<td>代码质量可控</td>
+<td>分层架构 + Linter + CI 约束检查</td>
+</tr>
+<tr>
+<td>Phase 3：自动化层</td>
+<td>1-2 周</td>
+<td>减少人工审查</td>
+<td>Agent 自验证闭环 + 自动化质量门禁</td>
+</tr>
+</tbody></table>
+<p>Phase 1 做扎实是质变的前提，过早追求自动化会导致约束和验证体系尚未成熟时 Agent 失控。</p>
 <hr>
-<h1 id="落地三阶段：不要一步到位"><a href="#落地三阶段：不要一步到位" class="headerlink" title="落地三阶段：不要一步到位"></a>落地三阶段：不要一步到位</h1><p>Harness Engineering 的落地不是「一把梭」，而是渐进式的：</p>
-<h2 id="Phase-1：信息层（1-2-天）"><a href="#Phase-1：信息层（1-2-天）" class="headerlink" title="Phase 1：信息层（1-2 天）"></a>Phase 1：信息层（1-2 天）</h2><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">目标：让 Agent 输出一致</span><br><span class="line"></span><br><span class="line">AGENTS.md 模式</span><br><span class="line">    ↓</span><br><span class="line">结构化文档 + 编码规范文档化</span><br><span class="line">    ↓</span><br><span class="line">收益：Agent 输出一致性 ↑</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="Phase-2：约束层（3-5-天）"><a href="#Phase-2：约束层（3-5-天）" class="headerlink" title="Phase 2：约束层（3-5 天）"></a>Phase 2：约束层（3-5 天）</h2><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">目标：让代码质量可控</span><br><span class="line"></span><br><span class="line">分层架构 + Linter</span><br><span class="line">    ↓</span><br><span class="line">CI 约束检查 + 错误信息含修复指令</span><br><span class="line">    ↓</span><br><span class="line">收益：代码质量可控 ↑</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="Phase-3：自动化层（1-2-周）"><a href="#Phase-3：自动化层（1-2-周）" class="headerlink" title="Phase 3：自动化层（1-2 周）"></a>Phase 3：自动化层（1-2 周）</h2><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">目标：减少人工审查量</span><br><span class="line"></span><br><span class="line">Agent 自验证闭环</span><br><span class="line">    ↓</span><br><span class="line">CDP/截图自动验证 + 后台清理</span><br><span class="line">    ↓</span><br><span class="line">收益：人工审查量 ↓↓↓</span><br></pre></td></tr></tbody></table></figure>
-
-<hr>
-<h1 id="反模式：七个常见误区"><a href="#反模式：七个常见误区" class="headerlink" title="反模式：七个常见误区"></a>反模式：七个常见误区</h1><p>实施 Harness Engineering 时，以下七个误区需要特别警惕：</p>
-<ol>
-<li><strong>层级混淆</strong>：把太多东西塞进一个 AGENTS.md，挤占上下文窗口</li>
-<li><strong>过度工具化</strong>：让 Agent 过度依赖工具，失去自主判断能力</li>
-<li><strong>过早追求自治</strong>：在约束和验证体系不完善时追求 Agent 完全自主</li>
-<li><strong>一次性搭完所有基础设施</strong>：Phase 1 做扎实，Phase 2 是质变</li>
-<li><strong>规则过密</strong>：约束太多反而限制了 Agent 的创造力</li>
-<li><strong>缺乏 Human-in-the-Loop</strong>：关键节点没有人工复核机制</li>
-<li><strong>忽视可维护性</strong>：Harness 本身也需要版本管理和持续迭代</li>
+<h1 id="常见反模式"><a href="#常见反模式" class="headerlink" title="常见反模式"></a>常见反模式</h1><ol>
+<li><strong>层级混淆</strong>：将过多内容塞入 AGENTS.md，挤占上下文窗口</li>
+<li><strong>过度工具化</strong>：Agent 过度依赖工具，失去自主判断能力</li>
+<li><strong>过早追求自治</strong>：约束和验证体系不完善时追求 Agent 完全自主</li>
+<li><strong>规则过密</strong>：约束太多反而限制 Agent 创造力</li>
+<li><strong>缺乏 Human-in-the-Loop</strong>：关键节点缺少人工复核机制</li>
+<li><strong>忽视可维护性</strong>：Harness 本身需要版本管理和持续迭代</li>
 </ol>
 <hr>
-<h1 id="与-SDD（Spec-Driven-Development）的关系"><a href="#与-SDD（Spec-Driven-Development）的关系" class="headerlink" title="与 SDD（Spec-Driven Development）的关系"></a>与 SDD（Spec-Driven Development）的关系</h1><p>Harness Engineering 并不是替代 SDD，而是 SDD 的<strong>执行层</strong>：</p>
+<h1 id="与-SDD（规范驱动开发）的关系"><a href="#与-SDD（规范驱动开发）的关系" class="headerlink" title="与 SDD（规范驱动开发）的关系"></a>与 SDD（规范驱动开发）的关系</h1><p>Harness Engineering 是 SDD 的<strong>执行层</strong>，二者互补而非替代：</p>
 <ul>
-<li><strong>SDD（Spec-Driven Development，规范驱动开发）</strong> 解决的是「做什么」和「怎么验证」——以规格文档（spec.md / spec.yaml）作为单一事实来源，规范驱动设计、实现与验证的全流程</li>
-<li><strong>Harness Engineering</strong> 解决的是「Agent 怎么可靠地执行 SDD 定义的方案」——提供 Agent 的约束、上下文、验证闭环与状态管理</li>
+<li><strong>SDD</strong> 解决”做什么”和”怎么验证”——以规格文档作为单一事实来源，驱动设计、实现与验证全流程</li>
+<li><strong>Harness Engineering</strong> 解决”Agent 怎么可靠地执行 SDD 定义的方案”——提供约束、上下文、验证闭环与状态管理</li>
 </ul>
-<p>没有 SDD，Harness 是盲目的；没有 Harness，SDD 是无法落地的。二者是互补关系。</p>
+<p>没有 SDD，Harness 是盲目的；没有 Harness，SDD 无法落地。</p>
 <hr>
-<h1 id="未来方向：Meta-Harness"><a href="#未来方向：Meta-Harness" class="headerlink" title="未来方向：Meta-Harness"></a>未来方向：Meta-Harness</h1><p>斯坦福、MIT 等机构提出了 <strong>Meta-Harness</strong> 框架，核心思路是：</p>
-<blockquote>
-<p>不再只优化单条 prompt，而是把完整 harness 程序作为优化对象。让 coding agent 自主检索历史失败原因并改写 harness，把原本依赖人工试错的系统优化过程自动化。</p>
-</blockquote>
-<p>实验数据显示，Meta-Harness 在在线文本分类任务上相比 ACE 基准平均准确率从 40.9% 提升到 48.6%，同时上下文开销从 50.8K tokens 降到 11.4K。</p>
+<h1 id="未来方向：Meta-Harness"><a href="#未来方向：Meta-Harness" class="headerlink" title="未来方向：Meta-Harness"></a>未来方向：Meta-Harness</h1><p>斯坦福、MIT 等机构提出 <strong>Meta-Harness</strong> 框架：不再只优化单条 prompt，而是把完整 Harness 程序作为优化对象，让 Agent 自主检索历史失败原因并改写 Harness，将系统优化过程自动化。</p>
+<p>实验数据显示，Meta-Harness 在在线文本分类任务上准确率从 40.9% 提升至 48.6%，同时上下文开销从 50.8K tokens 降至 11.4K。</p>
 <hr>
 <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><table>
 <thead>
@@ -301,7 +336,7 @@
 </thead>
 <tbody><tr>
 <td><strong>本质</strong></td>
-<td>在模型之外，给 Agent 搭建「可读、可控、可验证、可恢复」的运行环境</td>
+<td>在模型之外，给 Agent 搭建”可读、可控、可验证、可恢复”的外循环运行环境</td>
 </tr>
 <tr>
 <td><strong>核心公式</strong></td>
@@ -317,14 +352,17 @@
 </tr>
 <tr>
 <td><strong>关键动作</strong></td>
-<td>约束设计 + 上下文注入 + 验证闭环 + 状态管理</td>
+<td>约束设计 + 上下文注入 + 验证闭环 + 状态管理 + 安全纵深防御</td>
 </tr>
 <tr>
 <td><strong>落地策略</strong></td>
 <td>渐进式三阶段（信息层 → 约束层 → 自动化层）</td>
 </tr>
+<tr>
+<td><strong>工程师角色转变</strong></td>
+<td>从编码执行者 → 系统架构师与环境设计师</td>
+</tr>
 </tbody></table>
-<hr>
 
   </div>
 </article>
@@ -360,23 +398,23 @@
     
     
       <div id="toc-footer" style="display: none">
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%80%E5%8F%A5%E8%AF%9D%E8%A7%A3%E9%87%8A"><span class="toc-number">1.</span> <span class="toc-text">一句话解释</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BC%9A%E5%87%BA%E7%8E%B0%E8%BF%99%E4%B8%AA%E6%A6%82%E5%BF%B5%EF%BC%9F"><span class="toc-number">2.</span> <span class="toc-text">为什么会出现这个概念？</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#AI-Agent-%E7%9A%84%E3%80%8C%E5%A4%A9%E6%89%8D%E7%97%85%E3%80%8D"><span class="toc-number">2.1.</span> <span class="toc-text">AI Agent 的「天才病」</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%8E%E3%80%8C%E8%B0%83%E6%A8%A1%E5%9E%8B%E3%80%8D%E5%88%B0%E3%80%8C%E6%90%AD%E7%8E%AF%E5%A2%83%E3%80%8D"><span class="toc-number">2.2.</span> <span class="toc-text">从「调模型」到「搭环境」</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E5%85%AC%E5%BC%8F"><span class="toc-number">3.</span> <span class="toc-text">核心公式</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Harness-%E7%9A%84%E5%85%AD%E5%A4%A7%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6"><span class="toc-number">4.</span> <span class="toc-text">Harness 的六大核心组件</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E7%BA%A6%E6%9D%9F%EF%BC%88Constraints%EF%BC%89"><span class="toc-number">4.1.</span> <span class="toc-text">1. 约束（Constraints）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E4%B8%8A%E4%B8%8B%E6%96%87%E6%9E%B6%E6%9E%84%EF%BC%88Context-Architecture%EF%BC%89"><span class="toc-number">4.2.</span> <span class="toc-text">2. 上下文架构（Context Architecture）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E9%AA%8C%E8%AF%81%E5%9B%9E%E8%B7%AF%EF%BC%88Self-Validation-Loop%EF%BC%89"><span class="toc-number">4.3.</span> <span class="toc-text">3. 验证回路（Self-Validation Loop）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E4%BF%AE%E5%A4%8D%E6%9C%BA%E5%88%B6%EF%BC%88Error-Recovery%EF%BC%89"><span class="toc-number">4.4.</span> <span class="toc-text">4. 修复机制（Error Recovery）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E7%8A%B6%E6%80%81%E7%AE%A1%E7%90%86%EF%BC%88State-Management%EF%BC%89"><span class="toc-number">4.5.</span> <span class="toc-text">5. 状态管理（State Management）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E4%B8%8E%E5%8D%8F%E4%BD%9C%EF%BC%88Lifecycle-amp-Collaboration%EF%BC%89"><span class="toc-number">4.6.</span> <span class="toc-text">6. 生命周期与协作（Lifecycle &amp; Collaboration）</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E8%90%BD%E5%9C%B0%E4%B8%89%E9%98%B6%E6%AE%B5%EF%BC%9A%E4%B8%8D%E8%A6%81%E4%B8%80%E6%AD%A5%E5%88%B0%E4%BD%8D"><span class="toc-number">5.</span> <span class="toc-text">落地三阶段：不要一步到位</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Phase-1%EF%BC%9A%E4%BF%A1%E6%81%AF%E5%B1%82%EF%BC%881-2-%E5%A4%A9%EF%BC%89"><span class="toc-number">5.1.</span> <span class="toc-text">Phase 1：信息层（1-2 天）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Phase-2%EF%BC%9A%E7%BA%A6%E6%9D%9F%E5%B1%82%EF%BC%883-5-%E5%A4%A9%EF%BC%89"><span class="toc-number">5.2.</span> <span class="toc-text">Phase 2：约束层（3-5 天）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Phase-3%EF%BC%9A%E8%87%AA%E5%8A%A8%E5%8C%96%E5%B1%82%EF%BC%881-2-%E5%91%A8%EF%BC%89"><span class="toc-number">5.3.</span> <span class="toc-text">Phase 3：自动化层（1-2 周）</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%8D%E6%A8%A1%E5%BC%8F%EF%BC%9A%E4%B8%83%E4%B8%AA%E5%B8%B8%E8%A7%81%E8%AF%AF%E5%8C%BA"><span class="toc-number">6.</span> <span class="toc-text">反模式：七个常见误区</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%8E-SDD%EF%BC%88Spec-Driven-Development%EF%BC%89%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="toc-number">7.</span> <span class="toc-text">与 SDD（Spec-Driven Development）的关系</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9C%AA%E6%9D%A5%E6%96%B9%E5%90%91%EF%BC%9AMeta-Harness"><span class="toc-number">8.</span> <span class="toc-text">未来方向：Meta-Harness</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">9.</span> <span class="toc-text">总结</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF-Harness-Engineering%EF%BC%9F"><span class="toc-number">1.</span> <span class="toc-text">什么是 Harness Engineering？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%AE%83%EF%BC%9F"><span class="toc-number">2.</span> <span class="toc-text">为什么需要它？</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%8C%83%E5%BC%8F%E6%BC%94%E8%BF%9B"><span class="toc-number">2.1.</span> <span class="toc-text">范式演进</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E6%94%AF%E6%92%91"><span class="toc-number">2.2.</span> <span class="toc-text">数据支撑</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E7%90%86%E5%BF%B5"><span class="toc-number">3.</span> <span class="toc-text">核心理念</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9E%B6%E6%9E%84%EF%BC%9A%E4%B8%83%E5%B1%82%E5%A4%96%E5%BE%AA%E7%8E%AF%E7%B3%BB%E7%BB%9F"><span class="toc-number">4.</span> <span class="toc-text">架构：七层外循环系统</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%85%AD%E5%A4%A7%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6"><span class="toc-number">5.</span> <span class="toc-text">六大核心组件</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E4%B8%BB%E5%BE%AA%E7%8E%AF%E5%BC%95%E6%93%8E%EF%BC%88Agent-Loop%EF%BC%89"><span class="toc-number">5.1.</span> <span class="toc-text">1. 主循环引擎（Agent Loop）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%B7%A5%E5%85%B7%E6%B2%BB%E7%90%86%E4%B8%8E%E5%AE%89%E5%85%A8%E6%A8%A1%E5%9E%8B"><span class="toc-number">5.2.</span> <span class="toc-text">2. 工具治理与安全模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E4%B8%8A%E4%B8%8B%E6%96%87%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F"><span class="toc-number">5.3.</span> <span class="toc-text">3. 上下文管理系统</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E9%AA%8C%E8%AF%81%E4%B8%8E%E8%B4%A8%E9%87%8F%E9%97%A8%E7%A6%81%EF%BC%88Validation-Gates%EF%BC%89"><span class="toc-number">5.4.</span> <span class="toc-text">4. 验证与质量门禁（Validation Gates）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E7%8A%B6%E6%80%81%E6%8C%81%E4%B9%85%E5%8C%96%E4%B8%8E%E6%95%85%E9%9A%9C%E6%81%A2%E5%A4%8D"><span class="toc-number">5.5.</span> <span class="toc-text">5. 状态持久化与故障恢复</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E5%8F%AF%E6%89%A9%E5%B1%95%E6%8A%80%E8%83%BD%E7%B3%BB%E7%BB%9F%EF%BC%88Skills%EF%BC%89"><span class="toc-number">5.6.</span> <span class="toc-text">6. 可扩展技能系统（Skills）</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A4%9A-Agent-%E5%8D%8F%E8%B0%83%E4%B8%8E%E6%95%85%E9%9A%9C%E9%9A%94%E7%A6%BB"><span class="toc-number">6.</span> <span class="toc-text">多 Agent 协调与故障隔离</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%B8%90%E8%BF%9B%E5%BC%8F%E8%90%BD%E5%9C%B0%E7%AD%96%E7%95%A5"><span class="toc-number">7.</span> <span class="toc-text">渐进式落地策略</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E5%8F%8D%E6%A8%A1%E5%BC%8F"><span class="toc-number">8.</span> <span class="toc-text">常见反模式</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%8E-SDD%EF%BC%88%E8%A7%84%E8%8C%83%E9%A9%B1%E5%8A%A8%E5%BC%80%E5%8F%91%EF%BC%89%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="toc-number">9.</span> <span class="toc-text">与 SDD（规范驱动开发）的关系</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9C%AA%E6%9D%A5%E6%96%B9%E5%90%91%EF%BC%9AMeta-Harness"><span class="toc-number">10.</span> <span class="toc-text">未来方向：Meta-Harness</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">11.</span> <span class="toc-text">总结</span></a></li></ol>
       </div>
     
 
     <div id="share-footer" style="display: none">
       <ul>
   <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifs.com/2026/04/11/harnessengineering/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifs.com/2026/04/11/harnessengineering/&text=【AI】Harness Engineering：让 AI Agent 可靠完成任务的工程范式"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifs.com/2026/04/11/harnessengineering/&title=【AI】Harness Engineering：让 AI Agent 可靠完成任务的工程范式"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifs.com/2026/04/11/harnessengineering/&is_video=false&description=【AI】Harness Engineering：让 AI Agent 可靠完成任务的工程范式"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=【AI】Harness Engineering：让 AI Agent 可靠完成任务的工程范式&body=Check out this article: https://haifs.com/2026/04/11/harnessengineering/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifs.com/2026/04/11/harnessengineering/&title=【AI】Harness Engineering：让 AI Agent 可靠完成任务的工程范式"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifs.com/2026/04/11/harnessengineering/&title=【AI】Harness Engineering：让 AI Agent 可靠完成任务的工程范式"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifs.com/2026/04/11/harnessengineering/&title=【AI】Harness Engineering：让 AI Agent 可靠完成任务的工程范式"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifs.com/2026/04/11/harnessengineering/&title=【AI】Harness Engineering：让 AI Agent 可靠完成任务的工程范式"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifs.com/2026/04/11/harnessengineering/&name=【AI】Harness Engineering：让 AI Agent 可靠完成任务的工程范式&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifs.com/2026/04/11/harnessengineering/&t=【AI】Harness Engineering：让 AI Agent 可靠完成任务的工程范式"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifs.com/2026/04/11/harnessengineering/&text=【AI】Harness Engineering：构建可靠 AI Agent 系统的工程蓝图"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifs.com/2026/04/11/harnessengineering/&title=【AI】Harness Engineering：构建可靠 AI Agent 系统的工程蓝图"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifs.com/2026/04/11/harnessengineering/&is_video=false&description=【AI】Harness Engineering：构建可靠 AI Agent 系统的工程蓝图"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=【AI】Harness Engineering：构建可靠 AI Agent 系统的工程蓝图&body=Check out this article: https://haifs.com/2026/04/11/harnessengineering/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifs.com/2026/04/11/harnessengineering/&title=【AI】Harness Engineering：构建可靠 AI Agent 系统的工程蓝图"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifs.com/2026/04/11/harnessengineering/&title=【AI】Harness Engineering：构建可靠 AI Agent 系统的工程蓝图"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifs.com/2026/04/11/harnessengineering/&title=【AI】Harness Engineering：构建可靠 AI Agent 系统的工程蓝图"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifs.com/2026/04/11/harnessengineering/&title=【AI】Harness Engineering：构建可靠 AI Agent 系统的工程蓝图"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifs.com/2026/04/11/harnessengineering/&name=【AI】Harness Engineering：构建可靠 AI Agent 系统的工程蓝图&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifs.com/2026/04/11/harnessengineering/&t=【AI】Harness Engineering：构建可靠 AI Agent 系统的工程蓝图"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
