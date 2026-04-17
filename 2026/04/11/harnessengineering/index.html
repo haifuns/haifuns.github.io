@@ -14,7 +14,7 @@
 <meta property="og:description" content="什么是 Harness Engineering？Harness Engineering（驾驭工程） 是一种为 AI Agent 搭建可运行、可约束工程环境的系统性开发范式。其核心等式为：  Agent &#x3D; Model + Harness  Model 提供底层智能，Harness 是让这个智能能够可靠、可控运行的外循环基础设施。评估一个 Agent 的效果，评估的是”模型 + 驾驭系统”这个组合体">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2026-04-11T02:20:00.000Z">
-<meta property="article:modified_time" content="2026-04-17T05:08:21.921Z">
+<meta property="article:modified_time" content="2026-04-17T05:13:50.549Z">
 <meta property="article:author" content="haif.">
 <meta property="article:tag" content="Harness">
 <meta property="article:tag" content="Agent">
@@ -185,7 +185,6 @@
 <p><strong>Agent = Model + Harness</strong></p>
 </blockquote>
 <p>Model 提供底层智能，Harness 是让这个智能能够可靠、可控运行的外循环基础设施。评估一个 Agent 的效果，评估的是”模型 + 驾驭系统”这个组合体，而非模型单体。</p>
-<hr>
 <h1 id="为什么需要它？"><a href="#为什么需要它？" class="headerlink" title="为什么需要它？"></a>为什么需要它？</h1><h2 id="范式演进"><a href="#范式演进" class="headerlink" title="范式演进"></a>范式演进</h2><p>AI 工程经历了三个阶段的演进：</p>
 <table>
 <thead>
@@ -216,7 +215,6 @@
 <li><strong>LangChain 2026 年 3 月实验</strong>：仅通过优化 Harness，同一模型在 Terminal Bench 2.0 上的任务通过率从 52.8% 提升至 66.5%，排名跃升前五。瓶颈往往在基础设施，而非模型智能本身。</li>
 <li><strong>OpenAI 2026 年 2 月案例</strong>：3 名工程师在 5 个月内零手写代码，完全依靠 Agent 生成约 100 万行代码，完成 1500 个 Pull Request，效率提升约 90%。背后依赖的正是成熟的 Harness 系统。</li>
 </ul>
-<hr>
 <h1 id="核心理念"><a href="#核心理念" class="headerlink" title="核心理念"></a>核心理念</h1><p>Harness Engineering 带来了工程师角色的根本性转变：</p>
 <ol>
 <li>**从”编码执行”到”环境设计”**：不再手写每一行代码，而是将业务逻辑、工程判断和团队规范编码为机器可读的约束系统。</li>
@@ -224,7 +222,6 @@
 <li><strong>安全默认化</strong>：在所有设计环节贯彻”默认拒绝、最小权限”原则，构建纵深防御体系。</li>
 <li><strong>系统进化性</strong>：将运行中的失败经验自动沉淀为新规则，使 Harness 越用越完善。</li>
 </ol>
-<hr>
 <h1 id="架构：七层外循环系统"><a href="#架构：七层外循环系统" class="headerlink" title="架构：七层外循环系统"></a>架构：七层外循环系统</h1><p>Harness 的宏观架构是围绕核心模型（内循环）的七层外循环控制系统，构成从目标输入到可靠输出的完整闭环：</p>
 <table>
 <thead>
@@ -262,21 +259,18 @@
 <td>将失败经验沉淀为新规则，自动清理技术债，实现系统自我演进</td>
 </tr>
 </tbody></table>
-<hr>
 <h1 id="六大核心组件"><a href="#六大核心组件" class="headerlink" title="六大核心组件"></a>六大核心组件</h1><h2 id="1-主循环引擎（Agent-Loop）"><a href="#1-主循环引擎（Agent-Loop）" class="headerlink" title="1. 主循环引擎（Agent Loop）"></a>1. 主循环引擎（Agent Loop）</h2><p>封装完整的查询生命周期，采用异步生成器管理对话流，天然支持流式响应、中断与背压控制。每个会话创建独立实例，统一管理消息历史、会话状态、权限与预算。</p>
 <h2 id="2-工具治理与安全模型"><a href="#2-工具治理与安全模型" class="headerlink" title="2. 工具治理与安全模型"></a>2. 工具治理与安全模型</h2><p>采用 Fail-Closed（默认拒绝）策略，构建五级纵深防御：工具不可见（Deny）→ 工具级黑白名单 → 通用规则检查 → 运行模式限制 → 动态分类器判断。高级做法是让模型通过写代码调用工具，将工具发现与执行移出模型上下文，提升效率并降低不确定性。</p>
 <h2 id="3-上下文管理系统"><a href="#3-上下文管理系统" class="headerlink" title="3. 上下文管理系统"></a>3. 上下文管理系统</h2><p>应对上下文窗口限制，实现渐进式四级压缩策略按需触发（轻量修剪 → 缓存压缩 → 读时投影 → LLM 智能摘要）。通过技能系统（Skills）按需动态注入能力描述，而非启动时全量加载。建立分层记忆系统区分项目级、持久化和会话级知识。</p>
 <h2 id="4-验证与质量门禁（Validation-Gates）"><a href="#4-验证与质量门禁（Validation-Gates）" class="headerlink" title="4. 验证与质量门禁（Validation Gates）"></a>4. 验证与质量门禁（Validation Gates）</h2><p>代码生成后强制执行不可跳过的验证管道，将团队约定编码为可执行规则（语法检查、编译检查、架构依赖合规性检查等）。支持预验证（Pre-validation）在高风险操作前提前拦截，实现”事前预防”。</p>
 <h2 id="5-状态持久化与故障恢复"><a href="#5-状态持久化与故障恢复" class="headerlink" title="5. 状态持久化与故障恢复"></a>5. 状态持久化与故障恢复</h2><p>将任务状态、中间决策和已完成子目标持久化到版本控制管理的文件中，作为可版本化的检查点。通过 Transcript 与 Sidecar 机制保存完整会话轨迹，支持从精确断点恢复，无需从头重来。</p>
 <h2 id="6-可扩展技能系统（Skills）"><a href="#6-可扩展技能系统（Skills）" class="headerlink" title="6. 可扩展技能系统（Skills）"></a>6. 可扩展技能系统（Skills）</h2><p>技能以 Markdown 文件形式存在（含 frontmatter 元数据），降低扩展门槛，易于版本化管理。根据任务动态将相关技能描述注入 Agent 上下文，提供精准的能力指引，实现零代码扩展。</p>
-<hr>
 <h1 id="多-Agent-协调与故障隔离"><a href="#多-Agent-协调与故障隔离" class="headerlink" title="多 Agent 协调与故障隔离"></a>多 Agent 协调与故障隔离</h1><p>复杂任务采用主 Session 作为 Orchestrator，创建多个 Worker Agent 并行处理。可靠性通过隔离来保障：</p>
 <ul>
 <li>Worker 之间不共享原始上下文，只传递结构化消息，防止上下文污染</li>
 <li>每个 Worker 拥有独立会话上下文，一个 Worker 崩溃不会导致级联故障</li>
 <li>Orchestrator 负责监控所有 Worker 状态、错误重试调度和最终结果合成</li>
 </ul>
-<hr>
 <h1 id="渐进式落地策略"><a href="#渐进式落地策略" class="headerlink" title="渐进式落地策略"></a>渐进式落地策略</h1><p>Harness Engineering 的落地是渐进式的，切勿一步到位：</p>
 <table>
 <thead>
@@ -307,7 +301,6 @@
 </tr>
 </tbody></table>
 <p>Phase 1 做扎实是质变的前提，过早追求自动化会导致约束和验证体系尚未成熟时 Agent 失控。</p>
-<hr>
 <h1 id="常见反模式"><a href="#常见反模式" class="headerlink" title="常见反模式"></a>常见反模式</h1><ol>
 <li><strong>层级混淆</strong>：将过多内容塞入 AGENTS.md，挤占上下文窗口</li>
 <li><strong>过度工具化</strong>：Agent 过度依赖工具，失去自主判断能力</li>
@@ -316,17 +309,14 @@
 <li><strong>缺乏 Human-in-the-Loop</strong>：关键节点缺少人工复核机制</li>
 <li><strong>忽视可维护性</strong>：Harness 本身需要版本管理和持续迭代</li>
 </ol>
-<hr>
 <h1 id="与-SDD（规范驱动开发）的关系"><a href="#与-SDD（规范驱动开发）的关系" class="headerlink" title="与 SDD（规范驱动开发）的关系"></a>与 SDD（规范驱动开发）的关系</h1><p>Harness Engineering 是 SDD 的<strong>执行层</strong>，二者互补而非替代：</p>
 <ul>
 <li><strong>SDD</strong> 解决”做什么”和”怎么验证”——以规格文档作为单一事实来源，驱动设计、实现与验证全流程</li>
 <li><strong>Harness Engineering</strong> 解决”Agent 怎么可靠地执行 SDD 定义的方案”——提供约束、上下文、验证闭环与状态管理</li>
 </ul>
 <p>没有 SDD，Harness 是盲目的；没有 Harness，SDD 无法落地。</p>
-<hr>
 <h1 id="未来方向：Meta-Harness"><a href="#未来方向：Meta-Harness" class="headerlink" title="未来方向：Meta-Harness"></a>未来方向：Meta-Harness</h1><p>斯坦福、MIT 等机构提出 <strong>Meta-Harness</strong> 框架：不再只优化单条 prompt，而是把完整 Harness 程序作为优化对象，让 Agent 自主检索历史失败原因并改写 Harness，将系统优化过程自动化。</p>
 <p>实验数据显示，Meta-Harness 在在线文本分类任务上准确率从 40.9% 提升至 48.6%，同时上下文开销从 50.8K tokens 降至 11.4K。</p>
-<hr>
 <h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><table>
 <thead>
 <tr>
