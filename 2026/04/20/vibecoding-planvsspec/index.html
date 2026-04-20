@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="引言：从即兴创作到规范施工2025 年，Vibe Coding 被柯林斯词典评为年度词汇，AI 辅助编程正式进入大众视野。但企业级实践中，纯粹的 Vibe Coding 很快暴露短板——质量不可控、知识难沉淀、团队协作成本高。 两种更结构化的范式随之涌现：Plan 模式与Spec 模式。它们不是对立的流派，而是 AI 编码工程化道路上不同成熟度的阶段。  全景对比   维度 Vibe Coding">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Vibe Coding】Plan 模式 vs Spec 模式">
+<meta property="og:url" content="https://haifs.com/2026/04/20/vibecoding-planvsspec/index.html">
+<meta property="og:site_name" content="haif&#39;s blog">
+<meta property="og:description" content="引言：从即兴创作到规范施工2025 年，Vibe Coding 被柯林斯词典评为年度词汇，AI 辅助编程正式进入大众视野。但企业级实践中，纯粹的 Vibe Coding 很快暴露短板——质量不可控、知识难沉淀、团队协作成本高。 两种更结构化的范式随之涌现：Plan 模式与Spec 模式。它们不是对立的流派，而是 AI 编码工程化道路上不同成熟度的阶段。  全景对比   维度 Vibe Coding">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-04-20T14:35:00.000Z">
+<meta property="article:modified_time" content="2026-04-20T14:38:15.910Z">
+<meta property="article:author" content="haif.">
+<meta property="article:tag" content="Agent">
+<meta property="article:tag" content="Vibe Coding">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>【Vibe Coding】Plan 模式 vs Spec 模式</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+      <link rel="alternate" href="/true" title="haif&#39;s blog" type="application/atom+xml" />
+    
+	<!-- mathjax -->
+	
+		<script type="text/x-mathjax-config">
+		  MathJax.Hub.Config({
+			tex2jax: {
+			  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+			  inlineMath: [['$','$']]
+			}
+		  });
+		</script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
+	
+<meta name="generator" content="Hexo 5.4.2">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="顶部" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a href="/tags/">标签</a></li><!--
+     --><!--
+       --><li><a href="/categories/">分类</a></li><!--
+     --><!--
+       --><li><a href="/search/">搜索</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="下一篇" href="/2026/04/11/harnessengineering/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="返回顶部" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="分享文章" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifs.com/2026/04/20/vibecoding-planvsspec/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifs.com/2026/04/20/vibecoding-planvsspec/&text=【Vibe Coding】Plan 模式 vs Spec 模式"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifs.com/2026/04/20/vibecoding-planvsspec/&title=【Vibe Coding】Plan 模式 vs Spec 模式"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifs.com/2026/04/20/vibecoding-planvsspec/&is_video=false&description=【Vibe Coding】Plan 模式 vs Spec 模式"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=【Vibe Coding】Plan 模式 vs Spec 模式&body=Check out this article: https://haifs.com/2026/04/20/vibecoding-planvsspec/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifs.com/2026/04/20/vibecoding-planvsspec/&title=【Vibe Coding】Plan 模式 vs Spec 模式"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifs.com/2026/04/20/vibecoding-planvsspec/&title=【Vibe Coding】Plan 模式 vs Spec 模式"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifs.com/2026/04/20/vibecoding-planvsspec/&title=【Vibe Coding】Plan 模式 vs Spec 模式"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifs.com/2026/04/20/vibecoding-planvsspec/&title=【Vibe Coding】Plan 模式 vs Spec 模式"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifs.com/2026/04/20/vibecoding-planvsspec/&name=【Vibe Coding】Plan 模式 vs Spec 模式&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifs.com/2026/04/20/vibecoding-planvsspec/&t=【Vibe Coding】Plan 模式 vs Spec 模式"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%95%E8%A8%80%EF%BC%9A%E4%BB%8E%E5%8D%B3%E5%85%B4%E5%88%9B%E4%BD%9C%E5%88%B0%E8%A7%84%E8%8C%83%E6%96%BD%E5%B7%A5"><span class="toc-number">1.</span> <span class="toc-text">引言：从即兴创作到规范施工</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%A8%E6%99%AF%E5%AF%B9%E6%AF%94"><span class="toc-number">2.</span> <span class="toc-text">全景对比</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Plan-%E6%A8%A1%E5%BC%8F%EF%BC%9A%E4%BB%BB%E5%8A%A1%E6%B8%85%E5%8D%95%E5%BC%8F%E5%8D%8F%E4%BD%9C"><span class="toc-number">3.</span> <span class="toc-text">Plan 模式：任务清单式协作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B7%A5%E4%BD%9C%E6%B5%81"><span class="toc-number">3.1.</span> <span class="toc-text">工作流</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B3%E9%94%AE%E7%89%B9%E5%BE%81"><span class="toc-number">3.2.</span> <span class="toc-text">关键特征</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B1%80%E9%99%90"><span class="toc-number">3.3.</span> <span class="toc-text">局限</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%82%E5%90%88%E5%9C%BA%E6%99%AF"><span class="toc-number">3.4.</span> <span class="toc-text">适合场景</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Spec-%E6%A8%A1%E5%BC%8F%EF%BC%9A%E8%A7%84%E8%8C%83%E9%A9%B1%E5%8A%A8%E5%BC%80%E5%8F%91"><span class="toc-number">4.</span> <span class="toc-text">Spec 模式：规范驱动开发</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B7%A5%E4%BD%9C%E6%B5%81-1"><span class="toc-number">4.1.</span> <span class="toc-text">工作流</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B3%E9%94%AE%E7%89%B9%E5%BE%81-1"><span class="toc-number">4.2.</span> <span class="toc-text">关键特征</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B1%80%E9%99%90-1"><span class="toc-number">4.3.</span> <span class="toc-text">局限</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%82%E5%90%88%E5%9C%BA%E6%99%AF-1"><span class="toc-number">4.4.</span> <span class="toc-text">适合场景</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%AD%A3%E9%9D%A2%E4%BA%A4%E9%94%8B%EF%BC%9A%E5%90%8C%E4%B8%80%E4%BB%BB%E5%8A%A1%E7%9A%84%E4%B8%8D%E5%90%8C%E8%A7%A3%E6%B3%95"><span class="toc-number">5.</span> <span class="toc-text">正面交锋：同一任务的不同解法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Plan-%E6%A8%A1%E5%BC%8F"><span class="toc-number">5.1.</span> <span class="toc-text">Plan 模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Spec-%E6%A8%A1%E5%BC%8F"><span class="toc-number">5.2.</span> <span class="toc-text">Spec 模式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E9%80%89%E6%8B%A9%EF%BC%9F"><span class="toc-number">6.</span> <span class="toc-text">如何选择？</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%87%E7%BA%A7%E4%BF%A1%E5%8F%B7"><span class="toc-number">6.1.</span> <span class="toc-text">升级信号</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B7%B7%E5%90%88%E5%AE%9E%E8%B7%B5%EF%BC%9APlan-Spec"><span class="toc-number">7.</span> <span class="toc-text">混合实践：Plan + Spec</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%99%E5%9C%A8%E6%9C%80%E5%90%8E"><span class="toc-number">8.</span> <span class="toc-text">写在最后</span></a></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        【Vibe Coding】Plan 模式 vs Spec 模式
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">haif.</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2026-04-20T14:35:00.000Z" class="dt-published" itemprop="datePublished">2026-04-20</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/AI/">AI</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/Agent/" rel="tag">Agent</a>, <a class="p-category" href="/tags/Vibe-Coding/" rel="tag">Vibe Coding</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h2 id="引言：从即兴创作到规范施工"><a href="#引言：从即兴创作到规范施工" class="headerlink" title="引言：从即兴创作到规范施工"></a>引言：从即兴创作到规范施工</h2><p>2025 年，Vibe Coding 被柯林斯词典评为年度词汇，AI 辅助编程正式进入大众视野。但企业级实践中，纯粹的 Vibe Coding 很快暴露短板——质量不可控、知识难沉淀、团队协作成本高。</p>
+<p>两种更结构化的范式随之涌现：<strong>Plan 模式</strong>与<strong>Spec 模式</strong>。它们不是对立的流派，而是 AI 编码工程化道路上不同成熟度的阶段。</p>
+<hr>
+<h2 id="全景对比"><a href="#全景对比" class="headerlink" title="全景对比"></a>全景对比</h2><table>
+<thead>
+<tr>
+<th>维度</th>
+<th>Vibe Coding</th>
+<th>Plan 模式</th>
+<th>Spec 模式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>核心理念</strong></td>
+<td>自然语言描述，即时生成</td>
+<td>先计划后执行，审核再动手</td>
+<td>规格驱动，Spec 是唯一真理源</td>
+</tr>
+<tr>
+<td><strong>交互方式</strong></td>
+<td>自由对话，持续引导修正</td>
+<td>两阶段：生成计划 → 执行计划</td>
+<td>多阶段门控：Proposal → Spec → Design → Tasks</td>
+</tr>
+<tr>
+<td><strong>人类产出</strong></td>
+<td>一句 Prompt</td>
+<td>计划文档（plan.md）</td>
+<td>系列结构化工件（spec.md / design.md / tasks.md）</td>
+</tr>
+<tr>
+<td><strong>管控粒度</strong></td>
+<td>无</td>
+<td>任务级（做哪几步）</td>
+<td>逻辑级（做什么、遵循什么规则）</td>
+</tr>
+<tr>
+<td><strong>可靠性</strong></td>
+<td>低，依赖临场发挥</td>
+<td>中，减少方向错误</td>
+<td>高，产出可预期、可验证、可审计</td>
+</tr>
+<tr>
+<td><strong>知识沉淀</strong></td>
+<td>几乎为零</td>
+<td>有限，计划可存档</td>
+<td>系统性沉淀，Spec 成为版本化组织资产</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="Plan-模式：任务清单式协作"><a href="#Plan-模式：任务清单式协作" class="headerlink" title="Plan 模式：任务清单式协作"></a>Plan 模式：任务清单式协作</h2><h3 id="工作流"><a href="#工作流" class="headerlink" title="工作流"></a>工作流</h3><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">用户意图 → AI 生成步骤计划 → 人工审核 → AI 逐步执行</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="关键特征"><a href="#关键特征" class="headerlink" title="关键特征"></a>关键特征</h3><ul>
+<li><strong>步骤驱动</strong>：把目标拆成 1、2、3… 每步可审核、可回滚</li>
+<li><strong>人类掌控节奏</strong>：每步执行前确认，执行后可调整</li>
+<li><strong>容错空间大</strong>：走偏了随时调头，无需推翻整体方案</li>
+</ul>
+<h3 id="局限"><a href="#局限" class="headerlink" title="局限"></a>局限</h3><ul>
+<li>步骤粒度难把握：太粗等于没计划，太细等于在写代码</li>
+<li>只回答了”做哪几步”，对”每步遵循什么规则”约束较弱</li>
+<li>上下文仅限本次任务，缺乏与团队历史经验的连接</li>
+</ul>
+<h3 id="适合场景"><a href="#适合场景" class="headerlink" title="适合场景"></a>适合场景</h3><ul>
+<li>探索性任务、中等复杂度功能开发</li>
+<li>重构遗留系统、搭建项目脚手架</li>
+<li>团队初步引入 AI 编码的起步阶段</li>
+</ul>
+<hr>
+<h2 id="Spec-模式：规范驱动开发"><a href="#Spec-模式：规范驱动开发" class="headerlink" title="Spec 模式：规范驱动开发"></a>Spec 模式：规范驱动开发</h2><h3 id="工作流-1"><a href="#工作流-1" class="headerlink" title="工作流"></a>工作流</h3><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">用户意图 → Proposal（为什么做）→ Spec（做什么）→ Design（怎么做）→ Tasks（原子任务）→ AI 自主实现 → 人工验收</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="关键特征-1"><a href="#关键特征-1" class="headerlink" title="关键特征"></a>关键特征</h3><ul>
+<li><strong>规范驱动</strong>：Spec 定义输入、输出、边界、约束，是人类与 AI 之间的硬契约</li>
+<li><strong>多阶段门控</strong>：proposal（为什么做）→ spec（做什么）→ design（怎么做）→ tasks（原子任务），每阶段有明确产出</li>
+<li><strong>验收取代逐步审核</strong>：不需要盯过程，最终结果是否符合规格说了算</li>
+<li><strong>真理源机制</strong>：<code>specs/</code> 目录作为项目永久的知识库，新变更必须先读取历史 Spec，防止破坏既有逻辑</li>
+</ul>
+<h3 id="局限-1"><a href="#局限-1" class="headerlink" title="局限"></a>局限</h3><ul>
+<li>编写高质量 Spec 本身是工程能力，前期投入成本高</li>
+<li>规格遗漏会导致 AI “正确地做错事”</li>
+<li>不适合高度不确定的探索性工作</li>
+</ul>
+<h3 id="适合场景-1"><a href="#适合场景-1" class="headerlink" title="适合场景"></a>适合场景</h3><ul>
+<li>企业级复杂业务系统（电商交易、金融等高合规场景）</li>
+<li>跨模块协作频繁、需要知识沉淀的团队</li>
+<li>追求代码一致性、打造团队”AI 搭档”的中大型组织</li>
+</ul>
+<hr>
+<h2 id="正面交锋：同一任务的不同解法"><a href="#正面交锋：同一任务的不同解法" class="headerlink" title="正面交锋：同一任务的不同解法"></a>正面交锋：同一任务的不同解法</h2><p><strong>任务：给现有 API 加分页</strong></p>
+<h3 id="Plan-模式"><a href="#Plan-模式" class="headerlink" title="Plan 模式"></a>Plan 模式</h3><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">1. 找到现有 API 入口文件</span><br><span class="line">2. 分析当前查询逻辑</span><br><span class="line">3. 添加 page/page_size 参数校验</span><br><span class="line">4. 改写 SQL 加 LIMIT/OFFSET</span><br><span class="line">5. 包装返回格式 { list, total, page, pageSize }</span><br><span class="line">6. 写单元测试</span><br><span class="line">7. 更新 API 文档</span><br></pre></td></tr></tbody></table></figure>
+
+<p>逐步执行，每步确认。过程可控，但”返回格式””参数校验规则”全靠人脑维护。</p>
+<h3 id="Spec-模式"><a href="#Spec-模式" class="headerlink" title="Spec 模式"></a>Spec 模式</h3><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Proposal: 现有 API 无分页，数据量大时性能差且前端体验不佳</span><br><span class="line">Spec:     定义分页接口的参数、返回、约束（见下方 YAML）</span><br><span class="line">Design:   采用 LIMIT/OFFSET 方案，总数用 COUNT 子查询，同一事务保证一致性</span><br><span class="line">Tasks:    1. 修改查询逻辑  2. 添加参数校验  3. 包装返回格式  4. 补充测试</span><br></pre></td></tr></tbody></table></figure>
+
+<figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">功能:</span> <span class="string">列表分页查询</span></span><br><span class="line"><span class="string">接口:</span> <span class="string">GET</span> <span class="string">/api/items</span></span><br><span class="line"><span class="string">参数:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">page:</span> <span class="string">number,</span> <span class="string">默认1,</span> <span class="string">&gt;=1</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">pageSize:</span> <span class="string">number,</span> <span class="string">默认20,</span> <span class="string">范围[1,100]</span></span><br><span class="line"><span class="string">返回:</span></span><br><span class="line">  <span class="bullet">-</span> { <span class="attr">list:</span> <span class="string">Item</span>[], <span class="attr">total:</span> <span class="string">number</span>, <span class="attr">page:</span> <span class="string">number</span>, <span class="attr">pageSize:</span> <span class="string">number</span> }</span><br><span class="line"><span class="string">约束:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">向下兼容：不传分页参数时返回全部数据</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">总数查询与数据查询在同一事务</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">超出范围返回空列表而非报错</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>AI 自主实现，人工验收。业务规则、边界条件写在 Spec 里，门控流程确保每个阶段有明确产出，不依赖人的逐步把关。</p>
+<hr>
+<h2 id="如何选择？"><a href="#如何选择？" class="headerlink" title="如何选择？"></a>如何选择？</h2><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">              确定性高</span><br><span class="line">                 |</span><br><span class="line">           +-----+-----+</span><br><span class="line">           | Spec 模式  |</span><br><span class="line">           +-----+-----+</span><br><span class="line">                 |</span><br><span class="line">-----------------+-----------------</span><br><span class="line">                 |</span><br><span class="line">           +-----+-----+</span><br><span class="line">           | Plan 模式  |</span><br><span class="line">           +-----+-----+</span><br><span class="line">                 |</span><br><span class="line">             不确定性高</span><br></pre></td></tr></tbody></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>判断维度</th>
+<th>偏 Plan</th>
+<th>偏 Spec</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>需求清晰度</td>
+<td>模糊，需要边做边探</td>
+<td>清晰，能提前写明验收标准</td>
+</tr>
+<tr>
+<td>技术路线</td>
+<td>不确定，需要试错</td>
+<td>确定，实现路径明确</td>
+</tr>
+<tr>
+<td>不可逆性</td>
+<td>低（新功能、独立模块），走偏了代价小</td>
+<td>高（线上改动、数据迁移），必须精确定义约束与验收标准</td>
+</tr>
+<tr>
+<td>团队规模</td>
+<td>小团队或个人</td>
+<td>中大型团队，跨模块协作</td>
+</tr>
+<tr>
+<td>知识沉淀需求</td>
+<td>低，用完即走</td>
+<td>高，需要可复用的组织资产</td>
+</tr>
+</tbody></table>
+<h3 id="升级信号"><a href="#升级信号" class="headerlink" title="升级信号"></a>升级信号</h3><p>从 Plan 模式起步，当出现以下信号时考虑升级到 Spec 模式：</p>
+<ol>
+<li>跨模块协作频繁，沟通成本激增</li>
+<li>同样的业务错误被不同 AI 或开发者反复踩中</li>
+<li>代码库风格开始混乱，维护成本上升</li>
+<li>希望新同事或 AI 能快速理解系统全貌，而非从头摸索</li>
+</ol>
+<hr>
+<h2 id="混合实践：Plan-Spec"><a href="#混合实践：Plan-Spec" class="headerlink" title="混合实践：Plan + Spec"></a>混合实践：Plan + Spec</h2><p>现实中的最佳解法往往是组合使用：</p>
+<ol>
+<li><strong>Plan 阶段</strong>把大目标拆成若干子任务</li>
+<li>对确定性高的子任务写 <strong>Spec</strong>，交给 AI 自主实现</li>
+<li>对不确定的子任务走 <strong>Plan 逐步推进</strong></li>
+<li>每个子任务完成后做一次整体校验</li>
+</ol>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">大目标</span><br><span class="line">  |-- 子任务A（不确定）--&gt; Plan 模式，逐步推进</span><br><span class="line">  |-- 子任务B（边界清晰）--&gt; Spec 模式，AI 自主实现</span><br><span class="line">  +-- 子任务C（边界清晰）--&gt; Spec 模式，AI 自主实现</span><br></pre></td></tr></tbody></table></figure>
+
+<p><strong>Plan 模式和 Spec 模式在实践中有显著的重叠区域。</strong> Plan 侧重过程编排（做哪几步、按什么顺序），Spec 侧重结果定义（交付什么、遵循什么约束）。当 Plan 中的步骤描述逐渐加入验收标准和约束条件时，它就在自然演进为 Spec。两者可以平滑过渡。</p>
+<hr>
+<h2 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h2><p>Vibe Coding 的核心不是选哪个模式，而是<strong>在合适的场景用合适的模式</strong>：</p>
+<ul>
+<li><strong>Plan 是过程控制</strong> — 我告诉你每一步做什么</li>
+<li><strong>Spec 是结果控制</strong> — 我告诉你最终要什么</li>
+</ul>
+<p>当你发现自己在 Plan 里写了一堆”字段名是 xxx、类型是 yyy”的时候——那是该切 Spec 的信号。反过来，Spec 写到一半发现边界条件根本想不清楚——那就先 Plan 探一探。</p>
+<p>未来的 AI 编程，核心竞争力不再是比拼谁的模型调用更快，而是<strong>谁的知识库更丰富、谁的规范更完善、谁的反馈闭环更高效</strong>。投资 Spec 模式，就是投资团队未来的生产力护城河。</p>
+<p>工具服务于人，模式服务于场景。Vibe 它就好。</p>
+
+  </div>
+</article>
+
+
+    <div class="blog-post-comments">
+        <div id="utterances_thread">
+            <noscript>加载评论需要在浏览器启用 JavaScript 脚本支持。</noscript>
+        </div>
+    </div>
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">首页</a></li>
+        
+          <li><a href="/archives/">归档</a></li>
+        
+          <li><a href="/tags/">标签</a></li>
+        
+          <li><a href="/categories/">分类</a></li>
+        
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%95%E8%A8%80%EF%BC%9A%E4%BB%8E%E5%8D%B3%E5%85%B4%E5%88%9B%E4%BD%9C%E5%88%B0%E8%A7%84%E8%8C%83%E6%96%BD%E5%B7%A5"><span class="toc-number">1.</span> <span class="toc-text">引言：从即兴创作到规范施工</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%A8%E6%99%AF%E5%AF%B9%E6%AF%94"><span class="toc-number">2.</span> <span class="toc-text">全景对比</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Plan-%E6%A8%A1%E5%BC%8F%EF%BC%9A%E4%BB%BB%E5%8A%A1%E6%B8%85%E5%8D%95%E5%BC%8F%E5%8D%8F%E4%BD%9C"><span class="toc-number">3.</span> <span class="toc-text">Plan 模式：任务清单式协作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B7%A5%E4%BD%9C%E6%B5%81"><span class="toc-number">3.1.</span> <span class="toc-text">工作流</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B3%E9%94%AE%E7%89%B9%E5%BE%81"><span class="toc-number">3.2.</span> <span class="toc-text">关键特征</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B1%80%E9%99%90"><span class="toc-number">3.3.</span> <span class="toc-text">局限</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%82%E5%90%88%E5%9C%BA%E6%99%AF"><span class="toc-number">3.4.</span> <span class="toc-text">适合场景</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Spec-%E6%A8%A1%E5%BC%8F%EF%BC%9A%E8%A7%84%E8%8C%83%E9%A9%B1%E5%8A%A8%E5%BC%80%E5%8F%91"><span class="toc-number">4.</span> <span class="toc-text">Spec 模式：规范驱动开发</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B7%A5%E4%BD%9C%E6%B5%81-1"><span class="toc-number">4.1.</span> <span class="toc-text">工作流</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B3%E9%94%AE%E7%89%B9%E5%BE%81-1"><span class="toc-number">4.2.</span> <span class="toc-text">关键特征</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B1%80%E9%99%90-1"><span class="toc-number">4.3.</span> <span class="toc-text">局限</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%82%E5%90%88%E5%9C%BA%E6%99%AF-1"><span class="toc-number">4.4.</span> <span class="toc-text">适合场景</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%AD%A3%E9%9D%A2%E4%BA%A4%E9%94%8B%EF%BC%9A%E5%90%8C%E4%B8%80%E4%BB%BB%E5%8A%A1%E7%9A%84%E4%B8%8D%E5%90%8C%E8%A7%A3%E6%B3%95"><span class="toc-number">5.</span> <span class="toc-text">正面交锋：同一任务的不同解法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Plan-%E6%A8%A1%E5%BC%8F"><span class="toc-number">5.1.</span> <span class="toc-text">Plan 模式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Spec-%E6%A8%A1%E5%BC%8F"><span class="toc-number">5.2.</span> <span class="toc-text">Spec 模式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E9%80%89%E6%8B%A9%EF%BC%9F"><span class="toc-number">6.</span> <span class="toc-text">如何选择？</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%87%E7%BA%A7%E4%BF%A1%E5%8F%B7"><span class="toc-number">6.1.</span> <span class="toc-text">升级信号</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B7%B7%E5%90%88%E5%AE%9E%E8%B7%B5%EF%BC%9APlan-Spec"><span class="toc-number">7.</span> <span class="toc-text">混合实践：Plan + Spec</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%99%E5%9C%A8%E6%9C%80%E5%90%8E"><span class="toc-number">8.</span> <span class="toc-text">写在最后</span></a></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifs.com/2026/04/20/vibecoding-planvsspec/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifs.com/2026/04/20/vibecoding-planvsspec/&text=【Vibe Coding】Plan 模式 vs Spec 模式"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifs.com/2026/04/20/vibecoding-planvsspec/&title=【Vibe Coding】Plan 模式 vs Spec 模式"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifs.com/2026/04/20/vibecoding-planvsspec/&is_video=false&description=【Vibe Coding】Plan 模式 vs Spec 模式"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=【Vibe Coding】Plan 模式 vs Spec 模式&body=Check out this article: https://haifs.com/2026/04/20/vibecoding-planvsspec/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifs.com/2026/04/20/vibecoding-planvsspec/&title=【Vibe Coding】Plan 模式 vs Spec 模式"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifs.com/2026/04/20/vibecoding-planvsspec/&title=【Vibe Coding】Plan 模式 vs Spec 模式"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifs.com/2026/04/20/vibecoding-planvsspec/&title=【Vibe Coding】Plan 模式 vs Spec 模式"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifs.com/2026/04/20/vibecoding-planvsspec/&title=【Vibe Coding】Plan 模式 vs Spec 模式"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifs.com/2026/04/20/vibecoding-planvsspec/&name=【Vibe Coding】Plan 模式 vs Spec 模式&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifs.com/2026/04/20/vibecoding-planvsspec/&t=【Vibe Coding】Plan 模式 vs Spec 模式"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2019-2026
+    haif.
+    <a target="_blank" rel="noopener" href="https://beian.miit.gov.cn/">
+      鲁ICP备19052103号
+    </a>
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a href="/tags/">标签</a></li><!--
+     --><!--
+       --><li><a href="/categories/">分类</a></li><!--
+     --><!--
+       --><li><a href="/search/">搜索</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板！\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功！");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+  <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?d3c8edb388553a2084296cbfe9a0785a";
+          var s = document.getElementsByTagName("script")[0];
+          s.parentNode.insertBefore(hm, s);
+        })();
+        </script>
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+    <script type="text/javascript">
+      var utterances_repo = 'haifuns/haifuns.github.io';
+      var utterances_issue_term = 'pathname';
+      var utterances_label = 'Comment';
+      var utterances_theme = 'github-light';
+
+      (function(){
+          var script = document.createElement('script');
+
+          script.src = 'https://utteranc.es/client.js';
+          script.setAttribute('repo', utterances_repo);
+          script.setAttribute('issue-term', 'pathname');
+          script.setAttribute('label', utterances_label);
+          script.setAttribute('theme', utterances_theme);
+          script.setAttribute('crossorigin', 'anonymous');
+          script.async = true;
+          (document.getElementById('utterances_thread')).appendChild(script);
+      }());
+  </script>
+
+</body>
+</html>
