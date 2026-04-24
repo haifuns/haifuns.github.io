@@ -10,7 +10,7 @@ date: 2026-04-24 12:00:00
 
 ## 提示词
 
-[elder-plinius/CL4R1T4S/ANTHROPIC/Claude-Design-Sys-Prompt.txt](https://github.com/elder-plinius/CL4R1T4S/blob/main/ANTHROPIC/Claude-Design-Sys-Prompt.txt)
+[github/elder-plinius/CL4R1T4S/ANTHROPIC/Claude-Design-Sys-Prompt.txt](https://github.com/elder-plinius/CL4R1T4S/blob/main/ANTHROPIC/Claude-Design-Sys-Prompt.txt)
 
 ---
 
@@ -77,11 +77,11 @@ date: 2026-04-24 12:00:00
 
     ## React + Babel（用于内联 JSX）
     编写带内联 JSX 的 React 原型时，必须使用以下带有固定版本号和完整性哈希的确切 script 标签。不得使用不固定版本（如 react@18）或省略 integrity 属性。
-    ```html
+    \`\`\`html
     <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
-    ```
+    \`\`\`
 
     然后使用 script 标签导入你编写的辅助脚本或组件。避免在 script 导入中使用 type="module"——可能会导致问题。
 
@@ -90,14 +90,14 @@ date: 2026-04-24 12:00:00
 
     **关键：使用多个 Babel 脚本文件时，组件之间不共享作用域。**
     每个 `<script type="text/babel">` 在编译后都有独立作用域。要在文件间共享组件，请在组件文件末尾将它们导出到 `window`：
-    ```js
+    \`\`\`js
     // 在 components.jsx 末尾：
     Object.assign(window, {
       Terminal, Line, Spacer,
       Gray, Blue, Green, Bold,
       // ... 所有需要共享的组件
     });
-    ```
+    \`\`\`
 
     这使组件对其他脚本全局可用。
 
@@ -151,7 +151,7 @@ date: 2026-04-24 12:00:00
 
     你的 HTML 产物可以通过内置帮助函数调用 Claude，无需 SDK 或 API 密钥。
 
-    ```html
+    \`\`\`html
     <script>
     (async () => {
       const text = await window.claude.complete("总结：...");
@@ -161,7 +161,7 @@ date: 2026-04-24 12:00:00
       });
     })();
     </script>
-    ```
+    \`\`\`
 
     调用使用 `claude-haiku-4-5`，输出上限为 1024 个 Token（固定——共享产物在查看者的配额下运行）。每用户有速率限制。
 
@@ -178,9 +178,9 @@ date: 2026-04-24 12:00:00
 
     要读取或复制其他项目的文件，在路径前加 `/projects/<projectId>/` 前缀：
 
-    ```
+    \`\`\`
     read_file({ path: "/projects/2LHLW5S9xNLRKrnvRbTT/index.html" })
-    ```
+    \`\`\`
 
     跨项目访问**只读**——无法写入、编辑或删除其他项目的文件。用户必须对源项目有查看权限。跨项目文件不能用于 HTML 输出（例如不能作为 img 的 url）。需要时，将所需内容复制到当前项目！
 
@@ -255,13 +255,13 @@ date: 2026-04-24 12:00:00
 
     用注释标记包裹可调节的默认值，以便宿主在磁盘上重写它们：
 
-    ```
+    \`\`\`
     const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
       "primaryColor": "#D97757",
       "fontSize": 16,
       "dark": false
     }/*EDITMODE-END*/;
-    ```
+    \`\`\`
 
     标记之间的内容**必须是有效 JSON**（键和字符串用双引号）。根 HTML 文件的内联 `<script>` 中必须有且仅有一处此类块。当你发送 `__edit_mode_set_keys` 时，宿主解析 JSON、合并编辑内容并写回文件——更改在重新加载后依然有效。
 
@@ -360,11 +360,7 @@ date: 2026-04-24 12:00:00
 
 ---
 
-## 提示词结构分析
-
----
-
-### 架构骨架
+## 架构骨架
 
 ```
 角色定义 → 安全边界 → 工作流程 SOP → 功能模块手册 → 反模式清单 → 工具目录
@@ -372,9 +368,9 @@ date: 2026-04-24 12:00:00
 
 ---
 
-### 6 个核心技法
+## 6 个核心技法
 
-#### 1. 角色三段式
+### 1. 角色三段式 + 动态切换
 
 不只说"你是设计师"，而是给出**关系定位 + 环境约束 + 输出媒介**：
 
@@ -383,7 +379,9 @@ date: 2026-04-24 12:00:00
 使用 [工具/媒介] 在 [环境约束] 中完成 [目标]。
 ```
 
-#### 2. 时序约束带后果
+角色还要随任务动态切换：做动画时是动效设计师，做幻灯片时是 Deck 设计师——这样 AI 不会用"做网页"的思维套所有任务。
+
+### 2. 时序约束带后果
 
 不只说"先做 A 再做 B"，而是说清楚反序的具体后果——AI 理解因果后不会乱变：
 
@@ -392,7 +390,7 @@ date: 2026-04-24 12:00:00
 如果先做 [B]，会导致 [具体后果]，从而使 [功能X] 静默失效。
 ```
 
-#### 3. 决策对照表代替抽象规则
+### 3. 决策对照表代替抽象规则
 
 用具体案例让 AI 类比推理，而非死记规则：
 
@@ -404,47 +402,55 @@ date: 2026-04-24 12:00:00
 
 任何需要判断"是否做某件事"的场景，给 3-5 个正反例对照即可。
 
-#### 4. 反模式清单对抗统计偏好
+### 4. 反模式清单对抗统计偏好
 
 AI 有统计偏好，总往最常见的方向走。反模式清单直接针对这些偏差：
 
 ```
 - 避免大量使用渐变背景
-- 避免使用 Inter、Roboto、Arial
+- 避免使用 Inter、Roboto、Arial（烂大街字体）
 - 避免带左侧边框强调色的圆角容器
+- 避免用 SVG 硬画复杂图形，用占位符代替
+- 避免堆砌无意义的数字和图标（data slop）
 ```
 
 写 Prompt 时问自己：**"这个 AI 最可能犯什么错？"** 然后明确禁止它。
 
-#### 5. 数字锚定消除歧义
+### 5. 数字锚定消除歧义
 
 软性约束（"不要太长"）有歧义，用具体数字强制锚定：
 
 ```
-- 文件不超过 **1000 行**
-- 不批量复制超过 **20 个文件**的资源文件夹
-- 幻灯片编号从 **1** 开始，不是 0
+- 文件不超过 1000 行
+- 不批量复制超过 20 个文件的资源文件夹
+- 幻灯片编号从 1 开始，不是 0（人类不说"第 0 张幻灯片"）
 ```
 
-#### 6. 工具三件套：触发条件 + 边界
+### 6. 工具三件套：触发条件 + 边界
 
 | 工具 | 触发条件 | 边界 |
 |---|---|---|
 | `done` | 轮次末尾 HTML 交付 | 等控制台错误反馈 |
-| `fork_verifier_agent` | `done` 无误后 | 不等待，直接结束轮次 |
+| `fork_verifier_agent` | `done` 无误后 | fork 独立子 Agent 验证，避免"自己审自己"的确认偏误；不等待，直接结束轮次 |
 | `show_to_user` | 任务中途预览 | 适合非 HTML 文件 |
-| `snip` | 某阶段完成后 | 静默操作，不告知用户 |
+| `snip` | 某阶段完成后 | 静默标记可删除段落，上下文压力大时自动释放 |
+
+`fork_verifier_agent` 的设计值得单独说明：AI 检查自己的输出时容易陷入确认偏误，倾向于认为自己做得没问题。用全新上下文的独立 Agent 来验证，能有效打破这种偏误。
 
 ---
 
-### 方法论总结
+## 方法论总结
 
 | 层次 | 技法 |
 |---|---|
-| 角色层 | 角色 + 关系定位 + 工作环境 |
-| 流程层 | 有序 SOP，关键步骤不可跳过 |
+| 角色层 | 角色 + 关系定位 + 工作环境；随任务动态切换专业身份 |
+| 流程层 | 有序 SOP，关键步骤不可跳过；尽早出 v0 半成品对齐方向 |
 | 约束层 | 反例驱动 / 数字锚定 / 反模式清单 |
 | 决策层 | 正反例对照表代替抽象规则 |
-| 工具层 | 工具 + 触发条件 + 边界 |
+| 工具层 | 工具 + 触发条件 + 边界；独立 Agent 验证避免确认偏误 |
 
-**核心结论**：这份 Prompt 不是在描述 AI 应该是什么样子，而是在预测 AI 会在哪里犯错，并精准堵死每一个漏洞。这是高级 Prompt 工程与入门级最大的分水岭。
+> **核心结论**：这份 Prompt 不是在描述 AI 应该是什么样子，而是在预测 AI 会在哪里犯错，并精准堵死每一个漏洞。实测对比：裸跑是 85 分的好学生作品，加上这套约束是 95 分的设计师作品——差距来自那些看似琐碎的规则叠加后的量变。
+
+## 类 Claude Design 开源 Skill
+
+-   [code秘密花园 - web-design-skill](https://github.com/ConardLi/web-design-skill)
