@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="先回答一个问题：AI 应用开发的本质是什么？大多数 AI 项目的失败，不是因为模型不够强，而是因为不知道模型和工程系统之间隔着什么。 一个 LLM 再强，如果：  不知道你的私有数据（知识断层） 不知道外部世界发生了什么（实时性断层） 不能可靠地完成任务（控制断层） 不能被人信任地使用（可靠性断层）  它就只是一个能说会道的玩具。 过去三年，整个 AI 工程生态的核心任务，就是一层一层填补这四个断">
+<meta property="og:type" content="article">
+<meta property="og:title" content="AI 工程能力演进：从模型到可靠系统">
+<meta property="og:url" content="https://haifs.com/2026/04/26/ai-engineering-evolution/index.html">
+<meta property="og:site_name" content="haif&#39;s blog">
+<meta property="og:description" content="先回答一个问题：AI 应用开发的本质是什么？大多数 AI 项目的失败，不是因为模型不够强，而是因为不知道模型和工程系统之间隔着什么。 一个 LLM 再强，如果：  不知道你的私有数据（知识断层） 不知道外部世界发生了什么（实时性断层） 不能可靠地完成任务（控制断层） 不能被人信任地使用（可靠性断层）  它就只是一个能说会道的玩具。 过去三年，整个 AI 工程生态的核心任务，就是一层一层填补这四个断">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-04-26T14:00:00.000Z">
+<meta property="article:modified_time" content="2026-04-26T14:05:15.886Z">
+<meta property="article:author" content="haif.">
+<meta property="article:tag" content="演进">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>AI 工程能力演进：从模型到可靠系统</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+      <link rel="alternate" href="/true" title="haif&#39;s blog" type="application/atom+xml" />
+    
+	<!-- mathjax -->
+	
+		<script type="text/x-mathjax-config">
+		  MathJax.Hub.Config({
+			tex2jax: {
+			  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+			  inlineMath: [['$','$']]
+			}
+		  });
+		</script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
+	
+<meta name="generator" content="Hexo 5.4.2">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="顶部" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a href="/tags/">标签</a></li><!--
+     --><!--
+       --><li><a href="/categories/">分类</a></li><!--
+     --><!--
+       --><li><a href="/search/">搜索</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="下一篇" href="/2026/04/24/claudedesignprompt/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="返回顶部" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="分享文章" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifs.com/2026/04/26/ai-engineering-evolution/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifs.com/2026/04/26/ai-engineering-evolution/&text=AI 工程能力演进：从模型到可靠系统"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifs.com/2026/04/26/ai-engineering-evolution/&title=AI 工程能力演进：从模型到可靠系统"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifs.com/2026/04/26/ai-engineering-evolution/&is_video=false&description=AI 工程能力演进：从模型到可靠系统"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=AI 工程能力演进：从模型到可靠系统&body=Check out this article: https://haifs.com/2026/04/26/ai-engineering-evolution/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifs.com/2026/04/26/ai-engineering-evolution/&title=AI 工程能力演进：从模型到可靠系统"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifs.com/2026/04/26/ai-engineering-evolution/&title=AI 工程能力演进：从模型到可靠系统"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifs.com/2026/04/26/ai-engineering-evolution/&title=AI 工程能力演进：从模型到可靠系统"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifs.com/2026/04/26/ai-engineering-evolution/&title=AI 工程能力演进：从模型到可靠系统"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifs.com/2026/04/26/ai-engineering-evolution/&name=AI 工程能力演进：从模型到可靠系统&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifs.com/2026/04/26/ai-engineering-evolution/&t=AI 工程能力演进：从模型到可靠系统"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%88%E5%9B%9E%E7%AD%94%E4%B8%80%E4%B8%AA%E9%97%AE%E9%A2%98%EF%BC%9AAI-%E5%BA%94%E7%94%A8%E5%BC%80%E5%8F%91%E7%9A%84%E6%9C%AC%E8%B4%A8%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">1.</span> <span class="toc-text">先回答一个问题：AI 应用开发的本质是什么？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A8%A1%E5%9E%8B%E6%BC%94%E8%BF%9B%EF%BC%9A%E5%9B%9B%E6%AC%A1%E8%83%BD%E5%8A%9B%E8%B7%83%E8%BF%81"><span class="toc-number">2.</span> <span class="toc-text">模型演进：四次能力跃迁</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%9B%E4%BB%A3%E8%8C%83%E5%BC%8F"><span class="toc-number">2.1.</span> <span class="toc-text">四代范式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8E%A8%E7%90%86%E6%A8%A1%E5%9E%8B%EF%BC%9A%E6%85%A2%E6%80%9D%E8%80%83%E7%9A%84%E5%B7%A5%E7%A8%8B%E4%BB%B7%E5%80%BC"><span class="toc-number">2.2.</span> <span class="toc-text">推理模型：慢思考的工程价值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8A%E4%B8%8B%E6%96%87%E7%AA%97%E5%8F%A3%E8%86%A8%E8%83%80%EF%BC%9A%E6%94%B9%E5%8F%98%E4%BA%86%E4%BB%80%E4%B9%88"><span class="toc-number">2.3.</span> <span class="toc-text">上下文窗口膨胀：改变了什么</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Prompt-%E7%9A%84%E6%BC%94%E5%8C%96%E5%8F%B2%EF%BC%9A%E4%B8%89%E6%AC%A1%E5%B7%A5%E7%A8%8B%E8%8C%83%E5%BC%8F"><span class="toc-number">3.</span> <span class="toc-text">Prompt 的演化史：三次工程范式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8C%83%E5%BC%8F%E4%B8%80%EF%BC%9APrompt-Engineering%EF%BC%882022%E2%80%932023%EF%BC%89"><span class="toc-number">3.1.</span> <span class="toc-text">范式一：Prompt Engineering（2022–2023）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8C%83%E5%BC%8F%E4%BA%8C%EF%BC%9AContext-Engineering%EF%BC%882023%E2%80%932024%EF%BC%89"><span class="toc-number">3.2.</span> <span class="toc-text">范式二：Context Engineering（2023–2024）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8C%83%E5%BC%8F%E4%B8%89%EF%BC%9AHarness-Engineering%EF%BC%882025%E2%80%932026%EF%BC%89"><span class="toc-number">3.3.</span> <span class="toc-text">范式三：Harness Engineering（2025–2026）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ReAct-%E5%BE%AA%E7%8E%AF%EF%BC%9AAgent-%E7%9A%84%E5%BA%95%E5%B1%82%E9%AA%A8%E6%9E%B6"><span class="toc-number">4.</span> <span class="toc-text">ReAct 循环：Agent 的底层骨架</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MCP%E3%80%81Skill%E3%80%81Spec%EF%BC%9A%E5%B7%A5%E7%A8%8B%E6%A0%87%E5%87%86%E5%8C%96%E7%9A%84%E4%B8%89%E6%9D%BF%E6%96%A7"><span class="toc-number">5.</span> <span class="toc-text">MCP、Skill、Spec：工程标准化的三板斧</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#MCP%EF%BC%88Model-Context-Protocol%EF%BC%89"><span class="toc-number">5.1.</span> <span class="toc-text">MCP（Model Context Protocol）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Skill-System"><span class="toc-number">5.2.</span> <span class="toc-text">Skill System</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Spec-%E9%A9%B1%E5%8A%A8%E5%BC%80%E5%8F%91"><span class="toc-number">5.3.</span> <span class="toc-text">Spec 驱动开发</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Agent-%E6%9E%B6%E6%9E%84%EF%BC%9A%E5%A4%9A-Agent-%E5%A6%82%E4%BD%95%E5%8D%8F%E4%BD%9C"><span class="toc-number">6.</span> <span class="toc-text">Agent 架构：多 Agent 如何协作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%8F%E4%BD%9C%E6%8B%93%E6%89%91%E7%9A%84%E6%BC%94%E8%BF%9B"><span class="toc-number">6.1.</span> <span class="toc-text">协作拓扑的演进</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Agent-%E7%9A%84%E5%9B%9B%E5%B1%82%E8%AE%B0%E5%BF%86"><span class="toc-number">6.2.</span> <span class="toc-text">Agent 的四层记忆</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B7%A5%E5%85%B7%E9%93%BE%E5%85%A8%E6%99%AF%E5%9B%BE"><span class="toc-number">7.</span> <span class="toc-text">工具链全景图</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%9E%8B%E8%B0%83%E7%94%A8%E5%B1%82"><span class="toc-number">7.1.</span> <span class="toc-text">模型调用层</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BA%94%E7%94%A8%E6%A1%86%E6%9E%B6%E5%B1%82"><span class="toc-number">7.2.</span> <span class="toc-text">应用框架层</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="toc-number">7.3.</span> <span class="toc-text">向量数据库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7"><span class="toc-number">7.4.</span> <span class="toc-text">可观测性</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%A4%E4%BA%92%E5%BD%A2%E6%80%81%E6%BC%94%E8%BF%9B%EF%BC%9A%E4%BB%8E%E5%AF%B9%E8%AF%9D%E6%A1%86%E5%88%B0%E7%B3%BB%E7%BB%9F%E7%BA%A7-AI"><span class="toc-number">8.</span> <span class="toc-text">交互形态演进：从对话框到系统级 AI</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E5%85%A8%E4%B8%8E%E5%8F%AF%E9%9D%A0%E6%80%A7"><span class="toc-number">9.</span> <span class="toc-text">安全与可靠性</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B9%BB%E8%A7%89%E9%97%AE%E9%A2%98"><span class="toc-number">9.1.</span> <span class="toc-text">幻觉问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E5%85%A8%E6%8A%A4%E6%A0%8F"><span class="toc-number">9.2.</span> <span class="toc-text">安全护栏</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8A%80%E6%9C%AF%E9%80%89%E5%9E%8B%E9%80%9F%E6%9F%A5"><span class="toc-number">10.</span> <span class="toc-text">技术选型速查</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%99%84%EF%BC%9A%E6%BC%94%E8%BF%9B%E5%85%A8%E6%99%AF%E9%80%9F%E8%A7%88"><span class="toc-number">11.</span> <span class="toc-text">附：演进全景速览</span></a></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        AI 工程能力演进：从模型到可靠系统
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">haif.</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2026-04-26T14:00:00.000Z" class="dt-published" itemprop="datePublished">2026-04-26</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/AI/">AI</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/%E6%BC%94%E8%BF%9B/" rel="tag">演进</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h2 id="先回答一个问题：AI-应用开发的本质是什么？"><a href="#先回答一个问题：AI-应用开发的本质是什么？" class="headerlink" title="先回答一个问题：AI 应用开发的本质是什么？"></a>先回答一个问题：AI 应用开发的本质是什么？</h2><p>大多数 AI 项目的失败，不是因为模型不够强，而是因为<strong>不知道模型和工程系统之间隔着什么</strong>。</p>
+<p>一个 LLM 再强，如果：</p>
+<ul>
+<li>不知道你的私有数据（知识断层）</li>
+<li>不知道外部世界发生了什么（实时性断层）</li>
+<li>不能可靠地完成任务（控制断层）</li>
+<li>不能被人信任地使用（可靠性断层）</li>
+</ul>
+<p>它就只是一个能说会道的玩具。</p>
+<p>过去三年，整个 AI 工程生态的核心任务，就是<strong>一层一层填补这四个断层</strong>。本文的结构，就是沿着这条线索展开。</p>
+<hr>
+<h2 id="模型演进：四次能力跃迁"><a href="#模型演进：四次能力跃迁" class="headerlink" title="模型演进：四次能力跃迁"></a>模型演进：四次能力跃迁</h2><h3 id="四代范式"><a href="#四代范式" class="headerlink" title="四代范式"></a>四代范式</h3><p>如果把 LLM 的发展压缩成一句话：<strong>模型越来越会”想”，系统越来越会”做”。</strong></p>
+<p>按训练范式划分，LLM 经历了四次代际切换：</p>
+<table>
+<thead>
+<tr>
+<th>代际</th>
+<th>阶段</th>
+<th>核心问题</th>
+<th>代表</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>第一代</td>
+<td>规模定律</td>
+<td>参数量够大就能变强</td>
+<td>GPT-3（2020）</td>
+</tr>
+<tr>
+<td>第二代</td>
+<td>对齐与指令</td>
+<td>模型要听得懂人话</td>
+<td>RLHF、DPO（2022–2023）</td>
+</tr>
+<tr>
+<td>第三代</td>
+<td>推理期计算</td>
+<td>难的问题多想一会</td>
+<td>o1、DeepSeek-R1（2024）</td>
+</tr>
+<tr>
+<td>第四代</td>
+<td>多模态原生</td>
+<td>统一感知世界</td>
+<td>GPT-4o、Gemini 2.5（2024–2025）</td>
+</tr>
+</tbody></table>
+<p><strong>对齐技术的演进</strong>值得单独说。方向很清晰：降低人工标注成本，提高稳定性。</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">RLHF：人类标注偏好 → 训练 Reward Model → PPO 微调</span><br><span class="line">  ↑</span><br><span class="line">  缺点：标注成本高，多样性受限，Reward hacking 风险</span><br><span class="line"></span><br><span class="line">DPO（Direct Preference Optimization）：绕过 Reward Model，直接用偏好数据优化</span><br><span class="line">  ↑</span><br><span class="line">  缺点：依赖高质量偏好数据集</span><br><span class="line"></span><br><span class="line">Constitutional AI：基于规则（宪法原则）自动对齐，无需人工逐条标注</span><br></pre></td></tr></tbody></table></figure>
+
+<p>当模型能力接近甚至超越人类标注者时，对齐问题升级为 <strong>Scalable Oversight</strong>：如何监督一个比你更聪明的模型？这仍是 2025–2026 年最前沿的开放问题。</p>
+<h3 id="推理模型：慢思考的工程价值"><a href="#推理模型：慢思考的工程价值" class="headerlink" title="推理模型：慢思考的工程价值"></a>推理模型：慢思考的工程价值</h3><p>2024 年 9 月 o1 发布是 LLM 发展的一个转折点。</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">快思考（传统）：问题 → 自回归生成 → 答案</span><br><span class="line">慢思考（o1/R1）：问题 → [内部思维链搜索、试错、反思] → 答案</span><br></pre></td></tr></tbody></table></figure>
+
+<p>这不是噱头。o1 在 AIME 数学竞赛、Codeforces 编程竞赛上的表现超过 99% 的人类选手。DeepSeek-R1 以 MIT 许可证开源，用纯强化学习（GRPO）训练出对标 o1 的推理能力，训练成本不到 600 万美元。</p>
+<p>对工程师来说，这意味着：<strong>需要严密推理的任务，终于可以交给模型了</strong>。但也要注意，推理模型的 token 消耗是普通模型的 10–100 倍，合理分流是关键。</p>
+<h3 id="上下文窗口膨胀：改变了什么"><a href="#上下文窗口膨胀：改变了什么" class="headerlink" title="上下文窗口膨胀：改变了什么"></a>上下文窗口膨胀：改变了什么</h3><p>从 4K 到 10M tokens，不只是数字变化，它消解了一些原本必须靠 RAG 才能解决的问题。</p>
+<table>
+<thead>
+<tr>
+<th>上下文窗口</th>
+<th>时间</th>
+<th>工程意义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>4K</td>
+<td>2022</td>
+<td>标准对话，RAG 成为刚需</td>
+</tr>
+<tr>
+<td>128K</td>
+<td>2023</td>
+<td>整本书、整个代码库可塞入 Prompt</td>
+</tr>
+<tr>
+<td>1M</td>
+<td>2024</td>
+<td>多文档长报告、长视频字幕处理</td>
+</tr>
+<tr>
+<td>10M</td>
+<td>2025–2026</td>
+<td>全代码仓库 + 全历史对话，RAG 部分场景被替代</td>
+</tr>
+</tbody></table>
+<p><strong>技术挑战的核心</strong>：位置编码（RoPE/ALiBi）、注意力计算（Flash Attention）、成本控制（稀疏注意力、语义压缩）。</p>
+<p>当上下文窗口足够大时，整个 RAG 管线的必要性会部分消解——但不会完全消失，因为向量检索还有知识隔离和成本优势。</p>
+<hr>
+<h2 id="Prompt-的演化史：三次工程范式"><a href="#Prompt-的演化史：三次工程范式" class="headerlink" title="Prompt 的演化史：三次工程范式"></a>Prompt 的演化史：三次工程范式</h2><p>Prompt Engineering 不是一成不变的技巧，它经历了三次范式升级。</p>
+<h3 id="范式一：Prompt-Engineering（2022–2023）"><a href="#范式一：Prompt-Engineering（2022–2023）" class="headerlink" title="范式一：Prompt Engineering（2022–2023）"></a>范式一：Prompt Engineering（2022–2023）</h3><p>这是最早被认识的层次：<strong>怎么问，决定了模型怎么答。</strong></p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">ICL（In-Context Learning）：给例子，让模型从例子中推断规律</span><br><span class="line">  关键：示例数量 ↑ 但边际收益递减，过多示例反而稀释主题</span><br><span class="line"></span><br><span class="line">CoT（Chain-of-Thought）：让模型输出推理过程再给答案</span><br><span class="line">  关键发现：数学、逻辑、多步推理任务准确率显著提升</span><br><span class="line"></span><br><span class="line">Zero-Shot CoT：一句 "Let's think step by step" 触发推理链，无需手工示例</span><br></pre></td></tr></tbody></table></figure>
+
+<p><strong>Structured Output 是工程中最高频的需求</strong>：强制 JSON 格式输出。最佳实践：</p>
+<ul>
+<li>优先用模型原生的 <code>response_format: { type: "json_object" }</code> 参数，而非依赖 Prompt 描述</li>
+<li>System Prompt 中提供 JSON Schema 约束字段类型</li>
+<li>复杂嵌套结构拆分为多步，避免单次输出过长截断</li>
+</ul>
+<h3 id="范式二：Context-Engineering（2023–2024）"><a href="#范式二：Context-Engineering（2023–2024）" class="headerlink" title="范式二：Context Engineering（2023–2024）"></a>范式二：Context Engineering（2023–2024）</h3><p>当单次 Prompt 不够用，问题变成：<strong>下一步该喂模型什么信息？</strong></p>
+<p>这就是 Context Engineering 的本质——对”输入环境”的工程化。</p>
+<p>RAG 是最典型的实践：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Naive RAG：Query → 检索 Top-K → 拼接 → 生成</span><br><span class="line">HyDE：用 LLM 生成假设答案，再检索匹配</span><br><span class="line">Corrective RAG：加入结果评估和重检索</span><br><span class="line">GraphRAG：构建知识图谱，支持跨文档全局性问题</span><br><span class="line">Agentic RAG：Agent 自主决定是否检索、检索什么</span><br></pre></td></tr></tbody></table></figure>
+
+<p><strong>GraphRAG 的动机</strong>：向量相似度匹配在”这篇文档里某个事实是什么”上很有效，但在”这份财报体现了公司什么样的战略转变”这类全局性问题上往往失效——因为答案分散在多个章节，没有明显的相似段落。</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">向量 RAG：擅长局部事实问答</span><br><span class="line">GraphRAG：擅长全局主题摘要</span><br><span class="line">结构化 RAG：Text-to-Cypher / Text-to-SQL，适合强结构化数据</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="范式三：Harness-Engineering（2025–2026）"><a href="#范式三：Harness-Engineering（2025–2026）" class="headerlink" title="范式三：Harness Engineering（2025–2026）"></a>范式三：Harness Engineering（2025–2026）</h3><p>这是当前最核心、也最被低估的工程范式。</p>
+<p><strong>核心公式</strong>：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Agent = Model + Harness</span><br></pre></td></tr></tbody></table></figure>
+
+<p>模型是天赋异禀但方向不可控的千里马，Harness 是缰绳、护栏和验收机制的总和——<strong>Harness 是 Agent 运行环境中除模型本身之外的一切</strong>。</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Prompt Engineering → 对马喊话的技巧（单次调用怎么说）</span><br><span class="line">Context Engineering → 给马看地图（每步该喂什么信息）</span><br><span class="line">Harness Engineering → 造高速公路，配护栏和限速牌（整个任务怎么结构化推进）</span><br></pre></td></tr></tbody></table></figure>
+
+<p>后者的边界包含前者：Harness = Prompt + Context + 执行控制系统。</p>
+<p><strong>Harness 六层核心组件</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>层级</th>
+<th>职责</th>
+<th>典型实现</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>上下文管理</td>
+<td>组织提示词与文档，定义信息边界</td>
+<td>RAG 管线、Compaction 策略</td>
+</tr>
+<tr>
+<td>工具系统</td>
+<td>模型通过写代码调用工具，而非塞满上下文</td>
+<td>Tool Mediation</td>
+</tr>
+<tr>
+<td>执行编排</td>
+<td>步骤划分、决策节点、终止条件、异常处理</td>
+<td>Planner-Generator-Evaluator</td>
+</tr>
+<tr>
+<td>状态与记忆</td>
+<td>跨 session 持久状态</td>
+<td>Episodic / Semantic / 程序记忆</td>
+</tr>
+<tr>
+<td>评估与观测</td>
+<td>生产与验收分离，独立验收系统</td>
+<td>Evaluator、Trace 工具</td>
+</tr>
+<tr>
+<td>约束与失败恢复</td>
+<td>限制不可做的事，自动重试与路径切换</td>
+<td>棘轮效应、轨迹编译</td>
+</tr>
+</tbody></table>
+<p><strong>两个关键工程机制</strong>：</p>
+<ul>
+<li><strong>棘轮效应</strong>：每次失败经验 → Critic 分析根因 → Refiner 更新规则 → 下一个 Agent 受益。错误不是浪费，而是系统养料。</li>
+<li><strong>轨迹编译</strong>：同类任务连续成功 3 次以上 → 编译为确定性脚本，省去 LLM 调用。聪明的系统会越来越快。</li>
+</ul>
+<p><strong>工程师角色的转变</strong>：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">旧角色：亲手写代码的工匠</span><br><span class="line">新角色：设计规则的乐队指挥</span><br><span class="line"></span><br><span class="line">核心活动：架构设计 → 意图拆解 → 验收结果</span><br></pre></td></tr></tbody></table></figure>
+
+<blockquote>
+<p>“Agent 的每一次失败，都是环境设计不完善的信号。正确的回应不是换更强的模型，而是重新设计它运行的环境。”</p>
+</blockquote>
+<hr>
+<h2 id="ReAct-循环：Agent-的底层骨架"><a href="#ReAct-循环：Agent-的底层骨架" class="headerlink" title="ReAct 循环：Agent 的底层骨架"></a>ReAct 循环：Agent 的底层骨架</h2><p>不管用哪个框架（MCP、AutoGen、LangGraph），所有 Agent 的底层都是同一个模式：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">思考（Reason）→ 动手（Act）→ 看结果（Observe）→ 再思考 → 解决问题</span><br></pre></td></tr></tbody></table></figure>
+
+<p><strong>ReAct vs CoT 的本质区别</strong>：CoT 是纯推理，ReAct 引入环境反馈——模型能观察行动结果并据此修正推理。</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"># ReAct 的标准格式</span><br><span class="line">Thought:     需要查询北京的天气</span><br><span class="line">Action:      search_weather(city="北京")</span><br><span class="line">Observation:  晴，25°C</span><br><span class="line">Thought:     天气适合户外活动</span><br><span class="line">Action:      generate_suggestions(topic="户外")</span><br><span class="line">Final Answer: 建议去公园跑步</span><br></pre></td></tr></tbody></table></figure>
+
+<p>从 ReAct 循环的视角，可以清晰地看到这几年工程进展的填补路径：</p>
+<table>
+<thead>
+<tr>
+<th>缺失环节</th>
+<th>补全技术</th>
+<th>时间</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>动手能力</td>
+<td>RAG</td>
+<td>2023</td>
+</tr>
+<tr>
+<td>动手工具</td>
+<td>Function Calling</td>
+<td>2023</td>
+</tr>
+<tr>
+<td>动手标准化</td>
+<td>MCP</td>
+<td>2024</td>
+</tr>
+<tr>
+<td>动手复用性</td>
+<td>Skill System</td>
+<td>2025</td>
+</tr>
+<tr>
+<td>动手协作</td>
+<td>A2A</td>
+<td>2025</td>
+</tr>
+<tr>
+<td>看结果可靠性</td>
+<td>Harness</td>
+<td>2025–2026</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="MCP、Skill、Spec：工程标准化的三板斧"><a href="#MCP、Skill、Spec：工程标准化的三板斧" class="headerlink" title="MCP、Skill、Spec：工程标准化的三板斧"></a>MCP、Skill、Spec：工程标准化的三板斧</h2><h3 id="MCP（Model-Context-Protocol）"><a href="#MCP（Model-Context-Protocol）" class="headerlink" title="MCP（Model Context Protocol）"></a>MCP（Model Context Protocol）</h3><p>当 Agent 系统中的工具、数据源、模型越来越多，N×M 的集成复杂度急剧膨胀。</p>
+<p>MCP 是 Anthropic 在 2024 年提出的标准化协议——<strong>AI 世界的 USB-C</strong>：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">旧方式：每个 AI 产品 × 每个工具 = N×M 个集成点</span><br><span class="line">MCP：每个 AI 产品接 MCP → 每个工具实现 MCP Server = N+M 个集成点</span><br></pre></td></tr></tbody></table></figure>
+
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Host Application</span><br><span class="line">    └── MCP Client</span><br><span class="line">            ├── Tools Client</span><br><span class="line">            ├── Memory Client</span><br><span class="line">            └── Prompts Client</span><br><span class="line">                    │</span><br><span class="line">              MCP Protocol</span><br><span class="line">                    │</span><br><span class="line">            MCP Server（文件系统 / Git / 数据库 / ...）</span><br></pre></td></tr></tbody></table></figure>
+
+<p>2025 年，OpenAI、Google、Microsoft 均已采纳 MCP，生态快速扩张。</p>
+<h3 id="Skill-System"><a href="#Skill-System" class="headerlink" title="Skill System"></a>Skill System</h3><p>通用 Prompt 解决不了专业领域问题——你需要领域知识、最佳实践、质量标准、工具集的一体化封装。</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Skill = 领域知识 + 最佳实践 + 工具集 + 质量标准</span><br></pre></td></tr></tbody></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>通用 Prompt</th>
+<th>Skill</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>粒度</td>
+<td>文本指令</td>
+<td>结构化封装</td>
+</tr>
+<tr>
+<td>可复用性</td>
+<td>复制粘贴</td>
+<td>版本化管理</td>
+</tr>
+<tr>
+<td>可测试性</td>
+<td>难以自动化</td>
+<td>可独立测试</td>
+</tr>
+<tr>
+<td>持久化</td>
+<td>每次会话重建</td>
+<td>持久存储</td>
+</tr>
+</tbody></table>
+<p>Skill 与 MCP 的区别：MCP 是<strong>通信协议层</strong>（类比 USB-C 接口），Skill 是<strong>应用能力层</strong>（类比驱动程序包）。</p>
+<h3 id="Spec-驱动开发"><a href="#Spec-驱动开发" class="headerlink" title="Spec 驱动开发"></a>Spec 驱动开发</h3><p>AI 应用开发中，需求模糊是最大的痛点——用户说”我要一个智能助手”，工程师无法直接翻译成代码。</p>
+<p>Spec 驱动是解法：<strong>用结构化方式定义输入、输出、约束条件和质量标准</strong>。</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">传统开发：需求文档 → 开发 → 测试</span><br><span class="line"></span><br><span class="line">AI 开发：Spec（输入/输出/约束/质量标准）</span><br><span class="line">              → Prompt / Skill 配置</span><br><span class="line">              → Evaluation（自动 + 人工）</span><br><span class="line">              → 迭代优化</span><br></pre></td></tr></tbody></table></figure>
+
+<p>核心是把”我想要什么”拆解成可验证的质量指标，而非模糊的自然语言描述。</p>
+<hr>
+<h2 id="Agent-架构：多-Agent-如何协作"><a href="#Agent-架构：多-Agent-如何协作" class="headerlink" title="Agent 架构：多 Agent 如何协作"></a>Agent 架构：多 Agent 如何协作</h2><h3 id="协作拓扑的演进"><a href="#协作拓扑的演进" class="headerlink" title="协作拓扑的演进"></a>协作拓扑的演进</h3><p>单 Agent 能力有限，复杂任务需要多个 Agent 协同。协作拓扑经历了几代演进：</p>
+<table>
+<thead>
+<tr>
+<th>拓扑</th>
+<th>特征</th>
+<th>代表框架</th>
+<th>主要问题</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>顺序流水线</td>
+<td>A 完成 → B 检查 → C 输出</td>
+<td>LangChain Chain</td>
+<td>误差逐级累积</td>
+</tr>
+<tr>
+<td>去中心化群聊</td>
+<td>多 Agent 自行决定何时接力</td>
+<td>AutoGen</td>
+<td>易陷入死循环</td>
+</tr>
+<tr>
+<td>层级式组织</td>
+<td>Planner 分配、Worker 执行、Reviewer 监督</td>
+<td>MetaGPT</td>
+<td>当前最稳定的工程化范式</td>
+</tr>
+<tr>
+<td>群体智能</td>
+<td>大量同质化 Agent 通过局部互动涌现全局能力</td>
+<td>Swarm</td>
+<td>适合并行探索任务</td>
+</tr>
+</tbody></table>
+<p><strong>Planner → Generator → Evaluator</strong> 三层是当前最成熟的层级式架构：</p>
+<ul>
+<li><strong>Planner</strong>：理解任务，拆解步骤</li>
+<li><strong>Generator</strong>：执行每个步骤</li>
+<li><strong>Evaluator</strong>：验证输出质量，决定是否返工</li>
+</ul>
+<h3 id="Agent-的四层记忆"><a href="#Agent-的四层记忆" class="headerlink" title="Agent 的四层记忆"></a>Agent 的四层记忆</h3><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Agent = LLM（大脑）+ Planning（规划）+ Memory（记忆）+ Tools（行动）</span><br></pre></td></tr></tbody></table></figure>
+
+<p>记忆分四层，缺一不可：</p>
+<table>
+<thead>
+<tr>
+<th>层次</th>
+<th>描述</th>
+<th>实现方式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Working Memory</td>
+<td>当前任务上下文</td>
+<td>Context Window</td>
+</tr>
+<tr>
+<td>Episodic Memory</td>
+<td>过去的交互经验</td>
+<td>向量数据库（带时间戳）</td>
+</tr>
+<tr>
+<td>Semantic Memory</td>
+<td>长期知识与概念</td>
+<td>向量数据库 + 摘要压缩</td>
+</tr>
+<tr>
+<td>Sensory Memory</td>
+<td>即时感知输入</td>
+<td>实时流处理</td>
+</tr>
+</tbody></table>
+<p>核心挑战：遗忘策略（保留什么）、跨会话一致性、敏感信息隐私保护。</p>
+<hr>
+<h2 id="工具链全景图"><a href="#工具链全景图" class="headerlink" title="工具链全景图"></a>工具链全景图</h2><p>从模型调用到最终产品，需要一条完整的工具链。每一层都有对应的工程选择。</p>
+<h3 id="模型调用层"><a href="#模型调用层" class="headerlink" title="模型调用层"></a>模型调用层</h3><table>
+<thead>
+<tr>
+<th>工具</th>
+<th>定位</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>OpenAI SDK</td>
+<td>OpenAI 官方</td>
+<td>GPT 系列，Streaming / JSON Mode</td>
+</tr>
+<tr>
+<td>Anthropic SDK</td>
+<td>Anthropic 官方</td>
+<td>Claude 系列，Prompt Caching</td>
+</tr>
+<tr>
+<td>LiteLLM</td>
+<td>多模型统一接口</td>
+<td>一套代码切换不同厂商</td>
+</tr>
+<tr>
+<td>Ollama</td>
+<td>本地模型运行时</td>
+<td>本地运行 Llama、Qwen</td>
+</tr>
+<tr>
+<td>vLLM</td>
+<td>高性能推理引擎</td>
+<td>生产级本地部署，PagedAttention</td>
+</tr>
+</tbody></table>
+<p><strong>Prompt Caching</strong>：长 System Prompt 或固定上下文的场景（如 RAG 前缀），启用后可降低 60–90% 的重复 token 成本。注意：缓存前缀内容必须稳定不变。</p>
+<p><strong>生产级错误处理</strong>：</p>
+<ul>
+<li>Rate Limit（429）→ 指数退避重试，最多 3 次</li>
+<li>超时 → 合理 timeout，长任务拆分多步</li>
+<li>幂等性 → 写操作防止重试导致重复执行</li>
+</ul>
+<h3 id="应用框架层"><a href="#应用框架层" class="headerlink" title="应用框架层"></a>应用框架层</h3><table>
+<thead>
+<tr>
+<th>框架</th>
+<th>核心定位</th>
+<th>擅长场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>LangChain</td>
+<td>链式编排 + 生态最丰富</td>
+<td>快速原型、复杂 Agent 流程</td>
+</tr>
+<tr>
+<td>LlamaIndex</td>
+<td>知识检索专精</td>
+<td>RAG 管道、文档问答</td>
+</tr>
+<tr>
+<td>CrewAI</td>
+<td>多 Agent 协作</td>
+<td>角色分工明确的任务流水线</td>
+</tr>
+<tr>
+<td>AutoGen</td>
+<td>对话式多 Agent</td>
+<td>代码生成、自动调试</td>
+</tr>
+<tr>
+<td>Claude Agent SDK</td>
+<td>原生 Agent 支持</td>
+<td>生产级 Agent，内置安全机制</td>
+</tr>
+</tbody></table>
+<h3 id="向量数据库"><a href="#向量数据库" class="headerlink" title="向量数据库"></a>向量数据库</h3><table>
+<thead>
+<tr>
+<th>工具</th>
+<th>特点</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Chroma</td>
+<td>轻量、易嵌入、开源</td>
+<td>本地开发、快速原型</td>
+</tr>
+<tr>
+<td>Qdrant</td>
+<td>高性能、Rust 实现</td>
+<td>生产级向量检索</td>
+</tr>
+<tr>
+<td>Weaviate</td>
+<td>原生多模态、GraphQL</td>
+<td>多模态检索、知识图谱</td>
+</tr>
+<tr>
+<td>pgvector</td>
+<td>PostgreSQL 插件</td>
+<td>已有 PG 基础设施</td>
+</tr>
+<tr>
+<td>Milvus</td>
+<td>分布式、超大规模</td>
+<td>亿级向量、企业级</td>
+</tr>
+</tbody></table>
+<h3 id="可观测性"><a href="#可观测性" class="headerlink" title="可观测性"></a>可观测性</h3><p>LLM 应用的黑盒特性使可观测性不可或缺：</p>
+<table>
+<thead>
+<tr>
+<th>工具</th>
+<th>能力</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>LangSmith</td>
+<td>Trace、Eval、Prompt 管理</td>
+<td>LangChain 官方，深度集成</td>
+</tr>
+<tr>
+<td>Langfuse</td>
+<td>Trace、成本追踪、数据集</td>
+<td>开源可自托管</td>
+</tr>
+<tr>
+<td>Helicone</td>
+<td>请求代理、成本分析、缓存</td>
+<td>零侵入，一行代码接入</td>
+</tr>
+<tr>
+<td>Braintrust</td>
+<td>Eval 平台、Golden Set 管理</td>
+<td>专注评测，CI 集成</td>
+</tr>
+</tbody></table>
+<p><strong>核心观测指标</strong>：Latency（首 token / 完整响应）、Token 消耗与成本、工具调用成功率、Prompt 版本与效果对比。</p>
+<hr>
+<h2 id="交互形态演进：从对话框到系统级-AI"><a href="#交互形态演进：从对话框到系统级-AI" class="headerlink" title="交互形态演进：从对话框到系统级 AI"></a>交互形态演进：从对话框到系统级 AI</h2><p>AI 的交互模式不是静态的，它在快速演进：</p>
+<table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>交互特征</th>
+<th>代表形态</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>问答式 UI</td>
+<td>一问一答，被动响应</td>
+<td>ChatGPT Web</td>
+</tr>
+<tr>
+<td>嵌入式 Copilot</td>
+<td>侧边栏辅助，人工触发</td>
+<td>GitHub Copilot</td>
+</tr>
+<tr>
+<td>系统级 AI OS</td>
+<td>跨应用调度，底层基础设施</td>
+<td>Apple Intelligence、MCP Host</td>
+</tr>
+<tr>
+<td>主动式 AI</td>
+<td>基于场景意图主动执行，无需指令</td>
+<td>后台常驻 Agent</td>
+</tr>
+</tbody></table>
+<p><strong>Computer Use 是一个关键节点</strong>：LLM 直接控制 GUI——操作浏览器、点击按钮、填表、读写文件。这标志着 AI 从<strong>信息生成者</strong>向<strong>任务执行者</strong>的范式转变。</p>
+<hr>
+<h2 id="安全与可靠性"><a href="#安全与可靠性" class="headerlink" title="安全与可靠性"></a>安全与可靠性</h2><h3 id="幻觉问题"><a href="#幻觉问题" class="headerlink" title="幻觉问题"></a>幻觉问题</h3><p>LLM 生成看似合理但实际错误的内容，是最核心的可靠性挑战：</p>
+<table>
+<thead>
+<tr>
+<th>策略</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>RAG</td>
+<td>提供真实文档，减少凭空生成</td>
+</tr>
+<tr>
+<td>CoT</td>
+<td>暴露推理过程，便于发现逻辑错误</td>
+</tr>
+<tr>
+<td>Citation</td>
+<td>强制输出带引用来源</td>
+</tr>
+<tr>
+<td>Self-Check</td>
+<td>让模型自我验证输出</td>
+</tr>
+<tr>
+<td>Human-in-loop</td>
+<td>关键环节人工审核</td>
+</tr>
+</tbody></table>
+<h3 id="安全护栏"><a href="#安全护栏" class="headerlink" title="安全护栏"></a>安全护栏</h3><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">输入 → [输入过滤/意图检测] → 模型 → [输出过滤/格式校验] → 输出</span><br></pre></td></tr></tbody></table></figure>
+
+<p>Guardrail 解决的问题：有害内容过滤、Prompt Injection 防御、输出格式强制约束。</p>
+<hr>
+<h2 id="技术选型速查"><a href="#技术选型速查" class="headerlink" title="技术选型速查"></a>技术选型速查</h2><table>
+<thead>
+<tr>
+<th>场景</th>
+<th>推荐方案</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>简单问答 / 客服</td>
+<td>Prompt + RAG</td>
+</tr>
+<tr>
+<td>数据分析 / 报告生成</td>
+<td>ReAct + 代码执行</td>
+</tr>
+<tr>
+<td>复杂多步推理</td>
+<td>推理模型（o1 / R1 系列）</td>
+</tr>
+<tr>
+<td>复杂任务分解</td>
+<td>Agent + Planning</td>
+</tr>
+<tr>
+<td>多系统集成</td>
+<td>Multi-Agent + MCP</td>
+</tr>
+<tr>
+<td>跨文档全局理解</td>
+<td>GraphRAG</td>
+</tr>
+<tr>
+<td>实时界面操作</td>
+<td>Computer Use</td>
+</tr>
+<tr>
+<td>专业领域应用</td>
+<td>Skill System + Fine-tuning</td>
+</tr>
+<tr>
+<td>端侧 / 隐私敏感</td>
+<td>SLM（Phi-3、Qwen 小参数）</td>
+</tr>
+<tr>
+<td>质量保证</td>
+<td>Evaluation Harness</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="附：演进全景速览"><a href="#附：演进全景速览" class="headerlink" title="附：演进全景速览"></a>附：演进全景速览</h2><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">六条演进主线</span><br><span class="line"></span><br><span class="line">能力边界  纯文本 → 多模态 → 操作物理世界</span><br><span class="line">自主性    被动回答 → 工具调用 → 自主规划</span><br><span class="line">上下文    单轮 → 多轮 → 长期记忆 → 全局理解</span><br><span class="line">执行模式  单步 → 链式 → 树搜索 → 层级协作</span><br><span class="line">工程化    Prompt → Skill → MCP → 标准化生态</span><br><span class="line">算力与成本 暴力堆参数 → 极致压缩 → 推理期动态分配</span><br><span class="line">            ↑ 第六条主线常被忽视，但它是一切商业闭环的物质基础</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">四次训练范式</span><br><span class="line"></span><br><span class="line">规模定律主导（2020–2023）  堆算力、堆数据</span><br><span class="line">对齐与指令（2023–2024）   RLHF → DPO → Constitutional AI</span><br><span class="line">推理期计算（2024–2025）    o1、R1，慢思考</span><br><span class="line">多模态原生（2024–2026）   统一感知，统一建模</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">三次工程范式</span><br><span class="line"></span><br><span class="line">Prompt Engineering    对马喊话的技巧</span><br><span class="line">Context Engineering   给马看地图</span><br><span class="line">Harness Engineering  造高速公路，配护栏和限速牌</span><br></pre></td></tr></tbody></table></figure>
+
+  </div>
+</article>
+
+
+    <div class="blog-post-comments">
+        <div id="utterances_thread">
+            <noscript>加载评论需要在浏览器启用 JavaScript 脚本支持。</noscript>
+        </div>
+    </div>
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">首页</a></li>
+        
+          <li><a href="/archives/">归档</a></li>
+        
+          <li><a href="/tags/">标签</a></li>
+        
+          <li><a href="/categories/">分类</a></li>
+        
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%88%E5%9B%9E%E7%AD%94%E4%B8%80%E4%B8%AA%E9%97%AE%E9%A2%98%EF%BC%9AAI-%E5%BA%94%E7%94%A8%E5%BC%80%E5%8F%91%E7%9A%84%E6%9C%AC%E8%B4%A8%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="toc-number">1.</span> <span class="toc-text">先回答一个问题：AI 应用开发的本质是什么？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A8%A1%E5%9E%8B%E6%BC%94%E8%BF%9B%EF%BC%9A%E5%9B%9B%E6%AC%A1%E8%83%BD%E5%8A%9B%E8%B7%83%E8%BF%81"><span class="toc-number">2.</span> <span class="toc-text">模型演进：四次能力跃迁</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%9B%E4%BB%A3%E8%8C%83%E5%BC%8F"><span class="toc-number">2.1.</span> <span class="toc-text">四代范式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8E%A8%E7%90%86%E6%A8%A1%E5%9E%8B%EF%BC%9A%E6%85%A2%E6%80%9D%E8%80%83%E7%9A%84%E5%B7%A5%E7%A8%8B%E4%BB%B7%E5%80%BC"><span class="toc-number">2.2.</span> <span class="toc-text">推理模型：慢思考的工程价值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8A%E4%B8%8B%E6%96%87%E7%AA%97%E5%8F%A3%E8%86%A8%E8%83%80%EF%BC%9A%E6%94%B9%E5%8F%98%E4%BA%86%E4%BB%80%E4%B9%88"><span class="toc-number">2.3.</span> <span class="toc-text">上下文窗口膨胀：改变了什么</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Prompt-%E7%9A%84%E6%BC%94%E5%8C%96%E5%8F%B2%EF%BC%9A%E4%B8%89%E6%AC%A1%E5%B7%A5%E7%A8%8B%E8%8C%83%E5%BC%8F"><span class="toc-number">3.</span> <span class="toc-text">Prompt 的演化史：三次工程范式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8C%83%E5%BC%8F%E4%B8%80%EF%BC%9APrompt-Engineering%EF%BC%882022%E2%80%932023%EF%BC%89"><span class="toc-number">3.1.</span> <span class="toc-text">范式一：Prompt Engineering（2022–2023）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8C%83%E5%BC%8F%E4%BA%8C%EF%BC%9AContext-Engineering%EF%BC%882023%E2%80%932024%EF%BC%89"><span class="toc-number">3.2.</span> <span class="toc-text">范式二：Context Engineering（2023–2024）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8C%83%E5%BC%8F%E4%B8%89%EF%BC%9AHarness-Engineering%EF%BC%882025%E2%80%932026%EF%BC%89"><span class="toc-number">3.3.</span> <span class="toc-text">范式三：Harness Engineering（2025–2026）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ReAct-%E5%BE%AA%E7%8E%AF%EF%BC%9AAgent-%E7%9A%84%E5%BA%95%E5%B1%82%E9%AA%A8%E6%9E%B6"><span class="toc-number">4.</span> <span class="toc-text">ReAct 循环：Agent 的底层骨架</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MCP%E3%80%81Skill%E3%80%81Spec%EF%BC%9A%E5%B7%A5%E7%A8%8B%E6%A0%87%E5%87%86%E5%8C%96%E7%9A%84%E4%B8%89%E6%9D%BF%E6%96%A7"><span class="toc-number">5.</span> <span class="toc-text">MCP、Skill、Spec：工程标准化的三板斧</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#MCP%EF%BC%88Model-Context-Protocol%EF%BC%89"><span class="toc-number">5.1.</span> <span class="toc-text">MCP（Model Context Protocol）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Skill-System"><span class="toc-number">5.2.</span> <span class="toc-text">Skill System</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Spec-%E9%A9%B1%E5%8A%A8%E5%BC%80%E5%8F%91"><span class="toc-number">5.3.</span> <span class="toc-text">Spec 驱动开发</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Agent-%E6%9E%B6%E6%9E%84%EF%BC%9A%E5%A4%9A-Agent-%E5%A6%82%E4%BD%95%E5%8D%8F%E4%BD%9C"><span class="toc-number">6.</span> <span class="toc-text">Agent 架构：多 Agent 如何协作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8D%8F%E4%BD%9C%E6%8B%93%E6%89%91%E7%9A%84%E6%BC%94%E8%BF%9B"><span class="toc-number">6.1.</span> <span class="toc-text">协作拓扑的演进</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Agent-%E7%9A%84%E5%9B%9B%E5%B1%82%E8%AE%B0%E5%BF%86"><span class="toc-number">6.2.</span> <span class="toc-text">Agent 的四层记忆</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B7%A5%E5%85%B7%E9%93%BE%E5%85%A8%E6%99%AF%E5%9B%BE"><span class="toc-number">7.</span> <span class="toc-text">工具链全景图</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%9E%8B%E8%B0%83%E7%94%A8%E5%B1%82"><span class="toc-number">7.1.</span> <span class="toc-text">模型调用层</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BA%94%E7%94%A8%E6%A1%86%E6%9E%B6%E5%B1%82"><span class="toc-number">7.2.</span> <span class="toc-text">应用框架层</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="toc-number">7.3.</span> <span class="toc-text">向量数据库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%AF%E8%A7%82%E6%B5%8B%E6%80%A7"><span class="toc-number">7.4.</span> <span class="toc-text">可观测性</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%A4%E4%BA%92%E5%BD%A2%E6%80%81%E6%BC%94%E8%BF%9B%EF%BC%9A%E4%BB%8E%E5%AF%B9%E8%AF%9D%E6%A1%86%E5%88%B0%E7%B3%BB%E7%BB%9F%E7%BA%A7-AI"><span class="toc-number">8.</span> <span class="toc-text">交互形态演进：从对话框到系统级 AI</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E5%85%A8%E4%B8%8E%E5%8F%AF%E9%9D%A0%E6%80%A7"><span class="toc-number">9.</span> <span class="toc-text">安全与可靠性</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B9%BB%E8%A7%89%E9%97%AE%E9%A2%98"><span class="toc-number">9.1.</span> <span class="toc-text">幻觉问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E5%85%A8%E6%8A%A4%E6%A0%8F"><span class="toc-number">9.2.</span> <span class="toc-text">安全护栏</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8A%80%E6%9C%AF%E9%80%89%E5%9E%8B%E9%80%9F%E6%9F%A5"><span class="toc-number">10.</span> <span class="toc-text">技术选型速查</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%99%84%EF%BC%9A%E6%BC%94%E8%BF%9B%E5%85%A8%E6%99%AF%E9%80%9F%E8%A7%88"><span class="toc-number">11.</span> <span class="toc-text">附：演进全景速览</span></a></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifs.com/2026/04/26/ai-engineering-evolution/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifs.com/2026/04/26/ai-engineering-evolution/&text=AI 工程能力演进：从模型到可靠系统"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifs.com/2026/04/26/ai-engineering-evolution/&title=AI 工程能力演进：从模型到可靠系统"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifs.com/2026/04/26/ai-engineering-evolution/&is_video=false&description=AI 工程能力演进：从模型到可靠系统"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=AI 工程能力演进：从模型到可靠系统&body=Check out this article: https://haifs.com/2026/04/26/ai-engineering-evolution/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifs.com/2026/04/26/ai-engineering-evolution/&title=AI 工程能力演进：从模型到可靠系统"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifs.com/2026/04/26/ai-engineering-evolution/&title=AI 工程能力演进：从模型到可靠系统"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifs.com/2026/04/26/ai-engineering-evolution/&title=AI 工程能力演进：从模型到可靠系统"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifs.com/2026/04/26/ai-engineering-evolution/&title=AI 工程能力演进：从模型到可靠系统"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifs.com/2026/04/26/ai-engineering-evolution/&name=AI 工程能力演进：从模型到可靠系统&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifs.com/2026/04/26/ai-engineering-evolution/&t=AI 工程能力演进：从模型到可靠系统"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2019-2026
+    haif.
+    <a target="_blank" rel="noopener" href="https://beian.miit.gov.cn/">
+      鲁ICP备19052103号
+    </a>
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a href="/tags/">标签</a></li><!--
+     --><!--
+       --><li><a href="/categories/">分类</a></li><!--
+     --><!--
+       --><li><a href="/search/">搜索</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板！\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功！");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+  <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?d3c8edb388553a2084296cbfe9a0785a";
+          var s = document.getElementsByTagName("script")[0];
+          s.parentNode.insertBefore(hm, s);
+        })();
+        </script>
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+    <script type="text/javascript">
+      var utterances_repo = 'haifuns/haifuns.github.io';
+      var utterances_issue_term = 'pathname';
+      var utterances_label = 'Comment';
+      var utterances_theme = 'github-light';
+
+      (function(){
+          var script = document.createElement('script');
+
+          script.src = 'https://utteranc.es/client.js';
+          script.setAttribute('repo', utterances_repo);
+          script.setAttribute('issue-term', 'pathname');
+          script.setAttribute('label', utterances_label);
+          script.setAttribute('theme', utterances_theme);
+          script.setAttribute('crossorigin', 'anonymous');
+          script.async = true;
+          (document.getElementById('utterances_thread')).appendChild(script);
+      }());
+  </script>
+
+</body>
+</html>
