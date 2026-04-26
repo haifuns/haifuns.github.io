@@ -6,15 +6,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="HandheldFriendly" content="True">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-    <meta name="description" content="什么是 Harness Engineering？Harness Engineering（驾驭工程） 是一种为 AI Agent 搭建可运行、可约束工程环境的系统性开发范式。其核心等式为：  Agent &#x3D; Model + Harness  Model 提供底层智能，Harness 是让这个智能能够可靠、可控运行的外循环基础设施。评估一个 Agent 的效果，评估的是”模型 + 驾驭系统”这个组合体">
+    <meta name="description" content="什么是 Harness Engineering？ 人类约公元前3500年驯化马，又过了三千多年（约公元前1世纪）才出现木质鞍架，再过了四百余年（约公元4世纪）马镫才问世。马鞍没有改变马的速度，却把骑手重量从脊椎分散至肌肉，让人从”附体”变为骑兵——没有它，重装冲锋、草原骑射、丝路商队都无从谈起。  Harness Engineering（约束工程） 是一种为 AI Agent 搭建可运行、可约束工">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【AI】Harness Engineering：构建可靠 AI Agent 系统的工程范式">
 <meta property="og:url" content="https://haifs.com/2026/04/11/harnessengineering/index.html">
 <meta property="og:site_name" content="haif&#39;s blog">
-<meta property="og:description" content="什么是 Harness Engineering？Harness Engineering（驾驭工程） 是一种为 AI Agent 搭建可运行、可约束工程环境的系统性开发范式。其核心等式为：  Agent &#x3D; Model + Harness  Model 提供底层智能，Harness 是让这个智能能够可靠、可控运行的外循环基础设施。评估一个 Agent 的效果，评估的是”模型 + 驾驭系统”这个组合体">
+<meta property="og:description" content="什么是 Harness Engineering？ 人类约公元前3500年驯化马，又过了三千多年（约公元前1世纪）才出现木质鞍架，再过了四百余年（约公元4世纪）马镫才问世。马鞍没有改变马的速度，却把骑手重量从脊椎分散至肌肉，让人从”附体”变为骑兵——没有它，重装冲锋、草原骑射、丝路商队都无从谈起。  Harness Engineering（约束工程） 是一种为 AI Agent 搭建可运行、可约束工">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2026-04-11T02:20:00.000Z">
-<meta property="article:modified_time" content="2026-04-26T11:39:51.331Z">
+<meta property="article:modified_time" content="2026-04-26T13:48:45.474Z">
 <meta property="article:author" content="haif.">
 <meta property="article:tag" content="Agent">
 <meta property="article:tag" content="Harness">
@@ -132,7 +132,7 @@
     
     
       <div id="toc">
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF-Harness-Engineering%EF%BC%9F"><span class="toc-number">1.</span> <span class="toc-text">什么是 Harness Engineering？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%AE%83%EF%BC%9F"><span class="toc-number">2.</span> <span class="toc-text">为什么需要它？</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%8C%83%E5%BC%8F%E6%BC%94%E8%BF%9B"><span class="toc-number">2.1.</span> <span class="toc-text">范式演进</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E6%94%AF%E6%92%91"><span class="toc-number">2.2.</span> <span class="toc-text">数据支撑</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E7%90%86%E5%BF%B5"><span class="toc-number">3.</span> <span class="toc-text">核心理念</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9E%B6%E6%9E%84%EF%BC%9A%E4%B8%83%E5%B1%82%E5%A4%96%E5%BE%AA%E7%8E%AF%E7%B3%BB%E7%BB%9F"><span class="toc-number">4.</span> <span class="toc-text">架构：七层外循环系统</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94%E5%A4%A7%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6"><span class="toc-number">5.</span> <span class="toc-text">五大核心组件</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E7%BA%A6%E6%9D%9F%E7%B3%BB%E7%BB%9F%EF%BC%88Constraint-System%EF%BC%89"><span class="toc-number">5.1.</span> <span class="toc-text">一、约束系统（Constraint System）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E%EF%BC%88Execution-Engine%EF%BC%89"><span class="toc-number">5.2.</span> <span class="toc-text">二、执行引擎（Execution Engine）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E8%AE%B0%E5%BF%86%E7%B3%BB%E7%BB%9F%EF%BC%88Memory-System%EF%BC%89"><span class="toc-number">5.3.</span> <span class="toc-text">三、记忆系统（Memory System）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E6%A0%A1%E9%AA%8C%E4%B8%8E%E5%8F%8D%E9%A6%88%EF%BC%88Verification-amp-Feedback%EF%BC%89"><span class="toc-number">5.4.</span> <span class="toc-text">四、校验与反馈（Verification &amp; Feedback）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E5%AE%89%E5%85%A8%E4%B8%8E%E8%87%AA%E6%84%88%EF%BC%88Safety-amp-Self-Healing%EF%BC%89"><span class="toc-number">5.5.</span> <span class="toc-text">五、安全与自愈（Safety &amp; Self-Healing）</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A4%9A-Agent-%E5%8D%8F%E8%B0%83%E4%B8%8E%E6%95%85%E9%9A%9C%E9%9A%94%E7%A6%BB"><span class="toc-number">6.</span> <span class="toc-text">多 Agent 协调与故障隔离</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%B8%90%E8%BF%9B%E5%BC%8F%E8%90%BD%E5%9C%B0%E7%AD%96%E7%95%A5"><span class="toc-number">7.</span> <span class="toc-text">渐进式落地策略</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E5%8F%8D%E6%A8%A1%E5%BC%8F"><span class="toc-number">8.</span> <span class="toc-text">常见反模式</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%8E-SDD%EF%BC%88Spec-Driven-Development%EF%BC%8C%E8%A7%84%E8%8C%83%E9%A9%B1%E5%8A%A8%E5%BC%80%E5%8F%91%EF%BC%89%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="toc-number">9.</span> <span class="toc-text">与 SDD（Spec-Driven Development，规范驱动开发）的关系</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9C%AA%E6%9D%A5%E6%96%B9%E5%90%91%EF%BC%9AMeta-Harness"><span class="toc-number">10.</span> <span class="toc-text">未来方向：Meta-Harness</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">11.</span> <span class="toc-text">总结</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF-Harness-Engineering%EF%BC%9F"><span class="toc-number">1.</span> <span class="toc-text">什么是 Harness Engineering？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%AE%83%EF%BC%9F"><span class="toc-number">2.</span> <span class="toc-text">为什么需要它？</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8C%83%E5%BC%8F%E6%BC%94%E8%BF%9B"><span class="toc-number">2.1.</span> <span class="toc-text">范式演进</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E6%94%AF%E6%92%91"><span class="toc-number">2.2.</span> <span class="toc-text">数据支撑</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E7%90%86%E5%BF%B5"><span class="toc-number">3.</span> <span class="toc-text">核心理念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9E%B6%E6%9E%84%EF%BC%9A%E4%B8%83%E5%B1%82%E5%A4%96%E5%BE%AA%E7%8E%AF%E7%B3%BB%E7%BB%9F"><span class="toc-number">4.</span> <span class="toc-text">架构：七层外循环系统</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E5%A4%A7%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6"><span class="toc-number">5.</span> <span class="toc-text">五大核心组件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E7%BA%A6%E6%9D%9F%E7%B3%BB%E7%BB%9F%EF%BC%88Constraint-System%EF%BC%89"><span class="toc-number">5.1.</span> <span class="toc-text">一、约束系统（Constraint System）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E%EF%BC%88Execution-Engine%EF%BC%89"><span class="toc-number">5.2.</span> <span class="toc-text">二、执行引擎（Execution Engine）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E8%AE%B0%E5%BF%86%E7%B3%BB%E7%BB%9F%EF%BC%88Memory-System%EF%BC%89"><span class="toc-number">5.3.</span> <span class="toc-text">三、记忆系统（Memory System）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E6%A0%A1%E9%AA%8C%E4%B8%8E%E5%8F%8D%E9%A6%88%EF%BC%88Verification-amp-Feedback%EF%BC%89"><span class="toc-number">5.4.</span> <span class="toc-text">四、校验与反馈（Verification &amp; Feedback）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E5%AE%89%E5%85%A8%E4%B8%8E%E8%87%AA%E6%84%88%EF%BC%88Safety-amp-Self-Healing%EF%BC%89"><span class="toc-number">5.5.</span> <span class="toc-text">五、安全与自愈（Safety &amp; Self-Healing）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%9A-Agent-%E5%8D%8F%E8%B0%83%E4%B8%8E%E6%95%85%E9%9A%9C%E9%9A%94%E7%A6%BB"><span class="toc-number">6.</span> <span class="toc-text">多 Agent 协调与故障隔离</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B8%90%E8%BF%9B%E5%BC%8F%E8%90%BD%E5%9C%B0%E7%AD%96%E7%95%A5"><span class="toc-number">7.</span> <span class="toc-text">渐进式落地策略</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E5%8F%8D%E6%A8%A1%E5%BC%8F"><span class="toc-number">8.</span> <span class="toc-text">常见反模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8E-SDD%EF%BC%88Spec-Driven-Development%EF%BC%8C%E8%A7%84%E8%8C%83%E9%A9%B1%E5%8A%A8%E5%BC%80%E5%8F%91%EF%BC%89%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="toc-number">9.</span> <span class="toc-text">与 SDD（Spec-Driven Development，规范驱动开发）的关系</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%AA%E6%9D%A5%E6%96%B9%E5%90%91%EF%BC%9AMeta-Harness"><span class="toc-number">10.</span> <span class="toc-text">未来方向：Meta-Harness</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">11.</span> <span class="toc-text">总结</span></a></li></ol>
       </div>
     
   </span>
@@ -182,12 +182,15 @@
   
 
   <div class="content e-content" itemprop="articleBody">
-    <h1 id="什么是-Harness-Engineering？"><a href="#什么是-Harness-Engineering？" class="headerlink" title="什么是 Harness Engineering？"></a>什么是 Harness Engineering？</h1><p><strong>Harness Engineering（驾驭工程）</strong> 是一种为 AI Agent 搭建可运行、可约束工程环境的系统性开发范式。其核心等式为：</p>
+    <h2 id="什么是-Harness-Engineering？"><a href="#什么是-Harness-Engineering？" class="headerlink" title="什么是 Harness Engineering？"></a>什么是 Harness Engineering？</h2><blockquote>
+<p>人类约公元前3500年驯化马，又过了三千多年（约公元前1世纪）才出现木质鞍架，再过了四百余年（约公元4世纪）马镫才问世。马鞍没有改变马的速度，却把骑手重量从脊椎分散至肌肉，让人从”附体”变为骑兵——没有它，重装冲锋、草原骑射、丝路商队都无从谈起。</p>
+</blockquote>
+<p><strong>Harness Engineering（约束工程）</strong> 是一种为 AI Agent 搭建可运行、可约束工程环境的系统性开发范式。其核心等式为：</p>
 <blockquote>
 <p><strong>Agent = Model + Harness</strong></p>
 </blockquote>
-<p>Model 提供底层智能，Harness 是让这个智能能够可靠、可控运行的外循环基础设施。评估一个 Agent 的效果，评估的是”模型 + 驾驭系统”这个组合体，而非模型单体。</p>
-<h1 id="为什么需要它？"><a href="#为什么需要它？" class="headerlink" title="为什么需要它？"></a>为什么需要它？</h1><h2 id="范式演进"><a href="#范式演进" class="headerlink" title="范式演进"></a>范式演进</h2><p>AI 工程经历了三个阶段的演进：</p>
+<p>Model 提供底层智能，Harness 是让这个智能能够可靠、可控运行的外循环基础设施。评估一个 Agent 的效果，评估的是”模型 + 约束系统”这个组合体，而非模型单体。</p>
+<h2 id="为什么需要它？"><a href="#为什么需要它？" class="headerlink" title="为什么需要它？"></a>为什么需要它？</h2><h3 id="范式演进"><a href="#范式演进" class="headerlink" title="范式演进"></a>范式演进</h3><p>AI 工程经历了三个阶段的演进：</p>
 <table>
 <thead>
 <tr>
@@ -213,18 +216,18 @@
 </tr>
 </tbody></table>
 <p>AI Agent 在复杂任务中反复出错，往往不是因为模型不够智能，而是因为它”看不见”项目的隐式规则——架构分层、命名规范、依赖约定。Harness 将这些规则变得对 AI 可见且可验证。</p>
-<h2 id="数据支撑"><a href="#数据支撑" class="headerlink" title="数据支撑"></a>数据支撑</h2><ul>
+<h3 id="数据支撑"><a href="#数据支撑" class="headerlink" title="数据支撑"></a>数据支撑</h3><ul>
 <li><strong>LangChain 2026 年 3 月实验</strong>：仅通过优化 Harness，同一模型在 Terminal Bench 2.0 上的任务通过率从 52.8% 提升至 66.5%，排名跃升前五。瓶颈往往在基础设施，而非模型智能本身。</li>
 <li><strong>OpenAI 2026 年 2 月案例</strong>：3 名工程师在 5 个月内零手写代码，完全依靠 Agent 生成约 100 万行代码，完成 1500 个 Pull Request，效率提升约 90%。背后依赖的正是成熟的 Harness 系统。</li>
 </ul>
-<h1 id="核心理念"><a href="#核心理念" class="headerlink" title="核心理念"></a>核心理念</h1><p>Harness Engineering 带来了工程师角色的根本性转变：</p>
+<h2 id="核心理念"><a href="#核心理念" class="headerlink" title="核心理念"></a>核心理念</h2><p>Harness Engineering 带来了工程师角色的根本性转变：</p>
 <ol>
 <li>**从”编码执行”到”环境设计”**：不再手写每一行代码，而是将业务逻辑、工程判断和团队规范编码为机器可读的约束系统。</li>
 <li>**从”优化单点”到”构建系统”**：焦点从优化单次交互，转向设计和维护能让 Agent 自主、可靠、大规模工作的完整工程系统。</li>
 <li><strong>安全默认化</strong>：在所有设计环节贯彻”默认拒绝、最小权限”原则，构建纵深防御体系。</li>
 <li><strong>系统进化性</strong>：将运行中的失败经验自动沉淀为新规则，使 Harness 越用越完善。</li>
 </ol>
-<h1 id="架构：七层外循环系统"><a href="#架构：七层外循环系统" class="headerlink" title="架构：七层外循环系统"></a>架构：七层外循环系统</h1><p>Harness 的宏观架构是围绕核心模型（内循环）的七层外循环控制系统，构成从目标输入到可靠输出的完整闭环：</p>
+<h2 id="架构：七层外循环系统"><a href="#架构：七层外循环系统" class="headerlink" title="架构：七层外循环系统"></a>架构：七层外循环系统</h2><p>Harness 的宏观架构是围绕核心模型（内循环）的七层外循环控制系统，构成从目标输入到可靠输出的完整闭环：</p>
 <table>
 <thead>
 <tr>
@@ -261,7 +264,7 @@
 <td>将失败经验沉淀为新规则，自动清理技术债，实现系统自我演进</td>
 </tr>
 </tbody></table>
-<h1 id="五大核心组件"><a href="#五大核心组件" class="headerlink" title="五大核心组件"></a>五大核心组件</h1><h2 id="一、约束系统（Constraint-System）"><a href="#一、约束系统（Constraint-System）" class="headerlink" title="一、约束系统（Constraint System）"></a>一、约束系统（Constraint System）</h2><p><strong>核心理念：用代码强制执行规则，而非依赖 Prompt 软劝告。</strong></p>
+<h2 id="五大核心组件"><a href="#五大核心组件" class="headerlink" title="五大核心组件"></a>五大核心组件</h2><h3 id="一、约束系统（Constraint-System）"><a href="#一、约束系统（Constraint-System）" class="headerlink" title="一、约束系统（Constraint System）"></a>一、约束系统（Constraint System）</h3><p><strong>核心理念：用代码强制执行规则，而非依赖 Prompt 软劝告。</strong></p>
 <p>约束系统是 Harness 的”防护栏”，在模型决策之前就划定边界。</p>
 <p>关键设计：</p>
 <ul>
@@ -274,7 +277,7 @@
 <blockquote>
 <p>约束系统解决的是”什么不能做”的问题，越早拦截，修复成本越低。</p>
 </blockquote>
-<h2 id="二、执行引擎（Execution-Engine）"><a href="#二、执行引擎（Execution-Engine）" class="headerlink" title="二、执行引擎（Execution Engine）"></a>二、执行引擎（Execution Engine）</h2><p><strong>核心理念：不同任务需要不同执行策略，一套流程走天下是反模式。</strong></p>
+<h3 id="二、执行引擎（Execution-Engine）"><a href="#二、执行引擎（Execution-Engine）" class="headerlink" title="二、执行引擎（Execution Engine）"></a>二、执行引擎（Execution Engine）</h3><p><strong>核心理念：不同任务需要不同执行策略，一套流程走天下是反模式。</strong></p>
 <p>执行引擎负责将模型决策可靠地转化为行动。提供三种可选策略：</p>
 <table>
 <thead>
@@ -304,7 +307,7 @@
 <blockquote>
 <p>执行引擎解决的是”怎么做”的问题，过程的确定性决定结果的可信度。</p>
 </blockquote>
-<h2 id="三、记忆系统（Memory-System）"><a href="#三、记忆系统（Memory-System）" class="headerlink" title="三、记忆系统（Memory System）"></a>三、记忆系统（Memory System）</h2><p><strong>核心理念：上下文是有限资源，超过 40% 利用率后推理质量显著下降，必须主动管理。</strong></p>
+<h3 id="三、记忆系统（Memory-System）"><a href="#三、记忆系统（Memory-System）" class="headerlink" title="三、记忆系统（Memory System）"></a>三、记忆系统（Memory System）</h3><p><strong>核心理念：上下文是有限资源，超过 40% 利用率后推理质量显著下降，必须主动管理。</strong></p>
 <p>记忆系统分三层独立管理，避免信息污染与上下文膨胀：</p>
 <figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">┌─────────────────────────────────┐</span><br><span class="line">│  用户偏好记忆（跨会话，个人习惯）     │</span><br><span class="line">├─────────────────────────────────┤</span><br><span class="line">│  项目级记忆（代码规范、架构决策）     │</span><br><span class="line">├─────────────────────────────────┤</span><br><span class="line">│  外部知识记忆（文档、API 说明）      │</span><br><span class="line">└─────────────────────────────────┘</span><br></pre></td></tr></tbody></table></figure>
 
@@ -318,7 +321,7 @@
 <blockquote>
 <p>记忆系统解决的是”该知道什么”的问题，信息质量比信息数量更重要。</p>
 </blockquote>
-<h2 id="四、校验与反馈（Verification-amp-Feedback）"><a href="#四、校验与反馈（Verification-amp-Feedback）" class="headerlink" title="四、校验与反馈（Verification &amp; Feedback）"></a>四、校验与反馈（Verification &amp; Feedback）</h2><p><strong>核心理念：让结果可信，靠验证而非信任。</strong></p>
+<h3 id="四、校验与反馈（Verification-amp-Feedback）"><a href="#四、校验与反馈（Verification-amp-Feedback）" class="headerlink" title="四、校验与反馈（Verification &amp; Feedback）"></a>四、校验与反馈（Verification &amp; Feedback）</h3><p><strong>核心理念：让结果可信，靠验证而非信任。</strong></p>
 <p>校验层内置于执行流程每个关键节点，而非仅在最终输出时检查。</p>
 <p><strong>两类校验机制：</strong></p>
 <table>
@@ -354,7 +357,7 @@
 <blockquote>
 <p>校验层解决的是”做对了吗”的问题，可观测性是一等公民——只有能被看见的，才能被信任。</p>
 </blockquote>
-<h2 id="五、安全与自愈（Safety-amp-Self-Healing）"><a href="#五、安全与自愈（Safety-amp-Self-Healing）" class="headerlink" title="五、安全与自愈（Safety &amp; Self-Healing）"></a>五、安全与自愈（Safety &amp; Self-Healing）</h2><p><strong>核心理念：不假设系统不会出错，而是设计好出错后的恢复路径。</strong></p>
+<h3 id="五、安全与自愈（Safety-amp-Self-Healing）"><a href="#五、安全与自愈（Safety-amp-Self-Healing）" class="headerlink" title="五、安全与自愈（Safety &amp; Self-Healing）"></a>五、安全与自愈（Safety &amp; Self-Healing）</h3><p><strong>核心理念：不假设系统不会出错，而是设计好出错后的恢复路径。</strong></p>
 <p>安全设计分两个维度：</p>
 <p><strong>主动防御（Safety）</strong></p>
 <ul>
@@ -372,13 +375,13 @@
 <blockquote>
 <p>安全与自愈解决的是”出错了怎么办”的问题，系统的可靠性不来自于从不出错，而来自于出错后能快速恢复。</p>
 </blockquote>
-<h1 id="多-Agent-协调与故障隔离"><a href="#多-Agent-协调与故障隔离" class="headerlink" title="多 Agent 协调与故障隔离"></a>多 Agent 协调与故障隔离</h1><p>复杂任务采用主 Session 作为 Orchestrator，创建多个 Worker Agent 并行处理。可靠性通过隔离来保障：</p>
+<h2 id="多-Agent-协调与故障隔离"><a href="#多-Agent-协调与故障隔离" class="headerlink" title="多 Agent 协调与故障隔离"></a>多 Agent 协调与故障隔离</h2><p>复杂任务采用主 Session 作为 Orchestrator，创建多个 Worker Agent 并行处理。可靠性通过隔离来保障：</p>
 <ul>
 <li>Worker 之间不共享原始上下文，只传递结构化消息，防止上下文污染</li>
 <li>每个 Worker 拥有独立会话上下文，一个 Worker 崩溃不会导致级联故障</li>
 <li>Orchestrator 负责监控所有 Worker 状态、错误重试调度和最终结果合成</li>
 </ul>
-<h1 id="渐进式落地策略"><a href="#渐进式落地策略" class="headerlink" title="渐进式落地策略"></a>渐进式落地策略</h1><p>Harness Engineering 的落地是渐进式的，切勿一步到位：</p>
+<h2 id="渐进式落地策略"><a href="#渐进式落地策略" class="headerlink" title="渐进式落地策略"></a>渐进式落地策略</h2><p>Harness Engineering 的落地是渐进式的，切勿一步到位：</p>
 <table>
 <thead>
 <tr>
@@ -404,7 +407,7 @@
 </tr>
 </tbody></table>
 <p>Phase 1 做扎实是质变的前提，过早追求自动化会导致约束和验证体系尚未成熟时 Agent 失控。</p>
-<h1 id="常见反模式"><a href="#常见反模式" class="headerlink" title="常见反模式"></a>常见反模式</h1><ol>
+<h2 id="常见反模式"><a href="#常见反模式" class="headerlink" title="常见反模式"></a>常见反模式</h2><ol>
 <li><strong>层级混淆</strong>：将过多内容塞入 AGENTS.md，挤占上下文窗口</li>
 <li><strong>过度工具化</strong>：Agent 过度依赖工具，失去自主判断能力</li>
 <li><strong>过早追求自治</strong>：约束和验证体系不完善时追求 Agent 完全自主</li>
@@ -412,15 +415,15 @@
 <li><strong>缺乏 Human-in-the-Loop</strong>：关键节点缺少人工复核机制</li>
 <li><strong>忽视可维护性</strong>：Harness 本身需要版本管理和持续迭代</li>
 </ol>
-<h1 id="与-SDD（Spec-Driven-Development，规范驱动开发）的关系"><a href="#与-SDD（Spec-Driven-Development，规范驱动开发）的关系" class="headerlink" title="与 SDD（Spec-Driven Development，规范驱动开发）的关系"></a>与 SDD（Spec-Driven Development，规范驱动开发）的关系</h1><p>Harness Engineering 是 SDD 的<strong>执行层</strong>，二者互补而非替代：</p>
+<h2 id="与-SDD（Spec-Driven-Development，规范驱动开发）的关系"><a href="#与-SDD（Spec-Driven-Development，规范驱动开发）的关系" class="headerlink" title="与 SDD（Spec-Driven Development，规范驱动开发）的关系"></a>与 SDD（Spec-Driven Development，规范驱动开发）的关系</h2><p>Harness Engineering 是 SDD 的<strong>执行层</strong>，二者互补而非替代：</p>
 <ul>
 <li><strong>SDD</strong> 解决”做什么”和”怎么验证”——以规格文档作为单一事实来源，驱动设计、实现与验证全流程</li>
 <li><strong>Harness Engineering</strong> 解决”Agent 怎么可靠地执行 SDD 定义的方案”——提供约束、上下文、验证闭环与状态管理</li>
 </ul>
 <p>没有 SDD，Harness 是盲目的；没有 Harness，SDD 无法落地。</p>
-<h1 id="未来方向：Meta-Harness"><a href="#未来方向：Meta-Harness" class="headerlink" title="未来方向：Meta-Harness"></a>未来方向：Meta-Harness</h1><p>斯坦福、MIT 等机构提出 <strong>Meta-Harness</strong> 框架：不再只优化单条 prompt，而是把完整 Harness 程序作为优化对象，让 Agent 自主检索历史失败原因并改写 Harness，将系统优化过程自动化。</p>
+<h2 id="未来方向：Meta-Harness"><a href="#未来方向：Meta-Harness" class="headerlink" title="未来方向：Meta-Harness"></a>未来方向：Meta-Harness</h2><p>斯坦福、MIT 等机构提出 <strong>Meta-Harness</strong> 框架：不再只优化单条 prompt，而是把完整 Harness 程序作为优化对象，让 Agent 自主检索历史失败原因并改写 Harness，将系统优化过程自动化。</p>
 <p>实验数据显示，Meta-Harness 在在线文本分类任务上准确率从 40.9% 提升至 48.6%，同时上下文开销从 50.8K tokens 降至 11.4K。</p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><table>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><table>
 <thead>
 <tr>
 <th>维度</th>
@@ -491,7 +494,7 @@
     
     
       <div id="toc-footer" style="display: none">
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF-Harness-Engineering%EF%BC%9F"><span class="toc-number">1.</span> <span class="toc-text">什么是 Harness Engineering？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%AE%83%EF%BC%9F"><span class="toc-number">2.</span> <span class="toc-text">为什么需要它？</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%8C%83%E5%BC%8F%E6%BC%94%E8%BF%9B"><span class="toc-number">2.1.</span> <span class="toc-text">范式演进</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E6%94%AF%E6%92%91"><span class="toc-number">2.2.</span> <span class="toc-text">数据支撑</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E7%90%86%E5%BF%B5"><span class="toc-number">3.</span> <span class="toc-text">核心理念</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9E%B6%E6%9E%84%EF%BC%9A%E4%B8%83%E5%B1%82%E5%A4%96%E5%BE%AA%E7%8E%AF%E7%B3%BB%E7%BB%9F"><span class="toc-number">4.</span> <span class="toc-text">架构：七层外循环系统</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%94%E5%A4%A7%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6"><span class="toc-number">5.</span> <span class="toc-text">五大核心组件</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E7%BA%A6%E6%9D%9F%E7%B3%BB%E7%BB%9F%EF%BC%88Constraint-System%EF%BC%89"><span class="toc-number">5.1.</span> <span class="toc-text">一、约束系统（Constraint System）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E%EF%BC%88Execution-Engine%EF%BC%89"><span class="toc-number">5.2.</span> <span class="toc-text">二、执行引擎（Execution Engine）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E8%AE%B0%E5%BF%86%E7%B3%BB%E7%BB%9F%EF%BC%88Memory-System%EF%BC%89"><span class="toc-number">5.3.</span> <span class="toc-text">三、记忆系统（Memory System）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E6%A0%A1%E9%AA%8C%E4%B8%8E%E5%8F%8D%E9%A6%88%EF%BC%88Verification-amp-Feedback%EF%BC%89"><span class="toc-number">5.4.</span> <span class="toc-text">四、校验与反馈（Verification &amp; Feedback）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E5%AE%89%E5%85%A8%E4%B8%8E%E8%87%AA%E6%84%88%EF%BC%88Safety-amp-Self-Healing%EF%BC%89"><span class="toc-number">5.5.</span> <span class="toc-text">五、安全与自愈（Safety &amp; Self-Healing）</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A4%9A-Agent-%E5%8D%8F%E8%B0%83%E4%B8%8E%E6%95%85%E9%9A%9C%E9%9A%94%E7%A6%BB"><span class="toc-number">6.</span> <span class="toc-text">多 Agent 协调与故障隔离</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%B8%90%E8%BF%9B%E5%BC%8F%E8%90%BD%E5%9C%B0%E7%AD%96%E7%95%A5"><span class="toc-number">7.</span> <span class="toc-text">渐进式落地策略</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E5%8F%8D%E6%A8%A1%E5%BC%8F"><span class="toc-number">8.</span> <span class="toc-text">常见反模式</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%8E-SDD%EF%BC%88Spec-Driven-Development%EF%BC%8C%E8%A7%84%E8%8C%83%E9%A9%B1%E5%8A%A8%E5%BC%80%E5%8F%91%EF%BC%89%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="toc-number">9.</span> <span class="toc-text">与 SDD（Spec-Driven Development，规范驱动开发）的关系</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%9C%AA%E6%9D%A5%E6%96%B9%E5%90%91%EF%BC%9AMeta-Harness"><span class="toc-number">10.</span> <span class="toc-text">未来方向：Meta-Harness</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">11.</span> <span class="toc-text">总结</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF-Harness-Engineering%EF%BC%9F"><span class="toc-number">1.</span> <span class="toc-text">什么是 Harness Engineering？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%AE%83%EF%BC%9F"><span class="toc-number">2.</span> <span class="toc-text">为什么需要它？</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8C%83%E5%BC%8F%E6%BC%94%E8%BF%9B"><span class="toc-number">2.1.</span> <span class="toc-text">范式演进</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E6%94%AF%E6%92%91"><span class="toc-number">2.2.</span> <span class="toc-text">数据支撑</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E7%90%86%E5%BF%B5"><span class="toc-number">3.</span> <span class="toc-text">核心理念</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9E%B6%E6%9E%84%EF%BC%9A%E4%B8%83%E5%B1%82%E5%A4%96%E5%BE%AA%E7%8E%AF%E7%B3%BB%E7%BB%9F"><span class="toc-number">4.</span> <span class="toc-text">架构：七层外循环系统</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E5%A4%A7%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6"><span class="toc-number">5.</span> <span class="toc-text">五大核心组件</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E7%BA%A6%E6%9D%9F%E7%B3%BB%E7%BB%9F%EF%BC%88Constraint-System%EF%BC%89"><span class="toc-number">5.1.</span> <span class="toc-text">一、约束系统（Constraint System）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E6%89%A7%E8%A1%8C%E5%BC%95%E6%93%8E%EF%BC%88Execution-Engine%EF%BC%89"><span class="toc-number">5.2.</span> <span class="toc-text">二、执行引擎（Execution Engine）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E8%AE%B0%E5%BF%86%E7%B3%BB%E7%BB%9F%EF%BC%88Memory-System%EF%BC%89"><span class="toc-number">5.3.</span> <span class="toc-text">三、记忆系统（Memory System）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E6%A0%A1%E9%AA%8C%E4%B8%8E%E5%8F%8D%E9%A6%88%EF%BC%88Verification-amp-Feedback%EF%BC%89"><span class="toc-number">5.4.</span> <span class="toc-text">四、校验与反馈（Verification &amp; Feedback）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E5%AE%89%E5%85%A8%E4%B8%8E%E8%87%AA%E6%84%88%EF%BC%88Safety-amp-Self-Healing%EF%BC%89"><span class="toc-number">5.5.</span> <span class="toc-text">五、安全与自愈（Safety &amp; Self-Healing）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%9A-Agent-%E5%8D%8F%E8%B0%83%E4%B8%8E%E6%95%85%E9%9A%9C%E9%9A%94%E7%A6%BB"><span class="toc-number">6.</span> <span class="toc-text">多 Agent 协调与故障隔离</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%B8%90%E8%BF%9B%E5%BC%8F%E8%90%BD%E5%9C%B0%E7%AD%96%E7%95%A5"><span class="toc-number">7.</span> <span class="toc-text">渐进式落地策略</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E5%8F%8D%E6%A8%A1%E5%BC%8F"><span class="toc-number">8.</span> <span class="toc-text">常见反模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8E-SDD%EF%BC%88Spec-Driven-Development%EF%BC%8C%E8%A7%84%E8%8C%83%E9%A9%B1%E5%8A%A8%E5%BC%80%E5%8F%91%EF%BC%89%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="toc-number">9.</span> <span class="toc-text">与 SDD（Spec-Driven Development，规范驱动开发）的关系</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%9C%AA%E6%9D%A5%E6%96%B9%E5%90%91%EF%BC%9AMeta-Harness"><span class="toc-number">10.</span> <span class="toc-text">未来方向：Meta-Harness</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">11.</span> <span class="toc-text">总结</span></a></li></ol>
       </div>
     
 
