@@ -193,7 +193,7 @@ Phase 1 做扎实是质变的前提，过早追求自动化会导致约束和验
 5. **缺乏 Human-in-the-Loop**：关键节点缺少人工复核机制
 6. **忽视可维护性**：Harness 本身需要版本管理和持续迭代
 
-# 与 SDD（规范驱动开发）的关系
+# 与 SDD（Spec-Driven Development，规范驱动开发）的关系
 
 Harness Engineering 是 SDD 的**执行层**，二者互补而非替代：
 
