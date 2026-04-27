@@ -86,7 +86,7 @@ Constitutional AI：基于规则（宪法原则）自动对齐，无需人工逐
 
 ---
 
-## Prompt 的演化史：三次工程范式
+## 工程范式演进
 
 Prompt Engineering 不是一成不变的技巧，它经历了三次范式升级。
 
