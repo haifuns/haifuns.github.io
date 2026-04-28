@@ -206,4 +206,4 @@ Vibe Coding 的核心不是选哪个模式，而是**在合适的场景用合适
 
 ## 信息图
 
-![image](https://img.haifs.com/ai/2026-04-28-vibecoding-planvsspec.png)
+![image](https://img.haifs.com/ai/2026-04-28-vibecoding-planvsspec.jpg)
