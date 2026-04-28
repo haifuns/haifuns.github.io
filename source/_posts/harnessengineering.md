@@ -224,4 +224,4 @@ Harness Engineering 是 SDD 的**执行层**，二者互补而非替代：
 
 ### 信息图
 
-![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/ai/2026-04-27-harness-engineering.png)
+![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/ai/2026-04-27-harness-engineering.jpeg)
