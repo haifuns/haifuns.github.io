@@ -221,3 +221,7 @@ Harness Engineering 是 SDD 的**执行层**，二者互补而非替代：
 | **关键动作**    | 约束设计 + 上下文注入 + 验证闭环 + 状态管理 + 安全纵深防御     |
 | **落地策略**    | 渐进式三阶段（信息层 → 约束层 → 自动化层）                |
 | **工程师角色转变** | 从编码执行者 → 系统架构师与环境设计师                    |
+
+### 信息图
+
+![image](https://haif-cloud.oss-cn-beijing.aliyuncs.com/ai/2026-04-27-harness-engineering.png)
