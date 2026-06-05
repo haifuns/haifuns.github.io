@@ -22,6 +22,9 @@ date: 2026-06-05 18:00:00
 
 ```SQL
 uv tool install claude-tap
+
+# 或用 pip
+pip install claude-tap
 ```
 
 ## 启动
