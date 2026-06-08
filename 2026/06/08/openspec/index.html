@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="项目概述OpenSpec 是一个面向 AI 编码助手的规格驱动开发工具链（Spec-Driven Development），核心思想是在写代码之前先对齐需求规格。它以 Node.js CLI 工具的形式发布，支持 25+ 种 AI 助手（Claude Code、GitHub Copilot、Cursor、Codex 等），通过向这些工具注入斜杠命令（Slash Commands）和技能文件（Ski">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OpenSpec 技术分析">
+<meta property="og:url" content="https://haifs.com/2026/06/08/openspec/index.html">
+<meta property="og:site_name" content="haif&#39;s blog">
+<meta property="og:description" content="项目概述OpenSpec 是一个面向 AI 编码助手的规格驱动开发工具链（Spec-Driven Development），核心思想是在写代码之前先对齐需求规格。它以 Node.js CLI 工具的形式发布，支持 25+ 种 AI 助手（Claude Code、GitHub Copilot、Cursor、Codex 等），通过向这些工具注入斜杠命令（Slash Commands）和技能文件（Ski">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-06-08T02:00:00.000Z">
+<meta property="article:modified_time" content="2026-06-08T02:02:17.507Z">
+<meta property="article:author" content="haif.">
+<meta property="article:tag" content="Agent">
+<meta property="article:tag" content="VibeCoding">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>OpenSpec 技术分析</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+      <link rel="alternate" href="/true" title="haif&#39;s blog" type="application/atom+xml" />
+    
+	<!-- mathjax -->
+	
+		<script type="text/x-mathjax-config">
+		  MathJax.Hub.Config({
+			tex2jax: {
+			  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+			  inlineMath: [['$','$']]
+			}
+		  });
+		</script>
+		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML' async></script>
+	
+<meta name="generator" content="Hexo 5.4.2">
+<style>.github-emoji { position: relative; display: inline-block; width: 1.2em; min-height: 1.2em; overflow: hidden; vertical-align: top; color: transparent; }  .github-emoji > span { position: relative; z-index: 10; }  .github-emoji img, .github-emoji .fancybox { margin: 0 !important; padding: 0 !important; border: none !important; outline: none !important; text-decoration: none !important; user-select: none !important; cursor: auto !important; }  .github-emoji img { height: 1.2em !important; width: 1.2em !important; position: absolute !important; left: 50% !important; top: 50% !important; transform: translate(-50%, -50%) !important; user-select: none !important; cursor: auto !important; } .github-emoji-fallback { color: inherit; } .github-emoji-fallback img { opacity: 0 !important; }</style>
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="目录"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="顶部" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a href="/tags/">标签</a></li><!--
+     --><!--
+       --><li><a href="/categories/">分类</a></li><!--
+     --><!--
+       --><li><a href="/search/">搜索</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="下一篇" href="/2026/06/05/agenttrace/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="返回顶部" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="分享文章" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">上一篇</span>
+      <span id="i-next" class="info" style="display:none;">下一篇</span>
+      <span id="i-top" class="info" style="display:none;">返回顶部</span>
+      <span id="i-share" class="info" style="display:none;">分享文章</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifs.com/2026/06/08/openspec/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifs.com/2026/06/08/openspec/&text=OpenSpec 技术分析"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifs.com/2026/06/08/openspec/&title=OpenSpec 技术分析"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifs.com/2026/06/08/openspec/&is_video=false&description=OpenSpec 技术分析"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=OpenSpec 技术分析&body=Check out this article: https://haifs.com/2026/06/08/openspec/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifs.com/2026/06/08/openspec/&title=OpenSpec 技术分析"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifs.com/2026/06/08/openspec/&title=OpenSpec 技术分析"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifs.com/2026/06/08/openspec/&title=OpenSpec 技术分析"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifs.com/2026/06/08/openspec/&title=OpenSpec 技术分析"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifs.com/2026/06/08/openspec/&name=OpenSpec 技术分析&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifs.com/2026/06/08/openspec/&t=OpenSpec 技术分析"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A1%B9%E7%9B%AE%E6%A6%82%E8%BF%B0"><span class="toc-number">1.</span> <span class="toc-text">项目概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E5%8A%9F%E8%83%BD"><span class="toc-number">2.</span> <span class="toc-text">基本功能</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%8F%98%E6%9B%B4%EF%BC%88Change%EF%BC%89%E7%AE%A1%E7%90%86"><span class="toc-number">2.1.</span> <span class="toc-text">1. 变更（Change）管理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E8%A7%84%E6%A0%BC%EF%BC%88Spec%EF%BC%89%E7%AE%A1%E7%90%86"><span class="toc-number">2.2.</span> <span class="toc-text">2. 规格（Spec）管理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-Delta-Spec%EF%BC%88%E5%B7%AE%E9%87%8F%E8%A7%84%E6%A0%BC%EF%BC%89"><span class="toc-number">2.3.</span> <span class="toc-text">3. Delta Spec（差量规格）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E5%B7%A5%E4%BD%9C%E6%B5%81%EF%BC%88Workflow%EF%BC%89"><span class="toc-number">2.4.</span> <span class="toc-text">4. 工作流（Workflow）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E5%B7%A5%E4%BD%9C%E5%8C%BA%EF%BC%88Workspace%EF%BC%89"><span class="toc-number">2.5.</span> <span class="toc-text">5. 工作区（Workspace）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84"><span class="toc-number">3.</span> <span class="toc-text">文件结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E6%9E%B6%E6%9E%84"><span class="toc-number">4.</span> <span class="toc-text">核心架构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%88%B6%E5%93%81%E4%BE%9D%E8%B5%96%E5%9B%BE%EF%BC%88Artifact-Graph%EF%BC%89"><span class="toc-number">4.1.</span> <span class="toc-text">1. 制品依赖图（Artifact Graph）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%91%BD%E4%BB%A4%E7%94%9F%E6%88%90%E7%9A%84%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F%EF%BC%88Adapter-Pattern%EF%BC%89"><span class="toc-number">4.2.</span> <span class="toc-text">2. 命令生成的适配器模式（Adapter Pattern）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-Schema-%E9%A9%B1%E5%8A%A8%E7%9A%84%E5%B7%A5%E4%BD%9C%E6%B5%81%E5%AE%9A%E5%88%B6"><span class="toc-number">4.3.</span> <span class="toc-text">3. Schema 驱动的工作流定制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-Delta-Spec-%E5%BD%92%E6%A1%A3%E5%90%88%E5%B9%B6%E5%BC%95%E6%93%8E"><span class="toc-number">4.4.</span> <span class="toc-text">4. Delta Spec 归档合并引擎</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E6%80%9D%E6%83%B3"><span class="toc-number">5.</span> <span class="toc-text">设计思想</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%8D%B3%E7%8A%B6%E6%80%81%EF%BC%88Filesystem-as-State%EF%BC%89"><span class="toc-number">5.1.</span> <span class="toc-text">1. 文件系统即状态（Filesystem as State）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-AI-%E5%B7%A5%E5%85%B7%E6%97%A0%E5%85%B3%EF%BC%88Tool-Agnostic%EF%BC%89"><span class="toc-number">5.2.</span> <span class="toc-text">2. AI 工具无关（Tool Agnostic）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%A2%9E%E9%87%8F%E8%A7%84%E6%A0%BC%EF%BC%88Delta-First%EF%BC%89"><span class="toc-number">5.3.</span> <span class="toc-text">3. 增量规格（Delta-First）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-Schema-%E5%8F%AF%E7%BB%84%E5%90%88%EF%BC%88Composable-Schemas%EF%BC%89"><span class="toc-number">5.4.</span> <span class="toc-text">4. Schema 可组合（Composable Schemas）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E9%9A%90%E7%A7%81%E4%BC%98%E5%85%88%E7%9A%84%E9%81%A5%E6%B5%8B%EF%BC%88Privacy-First-Telemetry%EF%BC%89"><span class="toc-number">5.5.</span> <span class="toc-text">5. 隐私优先的遥测（Privacy-First Telemetry）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E9%94%AE%E5%AD%90%E7%B3%BB%E7%BB%9F%E8%AF%A6%E8%A7%A3"><span class="toc-number">6.</span> <span class="toc-text">关键子系统详解</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8A%E4%B8%8B%E6%96%87%E5%AD%98%E5%82%A8%EF%BC%88Context-Store%EF%BC%89"><span class="toc-number">6.1.</span> <span class="toc-text">上下文存储（Context Store）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Initiative-%E7%B3%BB%E7%BB%9F"><span class="toc-number">6.2.</span> <span class="toc-text">Initiative 系统</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%EF%BC%88Profiles%EF%BC%89%E7%B3%BB%E7%BB%9F"><span class="toc-number">6.3.</span> <span class="toc-text">配置文件（Profiles）系统</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Shell-%E8%A1%A5%E5%85%A8%E7%B3%BB%E7%BB%9F"><span class="toc-number">6.4.</span> <span class="toc-text">Shell 补全系统</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%9A%E5%B7%A5%E5%85%B7%E9%80%82%E9%85%8D%E5%B1%82"><span class="toc-number">7.</span> <span class="toc-text">多工具适配层</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B"><span class="toc-number">8.</span> <span class="toc-text">数据模型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Artifact-Schema"><span class="toc-number">8.1.</span> <span class="toc-text">Artifact Schema</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#WorkspaceViewState"><span class="toc-number">8.2.</span> <span class="toc-text">WorkspaceViewState</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#InitiativeState"><span class="toc-number">8.3.</span> <span class="toc-text">InitiativeState</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8A%80%E6%9C%AF%E6%A0%88"><span class="toc-number">9.</span> <span class="toc-text">技术栈</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%AF%E6%89%A9%E5%B1%95%E6%80%A7%E8%AE%BE%E8%AE%A1"><span class="toc-number">10.</span> <span class="toc-text">可扩展性设计</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89-Schema"><span class="toc-number">10.1.</span> <span class="toc-text">自定义 Schema</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BE%E5%8C%BA-Schema"><span class="toc-number">10.2.</span> <span class="toc-text">社区 Schema</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B7%A5%E5%85%B7%E9%80%82%E9%85%8D%E5%99%A8%E6%89%A9%E5%B1%95"><span class="toc-number">10.3.</span> <span class="toc-text">工具适配器扩展</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">11.</span> <span class="toc-text">总结</span></a></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        OpenSpec 技术分析
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">haif.</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2026-06-08T02:00:00.000Z" class="dt-published" itemprop="datePublished">2026-06-08</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/AI/">AI</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/Agent/" rel="tag">Agent</a>, <a class="p-category" href="/tags/VibeCoding/" rel="tag">VibeCoding</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h2 id="项目概述"><a href="#项目概述" class="headerlink" title="项目概述"></a>项目概述</h2><p>OpenSpec 是一个面向 AI 编码助手的<strong>规格驱动开发工具链（Spec-Driven Development）</strong>，核心思想是在写代码之前先对齐需求规格。它以 Node.js CLI 工具的形式发布，支持 25+ 种 AI 助手（Claude Code、GitHub Copilot、Cursor、Codex 等），通过向这些工具注入斜杠命令（Slash Commands）和技能文件（Skills），将结构化的规格管理流程嵌入到 AI 辅助开发工作流中。</p>
+<p><strong>核心理念</strong>:</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">fluid not rigid        — 无强制阶段门，随时更新任意制品</span><br><span class="line">iterative not waterfall — 拥抱需求变化，在实现中不断迭代</span><br><span class="line">easy not complex       — 秒级初始化，最小仪式感</span><br><span class="line">brownfield-first       — 面向已有代码库的增量变更，而非重建</span><br></pre></td></tr></tbody></table></figure>
+
+<hr>
+<h2 id="基本功能"><a href="#基本功能" class="headerlink" title="基本功能"></a>基本功能</h2><h3 id="1-变更（Change）管理"><a href="#1-变更（Change）管理" class="headerlink" title="1. 变更（Change）管理"></a>1. 变更（Change）管理</h3><p>一次变更被打包成一个独立目录，包含理解和实现该变更所需的全部文档：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">openspec/changes/add-dark-mode/</span><br><span class="line">├── proposal.md      # 为什么做（Why + What）</span><br><span class="line">├── design.md        # 怎么做（技术方案）</span><br><span class="line">├── tasks.md         # 实现步骤（带 checkbox 的任务清单）</span><br><span class="line">├── .openspec.yaml   # 变更元数据（可选）</span><br><span class="line">└── specs/           # Delta Spec（差量规格）</span><br><span class="line">    └── ui/</span><br><span class="line">        └── spec.md  # 描述 ui 规格的哪些部分在变化</span><br></pre></td></tr></tbody></table></figure>
+
+<p><strong>核心命令</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>openspec init</code></td>
+<td>在项目中初始化 OpenSpec</td>
+</tr>
+<tr>
+<td><code>openspec update</code></td>
+<td>更新 AI 工具的指令文件</td>
+</tr>
+<tr>
+<td><code>openspec new change &lt;name&gt;</code></td>
+<td>创建变更目录脚手架</td>
+</tr>
+<tr>
+<td><code>openspec status --change &lt;name&gt;</code></td>
+<td>查看制品完成状态</td>
+</tr>
+<tr>
+<td><code>openspec instructions &lt;artifact&gt;</code></td>
+<td>获取创建某制品的引导指令</td>
+</tr>
+<tr>
+<td><code>openspec archive [name]</code></td>
+<td>归档变更，将 Delta Spec 合并回主 Spec</td>
+</tr>
+<tr>
+<td><code>openspec validate</code></td>
+<td>校验变更和规格文档结构合法性</td>
+</tr>
+<tr>
+<td><code>openspec list</code></td>
+<td>列出活跃变更或规格</td>
+</tr>
+<tr>
+<td><code>openspec view</code></td>
+<td>交互式仪表板</td>
+</tr>
+</tbody></table>
+<h3 id="2-规格（Spec）管理"><a href="#2-规格（Spec）管理" class="headerlink" title="2. 规格（Spec）管理"></a>2. 规格（Spec）管理</h3><p>规格是系统当前行为的”真相来源”，按领域目录组织：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">openspec/specs/</span><br><span class="line">├── auth/spec.md</span><br><span class="line">├── payments/spec.md</span><br><span class="line">└── notifications/spec.md</span><br></pre></td></tr></tbody></table></figure>
+
+<p>每个 spec 文件采用结构化 Markdown，通过 <code>### Requirement:</code> 和 <code>#### Scenario:</code> 标题层次描述需求和可测试场景。</p>
+<h3 id="3-Delta-Spec（差量规格）"><a href="#3-Delta-Spec（差量规格）" class="headerlink" title="3. Delta Spec（差量规格）"></a>3. Delta Spec（差量规格）</h3><p>OpenSpec 面向棕地（Brownfield）开发的核心机制。Delta Spec 只描述<strong>变化</strong>，不重复整个规格：</p>
+<figure class="highlight markdown"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">## ADDED Requirements   → 新增需求（归档时追加到主 Spec）</span></span><br><span class="line"><span class="section">## MODIFIED Requirements → 修改需求（归档时替换现有需求）</span></span><br><span class="line"><span class="section">## REMOVED Requirements  → 删除需求（归档时从主 Spec 删除）</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="4-工作流（Workflow）"><a href="#4-工作流（Workflow）" class="headerlink" title="4. 工作流（Workflow）"></a>4. 工作流（Workflow）</h3><p>通过斜杠命令驱动，所有节点分为两组：</p>
+<p><strong>core profile（默认）</strong></p>
+<table>
+<thead>
+<tr>
+<th>节点</th>
+<th>命令</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Propose change</td>
+<td><code>/opsx:propose</code></td>
+<td>全自动模式，一步创建变更并连续生成所有制品直到 apply-ready，适合需求清晰、快速启动的场景</td>
+</tr>
+<tr>
+<td>Explore ideas</td>
+<td><code>/opsx:explore</code></td>
+<td>在创建变更前探索代码库，收集现有结构和上下文，帮助 AI 生成更准确的制品</td>
+</tr>
+<tr>
+<td>Apply tasks</td>
+<td><code>/opsx:apply</code></td>
+<td>读取 tasks.md，逐条执行任务并打勾，是实现阶段的主命令</td>
+</tr>
+<tr>
+<td>Sync specs</td>
+<td><code>/opsx:sync</code></td>
+<td>将主 Spec 的最新状态同步回当前变更上下文，避免并行变更导致的规格漂移</td>
+</tr>
+<tr>
+<td>Archive change</td>
+<td><code>/opsx:archive</code></td>
+<td>将已完成变更归档，Delta Spec 合并回主 Spec，变更目录移入 archive/</td>
+</tr>
+</tbody></table>
+<p><strong>expanded profile（需手动启用）</strong></p>
+<table>
+<thead>
+<tr>
+<th>节点</th>
+<th>命令</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>New change</td>
+<td><code>/opsx:new</code></td>
+<td>只创建变更目录脚手架，不自动生成任何制品，配合 continue 实现分步审核</td>
+</tr>
+<tr>
+<td>Continue change</td>
+<td><code>/opsx:continue</code></td>
+<td>有上下文感知的推进命令，读取已有制品后继续生成下一个或修改已有内容，是最灵活的制品操作命令</td>
+</tr>
+<tr>
+<td>Fast-forward</td>
+<td><code>/opsx:ff</code></td>
+<td>continue 的全自动版本，跳过确认直接批量生成所有缺失制品直到 apply-ready</td>
+</tr>
+<tr>
+<td>Bulk archive</td>
+<td><code>/opsx:bulk-archive</code></td>
+<td>批量归档多个已完成变更，适合积压了多个小变更时一次性清理</td>
+</tr>
+<tr>
+<td>Verify change</td>
+<td><code>/opsx:verify</code></td>
+<td>检查代码实现是否与规格一致，建议在归档前执行</td>
+</tr>
+<tr>
+<td>Onboard</td>
+<td><code>/opsx:onboard</code></td>
+<td>为新成员或 AI 生成项目上下文摘要，快速了解现有规格和进行中的变更</td>
+</tr>
+</tbody></table>
+<p><strong>典型使用路径</strong></p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">explore → propose          （快速路径，全自动）</span><br><span class="line">explore → new → continue → ff → apply → verify → archive  （分步审核路径）</span><br><span class="line">                                    ↑</span><br><span class="line">                               sync（有并行变更时）</span><br></pre></td></tr></tbody></table></figure>
+
+<p><strong>propose 与 new+continue 的选择</strong></p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th><code>/opsx:propose</code></th>
+<th><code>/opsx:new</code> + <code>/opsx:continue</code></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>速度</td>
+<td>快，一步到位</td>
+<td>慢，逐步推进</td>
+</tr>
+<tr>
+<td>审核时机</td>
+<td>全部生成后再审</td>
+<td>每步生成后审核</td>
+</tr>
+<tr>
+<td>适合场景</td>
+<td>需求清晰</td>
+<td>需求模糊、需要人机对齐</td>
+</tr>
+</tbody></table>
+<h3 id="5-工作区（Workspace）"><a href="#5-工作区（Workspace）" class="headerlink" title="5. 工作区（Workspace）"></a>5. 工作区（Workspace）</h3><p>面向多仓库/大型 monorepo 场景的协调层，支持跨仓库的 Initiative 管理：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">openspec workspace setup   # 创建工作区</span><br><span class="line">openspec workspace open    # 打开工作区（用 AI 工具或编辑器）</span><br><span class="line">openspec workspace link    # 添加仓库/目录链接</span><br></pre></td></tr></tbody></table></figure>
+
+<hr>
+<h2 id="文件结构"><a href="#文件结构" class="headerlink" title="文件结构"></a>文件结构</h2><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">OpenSpec/</span><br><span class="line">├── src/                          # TypeScript 源码</span><br><span class="line">│   ├── cli/</span><br><span class="line">│   │   └── index.ts              # CLI 入口，Commander.js 注册所有命令</span><br><span class="line">│   ├── commands/                 # 顶层命令实现</span><br><span class="line">│   │   ├── workflow/             # 工作流子命令</span><br><span class="line">│   │   └── workspace/            # 工作区子命令</span><br><span class="line">│   ├── core/                     # 核心业务逻辑</span><br><span class="line">│   │   ├── artifact-graph/       # 制品依赖图（关键架构）</span><br><span class="line">│   │   ├── collections/</span><br><span class="line">│   │   │   └── initiatives/      # Initiative 集合（跨仓库协调）</span><br><span class="line">│   │   ├── command-generation/   # 多工具命令生成</span><br><span class="line">│   │   │   └── adapters/         # 每种 AI 工具一个 Adapter（25+）</span><br><span class="line">│   │   ├── completions/          # Shell 自动补全系统</span><br><span class="line">│   │   ├── context-store/        # 上下文存储（跨会话持久化）</span><br><span class="line">│   │   ├── parsers/              # Markdown 解析</span><br><span class="line">│   │   ├── templates/            # 工作流模板生成</span><br><span class="line">│   │   │   └── workflows/        # 各工作流模板</span><br><span class="line">│   │   └── workspace/            # 工作区核心逻辑</span><br><span class="line">│   ├── telemetry/                # 匿名遥测（PostHog）</span><br><span class="line">│   └── utils/                    # 工具函数</span><br><span class="line">├── schemas/                      # 内置工作流 Schema</span><br><span class="line">│   ├── spec-driven/              # 默认 Schema</span><br><span class="line">│   │   ├── schema.yaml           # proposal → specs → design → tasks</span><br><span class="line">│   │   └── templates/            # 各制品的 Markdown 模板</span><br><span class="line">│   └── workspace-planning/       # 工作区规划 Schema</span><br><span class="line">├── bin/</span><br><span class="line">│   └── openspec.js               # CLI 可执行入口</span><br><span class="line">├── scripts/</span><br><span class="line">│   └── postinstall.js            # 安装后自动工具检测</span><br><span class="line">├── test/                         # Vitest 测试套件</span><br><span class="line">└── docs/                         # 用户文档</span><br></pre></td></tr></tbody></table></figure>
+
+<hr>
+<h2 id="核心架构"><a href="#核心架构" class="headerlink" title="核心架构"></a>核心架构</h2><h3 id="1-制品依赖图（Artifact-Graph）"><a href="#1-制品依赖图（Artifact-Graph）" class="headerlink" title="1. 制品依赖图（Artifact Graph）"></a>1. 制品依赖图（Artifact Graph）</h3><p>这是 OpenSpec 最核心的概念抽象。<code>ArtifactGraph</code> 类将 YAML Schema 中定义的制品（Artifact）及其依赖关系建模为有向无环图（DAG），并使用 <strong>Kahn 算法</strong>进行拓扑排序，确定制品的合法构建顺序。</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">proposal （根节点，无依赖）</span><br><span class="line">    │</span><br><span class="line">    ├──→ specs （requires: proposal）</span><br><span class="line">    │</span><br><span class="line">    └──→ design （requires: proposal）</span><br><span class="line">              ↓</span><br><span class="line">           tasks （requires: specs, design）</span><br><span class="line">              ↓</span><br><span class="line">           apply （实现阶段，requires: tasks）</span><br></pre></td></tr></tbody></table></figure>
+
+<p>AI 工具通过如下循环驱动制品创建过程：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">openspec status --change &lt;name&gt; --json</span><br><span class="line">  ↓ 获取 ready 状态的制品</span><br><span class="line">openspec instructions &lt;artifact-id&gt; --change &lt;name&gt; --json</span><br><span class="line">  ↓ 获取创建该制品的 context、rules、template、instruction</span><br><span class="line">  （AI 按模板创建文件）</span><br><span class="line">openspec status --change &lt;name&gt; --json</span><br><span class="line">  ↓ 再次查询，继续下一个 ready 制品</span><br><span class="line">  ...直到 applyRequires 中所有制品都完成</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="2-命令生成的适配器模式（Adapter-Pattern）"><a href="#2-命令生成的适配器模式（Adapter-Pattern）" class="headerlink" title="2. 命令生成的适配器模式（Adapter Pattern）"></a>2. 命令生成的适配器模式（Adapter Pattern）</h3><p>为了支持 25+ 种 AI 工具，OpenSpec 采用了<strong>策略/适配器模式</strong>解耦”命令内容”和”工具特定格式”：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">CommandContent（工具无关）</span><br><span class="line">    ├── id: 'propose'</span><br><span class="line">    ├── description: '...'</span><br><span class="line">    └── body: '...'（工作流指令 Markdown）</span><br><span class="line">          │</span><br><span class="line">          ▼ ToolCommandAdapter（每个工具实现）</span><br><span class="line">    ┌─────────────────────────────────────────┐</span><br><span class="line">    │  Claude Code  → .claude/commands/opsx/  │</span><br><span class="line">    │  Cursor       → .cursor/rules/opsx/     │</span><br><span class="line">    │  Codex        → ~/.codex/openspec/      │</span><br><span class="line">    │  GitHub Copilot → .github/prompts/      │</span><br><span class="line">    │  Gemini CLI   → .gemini/skills/         │</span><br><span class="line">    └─────────────────────────────────────────┘</span><br></pre></td></tr></tbody></table></figure>
+
+<p>每个 Adapter 实现两个方法：</p>
+<ul>
+<li><code>getFilePath(commandId)</code> — 决定命令文件写到哪里</li>
+<li><code>formatFile(content)</code> — 决定文件内容格式（frontmatter 格式因工具而异）</li>
+</ul>
+<h3 id="3-Schema-驱动的工作流定制"><a href="#3-Schema-驱动的工作流定制" class="headerlink" title="3. Schema 驱动的工作流定制"></a>3. Schema 驱动的工作流定制</h3><p>工作流由 YAML Schema 文件定义，用户可以自定义制品类型和依赖关系：</p>
+<figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># openspec/schemas/spec-driven/schema.yaml</span></span><br><span class="line"><span class="attr">name:</span> <span class="string">spec-driven</span></span><br><span class="line"><span class="attr">version:</span> <span class="number">1</span></span><br><span class="line"><span class="attr">artifacts:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">id:</span> <span class="string">proposal</span></span><br><span class="line">    <span class="attr">generates:</span> <span class="string">proposal.md</span></span><br><span class="line">    <span class="attr">template:</span> <span class="string">proposal.md</span></span><br><span class="line">    <span class="attr">instruction:</span> <span class="string">|</span>  <span class="comment"># 提供给 AI 的创建指南</span></span><br><span class="line">      <span class="string">...</span></span><br><span class="line">    <span class="attr">requires:</span> []</span><br><span class="line"></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">id:</span> <span class="string">tasks</span></span><br><span class="line">    <span class="attr">generates:</span> <span class="string">tasks.md</span></span><br><span class="line">    <span class="attr">template:</span> <span class="string">tasks.md</span></span><br><span class="line">    <span class="attr">requires:</span> [<span class="string">specs</span>, <span class="string">design</span>]</span><br><span class="line"></span><br><span class="line"><span class="attr">apply:</span></span><br><span class="line">  <span class="attr">requires:</span> [<span class="string">tasks</span>]    <span class="comment"># 进入实现阶段的前提制品</span></span><br><span class="line">  <span class="attr">tracks:</span> <span class="string">tasks.md</span>     <span class="comment"># 用 checkbox 追踪实现进度</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="4-Delta-Spec-归档合并引擎"><a href="#4-Delta-Spec-归档合并引擎" class="headerlink" title="4. Delta Spec 归档合并引擎"></a>4. Delta Spec 归档合并引擎</h3><p><code>archive.ts</code> 实现了将变更目录中的 Delta Spec 合并回主 Spec 的核心逻辑：</p>
+<ul>
+<li><strong>ADDED</strong>: 将需求块追加到目标 spec.md 的对应区域</li>
+<li><strong>MODIFIED</strong>: 按需求标题精确匹配，用新版本替换旧版本</li>
+<li><strong>REMOVED</strong>: 从主 spec 中删除匹配的需求块</li>
+</ul>
+<p>归档后，变更目录整体移入 <code>changes/archive/YYYY-MM-DD-&lt;name&gt;/</code> 保留完整历史。</p>
+<hr>
+<h2 id="设计思想"><a href="#设计思想" class="headerlink" title="设计思想"></a>设计思想</h2><h3 id="1-文件系统即状态（Filesystem-as-State）"><a href="#1-文件系统即状态（Filesystem-as-State）" class="headerlink" title="1. 文件系统即状态（Filesystem as State）"></a>1. 文件系统即状态（Filesystem as State）</h3><p>OpenSpec 不依赖数据库或后台服务，所有状态通过文件系统表达：</p>
+<ul>
+<li>制品是否完成 → 对应文件是否存在</li>
+<li>变更是否归档 → 目录是否在 <code>changes/archive/</code> 下</li>
+<li>变更元数据 → <code>.openspec.yaml</code> 文件</li>
+<li>工作区配置 → <code>workspace.yaml</code></li>
+</ul>
+<p>这使得状态天然可被 Git 追踪，支持代码审查，无需额外同步机制。</p>
+<h3 id="2-AI-工具无关（Tool-Agnostic）"><a href="#2-AI-工具无关（Tool-Agnostic）" class="headerlink" title="2. AI 工具无关（Tool Agnostic）"></a>2. AI 工具无关（Tool Agnostic）</h3><p>OpenSpec 的核心价值在于工具中立性。通过适配器模式，相同的工作流指令可以注入到任意 AI 工具的技能/命令系统中。AI 工具通过调用 <code>openspec</code> CLI 命令获取结构化数据（<code>--json</code> 输出），再基于这些数据创建文件。</p>
+<h3 id="3-增量规格（Delta-First）"><a href="#3-增量规格（Delta-First）" class="headerlink" title="3. 增量规格（Delta-First）"></a>3. 增量规格（Delta-First）</h3><p>区别于重建整个规格文件，Delta Spec 只表达”变化量”，具备以下优势：</p>
+<ul>
+<li><strong>并行无冲突</strong>：两个变更可同时修改不同需求，不产生 merge conflict</li>
+<li><strong>审查聚焦</strong>：只看 delta，无需对比全量 spec</li>
+<li><strong>历史可追溯</strong>：每次归档的 delta 说明了”为什么改”</li>
+</ul>
+<h3 id="4-Schema-可组合（Composable-Schemas）"><a href="#4-Schema-可组合（Composable-Schemas）" class="headerlink" title="4. Schema 可组合（Composable Schemas）"></a>4. Schema 可组合（Composable Schemas）</h3><p>Schema 是 OpenSpec 的扩展点，允许团队定制工作流：</p>
+<ul>
+<li><code>core</code> profile：propose → apply → archive（新手/快速场景）</li>
+<li><code>expanded</code> profile：new → continue → ff → verify → bulk-archive（完整流程）</li>
+<li>自定义 Schema：完全自定义制品类型、依赖顺序、模板内容</li>
+</ul>
+<h3 id="5-隐私优先的遥测（Privacy-First-Telemetry）"><a href="#5-隐私优先的遥测（Privacy-First-Telemetry）" class="headerlink" title="5. 隐私优先的遥测（Privacy-First Telemetry）"></a>5. 隐私优先的遥测（Privacy-First Telemetry）</h3><p>遥测设计严格限制数据范围：</p>
+<ul>
+<li>只收集命令名称和版本号</li>
+<li>不收集参数、路径、文件内容、PII</li>
+<li>CI 环境自动禁用</li>
+<li>支持 <code>OPENSPEC_TELEMETRY=0</code> 或 <code>DO_NOT_TRACK=1</code> 退出</li>
+<li>使用随机 UUID 作为匿名标识，不与用户身份绑定</li>
+</ul>
+<hr>
+<h2 id="关键子系统详解"><a href="#关键子系统详解" class="headerlink" title="关键子系统详解"></a>关键子系统详解</h2><h3 id="上下文存储（Context-Store）"><a href="#上下文存储（Context-Store）" class="headerlink" title="上下文存储（Context Store）"></a>上下文存储（Context Store）</h3><p>Context Store 是跨仓库协调的基础设施，支持 Git 作为后端：</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">~/.local/share/openspec/context-stores/</span><br><span class="line">├── registry.yaml        # 存储注册表（版本化 YAML）</span><br><span class="line">└── &lt;store-id&gt;/</span><br><span class="line">    ├── .openspec-store/</span><br><span class="line">    │   └── store.yaml   # 存储元数据</span><br><span class="line">    └── initiatives/     # Initiative 集合</span><br><span class="line">        └── &lt;id&gt;/</span><br><span class="line">            ├── initiative.yaml  # 状态文件（版本化）</span><br><span class="line">            ├── requirements.md</span><br><span class="line">            ├── design.md</span><br><span class="line">            ├── decisions.md</span><br><span class="line">            ├── questions.md</span><br><span class="line">            └── tasks.md</span><br></pre></td></tr></tbody></table></figure>
+
+<p>注册表写入采用<strong>文件锁（.lock 文件）+ 原子重命名</strong>机制，防止并发写入竞态。</p>
+<h3 id="Initiative-系统"><a href="#Initiative-系统" class="headerlink" title="Initiative 系统"></a>Initiative 系统</h3><p>Initiative 是跨仓库协调的高层概念，一个 Initiative 代表一个跨越多个仓库的功能或项目：</p>
+<figure class="highlight yaml"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># initiative.yaml</span></span><br><span class="line"><span class="attr">version:</span> <span class="number">1</span></span><br><span class="line"><span class="attr">id:</span> <span class="string">billing-launch</span></span><br><span class="line"><span class="attr">title:</span> <span class="string">Billing</span> <span class="string">System</span> <span class="string">Launch</span></span><br><span class="line"><span class="attr">summary:</span> <span class="string">Launch</span> <span class="string">new</span> <span class="string">billing</span> <span class="string">system</span> <span class="string">across</span> <span class="string">API</span> <span class="string">and</span> <span class="string">web</span> <span class="string">repos</span></span><br><span class="line"><span class="attr">status:</span> <span class="string">active</span>   <span class="comment"># exploring | active | complete | archived</span></span><br><span class="line"><span class="attr">created:</span> <span class="number">2026-01-01</span></span><br><span class="line"><span class="attr">owners:</span> [<span class="string">alice</span>, <span class="string">bob</span>]</span><br><span class="line"><span class="attr">metadata:</span> {}     <span class="comment"># 可扩展的自定义元数据</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="配置文件（Profiles）系统"><a href="#配置文件（Profiles）系统" class="headerlink" title="配置文件（Profiles）系统"></a>配置文件（Profiles）系统</h3><p>Profile 控制哪些工作流命令会被安装到项目（<code>openspec config profile</code>）：</p>
+<ul>
+<li><strong>core profile</strong>（推荐新用户）：<code>propose</code>、<code>explore</code>、<code>apply</code>、<code>sync</code>、<code>archive</code></li>
+<li><strong>custom profile</strong>：用户自选工作流，可额外启用 <code>new</code>、<code>continue</code>、<code>ff</code>、<code>bulk-archive</code>、<code>verify</code>、<code>onboard</code></li>
+</ul>
+<h3 id="Shell-补全系统"><a href="#Shell-补全系统" class="headerlink" title="Shell 补全系统"></a>Shell 补全系统</h3><p>支持 bash、zsh、fish、PowerShell 四种 Shell 的补全脚本生成和安装，采用分层架构：补全数据提供层（动态提供变更名、规格名）、各 Shell 语法生成层、安装层。</p>
+<hr>
+<h2 id="多工具适配层"><a href="#多工具适配层" class="headerlink" title="多工具适配层"></a>多工具适配层</h2><p>OpenSpec 当前支持的 AI 工具（截至 1.3.1 版本）：</p>
+<table>
+<thead>
+<tr>
+<th>工具</th>
+<th>技能目录</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Claude Code</td>
+<td><code>.claude/</code></td>
+</tr>
+<tr>
+<td>GitHub Copilot</td>
+<td><code>.github/</code></td>
+</tr>
+<tr>
+<td>Cursor</td>
+<td><code>.cursor/</code></td>
+</tr>
+<tr>
+<td>Codex</td>
+<td><code>~/.codex/</code>（全局）</td>
+</tr>
+<tr>
+<td>Gemini CLI</td>
+<td><code>.gemini/</code></td>
+</tr>
+<tr>
+<td>Windsurf</td>
+<td><code>.windsurf/</code></td>
+</tr>
+<tr>
+<td>Cline</td>
+<td><code>.cline/</code></td>
+</tr>
+<tr>
+<td>RooCode</td>
+<td><code>.roo/</code></td>
+</tr>
+<tr>
+<td>Continue</td>
+<td><code>.continue/</code></td>
+</tr>
+<tr>
+<td>Amazon Q</td>
+<td><code>.amazonq/</code></td>
+</tr>
+<tr>
+<td>Kiro</td>
+<td><code>.kiro/</code></td>
+</tr>
+<tr>
+<td>Qwen Code</td>
+<td><code>.qwen/</code></td>
+</tr>
+<tr>
+<td>Lingma</td>
+<td><code>.lingma/</code></td>
+</tr>
+<tr>
+<td>…</td>
+<td>…</td>
+</tr>
+</tbody></table>
+<p>工具检测逻辑通过检测 <code>detectionPaths</code> 或 <code>skillsDir</code> 目录是否存在来自动识别当前项目使用的 AI 工具，在 <code>openspec init</code> 时默认为检测到的工具生成命令文件。</p>
+<hr>
+<h2 id="数据模型"><a href="#数据模型" class="headerlink" title="数据模型"></a>数据模型</h2><h3 id="Artifact-Schema"><a href="#Artifact-Schema" class="headerlink" title="Artifact Schema"></a>Artifact Schema</h3><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Artifact</span><br><span class="line">├── id           制品标识符（如 proposal、tasks）</span><br><span class="line">├── generates    输出文件路径模式</span><br><span class="line">├── description  描述</span><br><span class="line">├── template     模板文件名</span><br><span class="line">├── instruction  提供给 AI 的创建指南（可选）</span><br><span class="line">└── requires     依赖的制品 ID 列表</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="WorkspaceViewState"><a href="#WorkspaceViewState" class="headerlink" title="WorkspaceViewState"></a>WorkspaceViewState</h3><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">WorkspaceViewState</span><br><span class="line">├── version          版本号（当前为 1）</span><br><span class="line">├── name             kebab-case 工作区名称</span><br><span class="line">├── context          关联的 Initiative 上下文（可为空）</span><br><span class="line">├── links            稳定名称 → 本地路径映射</span><br><span class="line">├── preferred_opener 默认打开方式（agent 或 editor）</span><br><span class="line">├── tools            启用的 AI 工具列表</span><br><span class="line">└── workspace_skills 技能安装状态</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="InitiativeState"><a href="#InitiativeState" class="headerlink" title="InitiativeState"></a>InitiativeState</h3><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">InitiativeState</span><br><span class="line">├── version   版本号（当前为 1）</span><br><span class="line">├── id        kebab-case 标识符</span><br><span class="line">├── title     标题</span><br><span class="line">├── summary   摘要</span><br><span class="line">├── status    exploring | active | complete | archived</span><br><span class="line">├── created   创建日期（YYYY-MM-DD）</span><br><span class="line">├── owners    负责人列表</span><br><span class="line">└── metadata  可扩展的自定义元数据</span><br></pre></td></tr></tbody></table></figure>
+
+<p>所有持久化状态均通过 Zod Schema 在读取时进行校验，确保数据完整性。</p>
+<hr>
+<h2 id="技术栈"><a href="#技术栈" class="headerlink" title="技术栈"></a>技术栈</h2><table>
+<thead>
+<tr>
+<th>类别</th>
+<th>技术选型</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>语言</td>
+<td>TypeScript 5.x</td>
+<td>严格模式，全量类型覆盖</td>
+</tr>
+<tr>
+<td>运行时</td>
+<td>Node.js ≥ 20.19.0</td>
+<td>ESM 原生模块</td>
+</tr>
+<tr>
+<td>构建</td>
+<td>esbuild（<code>build.js</code>）</td>
+<td>打包为单文件 dist/，快速构建</td>
+</tr>
+<tr>
+<td>测试</td>
+<td>Vitest 3.x</td>
+<td>单元 + 集成 + E2E 测试，支持 UI</td>
+</tr>
+<tr>
+<td>CLI 框架</td>
+<td>Commander.js 14.x</td>
+<td>命令注册、子命令、钩子</td>
+</tr>
+<tr>
+<td>交互式提示</td>
+<td>@inquirer/prompts 7.x</td>
+<td>多选、搜索等交互式 CLI</td>
+</tr>
+<tr>
+<td>Schema 校验</td>
+<td>Zod 4.x</td>
+<td>运行时类型安全</td>
+</tr>
+<tr>
+<td>YAML 处理</td>
+<td>yaml 2.x</td>
+<td>Schema 文件和状态文件的序列化</td>
+</tr>
+<tr>
+<td>进度展示</td>
+<td>ora 8.x</td>
+<td>Spinner 动画</td>
+</tr>
+<tr>
+<td>颜色输出</td>
+<td>chalk 5.x</td>
+<td>终端彩色输出</td>
+</tr>
+<tr>
+<td>文件查找</td>
+<td>fast-glob 3.x</td>
+<td>高性能 glob 匹配</td>
+</tr>
+<tr>
+<td>遥测</td>
+<td>posthog-node 5.x</td>
+<td>匿名使用统计</td>
+</tr>
+<tr>
+<td>版本管理</td>
+<td>changesets</td>
+<td>语义化版本发布</td>
+</tr>
+<tr>
+<td>代码规范</td>
+<td>ESLint 9.x + typescript-eslint</td>
+<td>静态分析</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="可扩展性设计"><a href="#可扩展性设计" class="headerlink" title="可扩展性设计"></a>可扩展性设计</h2><h3 id="自定义-Schema"><a href="#自定义-Schema" class="headerlink" title="自定义 Schema"></a>自定义 Schema</h3><p>用户可以从零创建或从内置 Schema fork 出自定义工作流：</p>
+<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">openspec schema init research-first    <span class="comment"># 从零创建</span></span><br><span class="line">openspec schema fork spec-driven custom-flow  <span class="comment"># Fork 后修改</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>自定义 Schema 存储在 <code>openspec/schemas/&lt;name&gt;/schema.yaml</code>，可以完全自定义制品类型、依赖顺序、模板内容、apply 阶段配置。</p>
+<h3 id="社区-Schema"><a href="#社区-Schema" class="headerlink" title="社区 Schema"></a>社区 Schema</h3><p>项目支持以独立仓库分发的第三方 Schema 包（类似 VS Code 插件目录的社区扩展），通过 <code>docs/customization.md</code> 的社区目录进行索引。</p>
+<h3 id="工具适配器扩展"><a href="#工具适配器扩展" class="headerlink" title="工具适配器扩展"></a>工具适配器扩展</h3><p>新增 AI 工具支持只需：</p>
+<ol>
+<li>在 <code>src/core/command-generation/adapters/</code> 下创建新的适配器文件，实现 <code>ToolCommandAdapter</code> 接口</li>
+<li>在 <code>src/core/config.ts</code> 的 <code>AI_TOOLS</code> 数组中注册工具配置</li>
+</ol>
+<hr>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>OpenSpec 的架构核心是<strong>围绕文件系统的、Schema 驱动的制品依赖图</strong>。通过将 AI 工具从实现主体（AI 写代码）变为流程参与者（AI 按 OpenSpec 工作流创建规格文档），它在人和 AI 之间建立了一个轻量但有结构的对齐层。</p>
+<p>关键设计决策：</p>
+<ul>
+<li><strong>文件系统即状态</strong> — 无服务器依赖，Git 友好</li>
+<li><strong>适配器模式</strong> — 工具无关，25+ 工具零改核心逻辑支持</li>
+<li><strong>Zod 全量校验</strong> — 所有持久化数据入口均有类型安全保证</li>
+<li><strong>Delta-First</strong> — 面向棕地场景的增量规格变更</li>
+<li><strong>Schema 可组合</strong> — 工作流完全可定制，无强制流程门</li>
+</ul>
+
+  </div>
+</article>
+
+
+    <div class="blog-post-comments">
+        <div id="utterances_thread">
+            <noscript>加载评论需要在浏览器启用 JavaScript 脚本支持。</noscript>
+        </div>
+    </div>
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">首页</a></li>
+        
+          <li><a href="/archives/">归档</a></li>
+        
+          <li><a href="/tags/">标签</a></li>
+        
+          <li><a href="/categories/">分类</a></li>
+        
+          <li><a href="/search/">搜索</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A1%B9%E7%9B%AE%E6%A6%82%E8%BF%B0"><span class="toc-number">1.</span> <span class="toc-text">项目概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E5%8A%9F%E8%83%BD"><span class="toc-number">2.</span> <span class="toc-text">基本功能</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%8F%98%E6%9B%B4%EF%BC%88Change%EF%BC%89%E7%AE%A1%E7%90%86"><span class="toc-number">2.1.</span> <span class="toc-text">1. 变更（Change）管理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E8%A7%84%E6%A0%BC%EF%BC%88Spec%EF%BC%89%E7%AE%A1%E7%90%86"><span class="toc-number">2.2.</span> <span class="toc-text">2. 规格（Spec）管理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-Delta-Spec%EF%BC%88%E5%B7%AE%E9%87%8F%E8%A7%84%E6%A0%BC%EF%BC%89"><span class="toc-number">2.3.</span> <span class="toc-text">3. Delta Spec（差量规格）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E5%B7%A5%E4%BD%9C%E6%B5%81%EF%BC%88Workflow%EF%BC%89"><span class="toc-number">2.4.</span> <span class="toc-text">4. 工作流（Workflow）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E5%B7%A5%E4%BD%9C%E5%8C%BA%EF%BC%88Workspace%EF%BC%89"><span class="toc-number">2.5.</span> <span class="toc-text">5. 工作区（Workspace）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84"><span class="toc-number">3.</span> <span class="toc-text">文件结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E6%9E%B6%E6%9E%84"><span class="toc-number">4.</span> <span class="toc-text">核心架构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%88%B6%E5%93%81%E4%BE%9D%E8%B5%96%E5%9B%BE%EF%BC%88Artifact-Graph%EF%BC%89"><span class="toc-number">4.1.</span> <span class="toc-text">1. 制品依赖图（Artifact Graph）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%91%BD%E4%BB%A4%E7%94%9F%E6%88%90%E7%9A%84%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F%EF%BC%88Adapter-Pattern%EF%BC%89"><span class="toc-number">4.2.</span> <span class="toc-text">2. 命令生成的适配器模式（Adapter Pattern）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-Schema-%E9%A9%B1%E5%8A%A8%E7%9A%84%E5%B7%A5%E4%BD%9C%E6%B5%81%E5%AE%9A%E5%88%B6"><span class="toc-number">4.3.</span> <span class="toc-text">3. Schema 驱动的工作流定制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-Delta-Spec-%E5%BD%92%E6%A1%A3%E5%90%88%E5%B9%B6%E5%BC%95%E6%93%8E"><span class="toc-number">4.4.</span> <span class="toc-text">4. Delta Spec 归档合并引擎</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AE%BE%E8%AE%A1%E6%80%9D%E6%83%B3"><span class="toc-number">5.</span> <span class="toc-text">设计思想</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%8D%B3%E7%8A%B6%E6%80%81%EF%BC%88Filesystem-as-State%EF%BC%89"><span class="toc-number">5.1.</span> <span class="toc-text">1. 文件系统即状态（Filesystem as State）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-AI-%E5%B7%A5%E5%85%B7%E6%97%A0%E5%85%B3%EF%BC%88Tool-Agnostic%EF%BC%89"><span class="toc-number">5.2.</span> <span class="toc-text">2. AI 工具无关（Tool Agnostic）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%A2%9E%E9%87%8F%E8%A7%84%E6%A0%BC%EF%BC%88Delta-First%EF%BC%89"><span class="toc-number">5.3.</span> <span class="toc-text">3. 增量规格（Delta-First）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-Schema-%E5%8F%AF%E7%BB%84%E5%90%88%EF%BC%88Composable-Schemas%EF%BC%89"><span class="toc-number">5.4.</span> <span class="toc-text">4. Schema 可组合（Composable Schemas）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E9%9A%90%E7%A7%81%E4%BC%98%E5%85%88%E7%9A%84%E9%81%A5%E6%B5%8B%EF%BC%88Privacy-First-Telemetry%EF%BC%89"><span class="toc-number">5.5.</span> <span class="toc-text">5. 隐私优先的遥测（Privacy-First Telemetry）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E9%94%AE%E5%AD%90%E7%B3%BB%E7%BB%9F%E8%AF%A6%E8%A7%A3"><span class="toc-number">6.</span> <span class="toc-text">关键子系统详解</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%8A%E4%B8%8B%E6%96%87%E5%AD%98%E5%82%A8%EF%BC%88Context-Store%EF%BC%89"><span class="toc-number">6.1.</span> <span class="toc-text">上下文存储（Context Store）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Initiative-%E7%B3%BB%E7%BB%9F"><span class="toc-number">6.2.</span> <span class="toc-text">Initiative 系统</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%EF%BC%88Profiles%EF%BC%89%E7%B3%BB%E7%BB%9F"><span class="toc-number">6.3.</span> <span class="toc-text">配置文件（Profiles）系统</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Shell-%E8%A1%A5%E5%85%A8%E7%B3%BB%E7%BB%9F"><span class="toc-number">6.4.</span> <span class="toc-text">Shell 补全系统</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%9A%E5%B7%A5%E5%85%B7%E9%80%82%E9%85%8D%E5%B1%82"><span class="toc-number">7.</span> <span class="toc-text">多工具适配层</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B"><span class="toc-number">8.</span> <span class="toc-text">数据模型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Artifact-Schema"><span class="toc-number">8.1.</span> <span class="toc-text">Artifact Schema</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#WorkspaceViewState"><span class="toc-number">8.2.</span> <span class="toc-text">WorkspaceViewState</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#InitiativeState"><span class="toc-number">8.3.</span> <span class="toc-text">InitiativeState</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8A%80%E6%9C%AF%E6%A0%88"><span class="toc-number">9.</span> <span class="toc-text">技术栈</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%AF%E6%89%A9%E5%B1%95%E6%80%A7%E8%AE%BE%E8%AE%A1"><span class="toc-number">10.</span> <span class="toc-text">可扩展性设计</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89-Schema"><span class="toc-number">10.1.</span> <span class="toc-text">自定义 Schema</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BE%E5%8C%BA-Schema"><span class="toc-number">10.2.</span> <span class="toc-text">社区 Schema</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B7%A5%E5%85%B7%E9%80%82%E9%85%8D%E5%99%A8%E6%89%A9%E5%B1%95"><span class="toc-number">10.3.</span> <span class="toc-text">工具适配器扩展</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%BB%E7%BB%93"><span class="toc-number">11.</span> <span class="toc-text">总结</span></a></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://haifs.com/2026/06/08/openspec/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://haifs.com/2026/06/08/openspec/&text=OpenSpec 技术分析"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://haifs.com/2026/06/08/openspec/&title=OpenSpec 技术分析"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://haifs.com/2026/06/08/openspec/&is_video=false&description=OpenSpec 技术分析"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=OpenSpec 技术分析&body=Check out this article: https://haifs.com/2026/06/08/openspec/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://haifs.com/2026/06/08/openspec/&title=OpenSpec 技术分析"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://haifs.com/2026/06/08/openspec/&title=OpenSpec 技术分析"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://haifs.com/2026/06/08/openspec/&title=OpenSpec 技术分析"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://haifs.com/2026/06/08/openspec/&title=OpenSpec 技术分析"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://haifs.com/2026/06/08/openspec/&name=OpenSpec 技术分析&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://haifs.com/2026/06/08/openspec/&t=OpenSpec 技术分析"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> 菜单</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> 目录</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> 分享</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> 返回顶部</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2019-2026
+    haif.
+    <a target="_blank" rel="noopener" href="https://beian.miit.gov.cn/">
+      鲁ICP备19052103号
+    </a>
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">首页</a></li><!--
+     --><!--
+       --><li><a href="/archives/">归档</a></li><!--
+     --><!--
+       --><li><a href="/tags/">标签</a></li><!--
+     --><!--
+       --><li><a href="/categories/">分类</a></li><!--
+     --><!--
+       --><li><a href="/search/">搜索</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"复制到粘贴板！\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "复制成功！");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+  <script type="text/javascript">
+        var _hmt = _hmt || [];
+        (function() {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?d3c8edb388553a2084296cbfe9a0785a";
+          var s = document.getElementsByTagName("script")[0];
+          s.parentNode.insertBefore(hm, s);
+        })();
+        </script>
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+    <script type="text/javascript">
+      var utterances_repo = 'haifuns/haifuns.github.io';
+      var utterances_issue_term = 'pathname';
+      var utterances_label = 'Comment';
+      var utterances_theme = 'github-light';
+
+      (function(){
+          var script = document.createElement('script');
+
+          script.src = 'https://utteranc.es/client.js';
+          script.setAttribute('repo', utterances_repo);
+          script.setAttribute('issue-term', 'pathname');
+          script.setAttribute('label', utterances_label);
+          script.setAttribute('theme', utterances_theme);
+          script.setAttribute('crossorigin', 'anonymous');
+          script.async = true;
+          (document.getElementById('utterances_thread')).appendChild(script);
+      }());
+  </script>
+
+</body>
+</html>
