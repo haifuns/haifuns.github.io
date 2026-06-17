@@ -1,4 +1,4 @@
-title: 【AI】什么是 MCP？
+title: 什么是 MCP？
 author: haif.
 tags:
   - MCP
