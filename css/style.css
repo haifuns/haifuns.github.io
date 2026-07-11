@@ -400,7 +400,7 @@ body abbr {
 body ul,
 body ol,
 body dl {
-  line-height: 1.725;
+  line-height: 1.85;
 }
 body ul ul,
 body ol ul,
@@ -419,7 +419,7 @@ body table {
   width: 100%;
   border-collapse: collapse;
   text-align: left;
-  font-size: 12px;
+  font-size: 13px;
   overflow: auto;
   display: block;
 }
@@ -428,7 +428,7 @@ body th {
   border-bottom: 1px dashed #666;
   color: #111;
   font-weight: bold;
-  font-size: 13px;
+  font-size: 14px;
 }
 body td {
   padding: 0 8px;
@@ -481,9 +481,9 @@ body {
   background-color: #e2e0de;
   color: #363533;
   font-weight: 400;
-  font-size: 14px;
-  font-family: "Menlo", "Meslo LG", monospace;
-  line-height: 1.725;
+  font-size: 15px;
+  font-family: "Maple Mono NF CN", "Menlo", "Meslo LG", monospace;
+  line-height: 1.85;
   text-rendering: geometricPrecision;
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
@@ -572,7 +572,7 @@ body {
   }
 }
 .max-width {
-  max-width: 48rem;
+  max-width: 56rem;
 }
 @media (max-width: 480px) {
   .px3 {
@@ -1417,9 +1417,9 @@ article .content .caption {
   color: #e2e0de;
   font-display: swap;
   font-weight: 400;
-  font-size: 11.200000000000001px;
-  font-family: "Menlo", "Meslo LG", monospace;
-  line-height: 1.725;
+  font-size: 12px;
+  font-family: "Maple Mono NF CN", "Menlo", "Meslo LG", monospace;
+  line-height: 1.85;
   text-rendering: geometricPrecision;
   text-align: center;
   word-wrap: break-word;
@@ -1578,7 +1578,7 @@ pre {
   border: 1px dotted #666;
   border-radius: 4px;
   font-size: 13px;
-  font-family: "Menlo", "Meslo LG", monospace;
+  font-family: "Maple Mono NF CN", "Menlo", "Meslo LG", monospace;
   line-height: 22px;
   -webkit-border-radius: 4px;
 }
@@ -1599,7 +1599,7 @@ code {
   padding: 10px 15px;
   border-radius: 4px;
   background: #dedcd9;
-  font-family: "Menlo", "Meslo LG", monospace;
+  font-family: "Maple Mono NF CN", "Menlo", "Meslo LG", monospace;
   -webkit-border-radius: 4px;
 }
 .highlight figcaption {
