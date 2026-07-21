@@ -12,7 +12,6 @@ date: 2026-03-10 14:00:00
 
 *   [BestBlogs 精选推送](https://www.bestblogs.dev)
 *   [AIBase 最新AI日报](https://news.aibase.com/zh/daily)
-*   [InStreet - Agent 社交网络](https://instreet.coze.site/)
 
 # Chat Model
 
@@ -62,14 +61,15 @@ date: 2026-03-10 14:00:00
 
 *   [ClawHub Skills](https://clawhub.ai/skills)
 *   [Awesome OpenClaw Skills](https://github.com/VoltAgent/awesome-openclaw-skills)
-*   [SkillsMP](https://skillsmp.com/)
+*   [SkillsMP](https://skillsmp.com/zh)
 *   [Skills.sh](https://skills.sh/)
+  * [Skillstore](https://skillstore.io/zh-hans)
 *   [腾讯 SkillHub](https://skillhub.tencent.com/)
 *   [百度 Skills](https://cloud.baidu.com/doc/qianfan/s/Mmlda41a2)
 *   [SafeSkill 安全扫描](https://safeskill.cn/)
 
 # Agent
-    
+
 *   [OpenClaw](https://github.com/openclaw/openclaw)
     *   [微信 QClaw](https://qclaw.qq.com)
     *   [飞书妙搭 Claw](https://miaoda.feishu.cn/bot)
@@ -87,9 +87,10 @@ date: 2026-03-10 14:00:00
 *   [Cursor](https://www.cursor.so)
 *   [Claude Code](https://claude.ai)
     *   [Claude Code 最佳实践](https://github.com/shanraisshan/claude-code-best-practice)
+    *   [CLAUDE.md 设置指南](https://github.com/forrestchang/andrej-karpathy-skills)
 *   [腾讯 CodeBuddy & WorkBuddy](https://www.codebuddy.cn)
 *   [字节 TRAE](https://www.trae.cn/)
-*   [阿里 通义灵码](https://lingma.aliyun.com/)，[阿里 iFlow](https://iflow.cn/)
+*   [阿里 通义灵码](https://lingma.aliyun.com/)，[阿里 iFlow](https://iflow.cn/)，[阿里 Qoder](https://qoder.com/)
 *   [美团 CatPaw](https://catpaw.meituan.com/)
 *   [GitHub Copilot](https://github.com/features/copilot)
 *   [AWS CodeWhisperer](https://aws.amazon.com/cn/codewhisperer/)
@@ -99,6 +100,7 @@ date: 2026-03-10 14:00:00
     *   [轻量规范框架 - Get Shit Done](https://github.com/gsd-build/get-shit-done)
     *   [规范驱动(SDD)框架 - OpenSpec](https://github.com/Fission-AI/OpenSpec)
     *   [规范驱动(SDD)套件 - Spec Kit](https://github.com/github/spec-kit)
+    * [claude-tap  agent 本地代理和 Trace 查看器](https://github.com/liaohch3/claude-tap)
 
 # 学习资料
 
@@ -107,3 +109,5 @@ date: 2026-03-10 14:00:00
 *   [Datawhale 从零开始构建智能体](https://datawhalechina.github.io/hello-agents)
 *   [Datawhale RAG技术全栈指南](https://datawhalechina.github.io/all-in-rag)
 *   [Claude Code 工程分析](https://ccb.agent-aura.top/docs/introduction/what-is-claude-code)
+*   [AI Agent 开发工程师学习路线图（工程落地版）](https://github.com/adongwanai/AgentGuide/blob/main/docs/05-roadmaps/learning-roadmap-development.md)
+*   [Awesome Agent Engineering：LLM 应用工程实战课程](https://github.com/kobejiasuoer/awesome-agent-engineering)
