@@ -108,6 +108,7 @@ date: 2026-03-10 14:00:00
 *   [Datawhale 面向开发者的大模型手册](https://datawhalechina.github.io/llm-cookbook)
 *   [Datawhale 从零开始构建智能体](https://datawhalechina.github.io/hello-agents)
 *   [Datawhale RAG技术全栈指南](https://datawhalechina.github.io/all-in-rag)
-*   [Claude Code 工程分析](https://ccb.agent-aura.top/docs/introduction/what-is-claude-code)
 *   [AI Agent 开发工程师学习路线图（工程落地版）](https://github.com/adongwanai/AgentGuide/blob/main/docs/05-roadmaps/learning-roadmap-development.md)
 *   [Awesome Agent Engineering：LLM 应用工程实战课程](https://github.com/kobejiasuoer/awesome-agent-engineering)
+*	[Learn Claude Code -- 真正的 Agent Harness 工程](https://github.com/shareAI-lab/learn-claude-code)
+*   [Claude Code 工程分析](https://ccb.agent-aura.top/docs/introduction/what-is-claude-code)
