@@ -12,6 +12,7 @@ date: 2026-03-10 14:00:00
 
 *   [BestBlogs 精选推送](https://www.bestblogs.dev)
 *   [AIBase 最新AI日报](https://news.aibase.com/zh/daily)
+*   [Trendshift Github趋势](https://trendshift.io/)
 
 # Chat Model
 
